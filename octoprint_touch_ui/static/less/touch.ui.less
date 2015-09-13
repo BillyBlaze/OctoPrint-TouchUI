@@ -140,6 +140,36 @@
 			margin: 0;
 		}
 		
+		#offline_overlay, #reloadui_overlay {
+			position: fixed;
+			top:0;
+			bottom:0;
+			overflow-y:auto;
+			-webkit-overflow-scrolling: touch;
+			
+			#offline_overlay_background {
+				transform: translateZ(0);
+			}
+			
+			#offline_overlay_wrapper, #reloadui_overlay_wrapper {
+				padding-top: 20px;
+			}
+			
+			.container {
+				width: 100%;
+
+				.hero-unit {
+					background-color: #5A5A5A;
+					padding: 20px;
+					border-radius: 0;
+					
+					h1 {
+						font-size: 32px !important;
+					}
+				}
+			}
+		}
+		
 		.tabbable > .nav-tabs li,
 		#navbar .nav li{
 			overflow: hidden;
