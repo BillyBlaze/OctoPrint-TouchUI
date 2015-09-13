@@ -1,7 +1,6 @@
-# OctoPrint-Touch.ui
-
-**TODO:** Describe what your plugin does.
-In heavy production: This will be a plugin for a TFT Touch display's on any resolution possible.
+# OctoPrint-Touch.ui 0.0.1
+##Currently in production; do not install untill atleast 0.1.0
+This plugin will transform the layout in a Touch/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible.
 
 ## Setup
 
