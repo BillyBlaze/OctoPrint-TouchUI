@@ -1,6 +1,7 @@
 # OctoPrint-Touch.ui
 
 **TODO:** Describe what your plugin does.
+In heavy production: This will be a plugin for a TFT Touch display's on any resolution possible.
 
 ## Setup
 
