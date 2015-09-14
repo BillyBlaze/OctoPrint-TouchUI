@@ -292,11 +292,163 @@
 					top: 0;
 				}
 			}
+			
+			#files_wrapper {
+
+				.accordion-heading {
+					display: block;
+					pointer-events: none;
+					background-color: #00B0FF;
+					margin: 40px -35px 0;
+					padding: 5px 20px;
+					color: white;
+					
+					> a, > a i {
+						color: white;
+						font-size: 23px;
+						padding-right: 0;
+					}
+					> div {
+						pointer-events: all;
+					} 
+					.icon-wrench, 
+					.icon-sd-black-14 {
+						font-size: 23px;
+						color: white;
+					}
+					.icon-sd-black-14 {
+						background: transparent;
+						
+						&:before {
+							content: "\f15b";
+						}						
+					}
+				}
+				
+				#files {
+					.form-search {
+						display: none;
+					}
+					
+					.slimScrollDiv {
+						margin: 0 -35px 10px;
+					}
+					
+					.upload-buttons {
+						.btn {
+							padding: 12px;
+							font-size: 22px;
+							display: block;
+							width: 100%;
+							margin-left: 0;
+						}
+					}
+				
+					.gcode_files {
+						height: auto !important;
+						margin: 0;
+						padding: 0;
+						
+						.entry {
+							padding: 15px 90px 15px 35px;
+							margin: 0;
+							background-color: #333;
+							border-bottom: 1px solid black;
+							border-top: 1px solid black;
+							position: relative;
+							left: 0;
+							clear: both;
+							
+							transition: left 0.4s ease, background 0.7s ease;
+							
+							&.open {
+								left: -90px;
+								background: #920000;
+
+								&:hover,
+								&:after {
+									background: #920000;
+								}
+							}
+							
+							&:after {
+								content: "";
+								display: block;
+								right: -200px;
+								top: 0;
+								height: 100%;
+								width: 200px;
+								background: #333;
+								position: absolute;
+								transition: background 0.7s ease;
+							}
+
+							&:hover {
+								background: #333;
+							}
+							
+							div, div span {
+								color: white;
+							}
+							
+							div.action-buttons {
+								position: static;
+								right: auto;
+								bottom: auto;
+								display: inline;
+							
+								i {
+									font-size: 32px;
+								}
+								
+								.btn.disabled, .btn[disabled] {
+									opacity: 0.2;
+								}
+								
+								.btn {
+									padding: 10px 15px;
+									position: absolute;
+									right: -60px;
+									top: 18px;
+									border-radius: 0;
+									background: transparent !important;
+									z-index: 5;
+									border: 0 none;
+									box-shadow: 0 0 0 transparent;
+									
+									&:first-child {
+										display: none;
+									}
+									&:last-child {
+										right: 20px;
+									}
+								}
+
+							}
+						}
+					}
+				}
+			}
+			.slimScrollBar, .slimScrollRail {
+				display: none !important;
+			}
+			.dropdown-menu {
+				left: auto !important;
+				right: 0 !important;
+			}
+			
 		}
 		
 		
 		/* TERMINAL TAB */
 		#term {
+			#terminal-output:before {
+				content: "   ▄▄▄▄▀ ████▄   ▄   ▄█▄     ▄  █   ▄   ▄█ \A▀▀▀ █    █   █    █  █▀ ▀▄  █   █    █  ██ \A    █    █   █ █   █ █   ▀  ██▀▀█ █   █ ██ \A   █     ▀████ █   █ █▄  ▄▀ █   █ █   █ ▐█  \A  ▀            █▄ ▄█ ▀███▀     █  █▄ ▄█  ▐  v0.0.1\A                ▀▀▀           ▀    ▀▀▀     ";
+				display: block;
+				width: 360px;
+				margin: 10px auto;
+			}
+			
 			position: relative;
 			
 			.icon-caret-down:before,

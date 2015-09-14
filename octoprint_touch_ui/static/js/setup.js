@@ -61,17 +61,42 @@ $(function() {
 		$('#state_wrapper').appendTo("#printer .row-fluid");
 		$('#files_wrapper').insertAfter("#printer .row-fluid #state_wrapper");
 		
+		setTimeout(function() {
+			$('.gcode_files').slimScroll({destroy: true});
+			$('.slimScrollDiv').slimScroll({destroy: true});
+		}, 400);
 		
-		/*$("#terminal-output").html(	"▄▄▄█████▓ ▒█████   █    ██  ▄████▄   ██░ ██  █    ██  ██▓\n" +
-									"▓  ██▒ ▓▒▒██▒  ██▒ ██  ▓██▒▒██▀ ▀█  ▓██░ ██▒ ██  ▓██▒▓██▒\n"+
-									"▒ ▓██░ ▒░▒██░  ██▒▓██  ▒██░▒▓█    ▄ ▒██▀▀██░▓██  ▒██░▒██▒\n"+
-									"░ ▓██▓ ░ ▒██   ██░▓▓█  ░██░▒▓▓▄ ▄██▒░▓█ ░██ ▓▓█  ░██░░██░\n"+
-									"  ▒██▒ ░ ░ ████▓▒░▒▒█████▓ ▒ ▓███▀ ░░▓█▒░██▓▒▒█████▓ ░██░\n"+
-									"  ▒ ░░   ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒ ░ ░▒ ▒  ░ ▒ ░░▒░▒░▒▓▒ ▒ ▒ ░▓  \n"+
-									"    ░      ░ ▒ ▒░ ░░▒░ ░ ░   ░  ▒    ▒ ░▒░ ░░░▒░ ░ ░  ▒ ░\n"+
-									"  ░      ░ ░ ░ ▒   ░░░ ░ ░ ░         ░  ░░ ░ ░░░ ░ ░  ▒ ░\n"+
-									"             ░ ░     ░     ░ ░       ░  ░  ░   ░      ░  \n"+
-									"                           ░                             \n\n");*/
+		$(document).ready(function() {
+			var touch = false,
+				start = 0;
+			$(document).on("mousedown touchstart", "#files .entry", function(e) {
+				e.preventDefault();
+				touch = e.currentTarget;
+				start = e.clientX;
+			});
+			$(document).on("mouseup touchsend", function(e) {
+				e.preventDefault();
+				touch = false;
+				start = 0;
+			});
+			$(document).on("mousemove touchmove", function(e) {
+				if(touch !== false) {
+					e.preventDefault();
+					
+					if(e.clientX > start + 80) {
+						$(touch).removeClass("open");
+						start = e.clientX;
+					} else if(e.clientX < start - 80) {
+						$(touch).addClass("open");
+						start = e.clientX;
+					}
+					
+					return false;
+				}
+			});
+		});
+		
+		
 	}
 
 	OCTOPRINT_VIEWMODELS.push([
