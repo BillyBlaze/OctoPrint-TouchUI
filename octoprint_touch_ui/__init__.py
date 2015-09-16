@@ -15,7 +15,7 @@ class TouchUIPlugin(octoprint.plugin.AssetPlugin,
 
 	def get_assets(self):
 		return dict(
-			js=["js/setup.js"],
+			js=["js/setup.js", "js/circular-slider.js", "js/iscroll.js", "js/jquery.keyboard.js"],
 			less=["less/touch.ui.less"]
 		)
 
