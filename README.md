@@ -9,9 +9,18 @@ or manually using this URL:
 
     https://github.com/BillyBlaze/OctoPrint-Touch.ui/archive/master.zip
 
-**TODO:** Describe how to install your plugin, if more needs to be done than just installing it via pip or through
-the plugin manager.
+#### Aditional step
+##### Automaticly boot into fullscreen mode with iceweasel:
+1. Make sure you boot to Desktop
+2. run ``apt-get install iceweasel``
+3. run ``sudo nano /etc/xdg/lxsession/LXDE/autostart``
+4. ...etc...
 
 ## Configuration
 
 **TODO:** Describe your plugin's configuration options (if any).
+
+## Supported browsers
+1. Firefox/Iceweasel
+2. Chrome 30+
+3. ....
