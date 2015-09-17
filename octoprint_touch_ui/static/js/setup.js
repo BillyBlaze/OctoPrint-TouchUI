@@ -17,7 +17,7 @@ $(function() {
 					return;
 				}
 				
-				$("#settings_dialog_menu").clone().attr("id", "").appendTo(this).addClass("show-dropdown");
+				var elm = $("#settings_dialog_menu").clone().attr("id", "").appendTo(this).addClass("show-dropdown");
 				$(document).on("click", function(event) {
 					
 					if(
@@ -26,7 +26,7 @@ $(function() {
 						window.TouchUI.blockDropdownFromClosing === false
 					) {
 						var href = settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
-						$(document).off(event);
+						$(document).off(event).trigger("dropdown-close");
 						
 						$('.show-dropdown').remove();
 						$('[href="'+href+'"]').click();
@@ -36,6 +36,8 @@ $(function() {
 					window.TouchUI.blockDropdownFromClosing = false;
 					
 				});
+				$(document).trigger("dropdown-open", [ elm[0] ]);
+				
 			});
 			
 			$("#gcode_link").clone().attr("id", "gcode_link2").insertBefore("#login_dropdown_loggedin li:first-child").click(function(e) {
@@ -133,7 +135,7 @@ $(function() {
 					fadeScrollbars: true
 				});
 				
-				$('[data-toggle="tab"]').on("click", function() {
+				$('#tabs [data-toggle="tab"]').on("click", function() {
 					scroll.stop();
 					scroll.refresh();
 					
@@ -147,38 +149,77 @@ $(function() {
 
 				});
 				
-				// Add scroll polyfill to modal
-				var curDown = false,
-					curYPos = 0,
-					curXPos = 0,
-					prev = {};
-
-				$('.modal').mousedown(function(m){
-					curDown = true;
-					curYPos = m.pageY;
-					curXPos = m.pageX;
-				});
+				$(document).on('show.modalmanager', function(e) {
+					var el = $(e.target);
+					
+					var scrolls = new IScroll(el.parent()[0], {
+						scrollbars: true,
+						mouseWheel: true,
+						interactiveScrollbars: true,
+						shrinkScrollbars: 'scale',
+						fadeScrollbars: true
+					});
+					
+					setTimeout(function() {
+						scrolls.refresh();
+					}, 100);
+					
+					setTimeout(function() {
+						scrolls.refresh();
+					}, 300);
 				
-				$('.modal').mousemove(function(m){
-					if(curDown === true){
-						m.preventDefault();
+					scrolls.on('scrollStart', function() {
+						window.TouchUI.blockDropdownFromClosing = true;
+						el.addClass("no-pointer");
+					});
+					scrolls.on("scrollEnd", function(e) {
+						setTimeout(function() {
+							el.removeClass("no-pointer");
+						}, 50);
+					});
+					
+					el.find('[data-toggle="tab"]').on("click", function(e) {
+						e.preventDefault();
+						scrolls.refresh();
+						scrolls.scrollTo(0, 0);
 						
-						if($(m.target).parents('.modal').length > 0 || $(m.target).is(".modal")) {
-							var target = $(m.target).parents('.modal')[0] || $(m.target);
-							window.TouchUI.blockDropdownFromClosing = true;
-							
-							$(target).scrollTop($(target).scrollTop() + (curYPos - m.pageY)); 
-							$(target).scrollLeft($(target).scrollLeft() + (curXPos - m.pageX));
-							
-							curYPos = m.pageY;
-							curXPos = m.pageX;
-							return;
-						}
-					}
-				});
+						setTimeout(function() {
+							scrolls.refresh();
+						}, 100);
+						
+					});
+					
+					var tmp;
+					$(document).on("dropdown-open", function(e, elm) {
 
-				$('.modal').mouseup(function(m, skip){
-					curDown = false;
+						tmp = new IScroll(elm, {
+							scrollbars: true,
+							mouseWheel: true,
+							interactiveScrollbars: true,
+							shrinkScrollbars: 'scale',
+							fadeScrollbars: true
+						});
+						scrolls.disable();
+						
+						tmp.on("scrollStart", function(e) {
+							$(elm).addClass("no-pointer");
+						});
+						tmp.on("scrollEnd", function(e) {
+							setTimeout(function() {
+								$(elm).removeClass("no-pointer");
+							}, 50);
+						});
+						
+					});
+					$(document).on("dropdown-close", function() {
+						scrolls.enable();
+					});
+					
+					$(document).one('hide.modalmanager', function() {
+						el.find('[data-toggle="tab"]').off("click");
+						scrolls.destroy();
+					});
+					
 				});
 				
 			} else {
@@ -203,7 +244,7 @@ $(function() {
 					customLayout: {
 						'default' : [
 							'1 2 3 4 5 6 7 8 9 0 {bksp}',
-							' , . {left} {right} {a} {c}'
+							'- , . {left} {right} {a} {c}'
 						]
 					},
 				});
@@ -212,9 +253,8 @@ $(function() {
 				.keyboard({
 
 					display: {
-						'accept' :  "Save",
 						'bksp'   :  "\u2190",
-						'accept' : 'Enter',
+						'accept' : 'Save',
 						'default': 'ABC',
 						'meta1'  : '.?123',
 						'meta2'  : '#+='
@@ -226,19 +266,19 @@ $(function() {
 							'Q W E R T Y U I O P {bksp}',
 							'A S D F G H J K L',
 							'{s} Z X C V B N M ! ? {s}',
-							'{meta1} {space} {meta1} {accept}'
+							'{meta1} {space} {c} {accept}'
 						],
 						'meta1': [
 							'1 2 3 4 5 6 7 8 9 0 {bksp}',
 							'- / : ; ( ) \u20ac & @',
 							'{meta2} . , ? ! \' " {meta2}',
-							'{default} {space} {default} {accept}'
+							'{default} {space} {c} {accept}'
 						],
 						'meta2': [
 							'[ ] { } # % ^ * + = {bksp}',
 							'_ \\ | ~ < > $ \u00a3 \u00a5',
 							'{meta1} . , ? ! \' " {meta1}',
-							'{default} {space} {default} {accept}'
+							'{default} {space} {c} {accept}'
 						]
 					}
 
@@ -250,7 +290,6 @@ $(function() {
 					display: {
 						'accept' :  "Save",
 						'bksp'   :  "\u2190",
-						'accept' : 'Enter',
 						'default': 'ABC',
 						'meta1'  : '.?123',
 						'meta2'  : '#+='
@@ -262,30 +301,29 @@ $(function() {
 							'q w e r t y u i o p {bksp}',
 							'a s d f g h j k l',
 							'{s} z x c v b n m , . {s}',
-							'{meta1} {space} {meta1} {accept}'
+							'{meta1} {space} {c} {accept}'
 						],
 						'shift': [
 							'Q W E R T Y U I O P {bksp}',
 							'A S D F G H J K L',
 							'{s} Z X C V B N M ! ? {s}',
-							'{meta1} {space} {meta1} {accept}'
+							'{meta1} {space} {c} {accept}'
 						],
 						'meta1': [
 							'1 2 3 4 5 6 7 8 9 0 {bksp}',
 							'- / : ; ( ) \u20ac & @',
 							'{meta2} . , ? ! \' " {meta2}',
-							'{default} {space} {default} {accept}'
+							'{default} {space} {c} {accept}'
 						],
 						'meta2': [
 							'[ ] { } # % ^ * + = {bksp}',
 							'_ \\ | ~ < > $ \u00a3 \u00a5',
 							'{meta1} . , ? ! \' " {meta1}',
-							'{default} {space} {default} {accept}'
+							'{default} {space} {c} {accept}'
 						]
 					}
 
 				});
-			
 		};
 		
 /*		$(window).resize(function() {
