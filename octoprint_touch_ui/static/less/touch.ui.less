@@ -18,6 +18,9 @@
 			display: none;
 		}
 		
+		
+		@import "tabs/controls.less";
+		
 		.accordion, 
 		#navbar .brand {
 			position: absolute;
@@ -204,6 +207,7 @@
 				text-indent: -5000px;
 				position: relative;
 				z-index: 2;
+				min-width: 37px;
 				padding: 10px 0;
 			}
 		}
@@ -302,6 +306,8 @@
 					margin: 40px -35px 0;
 					padding: 5px 20px;
 					color: white;
+					overflow: hidden;
+					height: 40px;
 					
 					> a, > a i {
 						color: white;
@@ -842,6 +848,7 @@
 		/* CONTROLS TAB */
 		#control {
 			overflow: visible;
+			position: relative;
 		
 			> .jog-panel {
 				-moz-box-sizing: border-box;
@@ -871,11 +878,56 @@
 						}
 					}
 				}
+			
+				&:nth-child(3) {
+					position: absolute;
+					top: 28px;
+					right: -20px;
+					
+					h1 {
+						display: none;
+					}
+					
+					button {
+						font-size: 36px;
+						color: white;
+						background-color: transparent;
+						padding: 0 !important;
+						margin: 0;
+						font-weight: normal;
+						overflow: hidden;
+						
+						width: 16vw;
+						height: 16vw;
+						font-size: 11vw;
+					
+						&:before,
+						&:after {
+							color: white;
+							font-family: FontAwesome;
+							text-shadow: 0 0 0 transparent;
+							display: block;
+							overflow: hidden;
+							margin-bottom: 200px;
+							line-height: 16vw;
+						}
+					}
+					
+					div {
+					
+						button {
+							&:before {
+								content: "\f085";
+							}
+						}
+					
+					}
+				}
 					
 				.jog-panel {
 					float: right;
 					margin: 0;
-					margin-right: 10px;
+					margin-right: 20vw;
 
 					&:first-child {
 						float: left;
@@ -883,7 +935,7 @@
 					}
 					
 					h1 {
-						color: white;
+						color: #4E4E4E;
 						margin: -10px 0 0px;
 						font-size: 32px;
 						text-align: center;
@@ -910,12 +962,13 @@
 				}
 				
 				.slider {
-				    width: 100% !important;
+					.slider-track,
+					button {
+						display: none;
+					}
 					
-					+ button {
-						width: 100% !important;
-						padding: 13px;
-						font-size: 23px !important;
+					input {
+						display: block !important;
 					}
 				}
 				
