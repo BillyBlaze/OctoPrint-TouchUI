@@ -36,14 +36,16 @@ window.TouchUI.modal = {
 							$(event.target).closest("#special-dropdown-uni").length === 0 //Check if we clicked outside the dropdown
 						) {
 							var href = settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
-							$(document).off(event).trigger("dropdown-is-closed");
+							$(document).off(event).trigger("dropdown-is-closed"); // Trigger event for enabling scrolling
 							
 							$('.show-dropdown').remove();
 							$('[href="'+href+'"]').click();
 							settingsLabel.text($('[href="'+href+'"]').text());
 						}
-						
+
 					});
+					
+					// Trigger event for disabling scrolling
 					$(document).trigger("dropdown-is-open", [ elm[0] ]);
 				});
 		}

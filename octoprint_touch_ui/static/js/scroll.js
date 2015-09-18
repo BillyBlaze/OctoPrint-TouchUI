@@ -1,120 +1,177 @@
 window.TouchUI = window.TouchUI || {};
 window.TouchUI.scroll = {
 	
-	init: function() {
+	iScrolls: {},
 
-		/* Add body scrolling on mousedown if there is no touch events */
-		if (!('ontouchstart' in window) && !('onmsgesturechange' in window)) {
+	init: function() {
+		var self = this;
+
+		// Add body scrolling on mousedown if there is no touch events 
+		if ("ontouchstart" in window || "onmsgesturechange" in window) {
+			
+			// Hide topbar if clicking an item 
+			// TODO: Make this a setting in the options
+			$('#tabs [data-toggle="tab"]').click(function() {
+				$("html, body").stop().animate({scrollTop:parseFloat($("#navbar").height())}, 160, "swing");
+			});
+
+		} else { //Setup mouse as touch
 			
 			// Set overflow hidden for best performance
-			$('body,html').css('overflow', 'hidden');
+			$("body,html").css("overflow", "hidden");
 			
-			var scroll = new IScroll('#scroll', {
+			self.iScrolls.body = new IScroll("#scroll", {
 				scrollbars: true,
 				mouseWheel: true,
 				interactiveScrollbars: true,
-				shrinkScrollbars: 'scale',
+				shrinkScrollbars: "scale",
 				fadeScrollbars: true
 			});
 			
-			$('#tabs [data-toggle="tab"]').on("click", function() {
-				scroll.stop();
-				scroll.refresh();
+			// Prevent dropdowns from closing when scrolling with them
+			$(document).on("mousedown", function(e) {
 				
+				// Add CSS pointer-events: none; to block all JS events
+				self.iScrolls.body.on("scrollStart", function() {
+					if( $(e.target).parents(".dropdown-menu").length > 0 ) {
+						setTimeout(function() {
+							$(e.target).parents(".dropdown-menu").addClass("no-pointer");
+						}, 50);
+					}
+				});
+				
+				// Add CSS pointer-events: all; to renable all JS events
+				self.iScrolls.body.on("scrollEnd", function() {
+					$(e.target).parents(".dropdown-menu").removeClass("no-pointer");
+					
+					// Remove the events
+					self.iScrolls.body.off("scrollStart")
+					self.iScrolls.body.off("scrollEnd")
+					
+					// Refresh body scroll
+					self.iScrolls.body.refresh();
+				});
+			});
+			
+			$('#tabs [data-toggle="tab"]').on("click", function() {
+				self.iScrolls.body.stop();
+				self.iScrolls.body.refresh();
+				
+				// Hide topbar if clicking an item 
 				// TODO: Make this a setting in the options
 				setTimeout(function() {
-					scroll.scrollTo(0, -parseFloat($("#navbar").height()), 160);
+					self.iScrolls.body.scrollTo(0, -parseFloat($("#navbar").height()), 160);
 					setTimeout(function() {
-						scroll.refresh();
+						self.iScrolls.body.refresh();
 					}, 180);//crappy iScroll
 				}, 100);
 
 			});
 			
+			// Try to bind inputs, textareas and buttons to keyup rather then mousedown
+			// Not on selects since we can't cancel the preventDefault
+			$('input, textarea, button').on("mousedown", function(e) {
+				e.preventDefault();
+				
+				var scrolled = false;
+				self.iScrolls.body.on("scrollStart", function(event) {
+					scrolled = true;
+				});
+				
+				$(document).on("mouseup", $(e.target), function(event) {
+					if(e.target === event.target && !scrolled) {
+						if(e.target.tagName == "BUTTON") {
+							$(e.target).click();
+						} else {
+							$(e.target).focus();
+						}
+					}
+					
+					$(document).off(event);
+					self.iScrolls.body.off("scrollStart");
+				});
+				
+			});
+			
 			//Setup scroll events in modal
 			this.modal.init.call(this);
-			
-		} else {
-			
-			/* Hide topbar if clicking an item */
-			// TODO: Make this a setting in the options
-			$('#tabs [data-toggle="tab"]').click(function() {
-				$("html, body").stop().animate({scrollTop:parseFloat($("#navbar").height())}, 160, 'swing');
-			});
 			
 		}
 	},
 	
 	modal: {
 		init: function() {
+			var $document = $(document);
 			
-			$(document).on('show.modalmanager', function(e) {
-				var el = $(e.target);
+			$document.on("show.modalmanager", function(e) {
+				var $modalElm = $(e.target);
 				
-				var scrolls = new IScroll(el.parent()[0], {
+				// Create temp iScroll within the modal
+				var tmpIScroll = new IScroll($modalElm.parent()[0], {
 					scrollbars: true,
 					mouseWheel: true,
 					interactiveScrollbars: true,
-					shrinkScrollbars: 'scale'
+					shrinkScrollbars: "scale"
 				});
 				
+				// Ugly, force iScroll to get the correct scrollHeight
 				setTimeout(function() {
-					scrolls.refresh();
+					tmpIScroll.refresh();
 				}, 100);
-				
 				setTimeout(function() {
-					scrolls.refresh();
+					tmpIScroll.refresh();
 				}, 300);
 			
-				scrolls.on('scrollStart', function() {
-					window.TouchUI.blockDropdownFromClosing = true;
-					el.addClass("no-pointer");
+				// Ugly, force iScroll to get the correct scrollHeight
+				tmpIScroll.on("scrollStart", function() {
+					$modalElm.addClass("no-pointer");
 				});
-				scrolls.on("scrollEnd", function(e) {
+				tmpIScroll.on("scrollEnd", function(e) {
 					setTimeout(function() {
-						el.removeClass("no-pointer");
+						$modalElm.removeClass("no-pointer");
 					}, 50);
 				});
 				
-				el.find('[data-toggle="tab"]').on("click", function(e) {
+				$modalElm.find('[data-toggle="tab"]').on("click", function(e) {
 					e.preventDefault();
-					scrolls.refresh();
-					scrolls.scrollTo(0, 0);
+					tmpIScroll.refresh();
+					tmpIScroll.scrollTo(0, 0);
 					
 					setTimeout(function() {
-						scrolls.refresh();
+						tmpIScroll.refresh();
 					}, 100);
 					
 				});
 				
-				var tmp;
-				$(document).on("dropdown-is-open", function(e, elm) {
+				var tmpIScrollDropdown;
+				$document.on("dropdown-is-open", function(e, elm) {
 
-					tmp = new IScroll(elm, {
+					tmpIScrollDropdown = new IScroll(elm, {
 						scrollbars: true,
 						mouseWheel: true,
 						interactiveScrollbars: true,
-						shrinkScrollbars: 'scale'
+						shrinkScrollbars: "scale"
 					});
-					scrolls.disable();
+					tmpIScroll.disable();
 					
-					tmp.on("scrollStart", function(e) {
+					tmpIScrollDropdown.on("scrollStart", function(e) {
 						$(elm).addClass("no-pointer");
 					});
-					tmp.on("scrollEnd", function(e) {
+					tmpIScrollDropdown.on("scrollEnd", function(e) {
 						setTimeout(function() {
 							$(elm).removeClass("no-pointer");
 						}, 50);
 					});
 					
 				});
-				$(document).on("dropdown-is-closed", function() {
-					scrolls.enable();
+				
+				$document.on("dropdown-is-closed", function() {
+					tmpIScroll.enable();
 				});
 				
-				$(document).one('hide.modalmanager', function() {
-					el.find('[data-toggle="tab"]').off("click");
-					scrolls.destroy();
+				$document.one("hide.modalmanager", function() {
+					$modalElm.find('[data-toggle="tab"]').off("click");
+					tmpIScroll.destroy();
 				});
 				
 			});

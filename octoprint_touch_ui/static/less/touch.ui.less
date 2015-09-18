@@ -18,9 +18,6 @@
 			display: none;
 		}
 		
-		
-		@import "tabs/controls.less";
-		
 		.accordion, 
 		#navbar .brand {
 			position: absolute;
@@ -306,7 +303,6 @@
 					margin: 40px -35px 0;
 					padding: 5px 20px;
 					color: white;
-					overflow: hidden;
 					height: 40px;
 					
 					> a, > a i {
@@ -342,6 +338,7 @@
 					
 					.slimScrollDiv {
 						margin: 0 -35px 10px;
+						height: auto !important;
 					}
 					
 					.upload-buttons {
@@ -366,7 +363,7 @@
 				
 					.gcode_files {
 						height: auto !important;
-						margin: 0 -35px 10px;
+						margin: 0 -0 10px;
 						padding: 0;
 						
 						.entry {
@@ -621,6 +618,7 @@
 			.modal {
 				/* make a sticky footer */
 				&-body {
+					padding: 20px 25px;
 					margin-bottom: 75px;
 					min-height: auto !important;
 					max-height: none !important;
@@ -631,7 +629,7 @@
 					.span9.scrollable {
 						width: 100% !important;
 						margin: 0;
-						padding: 0 20px;
+						padding: 0;
 					}
 				}
 				&-footer {
@@ -645,7 +643,7 @@
 					z-index: 2;
 				}
 				&-header {
-					padding: 20px 15px;
+					padding: 20px 25px;
 				
 					#settings_dialog_label {
 						font-size: 1.4rem;
@@ -745,6 +743,7 @@
 			#temperature-graph {
 				margin-bottom: 10px;
 				height: 85vh;
+				background-size: contain;
 			}
 		
 			table {
@@ -841,6 +840,36 @@
 				-moz-user-select: none;
 				-ms-user-select: none;
 				user-select: none;
+			}
+		}
+		
+		/* Footer */
+		.footer {
+			font-size: 14px;
+			
+			ul {
+				li {
+					display: inline-block;
+					margin-left: 0;
+					font-size: 85%;
+					width: auto;
+					
+					a {
+						display: inline-block;
+						width: 20px;
+						color: #555;
+						height: 20px;
+						overflow: hidden;
+						margin: 0;
+						font-size: 18px;
+						padding: 0;
+						
+						&:hover {
+							color: white;
+							text-decoration: none;
+						}
+					}
+				}
 			}
 		}
 		
@@ -1033,8 +1062,14 @@
 			
 		}
 		
+		.dropdown-menu {
+			a {
+				display: block;
+			}
+		}
+		
 		.no-pointer * {
-			pointer-events: none;
+			pointer-events: none !important;
 		}
 		
 		.ui-pnotify-container {

@@ -2,9 +2,6 @@ $(function() {
 
 	function touchUIViewModel(parameters) {
 		var self = this;
-		
-		window.TouchUI.main.init();
-		
 		self.toggleTouchUI = function() {
 			
 		};
@@ -23,6 +20,7 @@ $(function() {
 		
 	}
 	
+	window.TouchUI.main.init();
 	window.TouchUI.main.knockout.beforeLoad();
 
 	OCTOPRINT_VIEWMODELS.push([

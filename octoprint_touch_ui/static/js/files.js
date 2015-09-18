@@ -2,7 +2,7 @@ window.TouchUI = window.TouchUI || {};
 window.TouchUI.files = {
 	init: function() {
 	
-	/* Add touch friendly files list */
+		/* Add touch friendly files list */
 		var touch = false,
 			start = 0;
 
@@ -10,10 +10,12 @@ window.TouchUI.files = {
 			touch = e.currentTarget;
 			start = e.pageX || e.originalEvent.targetTouches[0].pageX;
 		});
+		
 		$(document).on("mouseup touchend", function(e) {
 			touch = false;
 			start = 0;
 		});
+		
 		$(document).on("mousemove touchmove", function(e) {
 			if(touch !== false) {
 				var current = e.pageX || e.originalEvent.targetTouches[0].pageX;
@@ -29,5 +31,10 @@ window.TouchUI.files = {
 				}
 			}
 		});
+		
+		$(".dropdown-menu li a").on("click", function() {
+			window.TouchUI.scroll.iScrolls.body.refresh();
+		});
+		
 	}
 };

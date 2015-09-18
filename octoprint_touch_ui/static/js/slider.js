@@ -2,8 +2,8 @@ window.TouchUI = window.TouchUI || {};
 window.TouchUI.slider = {
 	init: function() {
 		
-		/* Add touch friendly slider for temps */
-		$('#temp table tr[data-bind]').each(function(ind, elm) {
+		/* Add touch friendly sliders for temps */
+		$($('#temp .row-fluid table tr').splice(1)).each(function(ind, elm) {
 			var input = $(elm).find('input[type="text"]');
 			
 			var slider = $('<div class="circ-slider no-mouse-scroll"></div>').insertBefore("#temp table").CircularSlider({ 
