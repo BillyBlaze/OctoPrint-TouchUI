@@ -1,4 +1,4 @@
-# OctoPrint-Touch.ui 0.0.1
+# OctoPrint-TouchUI 0.0.1
 ##Currently in production; do not install untill atleast 0.1.0
 This plugin will transform the layout in a Touch/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible.
 
@@ -7,7 +7,7 @@ This plugin will transform the layout in a Touch/TFT friendly layout. With large
 Install via the bundled [Plugin Manager](https://github.com/foosel/OctoPrint/wiki/Plugin:-Plugin-Manager)
 or manually using this URL:
 
-    https://github.com/BillyBlaze/OctoPrint-Touch.ui/archive/master.zip
+    https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 
 #### Aditional step
 ##### Automaticly boot into fullscreen mode with iceweasel:
