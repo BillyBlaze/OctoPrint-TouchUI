@@ -9,8 +9,11 @@ from __future__ import absolute_import
 # Take a look at the documentation on what other plugin mixins are available.
 
 import octoprint.plugin
+import octoprint.settings
 
-class TouchUIPlugin(octoprint.plugin.AssetPlugin,
+class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
+					octoprint.plugin.StartupPlugin,
+					octoprint.plugin.AssetPlugin,
 					octoprint.plugin.TemplatePlugin):
 
 	def get_assets(self):
@@ -22,7 +25,7 @@ class TouchUIPlugin(octoprint.plugin.AssetPlugin,
 				"js/scroll.js",
 				"js/slider.js",
 				"js/modal.js",
-				"js/setup.js",
+				"js/setup-knockout.js",
 				"js/libs/circular-slider.js", 
 				"js/libs/iscroll.js", 
 				"js/libs/jquery.keyboard.js"
@@ -35,10 +38,19 @@ class TouchUIPlugin(octoprint.plugin.AssetPlugin,
 			dict(type="settings", template="touch_settings.jinja2", custom_bindings=True)
 		]
 
+	def get_settings_defaults(self):
+		return dict(
+			version=self._plugin_version
+		)
+		
+	def get_version(self):
+		return self._plugin_version
+
 	def get_update_information(self):
+	
 		return dict(
 			systemcommandeditor=dict(
-				displayName="Touch UI Plugin",
+				displayName="TouchUI Plugin",
 				displayVersion=self._plugin_version,
 
 				# version check: github repository
@@ -55,7 +67,7 @@ class TouchUIPlugin(octoprint.plugin.AssetPlugin,
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
 # can be overwritten via __plugin_xyz__ control properties. See the documentation for that.
-__plugin_name__ = "Touch.ui Plugin"
+__plugin_name__ = "TouchUI Plugin"
 
 def __plugin_load__():
 	global __plugin_implementation__

@@ -28,6 +28,23 @@ window.TouchUI.scroll = {
 				fadeScrollbars: true
 			});
 			
+			var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
+			$("#terminal-output").appendTo(cont);
+			self.iScrolls.terminal = new IScroll("#terminal-scroll", {
+				scrollbars: true,
+				mouseWheel: true,
+				interactiveScrollbars: true,
+				shrinkScrollbars: "scale",
+				fadeScrollbars: true
+			});
+			self.iScrolls.terminal.on("beforeScrollStart", function() {
+				self.iScrolls.terminal.refresh();
+				self.iScrolls.body.disable();
+			});
+			self.iScrolls.terminal.on("scrollEnd", function() {
+				self.iScrolls.body.enable();
+			});
+			
 			// Prevent dropdowns from closing when scrolling with them
 			$(document).on("mousedown", function(e) {
 				

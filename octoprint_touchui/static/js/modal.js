@@ -49,5 +49,31 @@ window.TouchUI.modal = {
 					$(document).trigger("dropdown-is-open", [ elm[0] ]);
 				});
 		}
+	},
+	
+	connection: {
+		
+		//Move the connection accordion tab to a modal and add it to the settings dropdown
+		init: function() {
+			var self = this,
+				text = $("#connection_wrapper .accordion-heading").text();
+			
+			// Clone usersettings modal
+			var modal = $("#usersettings_dialog").clone().attr("id", "connection_dialog").insertAfter("#usersettings_dialog");
+			
+			// Remove all html from clone
+			modal.find(".modal-body").html("");
+			
+			// Append tab contents to modal
+			$("#connection_wrapper").appendTo(modal.find(".modal-body"))
+			
+			// Set modal header to accordion header
+			modal.find(".modal-header h3").text(text);
+			
+			// Create a link in the dropdown
+			$('<li><a href="#connection_dialog" data-toggle="modal">'+text+'</a></li>').appendTo("#login_dropdown_loggedin");
+		}
+		
 	}
+	
 };

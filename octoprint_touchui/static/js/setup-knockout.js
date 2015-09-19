@@ -1,14 +1,13 @@
 $(function() {
 
-	function touchUIViewModel(parameters) {
+	function touchUIViewModel(viewModels) {
 		var self = this;
+		
 		self.toggleTouchUI = function() {
 			
 		};
 		
 		self.onStartupComplete = function() {
-
-			window.TouchUI.main.knockout.isReady.call(this);
 			
 			/* Setup modules */
 			window.TouchUI.modal.init();
@@ -16,16 +15,19 @@ $(function() {
 			window.TouchUI.slider.init();
 			window.TouchUI.files.init();
 			window.TouchUI.scroll.init();
+
+			window.TouchUI.main.knockout.isReady(viewModels);
 		};
 		
 	}
 	
 	window.TouchUI.main.init();
+	window.TouchUI.modal.connection.init();
 	window.TouchUI.main.knockout.beforeLoad();
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["controlViewModel", "connectionViewModel"],
+		["terminalViewModel", "connectionViewModel"],
 		"#settings_plugin_touch_ui"
 	]);
 

@@ -6,7 +6,8 @@ window.TouchUI.main = {
 	
 	knockout: {
 		
-		isReady: function() {
+		isReady: function(viewModels) {
+			var self = this;
 
 			// Remove slimScroll from files list
 			$('.gcode_files').slimScroll({destroy: true});
@@ -19,6 +20,26 @@ window.TouchUI.main = {
 			$('#state_wrapper').appendTo("#printer .row-fluid");
 			$('#files_wrapper').insertAfter("#printer .row-fluid #state_wrapper");
 			
+			// Watch the operational binder for visual online/offline
+			var subscription = viewModels[1].isOperational.subscribe(function(newOperationalState) {
+				var printLink = $("#navbar_login");
+				if( !newOperationalState ) {
+					printLink.addClass("offline");
+				} else {
+					printLink.removeClass("offline");
+				}
+			});
+			
+			// Refresh terminal scroll height
+			var subscription = viewModels[0].displayedLines.subscribe(function() {
+				window.TouchUI.scroll.iScrolls.terminal.refresh();
+			});
+			
+			// Overwrite scrollToEnd function with iScroll functions
+			viewModels[0].scrollToEnd = function() {
+				window.TouchUI.scroll.iScrolls.terminal.refresh();
+				window.TouchUI.scroll.iScrolls.terminal.scrollTo(0, window.TouchUI.scroll.iScrolls.terminal.maxScrollY);
+			};
 		},
 		
 		beforeLoad: function() {

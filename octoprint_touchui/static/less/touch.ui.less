@@ -27,6 +27,7 @@
 		
 		* {
 			font-family: monospace;
+			text-shadow: none !important; /* This should increase performance */
 		}
 
 		.page-container {
@@ -240,13 +241,50 @@
 		#navbar_settings {
 			display: none;
 		}
-		#navbar_login:after {
-			content: "\f085";
+		#navbar_login {
+			&.offline:after {
+				color: white;
+				animation-name: blink_offline;
+			}
+			&.online:after {
+				color: white;
+				animation-name: blink_online;
+			}
+			&:after {
+				animation-duration: 0.6s;
+				animation-iteration-count: 10;
+				content: "\f085";
+			}
 		}
-		#print_link:after {
-			content: "\f233";
+		#print_link {
+			&:after {
+				content: "\f233";
+			}
 		}
 		
+		@keyframes blink_offline {
+			0% {
+				color: white;
+			}
+			50% {
+				color: red;
+			}
+			100% {
+				color: white;
+			}
+		}
+		
+		@keyframes blink_online {
+			0% {
+				color: white;
+			}
+			50% {
+				color: #9AFD00;
+			}
+			100% {
+				color: white;
+			}
+		}
 		
 		/* PRINT/FILES STATUS TAB */
 		#printer {
@@ -462,16 +500,6 @@
 		
 		/* TERMINAL TAB */
 		#term {
-			#terminal-output:before {
-				content: "╔╦╗┌─┐┬ ┬┌─┐┬ ┬╦ ╦╦\A  ║ │ ││ ││  ├─┤║ ║║\A  ╩ └─┘└─┘└─┘┴ ┴╚═╝╩ v0.0.1";
-				display: block;
-				width: 215px;
-				margin: 10px auto;
-				position: relative;
-				line-height: 17px;
-				font-size: 14px;
-			}
-			
 			position: relative;
 			
 			.icon-caret-down:before,
@@ -493,21 +521,44 @@
 			#termin-filterpanel {
 				width: 100%;
 			}
-			#terminal-output {
-				margin-bottom: 40px;
-				background-color: black;
+			#terminal-scroll {
 				border: 1px solid #0F0;
-				color: #0F0;
-				overflow-y: auto;
+				overflow: hidden;
 				border-radius: 5px 5px 0 0;
-				min-height: 74vh;
+				height: 70vh;
+				min-height: 150px;
+				margin-bottom: 40px;
+				background-color: transparent;
+			}
+			#terminal-output {
+				margin-bottom: 26px;
+				border: 0 none;
+				box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				margin: 0;
+				background-color: transparent;
+				height: auto;
+				min-height: 0;
+				max-height: none;
+				overflow: hidden;
+				color: #0F0;
+				
+				&:before {
+					content: "╔╦╗┌─┐┬ ┬┌─┐┬ ┬╦ ╦╦\A  ║ │ ││ ││  ├─┤║ ║║\A  ╩ └─┘└─┘└─┘┴ ┴╚═╝╩ v0.0.1";
+					display: block;
+					width: 215px;
+					margin: 10px auto 20px;
+					position: relative;
+					line-height: 17px;
+					font-size: 14px;
+				}
 			}
 			#terminal-sendpanel {
 				position: absolute;
 				left: -1px;
 				width: 100%;
 				margin: 0;
-				top: 74vh;
+				top: 70vh;
 				
 				.muted {
 					display: none;
@@ -596,6 +647,29 @@
 			-moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
 			-o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
 			transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+			
+			.accordion-group {
+				border: 0 none !important;
+				
+				.accordion-heading {
+					display: none;
+				}
+				
+				.accordion-body {
+					border: 0 none;
+				
+					.accordion-inner {
+						padding: 0;
+						border: 0 none;
+					}
+				}
+			}
+			
+			&#connection_dialog {
+				.btn-primary {
+					display: none !important;
+				}
+			}
 		
 			&.fade {
 				top: 0 !important;
@@ -1033,7 +1107,8 @@
 			width: 100%;
 			overflow: hidden;
 			
-			.page-container {
+			.page-container,
+			#terminal-scroll pre {
 				position: absolute;
 				z-index: 1;
 				-webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -1053,6 +1128,9 @@
 				-ms-text-size-adjust: none;
 				-o-text-size-adjust: none;
 				text-size-adjust: none;
+			}
+			#terminal-scroll {
+				position: relative;
 			}
 			
 			.iScrollIndicator {
