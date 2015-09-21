@@ -98,13 +98,12 @@ window.TouchUI.scroll = {
 					scrolled = true;
 				});
 				
-				$(document).on("mouseup", $(e.target), function(event) {
-					if(e.target === event.target && !scrolled) {
-						if(e.target.tagName == "BUTTON") {
-							//Well do nothing then
-						} else {
-							$(e.target).focus();
-						}
+				$(document).on("mouseup", function(event) {
+					
+					if($(event.target).parents($(e.delegateTarget)).length > 0 && !scrolled) {
+						$(e.delegateTarget).focus().addClass('touch-focus').animate({opacity:1}, 300, function() {
+							$(e.delegateTarget).removeClass('touch-focus');
+						});
 					}
 					
 					$(document).off(event);

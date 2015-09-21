@@ -28,11 +28,11 @@ window.TouchUI.main = {
 			var subscription = connectionViewModel.isOperational.subscribe(function(newOperationalState) {
 				var printLink = $("#navbar_login");
 				if( !newOperationalState ) {
-					printLink.addClass("offline");
-					$("#conn_link2").addClass("offline");
+					printLink.addClass("offline").removeClass("online");
+					$("#conn_link2").addClass("offline").removeClass("online");
 				} else {
-					printLink.removeClass("offline");
-					$("#conn_link2").removeClass("offline");
+					printLink.removeClass("offline").addClass("online");
+					$("#conn_link2").removeClass("offline").addClass("online");
 				}
 			});
 			
