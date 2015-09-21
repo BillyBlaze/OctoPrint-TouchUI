@@ -9,16 +9,24 @@ or manually using this URL:
 
     https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 
-#### Aditional step
+#### Additional step for the RaspberryPi
 ##### Automaticly boot into fullscreen mode with iceweasel:
-1. Make sure you boot to Desktop
-2. run ``apt-get install iceweasel``
-3. run ``sudo nano /etc/xdg/lxsession/LXDE/autostart``
-4. ...etc...
+1. [Make sure you boot to Desktop](https://www.raspberrypi.org/documentation/configuration/raspi-config.md)
+2. [Autostart OctoPrint](https://github.com/foosel/OctoPrint/wiki/Setup-on-a-Raspberry-Pi-running-Raspbian)
+3. run ``sudo apt-get install iceweasel``
+4. run ``sudo nano /etc/xdg/lxsession/LXDE-pi/autostart``
+5. Insert ````@iceweasel "http://localhost:5000/#touch"```` to the list
+6. Now press ``Ctrl+X``, then ``Y`` and ``enter`` to save the changes
+7. Open ``Iceweavel ``
+8. Type in about:config in the address field and hit enter. Now find the ``browser.sessionstore.resume_from_crash`` line and double click to change it to false.
+9. Go into fullscreen mode
+10. Reboot and iceweavel should connect directly and in fullscreen
 
 ## Configuration
+To active the touch interface open the OctoPrint interface with '#touch' at the end. Such as `http://192.168.1.255:5000/#touch`
+Alternative you can toggle the touch interface within the Settings modal under `Plugins > TouchUI`.
 
-**TODO:** Describe your plugin's configuration options (if any).
+Activating touch will set a cookie on the client so it will remember to active the touch interface (up to a year).
 
 ## Supported browsers
 1. Firefox/Iceweasel

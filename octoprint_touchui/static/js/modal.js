@@ -56,7 +56,7 @@ window.TouchUI.modal = {
 		//Move the connection accordion tab to a modal and add it to the settings dropdown
 		init: function() {
 			var self = this,
-				text = $("#connection_wrapper .accordion-heading").text();
+				text = $("#connection_wrapper .accordion-heading").text().trim();
 			
 			// Clone usersettings modal
 			var modal = $("#usersettings_dialog").clone().attr("id", "connection_dialog").insertAfter("#usersettings_dialog");
@@ -71,7 +71,7 @@ window.TouchUI.modal = {
 			modal.find(".modal-header h3").text(text);
 			
 			// Create a link in the dropdown
-			$('<li><a href="#connection_dialog" data-toggle="modal">'+text+'</a></li>').appendTo("#login_dropdown_loggedin");
+			$('<li id="conn_link2"><a href="#connection_dialog" data-toggle="modal">'+text+'</a></li>').prependTo("#login_dropdown_loggedin");
 		}
 		
 	}

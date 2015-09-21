@@ -1,15 +1,40 @@
 window.TouchUI = window.TouchUI || {};
 window.TouchUI.keyboard = {
 	init: function() {
+		
+		function onShow(event, keyboard, el) {
+			
+			keyboard.$keyboard.find("button").on("mousedown", function(e) {
+				$(e.target).addClass("touch-focus");
+				
+				if(typeof $(e.target).data("timeout") !== "function") {
+					clearTimeout($(e.target).data("timeout"));
+				}
+				var timeout = setTimeout(function() {
+					$(e.target).removeClass("touch-focus").data("timeout", "");
+				}, 600);
+				$(e.target).data("timeout", timeout);
+			});
+		}
+		function onClose(event, keyboard, el) {
+			keyboard.$keyboard.find("button").off("mousedown");
+		}
+		
+		$(document).on("click", "#jog_distance", function(e) {
+			$("#jog_distance").toggleClass("open");
+		});
 	
 		$('input[type="number"]').keyboard({
-			layout: 'custom',
-
+			
+			visible: onShow,
+			beforeClose: onClose,
 			display: {
 				'bksp'   :  "\u2190",
 				'a'      :  "Save",
 				'c'      :  "Cancel"
 			},
+			
+			layout: 'custom',
 			customLayout: {
 				'default' : [
 					'1 2 3 4 5 6 7 8 9 0 {bksp}',
@@ -20,6 +45,8 @@ window.TouchUI.keyboard = {
 		
 		$('#terminal-command').keyboard({
 
+			visible: onShow,
+			beforeClose: onClose,
 			display: {
 				'bksp'   :  "\u2190",
 				'accept' : 'Save',
@@ -34,19 +61,19 @@ window.TouchUI.keyboard = {
 					'Q W E R T Y U I O P {bksp}',
 					'A S D F G H J K L',
 					'{s} Z X C V B N M ! ? {s}',
-					'{meta1} {space} {c} {accept}'
+					'{left} {right} {meta1} {space} {c} {accept}'
 				],
 				'meta1': [
 					'1 2 3 4 5 6 7 8 9 0 {bksp}',
 					'- / : ; ( ) \u20ac & @',
 					'{meta2} . , ? ! \' " {meta2}',
-					'{default} {space} {c} {accept}'
+					'{left} {right} {default} {space} {c} {accept}'
 				],
 				'meta2': [
 					'[ ] { } # % ^ * + = {bksp}',
 					'_ \\ | ~ < > $ \u00a3 \u00a5',
 					'{meta1} . , ? ! \' " {meta1}',
-					'{default} {space} {c} {accept}'
+					'{left} {right} {default} {space} {c} {accept}'
 				]
 			}
 
@@ -54,6 +81,8 @@ window.TouchUI.keyboard = {
 		
 		$('input[type="text"]:not("#terminal-command"), input[type="password"], textarea').keyboard({
 
+			visible: onShow,
+			beforeClose: onClose,
 			display: {
 				'accept' :  "Save",
 				'bksp'   :  "\u2190",
@@ -68,28 +97,30 @@ window.TouchUI.keyboard = {
 					'q w e r t y u i o p {bksp}',
 					'a s d f g h j k l',
 					'{s} z x c v b n m , . {s}',
-					'{meta1} {space} {c} {accept}'
+					'{left} {right} {meta1} {space} {c} {accept}'
 				],
 				'shift': [
 					'Q W E R T Y U I O P {bksp}',
 					'A S D F G H J K L',
 					'{s} Z X C V B N M ! ? {s}',
-					'{meta1} {space} {c} {accept}'
+					'{left} {right} {meta1} {space} {c} {accept}'
 				],
 				'meta1': [
 					'1 2 3 4 5 6 7 8 9 0 {bksp}',
 					'- / : ; ( ) \u20ac & @',
 					'{meta2} . , ? ! \' " {meta2}',
-					'{default} {space} {c} {accept}'
+					'{left} {right} {default} {space} {c} {accept}'
 				],
 				'meta2': [
 					'[ ] { } # % ^ * + = {bksp}',
 					'_ \\ | ~ < > $ \u00a3 \u00a5',
 					'{meta1} . , ? ! \' " {meta1}',
-					'{default} {space} {c} {accept}'
+					'{left} {right} {default} {space} {c} {accept}'
 				]
 			}
 
 		});
+		
+		
 	}
 };

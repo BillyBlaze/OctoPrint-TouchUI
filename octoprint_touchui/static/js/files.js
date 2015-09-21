@@ -28,6 +28,10 @@ window.TouchUI.files = {
 					$(document).trigger("files.closed", e.target);
 					$(touch).addClass("open");
 					start = current;
+
+					if( $(touch).find(".btn-group").children().length > 4 ) {
+						$(touch).addClass("large");
+					}
 				}
 			}
 		});

@@ -39,7 +39,10 @@ window.TouchUI.scroll = {
 			});
 			self.iScrolls.terminal.on("beforeScrollStart", function() {
 				self.iScrolls.terminal.refresh();
-				self.iScrolls.body.disable();
+				
+				if(this.hasVerticalScroll) {
+					self.iScrolls.body.disable();
+				}
 			});
 			self.iScrolls.terminal.on("scrollEnd", function() {
 				self.iScrolls.body.enable();
@@ -98,7 +101,7 @@ window.TouchUI.scroll = {
 				$(document).on("mouseup", $(e.target), function(event) {
 					if(e.target === event.target && !scrolled) {
 						if(e.target.tagName == "BUTTON") {
-							$(e.target).click();
+							//Well do nothing then
 						} else {
 							$(e.target).focus();
 						}

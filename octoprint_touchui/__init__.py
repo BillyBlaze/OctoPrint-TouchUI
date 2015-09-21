@@ -8,14 +8,31 @@ from __future__ import absolute_import
 #
 # Take a look at the documentation on what other plugin mixins are available.
 
+import shutil
+import os
+import logging
 import octoprint.plugin
 import octoprint.settings
+import octoprint.util
+
+def dump(obj):
+   for attr in dir(obj):
+       if hasattr( obj, attr ):
+           print( "obj.%s = %s" % (attr, getattr(obj, attr)))
 
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.StartupPlugin,
 					octoprint.plugin.AssetPlugin,
 					octoprint.plugin.TemplatePlugin):
 
+	def on_startup(self, host, port):
+		__tmp = self.get_plugin_data_folder().replace("data/touchui", "generated/webassets/fonts/")
+		
+		shutil.copytree(self.get_asset_folder() + '/fonts/', __tmp)
+		shutil.copy2(self.get_asset_folder() + '/css/libs/fontawesome.css', __tmp)
+		
+		self._logger.info("Copied font files to '" + __tmp + "'")
+	
 	def get_assets(self):
 		return dict(
 			js=[
@@ -26,11 +43,12 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/slider.js",
 				"js/modal.js",
 				"js/setup-knockout.js",
-				"js/libs/circular-slider.js", 
 				"js/libs/iscroll.js", 
 				"js/libs/jquery.keyboard.js"
 			],
-			less=["less/touch.ui.less"]
+			less=[
+				"less/touchui.less"
+			]
 		)
 
 	def get_template_configs(self):
