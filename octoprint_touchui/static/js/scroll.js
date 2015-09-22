@@ -20,14 +20,46 @@ window.TouchUI.scroll = {
 			// Set overflow hidden for best performance
 			$("body,html").css("overflow", "hidden");
 			
-			self.iScrolls.body = new IScroll("#scroll", {
-				scrollbars: true,
-				mouseWheel: true,
-				interactiveScrollbars: true,
-				shrinkScrollbars: "scale",
-				fadeScrollbars: true
+			self.create.terminal.call(self);
+			self.create.body.call(self);
+			
+			// Try to bind inputs, textareas and buttons to keyup rather then mousedown
+			// Not on selects since we can't cancel the preventDefault
+			$('input, textarea, button').on("mousedown", function(e) {
+				e.preventDefault();
+				
+				var scrolled = false;
+				self.iScrolls.body.on("scrollStart", function(event) {
+					scrolled = true;
+				});
+				
+				$(document).on("mouseup", function(event) {
+					
+					if(!scrolled && $(event.target).parents($(e.delegateTarget)).length > 0) {
+						$(e.delegateTarget).focus().addClass('touch-focus').animate({opacity:1}, 300, function() {
+							$(e.delegateTarget).removeClass('touch-focus');
+						});
+					}
+					
+					$(document).off(event);
+					self.iScrolls.body.off("scrollStart");
+				});
+				
 			});
 			
+			//Setup scroll events in modal
+			this.modal.init.call(this);
+			
+		}
+
+	},
+
+	create: {
+		
+		terminal: function() {
+			var self = this;
+			
+			// Create scrolling for terminal
 			var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
 			$("#terminal-output").appendTo(cont);
 			self.iScrolls.terminal = new IScroll("#terminal-scroll", {
@@ -37,6 +69,8 @@ window.TouchUI.scroll = {
 				shrinkScrollbars: "scale",
 				fadeScrollbars: true
 			});
+			
+			// Enforce the right scrollheight and disable main scrolling if we have a scrolling content
 			self.iScrolls.terminal.on("beforeScrollStart", function() {
 				self.iScrolls.terminal.refresh();
 				
@@ -46,6 +80,20 @@ window.TouchUI.scroll = {
 			});
 			self.iScrolls.terminal.on("scrollEnd", function() {
 				self.iScrolls.body.enable();
+			});
+
+		},
+		
+		body: function() {
+			var self = this;
+
+			// Create main body scroll
+			self.iScrolls.body = new IScroll("#scroll", {
+				scrollbars: true,
+				mouseWheel: true,
+				interactiveScrollbars: true,
+				shrinkScrollbars: "scale",
+				fadeScrollbars: true
 			});
 			
 			// Prevent dropdowns from closing when scrolling with them
@@ -65,8 +113,8 @@ window.TouchUI.scroll = {
 					$(e.target).parents(".dropdown-menu").removeClass("no-pointer");
 					
 					// Remove the events
-					self.iScrolls.body.off("scrollStart")
-					self.iScrolls.body.off("scrollEnd")
+					self.iScrolls.body.off("scrollStart");
+					self.iScrolls.body.off("scrollEnd");
 					
 					// Refresh body scroll
 					self.iScrolls.body.refresh();
@@ -87,112 +135,117 @@ window.TouchUI.scroll = {
 				}, 100);
 
 			});
-			
-			// Try to bind inputs, textareas and buttons to keyup rather then mousedown
-			// Not on selects since we can't cancel the preventDefault
-			$('input, textarea, button').on("mousedown", function(e) {
-				e.preventDefault();
-				
-				var scrolled = false;
-				self.iScrolls.body.on("scrollStart", function(event) {
-					scrolled = true;
-				});
-				
-				$(document).on("mouseup", function(event) {
-					
-					if($(event.target).parents($(e.delegateTarget)).length > 0 && !scrolled) {
-						$(e.delegateTarget).focus().addClass('touch-focus').animate({opacity:1}, 300, function() {
-							$(e.delegateTarget).removeClass('touch-focus');
-						});
-					}
-					
-					$(document).off(event);
-					self.iScrolls.body.off("scrollStart");
-				});
-				
-			});
-			
-			//Setup scroll events in modal
-			this.modal.init.call(this);
-			
+
 		}
+		
 	},
 	
 	modal: {
+		modals: [],
+		modalDropdown: null,
 		init: function() {
-			var $document = $(document);
+			var $document = $(document),
+				self = this;
 			
 			$document.on("show.modalmanager", function(e) {
 				var $modalElm = $(e.target);
+
+				if( typeof $modalElm.data("modal") !== "object" ) {
+					//assume we are switching tabs
+					return;
+				}
 				
 				// Create temp iScroll within the modal
-				var tmpIScroll = new IScroll($modalElm.parent()[0], {
+				self.modal.modals.push(new IScroll($modalElm.parent()[0], {
+					scrollbars: true,
+					mouseWheel: true,
+					interactiveScrollbars: true,
+					shrinkScrollbars: "scale"
+				}));
+				
+				var curModal = self.modal.modals[self.modal.modals.length-1];
+				
+				// Ugly, force iScroll to get the correct scrollHeight
+				setTimeout(function() {
+					curModal.refresh();
+				}, 300);
+				setTimeout(function() {
+					curModal.refresh();
+				}, 600);
+			
+				// Disable all JS events while scrolling for best performance
+				var tmp = false;
+				curModal.on("scrollStart", function() {
+					$modalElm.addClass("no-pointer");
+				});
+				curModal.on("scrollEnd", function(e) {
+					if(tmp !== false) {
+						clearTimeout(tmp);
+					}
+				
+					tmp = setTimeout(function() {
+						$modalElm.removeClass("no-pointer");
+						tmp = false;
+					}, 300);
+				});
+				
+				// Disable all JS events while scrolling for best performance
+				$modalElm.find('[data-toggle="tab"]').on("click", function(e) {
+					e.preventDefault();
+					curModal.refresh();
+					curModal.scrollTo(0, 0);
+					
+					setTimeout(function() {
+						curModal.refresh();
+					}, 300);
+					
+				});
+				
+				$modalElm.one("destroy", function() {
+					$modalElm.find('[data-toggle="tab"]').off("click");
+					curModal.destroy();
+					self.modal.modals.pop();
+				});
+				
+			});
+				
+			// Triggered when we create the dropdown and need scrolling
+			$document.on("dropdown-is-open", function(e, elm) {
+
+				// Create dropdown
+				self.modal.modalDropdown = new IScroll(elm, {
 					scrollbars: true,
 					mouseWheel: true,
 					interactiveScrollbars: true,
 					shrinkScrollbars: "scale"
 				});
 				
-				// Ugly, force iScroll to get the correct scrollHeight
-				setTimeout(function() {
-					tmpIScroll.refresh();
-				}, 100);
-				setTimeout(function() {
-					tmpIScroll.refresh();
-				}, 300);
+				// Set scroll to active item
+				self.modal.modalDropdown.scrollToElement($(elm).find('li.active')[0], 0, 0, -30);
+				
+				// Disable active modal
+				self.modal.modals[self.modal.modals.length-1].disable();
+				
+				// Disable all JS events for smooth scrolling
+				var tmp2 = false;
+				self.modal.modalDropdown.on("scrollStart", function(e) {
+					$(elm).addClass("no-pointer");
+				});
+				self.modal.modalDropdown.on("scrollEnd", function(e) {
+					if(tmp2 !== false) {
+						clearTimeout(tmp2);
+					}
+				
+					tmp2 = setTimeout(function() {
+						$(elm).removeClass("no-pointer");
+					}, 300);
+				});
+			});
 			
-				// Ugly, force iScroll to get the correct scrollHeight
-				tmpIScroll.on("scrollStart", function() {
-					$modalElm.addClass("no-pointer");
-				});
-				tmpIScroll.on("scrollEnd", function(e) {
-					setTimeout(function() {
-						$modalElm.removeClass("no-pointer");
-					}, 50);
-				});
-				
-				$modalElm.find('[data-toggle="tab"]').on("click", function(e) {
-					e.preventDefault();
-					tmpIScroll.refresh();
-					tmpIScroll.scrollTo(0, 0);
-					
-					setTimeout(function() {
-						tmpIScroll.refresh();
-					}, 100);
-					
-				});
-				
-				var tmpIScrollDropdown;
-				$document.on("dropdown-is-open", function(e, elm) {
-
-					tmpIScrollDropdown = new IScroll(elm, {
-						scrollbars: true,
-						mouseWheel: true,
-						interactiveScrollbars: true,
-						shrinkScrollbars: "scale"
-					});
-					tmpIScroll.disable();
-					
-					tmpIScrollDropdown.on("scrollStart", function(e) {
-						$(elm).addClass("no-pointer");
-					});
-					tmpIScrollDropdown.on("scrollEnd", function(e) {
-						setTimeout(function() {
-							$(elm).removeClass("no-pointer");
-						}, 50);
-					});
-					
-				});
-				
-				$document.on("dropdown-is-closed", function() {
-					tmpIScroll.enable();
-				});
-				
-				$document.one("hide.modalmanager", function() {
-					$modalElm.find('[data-toggle="tab"]').off("click");
-					tmpIScroll.destroy();
-				});
-				
+			$document.on("dropdown-is-closed", function() {
+				// Enable active modal
+				self.modal.modals[self.modal.modals.length-1].enable();
+				self.modal.modalDropdown.destroy();
 			});
 			
 		}
