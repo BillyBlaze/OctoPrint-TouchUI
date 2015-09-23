@@ -2,6 +2,18 @@
 	width: 100%;
 	height: 100%;
 	
+	&.hasScrollTouch {
+		overflow: hidden;
+		
+		body {
+			overflow: hidden;
+			
+			.modal-scrollable,
+			.show-dropdown {
+				overflow: hidden;
+			}
+		}
+	}
 	body {
 		width: 100%;
 		height: 100%;
@@ -56,6 +68,7 @@
 				.tab-content {
 					box-sizing: border-box;
 					padding: 30px 35px 0;
+					overflow: hidden;
 				}
 				
 				* {
@@ -706,13 +719,16 @@
 				color: #0F0;
 				
 				&:before {
-					content: "╔╦╗┌─┐┬ ┬┌─┐┬ ┬╦ ╦╦\A  ║ │ ││ ││  ├─┤║ ║║\A  ╩ └─┘└─┘└─┘┴ ┴╚═╝╩";
+					content: "╔╦╗┌─┐┬    ┬┌─┐┬    ┬╦    ╦╦\A     ║    │    ││    ││        ├─┤║    ║║\A     ╩    └─┘└─┘└─┘┴    ┴╚═╝╩";
 					display: block;
-					width: 155px;
+					width: 280px;
 					margin: 10px auto 30px;
 					position: relative;
-					line-height: 17px;
+					line-height: 14px;
 					font-size: 14px;
+					text-align: center;
+					font-family: FontAwesome;
+					transform: scale(0.75, 1.25);
 				}
 				&:after {
 					content: "v?.?.?";
@@ -772,7 +788,6 @@
 			left: 0;
 			right: 0;
 			width: 100%;
-			overflow: hidden;
 			height: 100%;
 			
 			.modal {
@@ -799,7 +814,10 @@
 				-ms-text-size-adjust: none;
 				-o-text-size-adjust: none;
 				text-size-adjust: none;
-				transition-duration: 1s !important;
+
+				-moz-transition-duration: 0.5s !important;
+				-webkit-transition-duration: 0.5s !important;
+				transition-duration: 0.5s !important;
 			}
 			.iScrollIndicator {
 				background: rgba(255,255,255,0.7) !important;
@@ -1734,6 +1752,19 @@
 			right: auto !important;
 		}
 		
+		#files_wrapper .entry,
+		#temp .row-fluid table {
+			-webkit-transform: translateZ(0);
+			-moz-transform: translateZ(0);
+			-ms-transform: translateZ(0);
+			-o-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
 		
 		.ui-keyboard-button {
 			min-width: 0px !important;

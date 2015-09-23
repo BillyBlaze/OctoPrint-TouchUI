@@ -3,11 +3,20 @@ window.TouchUI.scroll = {
 	
 	iScrolls: {},
 
+	preInit: function() {
+		var self = this;
+		
+		// Manipulate DOM for iScroll before knockout binding kicks in
+		if (!window.TouchUI.isTouch) {
+			$('<div id="scroll"></div>').insertBefore('.page-container');
+			$('.page-container').appendTo("#scroll");
+		}
+	},
 	init: function() {
 		var self = this;
 
 		// Add body scrolling on mousedown if there is no touch events 
-		if ("ontouchstart" in window || "onmsgesturechange" in window) {
+		if (window.TouchUI.isTouch) {
 			
 			// Hide topbar if clicking an item 
 			// TODO: Make this a setting in the options
@@ -18,10 +27,10 @@ window.TouchUI.scroll = {
 		} else { //Setup mouse as touch
 			
 			// Set overflow hidden for best performance
-			$("body,html").css("overflow", "hidden");
+			$("html").addClass("hasScrollTouch");
 			
-			self.create.terminal.call(self);
-			self.create.body.call(self);
+			self.terminal.init.call(self);
+			self.body.init.call(self);
 			
 			// Try to bind inputs, textareas and buttons to keyup rather then mousedown
 			// Not on selects since we can't cancel the preventDefault
@@ -46,45 +55,14 @@ window.TouchUI.scroll = {
 				});
 				
 			});
-			
-			//Setup scroll events in modal
-			this.modal.init.call(this);
-			
+
 		}
 
 	},
-
-	create: {
 		
-		terminal: function() {
-			var self = this;
-			
-			// Create scrolling for terminal
-			var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
-			$("#terminal-output").appendTo(cont);
-			self.iScrolls.terminal = new IScroll("#terminal-scroll", {
-				scrollbars: true,
-				mouseWheel: true,
-				interactiveScrollbars: true,
-				shrinkScrollbars: "scale",
-				fadeScrollbars: true
-			});
-			
-			// Enforce the right scrollheight and disable main scrolling if we have a scrolling content
-			self.iScrolls.terminal.on("beforeScrollStart", function() {
-				self.iScrolls.terminal.refresh();
-				
-				if(this.hasVerticalScroll) {
-					self.iScrolls.body.disable();
-				}
-			});
-			self.iScrolls.terminal.on("scrollEnd", function() {
-				self.iScrolls.body.enable();
-			});
-
-		},
+	body: {
 		
-		body: function() {
+		init: function() {
 			var self = this;
 
 			// Create main body scroll
@@ -135,9 +113,72 @@ window.TouchUI.scroll = {
 				}, 100);
 
 			});
-
 		}
 		
+	},
+	
+	terminal: {
+		
+		init: function() {
+			var self = this;
+			
+			// Create scrolling for terminal
+			self.iScrolls.terminal = new IScroll("#terminal-scroll", {
+				scrollbars: true,
+				mouseWheel: true,
+				interactiveScrollbars: true,
+				shrinkScrollbars: "scale",
+				fadeScrollbars: true
+			});
+			
+			// Enforce the right scrollheight and disable main scrolling if we have a scrolling content
+			self.iScrolls.terminal.on("beforeScrollStart", function() {
+				self.iScrolls.terminal.refresh();
+				
+				if(this.hasVerticalScroll) {
+					self.iScrolls.body.disable();
+				}
+			});
+			self.iScrolls.terminal.on("scrollEnd", function() {
+				self.iScrolls.body.enable();
+			});
+
+		},
+
+		knockoutEvents: function(terminalViewModel) {
+				
+			//Setup scroll events in modal
+			window.TouchUI.scroll.modal.init.call(window.TouchUI.scroll.modal);
+			
+			// Refresh terminal scroll height
+			terminalViewModel.displayedLines.subscribe(function() {
+				window.TouchUI.scroll.iScrolls.terminal.refresh();
+			});
+			
+			// Overwrite scrollToEnd function with iScroll functions
+			terminalViewModel.scrollToEnd = function() {
+				window.TouchUI.scroll.iScrolls.terminal.refresh();
+				window.TouchUI.scroll.iScrolls.terminal.scrollTo(0, window.TouchUI.scroll.iScrolls.terminal.maxScrollY);
+			};
+		
+			// Overwrite orginal helper, add one step and call the orginal function
+			var showOfflineOverlay = window.showOfflineOverlay;
+			window.showOfflineOverlay = function(title, message, reconnectCallback) {
+				window.TouchUI.scroll.iScrolls.body.scrollTo(0, 0, 500);
+				showOfflineOverlay.call(this, title, message, reconnectCallback);
+			};
+			
+			// Overwrite orginal helper, add one step and call the orginal function
+			var showConfirmationDialog = window.showConfirmationDialog;
+			window.showConfirmationDialog = function(message, onacknowledge) {
+				window.TouchUI.scroll.iScrolls.body.scrollTo(0, 0, 500);
+				showConfirmationDialog.call(this, message, onacknowledge);
+			};
+			
+			$("#reloadui_overlay").on("show", function() {
+				window.TouchUI.scroll.iScrolls.body.scrollTo(0, 0, 500);
+			});
+		}
 	},
 	
 	modal: {
@@ -156,14 +197,14 @@ window.TouchUI.scroll = {
 				}
 				
 				// Create temp iScroll within the modal
-				self.modal.modals.push(new IScroll($modalElm.parent()[0], {
+				self.modals.push(new IScroll($modalElm.parent()[0], {
 					scrollbars: true,
 					mouseWheel: true,
 					interactiveScrollbars: true,
 					shrinkScrollbars: "scale"
 				}));
 				
-				var curModal = self.modal.modals[self.modal.modals.length-1];
+				var curModal = self.modals[self.modals.length-1];
 				
 				// Ugly, force iScroll to get the correct scrollHeight
 				setTimeout(function() {
@@ -204,7 +245,7 @@ window.TouchUI.scroll = {
 				$modalElm.one("destroy", function() {
 					$modalElm.find('[data-toggle="tab"]').off("click");
 					curModal.destroy();
-					self.modal.modals.pop();
+					self.modals.pop();
 				});
 				
 			});
@@ -213,7 +254,7 @@ window.TouchUI.scroll = {
 			$document.on("dropdown-is-open", function(e, elm) {
 
 				// Create dropdown
-				self.modal.modalDropdown = new IScroll(elm, {
+				self.modalDropdown = new IScroll(elm, {
 					scrollbars: true,
 					mouseWheel: true,
 					interactiveScrollbars: true,
@@ -221,17 +262,17 @@ window.TouchUI.scroll = {
 				});
 				
 				// Set scroll to active item
-				self.modal.modalDropdown.scrollToElement($(elm).find('li.active')[0], 0, 0, -30);
+				self.modalDropdown.scrollToElement($(elm).find('li.active')[0], 0, 0, -30);
 				
 				// Disable active modal
-				self.modal.modals[self.modal.modals.length-1].disable();
+				self.modals[self.modals.length-1].disable();
 				
 				// Disable all JS events for smooth scrolling
 				var tmp2 = false;
-				self.modal.modalDropdown.on("scrollStart", function(e) {
+				self.modalDropdown.on("scrollStart", function(e) {
 					$(elm).addClass("no-pointer");
 				});
-				self.modal.modalDropdown.on("scrollEnd", function(e) {
+				self.modalDropdown.on("scrollEnd", function(e) {
 					if(tmp2 !== false) {
 						clearTimeout(tmp2);
 					}
@@ -244,8 +285,8 @@ window.TouchUI.scroll = {
 			
 			$document.on("dropdown-is-closed", function() {
 				// Enable active modal
-				self.modal.modals[self.modal.modals.length-1].enable();
-				self.modal.modalDropdown.destroy();
+				self.modals[self.modals.length-1].enable();
+				self.modalDropdown.destroy();
 			});
 			
 		}
