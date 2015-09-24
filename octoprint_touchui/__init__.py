@@ -42,6 +42,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/scroll.js",
 				"js/slider.js",
 				"js/modal.js",
+				"js/DOM.js",
 				"js/setup-knockout.js",
 				"js/libs/iscroll.js", 
 				"js/libs/jquery.keyboard.js"

@@ -3,7 +3,7 @@ window.TouchUI.scroll = {
 	
 	iScrolls: {},
 
-	preInit: function() {
+	beforeLoad: function() {
 		var self = this;
 		
 		// Manipulate DOM for iScroll before knockout binding kicks in
@@ -11,6 +11,9 @@ window.TouchUI.scroll = {
 			$('<div id="scroll"></div>').insertBefore('.page-container');
 			$('.page-container').appendTo("#scroll");
 		}
+		
+		var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
+		$("#terminal-output").appendTo(cont);
 	},
 	init: function() {
 		var self = this;
@@ -145,7 +148,7 @@ window.TouchUI.scroll = {
 
 		},
 
-		knockoutEvents: function(terminalViewModel) {
+		knockoutOverwrite: function(terminalViewModel) {
 				
 			//Setup scroll events in modal
 			window.TouchUI.scroll.modal.init.call(window.TouchUI.scroll.modal);

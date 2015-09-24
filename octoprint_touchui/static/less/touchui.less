@@ -145,7 +145,7 @@
 			}
 			.nav {
 				position: relative;
-				z-index: 3;
+				z-index: 23;
 			}
 			
 			.dropdown-menu {
@@ -196,6 +196,11 @@
 					&#conn_link2 {
 						a:before {
 							content: "\f1eb";
+						}
+					}	
+					&#timelapse_link2 {
+						a:before {
+							content: "\f03e";
 						}
 					}	
 					&#gcode_link2 {
@@ -309,8 +314,9 @@
 				min-width: 37px;
 				padding: 10px 0;
 			}
+
 		}
-		.tabbable.items-5 > .nav-tabs li {
+		#tabs.items-5 li {
 			a {
 				width: 15vw;
 			}
@@ -344,6 +350,11 @@
 		#term_link:after {
 			content: "\f120";
 		}
+		#webcam_link:after {
+			content: "\f030";
+			font-size: 26px;
+			line-height: 38px;
+		}
 		#navbar_settings {
 			display: none;
 		}
@@ -359,7 +370,7 @@
 			&:after {
 				animation-duration: 0.6s;
 				animation-iteration-count: 10;
-				content: "\f085";
+				content: "\f0c9";
 			}
 		}
 		#print_link {
@@ -390,6 +401,23 @@
 			100% {
 				color: white;
 			}
+		}
+		
+		/* Webcam */
+		#webcam {
+			margin: -30px -35px 0;
+			
+			#webcam_image {
+				display: block;
+				width: 100%;
+				height: auto;
+			}
+			
+			.muted {
+				padding: 35px;
+				display: block;
+			}
+		
 		}
 		
 		/* PRINT/FILES STATUS TAB */
@@ -492,6 +520,10 @@
 					.slimScrollDiv {
 						margin: 0 -35px 10px;
 						height: auto !important;
+					}
+					
+					.text-right.muted {
+						text-align: center;
 					}
 					
 					.upload-buttons {
@@ -1266,7 +1298,7 @@
 				margin: 0;
 				padding: 0;
 			
-				&:first-child {
+				&#x-y-panel {
 					display: block;
 					overflow: hidden;
 					float: none;
@@ -1311,7 +1343,7 @@
 					}
 				}
 				
-				&:nth-child(2) {
+				&#e-panel {
 					position: absolute;
 					margin: 85px 0 0;
 					width: 45%;
@@ -1327,7 +1359,7 @@
 					
 				}
 				
-				&:nth-child(2),
+				&#e-panel,
 				&:last-child {
 					.btn-group.control-box {
 						height: auto;
@@ -1373,7 +1405,7 @@
 					}
 				}
 				
-				&:nth-child(3) {
+				&#extra-panel {
 					position: absolute;
 					top: 43px;
 					right: -20px;
