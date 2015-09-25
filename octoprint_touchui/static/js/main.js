@@ -1,5 +1,4 @@
 window.TouchUI = window.TouchUI || {};
-		
 window.TouchUI.main = {
 	init: function() {
 		$("html").attr("id", "touch");
@@ -7,6 +6,7 @@ window.TouchUI.main = {
 		
 		window.TouchUI.isTouch = "ontouchstart" in window || "onmsgesturechange" in window;
 		
+		//Disable tabdrop, menu should be responsive enough :)
 		$.fn.tabdrop = function() {};
 		$.fn.tabdrop.prototype = { constructor: $.fn.tabdrop };
 		$.fn.tabdrop.Constructor = $.fn.tabdrop;
@@ -29,7 +29,8 @@ window.TouchUI.main = {
 			var self = this,
 				terminalViewModel = viewModels[0],
 				connectionViewModel = viewModels[1],
-				settingsViewModel = viewModels[2];
+				settingsViewModel = viewModels[2],
+				softwareUpdateViewModel = viewModels[3];
 
 			// Remove slimScroll from files list
 			$('.gcode_files').slimScroll({destroy: true});
@@ -63,7 +64,7 @@ window.TouchUI.main = {
 			}
 
 			window.TouchUI.DOM.move.init();
-			window.TouchUI.main.version.init(settingsViewModel);
+			window.TouchUI.main.version.init(settingsViewModel, softwareUpdateViewModel);
 
 			// Add class with how many tab-items
 			$("#tabs").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
@@ -73,21 +74,26 @@ window.TouchUI.main = {
 	
 	version: {
 		
-		init: function(settingsViewModel) {
+		init: function(settingsViewModel, softwareUpdateViewModel) {
 
 			//Get currect version from settingsView and store them
 			window.TouchUI.version = settingsViewModel.settings.plugins.touchui.version();
 			
-			var showing = window.TouchUI.version,
-				update = false;
-				
-			//TODO: check for update
-			if(update) {
-				showing += " outdated, new version: 0.1.0";
-			}
-			
 			// Update the content of the version
-			$('head').append('<style id="touch_updates_css">#term pre:after{ content: "v'+showing+'" !important; }</style>');
+			$('head').append('<style id="touch_updates_css">#term pre:after{ content: "v'+window.TouchUI.version+'" !important; }</style>');
+				
+			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
+				
+				var touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
+					return (elm.key === "touchui");
+				}, true) || false;
+				
+				if( touchui !== false && (touchui.information.remote.value !== window.TouchUI.version && touchui.information.remote.value !== null) ) {
+					$("#touch_updates_css").remove();
+					$('head').append('<style id="touch_updates_css">#term pre:after{ content: "v'+window.TouchUI.version+" outdated, new version: v"+touchui.information.remote.value+'" !important; }</style>');
+				}
+
+			});
 			
 		}
 		

@@ -43,6 +43,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/slider.js",
 				"js/modal.js",
 				"js/DOM.js",
+				"js/animate.js",
 				"js/setup-knockout.js",
 				"js/libs/iscroll.js", 
 				"js/libs/jquery.keyboard.js"
@@ -68,7 +69,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 	def get_update_information(self):
 	
 		return dict(
-			systemcommandeditor=dict(
+			touchui=dict(
 				displayName="TouchUI Plugin",
 				displayVersion=self._plugin_version,
 

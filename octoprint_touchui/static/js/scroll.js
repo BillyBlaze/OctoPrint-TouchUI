@@ -12,22 +12,23 @@ window.TouchUI.scroll = {
 			$('.page-container').appendTo("#scroll");
 		}
 		
+		// Create iScroll container for terminal anyway, we got styling on that
 		var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
 		$("#terminal-output").appendTo(cont);
 	},
 	init: function() {
 		var self = this;
 
-		// Add body scrolling on mousedown if there is no touch events 
-		if (window.TouchUI.isTouch) {
-			
-			// Hide topbar if clicking an item 
-			// TODO: Make this a setting in the options
-			$('#tabs [data-toggle="tab"]').click(function() {
-				$("html, body").stop().animate({scrollTop:parseFloat($("#navbar").height())}, 160, "swing");
-			});
+		// Hide topbar if clicking an item 
+		// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before.
+		// TODO: Make this a setting in the options
+		$(document).on("click", '#tabs [data-toggle="tab"]', function() {
+			window.TouchUI.animate.hide("navbar");
+		});
 
-		} else { //Setup mouse as touch
+		// Add body scrolling on mousedown if there is no touch events 
+		// Setup mouse as touch
+		if (!window.TouchUI.isTouch) { 
 			
 			// Set overflow hidden for best performance
 			$("html").addClass("hasScrollTouch");
@@ -103,18 +104,7 @@ window.TouchUI.scroll = {
 			});
 			
 			$('#tabs [data-toggle="tab"]').on("click", function() {
-				self.iScrolls.body.stop();
-				self.iScrolls.body.refresh();
 				
-				// Hide topbar if clicking an item 
-				// TODO: Make this a setting in the options
-				setTimeout(function() {
-					self.iScrolls.body.scrollTo(0, -parseFloat($("#navbar").height()), 160);
-					setTimeout(function() {
-						self.iScrolls.body.refresh();
-					}, 180);//crappy iScroll
-				}, 100);
-
 			});
 		}
 		
@@ -293,5 +283,5 @@ window.TouchUI.scroll = {
 			});
 			
 		}
-	},
+	}
 };
