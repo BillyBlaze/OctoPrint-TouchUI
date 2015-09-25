@@ -23,6 +23,7 @@ window.TouchUI.scroll = {
 		// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before.
 		// TODO: Make this a setting in the options
 		$(document).on("click", '#tabs [data-toggle="tab"]', function() {
+			window.TouchUI.scroll.iScrolls.body.refresh();
 			window.TouchUI.animate.hide("navbar");
 		});
 
@@ -102,12 +103,8 @@ window.TouchUI.scroll = {
 					self.iScrolls.body.refresh();
 				});
 			});
-			
-			$('#tabs [data-toggle="tab"]').on("click", function() {
-				
-			});
-		}
-		
+
+		}		
 	},
 	
 	terminal: {
@@ -168,6 +165,7 @@ window.TouchUI.scroll = {
 				showConfirmationDialog.call(this, message, onacknowledge);
 			};
 			
+			// Well this is easier, isn't it :D
 			$("#reloadui_overlay").on("show", function() {
 				window.TouchUI.scroll.iScrolls.body.scrollTo(0, 0, 500);
 			});
@@ -183,6 +181,7 @@ window.TouchUI.scroll = {
 			
 			$document.on("show.modalmanager", function(e) {
 				var $modalElm = $(e.target);
+				console.log(e);
 
 				if( typeof $modalElm.data("modal") !== "object" ) {
 					//assume we are switching tabs
@@ -202,17 +201,14 @@ window.TouchUI.scroll = {
 				// Ugly, force iScroll to get the correct scrollHeight
 				setTimeout(function() {
 					curModal.refresh();
-				}, 300);
-				setTimeout(function() {
-					curModal.refresh();
-				}, 600);
+				}, 0);
 			
 				// Disable all JS events while scrolling for best performance
 				var tmp = false;
 				curModal.on("scrollStart", function() {
 					$modalElm.addClass("no-pointer");
 				});
-				curModal.on("scrollEnd", function(e) {
+				curModal.on("scrollEnd scrollCancel", function(e) {
 					if(tmp !== false) {
 						clearTimeout(tmp);
 					}
@@ -223,16 +219,15 @@ window.TouchUI.scroll = {
 					}, 300);
 				});
 				
-				// Disable all JS events while scrolling for best performance
+				// Prevent default events (i.e. clones) refresh the scrollHeight and scroll back to top
 				$modalElm.find('[data-toggle="tab"]').on("click", function(e) {
 					e.preventDefault();
-					curModal.refresh();
-					curModal.scrollTo(0, 0);
+					curModal.stop();
 					
 					setTimeout(function() {
 						curModal.refresh();
-					}, 300);
-					
+						curModal.scrollTo(0, 0);
+					}, 0);
 				});
 				
 				$modalElm.one("destroy", function() {
@@ -246,7 +241,7 @@ window.TouchUI.scroll = {
 			// Triggered when we create the dropdown and need scrolling
 			$document.on("dropdown-is-open", function(e, elm) {
 
-				// Create dropdown
+				// Create dropdown scroll
 				self.modalDropdown = new IScroll(elm, {
 					scrollbars: true,
 					mouseWheel: true,
@@ -257,7 +252,7 @@ window.TouchUI.scroll = {
 				// Set scroll to active item
 				self.modalDropdown.scrollToElement($(elm).find('li.active')[0], 0, 0, -30);
 				
-				// Disable active modal
+				// Disable scrolling in active modal
 				self.modals[self.modals.length-1].disable();
 				
 				// Disable all JS events for smooth scrolling
@@ -265,7 +260,7 @@ window.TouchUI.scroll = {
 				self.modalDropdown.on("scrollStart", function(e) {
 					$(elm).addClass("no-pointer");
 				});
-				self.modalDropdown.on("scrollEnd", function(e) {
+				self.modalDropdown.on("scrollEnd scrollCancel", function(e) {
 					if(tmp2 !== false) {
 						clearTimeout(tmp2);
 					}

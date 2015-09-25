@@ -43,6 +43,11 @@
 			box-shadow: none !important; /* This should increase performance */
 		}
 		
+		#gcode_canvas {
+			width: 100% !important;
+			height: 100% !important;
+		}
+		
 		.page-container {
 			color: white;
 			width: 100%;
@@ -78,6 +83,30 @@
 					.add-on {
 						color: black;
 					}
+					
+					table {
+						tr {
+							&:first-child {
+								th {
+									margin: 0;
+									font-size: 18px;
+									border-bottom: 2px solid black;
+									background: #00B0FF;
+									padding: 13px 5px;
+								}
+							}
+							
+							&:hover {
+								background-color: #333;
+							}
+							
+							th, td {
+								border-bottom: 2px solid black;
+								background-color: #333;
+							}
+						}
+					}
+					
 				}
 				
 				* {
@@ -1061,19 +1090,34 @@
 				.tickLabel {
 					color: rgb(169, 169, 169);
 				}
-				td {
-					color: white;
+				table {
+					tr {
+						background: transparent !important;
+						
+						&:hover {
+							background: transparent !important;
+							
+							td {
+								background: transparent !important;
+							}
+						}
 					
-					&.legendLabel {
-						padding: 0 15px 0 5px;
+						td {
+							background: transparent !important;
+							color: white;
+							
+							&.legendLabel {
+								padding: 0 15px 0 5px;
+							}
+						}
 					}
 				}
 			}
-		
+
 			.row-fluid {
 				table {
 					width: 161vw !important;
-					margin: 20px 0 10px -40px !important;
+					margin: 20px 0 40px -40px !important;
 					transition: left 0.5s ease;
 					cursor: w-resize;
 					position: relative;
@@ -1091,25 +1135,13 @@
 					tr {
 						&:first-child {
 							th {
-								background: #00B0FF;
-								padding: 13px 5px;
-								margin: 0;
-								font-size: 18px;
-								border-bottom: 2px solid black;
-								
 								&:first-child {
 									width: 11% !important;
 								}
 							}
 						}
-						&:hover {
-							background-color: #333;
-						}
 						
 						th, td {
-							background-color: #333;
-							border-bottom: 2px solid black;
-						
 							&:nth-child(1) {
 								text-align: right;
 							}
@@ -1640,24 +1672,6 @@
 			}
 			
 
-		}
-		
-		.slider {
-			width: 100% !important;
-			margin: 0 0 10px;
-			height: 50px;
-			
-			.slider-handle {
-				height: 30px;
-				width: 30px;
-				margin-left: -15px;
-				margin-top: -10px;
-				background: #00B0FF;
-			}
-			
-			.slider-selection {
-				background: #00B0FF;
-			}
 		}
 		
 		#connection {
