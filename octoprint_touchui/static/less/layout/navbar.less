@@ -110,6 +110,7 @@
 	#navbar_settings {
 		display: none;
 	}
+
 	#navbar_login {
 		&.offline:after {
 			color: white;
@@ -125,6 +126,7 @@
 			content: "\f0c9";
 		}
 	}
+
 	@keyframes blink_offline {
 		0% {
 			color: white;
@@ -148,29 +150,42 @@
 			color: white;
 		}
 	}
+
 }
 
 #tabs {
-	#temp_link:after {
-		content: "\f0e4";
+
+	#temp_link {
+		&:after {
+			content: "\f0e4";
+		}
 	}
-	#control_link:after {
-		content: "\f11b";
+	#control_link {
+		&:after {
+			content: "\f11b";
+		}
 	}
-	#gcode_link:after {
-		content: "\f248";
+	#gcode_link {
+		&:after {
+			content: "\f248";
+		}
 	}
-	#term_link:after {
-		content: "\f120";
+	#term_link {
+		&:after {
+			content: "\f120";
+		}
 	}
-	#webcam_link:after {
-		content: "\f030";
-		font-size: 26px;
-		line-height: 38px;
+	#webcam_link {
+		&:after {
+			content: "\f030";
+			font-size: 26px;
+			line-height: 38px;
+		}
 	}
 	#print_link {
 		&:after {
 			content: "\f233";
 		}
 	}
+
 }

@@ -11,7 +11,7 @@ Install NodeJS (http://www.nodejs.org/) and update NPM with ``sudo npm install n
 
 2. Install Gulp
 ```
-(sudo) npm install -g less
+(sudo) npm install -g gulp
 ```
 
 3. Install devDependencies
@@ -20,4 +20,7 @@ Install NodeJS (http://www.nodejs.org/) and update NPM with ``sudo npm install n
 ```
 
 ### Watch
-You now can run `gulp watch` in the root of this project
+Run `gulp watch` in the root of this project
+
+### Build
+Run `gulp` in the root of this project

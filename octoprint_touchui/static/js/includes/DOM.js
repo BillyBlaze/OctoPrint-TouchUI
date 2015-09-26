@@ -5,7 +5,6 @@
 		create: {
 
 			init: function() {
-				console.log(this);
 
 				this.DOM.create.connection.init.call(this);
 				this.DOM.create.settings.init.call(this);

@@ -15,6 +15,9 @@ import octoprint.plugin
 import octoprint.settings
 import octoprint.util
 
+dev = True
+#dev = False
+
 def dump(obj):
 	for attr in dir(obj):
 		if hasattr( obj, attr ):
@@ -35,6 +38,13 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def get_assets(self):
 
+		if dev == True:
+			less = []
+			css = ["css/touchui.css"]
+		else:
+			less = []
+			css = ["css/touchui.css"]
+
 		return dict(
 			js=[
 				"js/libs/iscroll.js",
@@ -54,10 +64,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
 			],
-			less=[],
-			css=[
-				"css/touchui.css"
-			]
+			less=less,
+			css=css
 		)
 
 	def get_template_configs(self):

@@ -16,14 +16,16 @@
   width: 100%;
   height: 100%;
   background: black;
-  /* Webcam */
-  /* PRINT/FILES STATUS TAB */
-  /* TERMINAL TAB */
-  /* MODALS */
-  /* MISC */
-  /* TEMP TAB */
-  /* Footer */
-  /* CONTROLS TAB */
+}
+#touch body * {
+  font-family: monospace;
+  text-shadow: none !important;
+  /* This should increase performance */
+  box-shadow: none !important;
+  /* This should increase performance */
+}
+#touch body .no-pointer * {
+  pointer-events: none !important;
 }
 #touch body [class^="icon-"],
 #touch body [class*=" icon-"] {
@@ -40,17 +42,6 @@
   position: absolute;
   top: -5000px;
   left: -5000px;
-}
-#touch body * {
-  font-family: monospace;
-  text-shadow: none !important;
-  /* This should increase performance */
-  box-shadow: none !important;
-  /* This should increase performance */
-}
-#touch body #gcode_canvas {
-  width: 100% !important;
-  height: 100% !important;
 }
 #touch body .page-container {
   color: white;
@@ -141,6 +132,77 @@
 #touch body .page-container .octoprint-container .btn[disabled] {
   pointer-events: none;
 }
+#touch body .control-group .control-label,
+#touch body .control-group .controls {
+  display: block;
+  float: none;
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+#touch body .nav-tabs .active {
+  background: black;
+}
+#touch body .nav-tabs .active a {
+  border-radius: 0;
+}
+#touch body .tabbable,
+#touch body .container {
+  width: 100%;
+}
+#touch body .container > .row,
+#touch body .container > .row > .tabbable {
+  margin: 0;
+}
+#touch body button,
+#touch body .btn {
+  color: black;
+  background: #F3F3F3;
+  padding: 6px 15px;
+}
+#touch body button:active,
+#touch body .btn:active {
+  background: #ECECEC;
+}
+#touch body button:focus,
+#touch body .btn:focus {
+  outline: 0 none;
+}
+#touch body button-primary,
+#touch body .btn-primary {
+  color: white;
+  background: #00B0FF;
+}
+#touch body button-primary:active,
+#touch body .btn-primary:active {
+  background: #009CE2;
+}
+#touch body button-danger,
+#touch body .btn-danger {
+  color: white;
+  background: #D40000;
+}
+#touch body button-danger:active,
+#touch body .btn-danger:active {
+  background: #9E0000;
+}
+#touch body a {
+  color: #009CE2;
+}
+#touch body a.close {
+  color: black;
+}
+#touch body .nav-tabs > li,
+#touch body .nav-pills > li {
+  color: #009CE2;
+}
+#touch body .nav-pills > .active > a,
+#touch body .nav-pills > .active > a:hover,
+#touch body .nav-list > .active > a,
+#touch body .nav-list > .active > a:hover {
+  background: #00B0FF;
+  color: white;
+}
 #touch body .progress {
   background-color: #252525;
   background-image: -moz-linear-gradient(top, #252525, #2D2D2D);
@@ -175,6 +237,9 @@
 #touch body #navbar .dropdown-menu {
   margin-top: 6px;
   right: 10px;
+}
+#touch body #navbar .dropdown-menu:after {
+  border-bottom-color: #00B0FE !important;
 }
 #touch body #navbar .dropdown-menu li.offline a:before {
   color: red;
@@ -224,19 +289,63 @@
 #touch body #navbar .dropdown-menu li #logout_button:before {
   content: "\f08b";
 }
-#touch body .nav-tabs .active {
-  background: black;
+#touch body #navbar #navbar_settings {
+  display: none;
 }
-#touch body .nav-tabs .active a {
-  border-radius: 0;
+#touch body #navbar #navbar_login.offline:after {
+  color: white;
+  animation-name: blink_offline;
 }
-#touch body .tabbable,
-#touch body .container {
-  width: 100%;
+#touch body #navbar #navbar_login.online:after {
+  color: white;
+  animation-name: blink_online;
 }
-#touch body .container > .row,
-#touch body .container > .row > .tabbable {
-  margin: 0;
+#touch body #navbar #navbar_login:after {
+  animation-duration: 0.6s;
+  animation-iteration-count: 5;
+  content: "\f0c9";
+}
+@keyframes blink_offline {
+  0% {
+    color: white;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: white;
+  }
+}
+@keyframes blink_online {
+  0% {
+    color: white;
+  }
+  50% {
+    color: #9AFD00;
+  }
+  100% {
+    color: white;
+  }
+}
+#touch body #tabs #temp_link:after {
+  content: "\f0e4";
+}
+#touch body #tabs #control_link:after {
+  content: "\f11b";
+}
+#touch body #tabs #gcode_link:after {
+  content: "\f248";
+}
+#touch body #tabs #term_link:after {
+  content: "\f120";
+}
+#touch body #tabs #webcam_link:after {
+  content: "\f030";
+  font-size: 26px;
+  line-height: 38px;
+}
+#touch body #tabs #print_link:after {
+  content: "\f233";
 }
 #touch body #offline_overlay,
 #touch body #reloadui_overlay {
@@ -309,77 +418,6 @@
 }
 #touch body #tabs.items-5 li a {
   width: 15vw;
-}
-#touch body .dropdown.open {
-  overflow: visible !important;
-}
-#touch body .dropdown.open .dropdown-menu {
-  background-color: #00B0FE !important;
-}
-#touch body .dropdown.open .dropdown-menu a {
-  text-indent: 0 !important;
-}
-#touch body .navbar .pull-right > li > .dropdown-menu:after,
-#touch body .navbar .nav > li > .dropdown-menu.pull-right:after {
-  border-bottom-color: #00B0FE !important;
-}
-#touch body #temp_link:after {
-  content: "\f0e4";
-}
-#touch body #control_link:after {
-  content: "\f11b";
-}
-#touch body #gcode_link:after {
-  content: "\f248";
-}
-#touch body #term_link:after {
-  content: "\f120";
-}
-#touch body #webcam_link:after {
-  content: "\f030";
-  font-size: 26px;
-  line-height: 38px;
-}
-#touch body #navbar_settings {
-  display: none;
-}
-#touch body #navbar_login.offline:after {
-  color: white;
-  animation-name: blink_offline;
-}
-#touch body #navbar_login.online:after {
-  color: white;
-  animation-name: blink_online;
-}
-#touch body #navbar_login:after {
-  animation-duration: 0.6s;
-  animation-iteration-count: 10;
-  content: "\f0c9";
-}
-#touch body #print_link:after {
-  content: "\f233";
-}
-@keyframes blink_offline {
-  0% {
-    color: white;
-  }
-  50% {
-    color: red;
-  }
-  100% {
-    color: white;
-  }
-}
-@keyframes blink_online {
-  0% {
-    color: white;
-  }
-  50% {
-    color: #9AFD00;
-  }
-  100% {
-    color: white;
-  }
 }
 #touch body #webcam {
   margin: -30px -35px 0;
@@ -618,6 +656,10 @@
   clear: both;
   padding-top: 5px;
 }
+#touch body #term .iScrollIndicator {
+  background: rgba(0, 255, 80, 0.7) !important;
+  border: 0 none !important;
+}
 #touch body #term .terminal {
   margin-bottom: 70px;
 }
@@ -731,195 +773,6 @@
   color: #0F0;
   padding: 4px 12px;
 }
-#touch body .modal-scrollable {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-}
-#touch body .modal-scrollable .modal {
-  margin: 0;
-  position: absolute !important;
-  z-index: 1 !important;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
-  width: 95% !important;
-  height: auto;
-  overflow: hidden;
-  min-height: 100%;
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-text-size-adjust: none;
-  -moz-text-size-adjust: none;
-  -ms-text-size-adjust: none;
-  -o-text-size-adjust: none;
-  text-size-adjust: none;
-  -moz-transition-duration: 0.5s !important;
-  -webkit-transition-duration: 0.5s !important;
-  transition-duration: 0.5s !important;
-}
-#touch body .modal-scrollable .iScrollIndicator {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border: 0 none !important;
-}
-#touch body .modal {
-  position: fixed;
-  overflow: auto;
-  /* Make modal appear from left
-			top: 0 !important;
-			bottom: 0 !important;
-			height: 100% !important;
-			left: -100% !important;
-			width: 95% !important;
-			margin: 0 !important;
-			min-height: 100%;*/
-  border-radius: 0;
-  -webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
-  -moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
-  -o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
-  transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
-}
-#touch body .modal .accordion-group {
-  border: 0 none !important;
-}
-#touch body .modal .accordion-group .accordion-heading {
-  display: none;
-}
-#touch body .modal .accordion-group .accordion-body {
-  border: 0 none;
-}
-#touch body .modal .accordion-group .accordion-body .accordion-inner {
-  padding: 0;
-  border: 0 none;
-}
-#touch body .modal#connection_dialog .btn-primary {
-  display: none !important;
-}
-#touch body .modal.fade {
-  top: 0 !important;
-  left: -100% !important;
-}
-#touch body .modal.in {
-  top: 0 !important;
-  left: 0% !important;
-}
-#touch body .modal.show-dropdown .modal-header .span3 {
-  height: auto;
-}
-#touch body .modal .modal {
-  /* make a sticky footer */
-}
-#touch body .modal .modal-body {
-  padding: 20px 25px;
-  margin-bottom: 60px;
-  min-height: auto !important;
-  max-height: none !important;
-}
-#touch body .modal .modal-body .span3.scrollable {
-  display: none;
-}
-#touch body .modal .modal-body .span9.scrollable {
-  width: 100% !important;
-  margin: 0;
-  padding: 0;
-}
-#touch body .modal .modal-footer {
-  border-radius: 0;
-  box-sizing: border-box;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding-right: 30px;
-  z-index: 2;
-}
-#touch body .modal .modal-header {
-  padding: 20px 25px;
-}
-#touch body .modal .modal-header #settings_dialog_label {
-  font-size: 1.4rem;
-  padding: 0 50px 0 0;
-}
-#touch body .modal .modal-header .close {
-  font-size: 42px;
-  padding: 13px;
-  margin-top: -10px;
-  background: transparent;
-}
-#touch body .modal .modal-header span.hidden {
-  display: inline-block !important;
-  position: relative;
-}
-#touch body .modal .modal-header span.hidden:before {
-  content: "/";
-  color: #777;
-  margin-right: 10px;
-}
-#touch body .modal .modal-header span.hidden:after {
-  content: "\f078";
-  font-family: FontAwesome !important;
-  font-size: 0.8rem;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: relative;
-  top: -4px;
-  margin-left: 10px;
-}
-#touch body .modal .modal-header span.hidden .show-dropdown {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  overflow: hidden;
-  height: 68vh;
-  z-index: 29;
-  min-height: 0 !important;
-  margin-bottom: 100px;
-  background-color: white;
-  border: 1px solid #CCC;
-}
-#touch body .modal .modal-header span.hidden .show-dropdown li a {
-  font-size: 15px;
-  padding: 10px 15px;
-}
-#touch body .modal .modal-header span.hidden .show-dropdown .iScrollIndicator {
-  background: rgba(105, 105, 105, 0.7) !important;
-  border: 0 none !important;
-}
-#touch body .modal .full-sized-box {
-  padding: 0 !important;
-  position: relative;
-}
-#touch body .modal-backdrop {
-  background: black !important;
-}
-#touch body label {
-  /* Disabling for better scrolling performance */
-  pointer-events: none;
-}
-#touch body label.checkbox,
-#touch body label.radio {
-  /* Well except for.. */
-  pointer-events: all;
-}
-#touch body .control-group .control-label,
-#touch body .control-group .controls {
-  display: block;
-  float: none;
-  width: 100%;
-  margin: 0;
-  text-align: left;
-}
 #touch body #temp #temperature-graph {
   margin-bottom: 10px;
   height: 85vh;
@@ -1027,108 +880,6 @@
   font-size: 18px;
   top: -7px;
   position: relative;
-}
-#touch body .page-container .octoprint-container .circ-slider {
-  width: 50%;
-  height: 130px;
-  padding: 10px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  float: left;
-  margin: 0 0 20px;
-}
-@media (max-width: 479px) {
-  #touch body .page-container .octoprint-container .circ-slider {
-    float: none;
-    display: block;
-    width: 100%;
-  }
-}
-#touch body .page-container .octoprint-container .circ-slider.disabled {
-  pointer-events: none;
-  cursor: not-allowed;
-  opacity: 0.3;
-}
-#touch body .page-container .octoprint-container .jcs {
-  position: relative;
-  border-style: solid;
-  border-radius: 100%;
-  border-color: #00B0FF;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  border-width: 5px;
-  cursor: pointer;
-}
-#touch body .page-container .octoprint-container .jcs-value {
-  position: absolute;
-  text-align: center;
-  pointer-events: none;
-  line-height: 4em;
-  color: white;
-  outline: none;
-  top: 35px !important;
-  font-size: 18px;
-  line-height: 22px;
-}
-#touch body .page-container .octoprint-container .jcs-value b {
-  display: block;
-}
-#touch body .page-container .octoprint-container .jcs-indicator {
-  position: absolute;
-  border-radius: 100%;
-  background-color: #00B0FF;
-  border: 0 none;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  pointer-events: none;
-  width: 30px;
-  height: 30px;
-}
-#touch body .page-container .octoprint-container .jcs-panel {
-  position: relative;
-  display: block;
-  border-style: solid;
-  border-color: transparent;
-  cursor: pointer;
-  margin: 0 auto;
-  width: 140px;
-}
-#touch body .page-container .octoprint-container .jcs-value img {
-  border-radius: 100%;
-  background: transparent;
-  width: inherit;
-  height: inherit;
-}
-#touch body .page-container .octoprint-container .noselect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-#touch body .footer {
-  font-size: 14px;
-}
-#touch body .footer ul li {
-  display: inline-block;
-  margin-left: 0;
-  font-size: 85%;
-  width: auto;
-}
-#touch body .footer ul li a {
-  display: inline-block;
-  width: 20px;
-  color: #555;
-  height: 20px;
-  overflow: hidden;
-  margin: 0;
-  font-size: 18px;
-  padding: 0;
-}
-#touch body .footer ul li a:hover {
-  color: white;
-  text-decoration: none;
 }
 #touch body #control {
   margin: 0 auto;
@@ -1424,8 +1175,200 @@
 #touch body #control > .jog-panel .slider input {
   display: block !important;
 }
+#touch body #gcode_canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
 #touch body #connection {
   height: auto !important;
+}
+#touch body #timelapse > h1 {
+  margin: 30px 0 0;
+}
+#touch body #timelapse > table {
+  margin: 5px -35px 0;
+  display: table;
+  width: 100vw;
+}
+#touch body #timelapse > table tr td:first-child,
+#touch body #timelapse > table tr th:first-child {
+  padding-left: 35px;
+}
+#touch body #timelapse > table tr td:last-child,
+#touch body #timelapse > table tr th:last-child {
+  padding-right: 35px;
+}
+#touch body .modal-backdrop {
+  background: black !important;
+}
+#touch body .modal-scrollable {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+#touch body .modal-scrollable .modal {
+  margin: 0;
+  position: absolute !important;
+  z-index: 1 !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  width: 95% !important;
+  height: auto;
+  overflow: hidden;
+  min-height: 100%;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+  -moz-transition-duration: 0.5s !important;
+  -webkit-transition-duration: 0.5s !important;
+  transition-duration: 0.5s !important;
+}
+#touch body .modal-scrollable .iScrollIndicator {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 0 none !important;
+}
+#touch body .modal {
+  position: fixed;
+  overflow: auto;
+  /* Make modal appear from left
+	top: 0 !important;
+	bottom: 0 !important;
+	height: 100% !important;
+	left: -100% !important;
+	width: 95% !important;
+	margin: 0 !important;
+	min-height: 100%;*/
+  border-radius: 0;
+  -webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+  transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+}
+#touch body .modal .accordion-group {
+  border: 0 none !important;
+}
+#touch body .modal .accordion-group .accordion-heading {
+  display: none;
+}
+#touch body .modal .accordion-group .accordion-body {
+  border: 0 none;
+}
+#touch body .modal .accordion-group .accordion-body .accordion-inner {
+  padding: 0;
+  border: 0 none;
+}
+#touch body .modal#connection_dialog .btn-primary {
+  display: none !important;
+}
+#touch body .modal.fade {
+  top: 0 !important;
+  left: -100% !important;
+}
+#touch body .modal.in {
+  top: 0 !important;
+  left: 0% !important;
+}
+#touch body .modal.show-dropdown .modal-header .span3 {
+  height: auto;
+}
+#touch body .modal .modal {
+  /* make a sticky footer */
+}
+#touch body .modal .modal-body {
+  padding: 20px 25px;
+  margin-bottom: 60px;
+  min-height: auto !important;
+  max-height: none !important;
+}
+#touch body .modal .modal-body .span3.scrollable {
+  display: none;
+}
+#touch body .modal .modal-body .span9.scrollable {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+#touch body .modal .modal-footer {
+  border-radius: 0;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-right: 30px;
+  z-index: 2;
+}
+#touch body .modal .modal-header {
+  padding: 20px 25px;
+}
+#touch body .modal .modal-header #settings_dialog_label {
+  font-size: 1.4rem;
+  padding: 0 50px 0 0;
+}
+#touch body .modal .modal-header .close {
+  font-size: 42px;
+  padding: 13px;
+  margin-top: -10px;
+  background: transparent;
+}
+#touch body .modal .modal-header span.hidden {
+  display: inline-block !important;
+  position: relative;
+}
+#touch body .modal .modal-header span.hidden:before {
+  content: "/";
+  color: #777;
+  margin-right: 10px;
+}
+#touch body .modal .modal-header span.hidden:after {
+  content: "\f078";
+  font-family: FontAwesome !important;
+  font-size: 0.8rem;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  top: -4px;
+  margin-left: 10px;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  overflow: hidden;
+  height: 68vh;
+  z-index: 29;
+  min-height: 0 !important;
+  margin-bottom: 100px;
+  background-color: white;
+  border: 1px solid #CCC;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown li a {
+  font-size: 15px;
+  padding: 10px 15px;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown .iScrollIndicator {
+  background: rgba(105, 105, 105, 0.7) !important;
+  border: 0 none !important;
+}
+#touch body .modal .full-sized-box {
+  padding: 0 !important;
+  position: relative;
 }
 #touch body #scroll {
   position: absolute;
@@ -1465,108 +1408,13 @@
   background: rgba(255, 255, 255, 0.7) !important;
   border: 0 none !important;
 }
-#touch body button,
-#touch body .btn {
-  color: black;
-  background: #F3F3F3;
-  padding: 6px 15px;
-}
-#touch body button:active,
-#touch body .btn:active {
-  background: #ECECEC;
-}
-#touch body button:focus,
-#touch body .btn:focus {
-  outline: 0 none;
-}
-#touch body button-primary,
-#touch body .btn-primary {
-  color: white;
-  background: #00B0FF;
-}
-#touch body button-primary:active,
-#touch body .btn-primary:active {
-  background: #009CE2;
-}
-#touch body button-danger,
-#touch body .btn-danger {
-  color: white;
-  background: #D40000;
-}
-#touch body button-danger:active,
-#touch body .btn-danger:active {
-  background: #9E0000;
-}
-#touch body a {
-  color: #009CE2;
-}
-#touch body a.close {
-  color: black;
-}
-#touch body .nav-tabs > li,
-#touch body .nav-pills > li {
-  color: #009CE2;
-}
-#touch body .nav-pills > .active > a,
-#touch body .nav-pills > .active > a:hover,
-#touch body .nav-list > .active > a,
-#touch body .nav-list > .active > a:hover {
-  background: #00B0FF;
-  color: white;
-}
-#touch body .dropdown-menu a {
-  display: block;
-  color: black;
-}
-#touch body .dropdown-menu a:hover {
-  color: white;
-  background: #00B0FF;
-}
-#touch body .divider {
-  margin: 5px 0;
-  background-color: black;
-  border: 0 none;
-}
-#touch body .no-pointer * {
-  pointer-events: none !important;
-}
-#touch body .ui-pnotify-container {
-  border-radius: 0;
-}
-#touch body .ui-pnotify-closer {
-  visibility: visible !important;
-  padding: 5px 10px;
-  font-size: 28px;
-}
-#touch body .ui-pnotify-sticker {
-  display: none;
-}
-#touch body .ui-pnotify {
-  position: absolute;
-  left: 0;
-  width: 100% !important;
-  right: auto !important;
-}
-#touch body #files_wrapper .entry,
-#touch body #temp .row-fluid table {
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 #touch body .ui-keyboard-button {
-  min-width: 0px !important;
+  min-width: 0 !important;
   height: 13vh !important;
   min-width: 8vw !important;
   margin: 1px !important;
   padding: 0 !important;
-  background-color: #00B0FF;
+  background-color: #00b0ff;
   border: 0 none;
   color: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.65);
@@ -1589,7 +1437,7 @@
   padding: 0 10px !important;
 }
 #touch body .ui-keyboard {
-  padding: .3em;
+  padding: 0.3em;
   position: absolute;
   left: 0;
   top: 0;
@@ -1604,7 +1452,7 @@
 #touch body .ui-keyboard-button {
   height: 2em;
   min-width: 2em;
-  margin: .1em;
+  margin: 0.1em;
   cursor: pointer;
   overflow: hidden;
   line-height: 2em;
@@ -1668,7 +1516,7 @@
 #touch body .ui-keyboard-ZWJ span,
 #touch body .ui-keyboard-ZWNJ span,
 #touch body .ui-keyboard-ZWSP span {
-  font-size: .5em;
+  font-size: 0.5em;
   line-height: 1.5em;
   white-space: normal;
 }
@@ -1687,7 +1535,7 @@
   border-color: #c00;
   background: #800;
   color: #fff;
-  opacity: .5;
+  opacity: 0.5;
   filter: alpha(opacity=50);
 }
 #touch body button.ui-keyboard-accept.ui-keyboard-invalid-input:hover {
@@ -1699,7 +1547,7 @@
   margin-top: 3px;
 }
 #touch body div.ui-body.ui-keyboard button.ui-keyboard-button.ui-btn {
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   border-color: transparent;
 }
 #touch body .ui-body .ui-keyboard-button {
@@ -1725,7 +1573,7 @@
 }
 #touch body .ui-body .ui-btn-inner {
   height: 2em;
-  padding: .2em 0;
+  padding: 0.2em 0;
   margin: 0;
 }
 #touch body .ui-body .ui-btn {
@@ -1736,8 +1584,8 @@
   padding: 1px 6px;
 }
 #touch body button.ui-keyboard-toggle span {
-  width: .8em;
-  height: .8em;
+  width: 0.8em;
+  height: 0.8em;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: center center;
@@ -1774,8 +1622,8 @@
   margin-left: 5px;
 }
 #touch body button.ui-keyboard-extender span {
-  width: .9em;
-  height: .9em;
+  width: 0.9em;
+  height: 0.9em;
   display: inline-block;
   margin-bottom: 3px;
   background-repeat: no-repeat;
@@ -1857,7 +1705,91 @@
     padding: 0.5em 0;
   }
 }
-#touch body #term .iScrollIndicator {
-  background: rgba(0, 255, 80, 0.7) !important;
-  border: 0 none !important;
+#touch body .dropdown.open {
+  overflow: visible !important;
+}
+#touch body .dropdown.open .dropdown-menu {
+  background-color: #00B0FE !important;
+}
+#touch body .dropdown.open .dropdown-menu a {
+  text-indent: 0 !important;
+}
+#touch body .dropdown .dropdown-menu a {
+  display: block;
+  color: black;
+}
+#touch body .dropdown .dropdown-menu a:hover {
+  color: white;
+  background: #00B0FF;
+}
+#touch body .dropdown .divider {
+  margin: 5px 0;
+  background-color: black;
+  border: 0 none;
+}
+#touch body .ui-pnotify-container {
+  border-radius: 0;
+}
+#touch body .ui-pnotify-closer {
+  visibility: visible !important;
+  padding: 5px 10px;
+  font-size: 28px;
+}
+#touch body .ui-pnotify-sticker {
+  display: none;
+}
+#touch body .ui-pnotify {
+  position: absolute;
+  left: 0;
+  width: 100% !important;
+  right: auto !important;
+}
+#touch body .pagination {
+  color: transparent;
+}
+#touch body .pagination ul > li.disabled > a {
+  background: transparent;
+  color: #BFBFBF;
+}
+#touch body .pagination ul > li > a {
+  padding: 10px 15px;
+  font-size: 21px;
+  background: #00B0FF;
+  color: white;
+}
+#touch body .footer {
+  font-size: 14px;
+}
+#touch body .footer ul li {
+  display: inline-block;
+  margin-left: 0;
+  font-size: 85%;
+  width: auto;
+}
+#touch body .footer ul li a {
+  display: inline-block;
+  width: 20px;
+  color: #555;
+  height: 20px;
+  overflow: hidden;
+  margin: 0;
+  font-size: 18px;
+  padding: 0;
+}
+#touch body .footer ul li a:hover {
+  color: white;
+  text-decoration: none;
+}
+#touch body #files_wrapper .entry,
+#touch body #temp .row-fluid table {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

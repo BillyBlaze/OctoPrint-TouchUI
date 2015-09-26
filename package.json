@@ -8,8 +8,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "gulp-less": "^3.0.3",
-    "gulp-watch-less": "^1.0.1"
+    "gulp-less": "^3.0.3"
   },
   "optionalDependencies": {},
   "engines": {
