@@ -1,0 +1,32 @@
+.dropdown {
+
+	&.open {
+		overflow: visible !important;
+
+		.dropdown-menu {
+			background-color: #00B0FE !important;
+
+			a {
+				text-indent: 0 !important;
+			}
+		}
+	}
+
+	.dropdown-menu {
+		a {
+			display: block;
+			color: black;
+
+			&:hover {
+				color: white;
+				background: #00B0FF;
+			}
+		}
+	}
+
+	.divider {
+		margin: 5px 0;
+		background-color: black;
+		border: 0 none;
+	}
+}

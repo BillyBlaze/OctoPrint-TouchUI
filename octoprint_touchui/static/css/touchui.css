@@ -1,0 +1,1863 @@
+#touch {
+  width: 100%;
+  height: 100%;
+}
+#touch.hasScrollTouch {
+  overflow: hidden;
+}
+#touch.hasScrollTouch body {
+  overflow: hidden;
+}
+#touch.hasScrollTouch body .modal-scrollable,
+#touch.hasScrollTouch body .show-dropdown {
+  overflow: hidden;
+}
+#touch body {
+  width: 100%;
+  height: 100%;
+  background: black;
+  /* Webcam */
+  /* PRINT/FILES STATUS TAB */
+  /* TERMINAL TAB */
+  /* MODALS */
+  /* MISC */
+  /* TEMP TAB */
+  /* Footer */
+  /* CONTROLS TAB */
+}
+#touch body [class^="icon-"],
+#touch body [class*=" icon-"] {
+  font-family: FontAwesome !important;
+}
+#touch body .visible_touch {
+  display: block;
+}
+#touch body .hidden_touch {
+  display: none;
+}
+#touch body .accordion,
+#touch body #navbar .brand {
+  position: absolute;
+  top: -5000px;
+  left: -5000px;
+}
+#touch body * {
+  font-family: monospace;
+  text-shadow: none !important;
+  /* This should increase performance */
+  box-shadow: none !important;
+  /* This should increase performance */
+}
+#touch body #gcode_canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+#touch body .page-container {
+  color: white;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  position: relative;
+}
+#touch body .page-container .octoprint-container {
+  margin: 0;
+}
+#touch body .page-container .octoprint-container > .row {
+  margin-bottom: 40px;
+}
+#touch body .page-container .octoprint-container > .footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 40px 0;
+}
+#touch body .page-container .octoprint-container .tab-content {
+  box-sizing: border-box;
+  padding: 30px 35px 0;
+  overflow: hidden;
+}
+#touch body .page-container .octoprint-container .tab-content h1 {
+  color: white;
+  margin: 0;
+}
+#touch body .page-container .octoprint-container .tab-content .add-on {
+  color: black;
+}
+#touch body .page-container .octoprint-container .tab-content table tr:first-child th {
+  margin: 0;
+  font-size: 18px;
+  border-bottom: 2px solid black;
+  background: #00B0FF;
+  padding: 13px 5px;
+}
+#touch body .page-container .octoprint-container .tab-content table tr:hover {
+  background-color: #333;
+}
+#touch body .page-container .octoprint-container .tab-content table tr th,
+#touch body .page-container .octoprint-container .tab-content table tr td {
+  border-bottom: 2px solid black;
+  background-color: #333;
+}
+#touch body .page-container .octoprint-container * {
+  border: 0 none;
+}
+#touch body .page-container .octoprint-container button,
+#touch body .page-container .octoprint-container .btn {
+  background: #00B0FF;
+  color: white;
+}
+#touch body .page-container .octoprint-container button:active,
+#touch body .page-container .octoprint-container .btn:active {
+  background: #00B0FF;
+}
+#touch body .page-container .octoprint-container button:active:active,
+#touch body .page-container .octoprint-container .btn:active:active {
+  background: #009CE2;
+}
+#touch body .page-container .octoprint-container button:focus {
+  outline: 0 none;
+}
+#touch body .page-container .octoprint-container .touch-focus {
+  background-color: white !important;
+  color: black !important;
+  fill: black !important;
+}
+#touch body .page-container .octoprint-container .touch-focus:before,
+#touch body .page-container .octoprint-container .touch-focus:after,
+#touch body .page-container .octoprint-container .touch-focus span,
+#touch body .page-container .octoprint-container .touch-focus i {
+  color: black !important;
+  fill: black !important;
+}
+#touch body .page-container .octoprint-container button,
+#touch body .page-container .octoprint-container .btn {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+#touch body .page-container .octoprint-container button.disabled,
+#touch body .page-container .octoprint-container .btn.disabled,
+#touch body .page-container .octoprint-container button[disabled],
+#touch body .page-container .octoprint-container .btn[disabled] {
+  pointer-events: none;
+}
+#touch body .progress {
+  background-color: #252525;
+  background-image: -moz-linear-gradient(top, #252525, #2D2D2D);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(252525), to(2D 2D 2D));
+  background-image: -webkit-linear-gradient(top, #252525, #2D2D2D);
+  background-image: -o-linear-gradient(top, #252525, #2D2D2D);
+  background-image: linear-gradient(to bottom, #252525, #2D2D2D);
+}
+#touch body #navbar {
+  height: 70px;
+  background-color: #00B0FF;
+  border: 0 none !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+#touch body #navbar .navbar-inner {
+  background: transparent !important;
+  border: 0 none !important;
+  padding: 0;
+  margin: 0;
+}
+#touch body #navbar .container {
+  height: 66px;
+  border: 0 none;
+}
+#touch body #navbar .nav {
+  position: relative;
+  z-index: 23;
+}
+#touch body #navbar .dropdown-menu {
+  margin-top: 6px;
+  right: 10px;
+}
+#touch body #navbar .dropdown-menu li.offline a:before {
+  color: red;
+}
+#touch body #navbar .dropdown-menu li.online a:before {
+  color: #9AFD00;
+}
+#touch body #navbar .dropdown-menu li a {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  color: white;
+  display: block;
+  text-align: left;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  padding: 10px 20px !important;
+  float: none;
+}
+#touch body #navbar .dropdown-menu li a .icon-wrench {
+  display: none;
+}
+#touch body #navbar .dropdown-menu li a:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "";
+  display: inline-block;
+  margin: 0 15px 0 0;
+  font-size: 20px;
+  position: relative;
+  top: 2px;
+}
+#touch body #navbar .dropdown-menu li#conn_link2 a:before {
+  content: "\f1eb";
+}
+#touch body #navbar .dropdown-menu li#timelapse_link2 a:before {
+  content: "\f03e";
+}
+#touch body #navbar .dropdown-menu li#gcode_link2 a:before {
+  content: "\f248";
+}
+#touch body #navbar .dropdown-menu li#navbar_settings2 a:before {
+  content: "\f013";
+}
+#touch body #navbar .dropdown-menu li #usersettings_button:before {
+  content: "\f007";
+}
+#touch body #navbar .dropdown-menu li #logout_button:before {
+  content: "\f08b";
+}
+#touch body .nav-tabs .active {
+  background: black;
+}
+#touch body .nav-tabs .active a {
+  border-radius: 0;
+}
+#touch body .tabbable,
+#touch body .container {
+  width: 100%;
+}
+#touch body .container > .row,
+#touch body .container > .row > .tabbable {
+  margin: 0;
+}
+#touch body #offline_overlay,
+#touch body #reloadui_overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#touch body #offline_overlay #offline_overlay_background,
+#touch body #reloadui_overlay #offline_overlay_background {
+  transform: translateZ(0);
+}
+#touch body #offline_overlay #offline_overlay_wrapper,
+#touch body #reloadui_overlay #offline_overlay_wrapper,
+#touch body #offline_overlay #reloadui_overlay_wrapper,
+#touch body #reloadui_overlay #reloadui_overlay_wrapper {
+  padding-top: 20px;
+}
+#touch body #offline_overlay .container,
+#touch body #reloadui_overlay .container {
+  width: 100%;
+}
+#touch body #offline_overlay .container .hero-unit,
+#touch body #reloadui_overlay .container .hero-unit {
+  background-color: #5A5A5A;
+  padding: 20px;
+  border-radius: 0;
+}
+#touch body #offline_overlay .container .hero-unit h1,
+#touch body #reloadui_overlay .container .hero-unit h1 {
+  font-size: 32px !important;
+}
+#touch body .tabbable > .nav-tabs li,
+#touch body #navbar .nav li {
+  overflow: hidden;
+  position: relative;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: white;
+}
+#touch body .tabbable > .nav-tabs li:after,
+#touch body #navbar .nav li:after {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 32px;
+  vertical-align: middle;
+  display: block;
+  margin-top: -16px;
+}
+#touch body .tabbable > .nav-tabs li a,
+#touch body #navbar .nav li a {
+  width: 100px;
+  width: 18vw;
+  max-width: 100px;
+  height: 50px;
+  background: transparent;
+  text-indent: -5000px;
+  position: relative;
+  z-index: 2;
+  min-width: 37px;
+  padding: 10px 0;
+}
+#touch body #tabs.items-5 li a {
+  width: 15vw;
+}
+#touch body .dropdown.open {
+  overflow: visible !important;
+}
+#touch body .dropdown.open .dropdown-menu {
+  background-color: #00B0FE !important;
+}
+#touch body .dropdown.open .dropdown-menu a {
+  text-indent: 0 !important;
+}
+#touch body .navbar .pull-right > li > .dropdown-menu:after,
+#touch body .navbar .nav > li > .dropdown-menu.pull-right:after {
+  border-bottom-color: #00B0FE !important;
+}
+#touch body #temp_link:after {
+  content: "\f0e4";
+}
+#touch body #control_link:after {
+  content: "\f11b";
+}
+#touch body #gcode_link:after {
+  content: "\f248";
+}
+#touch body #term_link:after {
+  content: "\f120";
+}
+#touch body #webcam_link:after {
+  content: "\f030";
+  font-size: 26px;
+  line-height: 38px;
+}
+#touch body #navbar_settings {
+  display: none;
+}
+#touch body #navbar_login.offline:after {
+  color: white;
+  animation-name: blink_offline;
+}
+#touch body #navbar_login.online:after {
+  color: white;
+  animation-name: blink_online;
+}
+#touch body #navbar_login:after {
+  animation-duration: 0.6s;
+  animation-iteration-count: 10;
+  content: "\f0c9";
+}
+#touch body #print_link:after {
+  content: "\f233";
+}
+@keyframes blink_offline {
+  0% {
+    color: white;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: white;
+  }
+}
+@keyframes blink_online {
+  0% {
+    color: white;
+  }
+  50% {
+    color: #9AFD00;
+  }
+  100% {
+    color: white;
+  }
+}
+#touch body #webcam {
+  margin: -30px -35px 0;
+}
+#touch body #webcam #webcam_image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+#touch body #webcam .muted {
+  padding: 35px;
+  display: block;
+}
+#touch body #printer .accordion-heading {
+  display: none;
+}
+#touch body #printer .accordion-inner {
+  padding: 0;
+}
+#touch body #printer .print-control .btn {
+  padding: 12px 0;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  background-color: white;
+  color: black;
+}
+#touch body #printer .print-control .btn-primary {
+  color: white;
+  background: #00B0FF;
+}
+#touch body #printer .print-control i {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 200px;
+}
+#touch body #printer .print-control .icon-print:before {
+  content: "\f051";
+}
+#touch body #printer .print-control #job_pause {
+  top: 40px;
+}
+#touch body #printer .print-control #job_cancel {
+  top: 80px;
+}
+#touch body #printer #state {
+  padding-top: 100px;
+}
+#touch body #printer #state .progress,
+#touch body #printer #state .print-control {
+  position: absolute;
+  top: 67px;
+  left: 0;
+  height: 20px;
+  width: 100%;
+  margin: 0;
+}
+#touch body #printer #state .print-control {
+  top: 0;
+}
+#touch body #printer #files_wrapper .accordion-heading {
+  display: block;
+  pointer-events: none;
+  background-color: #00B0FF;
+  margin: 40px -35px 0;
+  padding: 5px 20px;
+  color: white;
+  height: 40px;
+}
+#touch body #printer #files_wrapper .accordion-heading > a,
+#touch body #printer #files_wrapper .accordion-heading > a i {
+  color: white;
+  font-size: 23px;
+  padding-right: 0;
+}
+#touch body #printer #files_wrapper .accordion-heading > div {
+  pointer-events: all;
+}
+#touch body #printer #files_wrapper .accordion-heading .icon-wrench,
+#touch body #printer #files_wrapper .accordion-heading .icon-sd-black-14 {
+  font-size: 23px;
+  color: white;
+}
+#touch body #printer #files_wrapper .accordion-heading .icon-sd-black-14 {
+  background: transparent;
+}
+#touch body #printer #files_wrapper .accordion-heading .icon-sd-black-14:before {
+  content: "\f15b";
+}
+#touch body #printer #files_wrapper #files #gcode_upload_progress + div .muted {
+  display: none;
+}
+#touch body #printer #files_wrapper #files .form-search {
+  display: none;
+}
+#touch body #printer #files_wrapper #files .slimScrollDiv {
+  margin: 0 -35px 10px;
+  height: auto !important;
+}
+#touch body #printer #files_wrapper #files .text-right.muted {
+  text-align: center;
+}
+#touch body #printer #files_wrapper #files .upload-buttons .btn {
+  padding: 12px;
+  font-size: 22px;
+  display: block;
+  width: 100%;
+  margin-left: 0;
+}
+@media (min-width: 510px) {
+  #touch body #printer #files_wrapper #files .upload-buttons .btn {
+    width: 50%;
+    display: inline-block;
+    border-radius: 0 5px 5px 0;
+  }
+  #touch body #printer #files_wrapper #files .upload-buttons .btn:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+}
+#touch body #printer #files_wrapper #files .gcode_files {
+  height: auto !important;
+  margin: 0 0 10px;
+  padding: 0;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry {
+  padding: 15px 130px 15px 35px;
+  margin: 0;
+  background-color: #333;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  position: relative;
+  left: 0;
+  clear: both;
+  cursor: w-resize;
+  transition: left 0.4s ease, background 0.7s ease;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry.open {
+  left: -80px;
+  background: #920000;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry.open.large {
+  left: -180px;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry.open:hover,
+#touch body #printer #files_wrapper #files .gcode_files .entry.open:after {
+  background: #920000;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry:after {
+  content: "";
+  display: block;
+  right: -200px;
+  top: 0;
+  height: 100%;
+  width: 200px;
+  background: #333;
+  position: absolute;
+  transition: background 0.7s ease;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry:hover {
+  background: #333;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div,
+#touch body #printer #files_wrapper #files .gcode_files .entry div span {
+  color: white;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons {
+  position: static;
+  right: auto;
+  bottom: auto;
+  display: inline;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons i {
+  font-size: 32px;
+  line-height: 40px;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn.disabled,
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn[disabled] {
+  opacity: 0.2;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn {
+  padding: 10px 15px;
+  position: absolute;
+  right: -50px;
+  top: 14px;
+  border-radius: 0;
+  background: transparent !important;
+  z-index: 5;
+  border: 0 none;
+  box-shadow: 0 0 0 transparent;
+  color: white;
+  text-shadow: 0 0 0 transparent;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn:first-child {
+  right: 70px;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn:last-child {
+  right: 20px;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn.toggleAdditionalData + :nth-child(2) {
+  right: -109px;
+}
+#touch body #printer #files_wrapper #files .gcode_files .entry div.action-buttons .btn:nth-child(4) {
+  right: -171px;
+}
+#touch body #printer #files_wrapper .btn-primary {
+  background: #00B0FF;
+}
+#touch body #printer .slimScrollBar,
+#touch body #printer .slimScrollRail {
+  display: none !important;
+}
+#touch body #printer .dropdown-menu {
+  left: auto !important;
+  right: 0 !important;
+}
+#touch body #term {
+  position: relative;
+}
+#touch body #term .icon-caret-down:before,
+#touch body #term .icon-caret-right:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f078";
+}
+#touch body #term .icon-caret-right:before {
+  content: "\f054";
+}
+#touch body #term span.muted {
+  color: rgba(0, 255, 0, 0.5);
+}
+#touch body #term .row-fluid {
+  clear: both;
+  padding-top: 5px;
+}
+#touch body #term .terminal {
+  margin-bottom: 70px;
+}
+#touch body #term .terminal small.pull-left {
+  margin-right: 30px;
+}
+#touch body #term .terminal small.pull-right {
+  position: absolute;
+  right: 0;
+}
+#touch body #term .terminal small button {
+  padding: 3px 10px;
+}
+#touch body #term .terminal small button + span {
+  padding-left: 7px;
+}
+#touch body #term .terminal a {
+  font-size: 35px;
+  color: #0F0;
+}
+#touch body #term .terminal a i:before {
+  font-family: FontAwesome;
+}
+#touch body #term .terminal button {
+  background: white;
+  color: black;
+  padding: 4px 12px;
+}
+#touch body #term .terminal button.active {
+  background: #0F0;
+}
+#touch body #term #termin-filterpanel {
+  width: 100%;
+}
+#touch body #term #terminal-scroll {
+  border: 1px solid #0F0;
+  overflow: hidden;
+  border-radius: 5px 5px 0 0;
+  height: 66vh;
+  min-height: 150px;
+  margin-bottom: 40px;
+  background-color: transparent;
+}
+#touch body #term #terminal-output {
+  margin-bottom: 26px;
+  border: 0 none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: 0;
+  background-color: transparent;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  color: #0F0;
+}
+#touch body #term #terminal-output:before {
+  content: "╔╦╗┌─┐┬    ┬┌─┐┬    ┬╦    ╦╦\A     ║    │    ││    ││        ├─┤║    ║║\A     ╩    └─┘└─┘└─┘┴    ┴╚═╝╩";
+  display: block;
+  width: 280px;
+  margin: 10px auto 30px;
+  position: relative;
+  line-height: 14px;
+  font-size: 14px;
+  text-align: center;
+  font-family: FontAwesome;
+  transform: scale(0.75, 1.25);
+}
+#touch body #term #terminal-output:after {
+  content: "v?.?.?";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 70px;
+  line-height: 17px;
+  font-size: 14px;
+  width: 100%;
+  text-align: center;
+}
+#touch body #term #terminal-sendpanel {
+  position: absolute;
+  left: -1px;
+  width: 100%;
+  margin: 0;
+  top: 66vh;
+}
+#touch body #term #terminal-sendpanel .muted {
+  display: none;
+}
+#touch body #term #terminal-sendpanel input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: black;
+  color: #0F0;
+  border: 1px solid #0F0;
+  padding: 14px;
+  border-radius: 0 0 5px 5px;
+}
+#touch body #term #terminal-sendpanel button {
+  margin-left: -61px;
+  width: 60px;
+  background-color: black;
+  color: white;
+  text-shadow: 0 0 0 transparent;
+  border: 0 none;
+  border-left: 1px solid #0F0;
+  border-radius: 0 0 5px 0;
+  margin-top: 1px;
+  z-index: 21;
+  position: relative;
+  color: #0F0;
+  padding: 4px 12px;
+}
+#touch body .modal-scrollable {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+#touch body .modal-scrollable .modal {
+  margin: 0;
+  position: absolute !important;
+  z-index: 1 !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  width: 95% !important;
+  height: auto;
+  overflow: hidden;
+  min-height: 100%;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+  -moz-transition-duration: 0.5s !important;
+  -webkit-transition-duration: 0.5s !important;
+  transition-duration: 0.5s !important;
+}
+#touch body .modal-scrollable .iScrollIndicator {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 0 none !important;
+}
+#touch body .modal {
+  position: fixed;
+  overflow: auto;
+  /* Make modal appear from left
+			top: 0 !important;
+			bottom: 0 !important;
+			height: 100% !important;
+			left: -100% !important;
+			width: 95% !important;
+			margin: 0 !important;
+			min-height: 100%;*/
+  border-radius: 0;
+  -webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+  transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+}
+#touch body .modal .accordion-group {
+  border: 0 none !important;
+}
+#touch body .modal .accordion-group .accordion-heading {
+  display: none;
+}
+#touch body .modal .accordion-group .accordion-body {
+  border: 0 none;
+}
+#touch body .modal .accordion-group .accordion-body .accordion-inner {
+  padding: 0;
+  border: 0 none;
+}
+#touch body .modal#connection_dialog .btn-primary {
+  display: none !important;
+}
+#touch body .modal.fade {
+  top: 0 !important;
+  left: -100% !important;
+}
+#touch body .modal.in {
+  top: 0 !important;
+  left: 0% !important;
+}
+#touch body .modal.show-dropdown .modal-header .span3 {
+  height: auto;
+}
+#touch body .modal .modal {
+  /* make a sticky footer */
+}
+#touch body .modal .modal-body {
+  padding: 20px 25px;
+  margin-bottom: 60px;
+  min-height: auto !important;
+  max-height: none !important;
+}
+#touch body .modal .modal-body .span3.scrollable {
+  display: none;
+}
+#touch body .modal .modal-body .span9.scrollable {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+#touch body .modal .modal-footer {
+  border-radius: 0;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-right: 30px;
+  z-index: 2;
+}
+#touch body .modal .modal-header {
+  padding: 20px 25px;
+}
+#touch body .modal .modal-header #settings_dialog_label {
+  font-size: 1.4rem;
+  padding: 0 50px 0 0;
+}
+#touch body .modal .modal-header .close {
+  font-size: 42px;
+  padding: 13px;
+  margin-top: -10px;
+  background: transparent;
+}
+#touch body .modal .modal-header span.hidden {
+  display: inline-block !important;
+  position: relative;
+}
+#touch body .modal .modal-header span.hidden:before {
+  content: "/";
+  color: #777;
+  margin-right: 10px;
+}
+#touch body .modal .modal-header span.hidden:after {
+  content: "\f078";
+  font-family: FontAwesome !important;
+  font-size: 0.8rem;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  top: -4px;
+  margin-left: 10px;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  overflow: hidden;
+  height: 68vh;
+  z-index: 29;
+  min-height: 0 !important;
+  margin-bottom: 100px;
+  background-color: white;
+  border: 1px solid #CCC;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown li a {
+  font-size: 15px;
+  padding: 10px 15px;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown .iScrollIndicator {
+  background: rgba(105, 105, 105, 0.7) !important;
+  border: 0 none !important;
+}
+#touch body .modal .full-sized-box {
+  padding: 0 !important;
+  position: relative;
+}
+#touch body .modal-backdrop {
+  background: black !important;
+}
+#touch body label {
+  /* Disabling for better scrolling performance */
+  pointer-events: none;
+}
+#touch body label.checkbox,
+#touch body label.radio {
+  /* Well except for.. */
+  pointer-events: all;
+}
+#touch body .control-group .control-label,
+#touch body .control-group .controls {
+  display: block;
+  float: none;
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+#touch body #temp #temperature-graph {
+  margin-bottom: 10px;
+  height: 85vh;
+  background-size: contain;
+}
+#touch body #temp #temperature-graph .tickLabel {
+  color: #a9a9a9;
+}
+#touch body #temp #temperature-graph table tr {
+  background: transparent !important;
+}
+#touch body #temp #temperature-graph table tr:hover {
+  background: transparent !important;
+}
+#touch body #temp #temperature-graph table tr:hover td {
+  background: transparent !important;
+}
+#touch body #temp #temperature-graph table tr td {
+  background: transparent !important;
+  color: white;
+}
+#touch body #temp #temperature-graph table tr td.legendLabel {
+  padding: 0 15px 0 5px;
+}
+#touch body #temp .row-fluid table {
+  width: 161vw !important;
+  margin: 20px 0 40px -40px !important;
+  transition: left 0.5s ease;
+  cursor: w-resize;
+  position: relative;
+  left: 0;
+}
+#touch body #temp .row-fluid table.open {
+  left: -61vw !important;
+}
+@media (min-width: 700px) {
+  #touch body #temp .row-fluid table {
+    margin-left: -40px !important;
+    left: 0 !important;
+  }
+}
+#touch body #temp .row-fluid table tr:first-child th:first-child {
+  width: 11% !important;
+}
+#touch body #temp .row-fluid table tr th:nth-child(1),
+#touch body #temp .row-fluid table tr td:nth-child(1) {
+  text-align: right;
+}
+#touch body #temp .row-fluid table tr th:nth-child(2),
+#touch body #temp .row-fluid table tr td:nth-child(2) {
+  text-align: center !important;
+}
+#touch body #temp .row-fluid table tr th:last-child .input-append,
+#touch body #temp .row-fluid table tr td:last-child .input-append {
+  padding-right: 120px;
+}
+#touch body #temp .row-fluid table tr th .dropdown-menu,
+#touch body #temp .row-fluid table tr td .dropdown-menu {
+  margin: 2px 0 5px;
+  bottom: 100%;
+  top: auto;
+  left: auto;
+  right: 0;
+}
+#touch body #temp .row-fluid table tr th .input-append,
+#touch body #temp .row-fluid table tr td .input-append {
+  box-sizing: border-box;
+  position: relative;
+  padding-right: 160px;
+}
+#touch body #temp .row-fluid table tr th .input-append input,
+#touch body #temp .row-fluid table tr td .input-append input {
+  width: 100%;
+  margin-right: 0px;
+  padding: 7px 15px;
+  border-radius: 0;
+  text-align: left;
+}
+#touch body #temp .row-fluid table tr th .input-append .btn-group,
+#touch body #temp .row-fluid table tr td .input-append .btn-group,
+#touch body #temp .row-fluid table tr th .input-append > button,
+#touch body #temp .row-fluid table tr td .input-append > button {
+  position: absolute;
+  right: 0;
+  border-radius: 0;
+}
+#touch body #temp .row-fluid table tr th .input-append .add-on,
+#touch body #temp .row-fluid table tr td .input-append .add-on {
+  padding: 7px;
+  color: black;
+}
+#touch body #temp .row-fluid table tr th .input-append button,
+#touch body #temp .row-fluid table tr td .input-append button {
+  padding: 7px 15px;
+  border-radius: 0;
+}
+#touch body #temp .row-fluid table tr th .input-append button .caret,
+#touch body #temp .row-fluid table tr td .input-append button .caret {
+  width: 11px;
+}
+#touch body #temp .row-fluid table tr th .input-append button .caret:after,
+#touch body #temp .row-fluid table tr td .input-append button .caret:after {
+  content: "\f0d7";
+  font-family: FontAwesome;
+  font-size: 18px;
+  top: -7px;
+  position: relative;
+}
+#touch body .page-container .octoprint-container .circ-slider {
+  width: 50%;
+  height: 130px;
+  padding: 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  float: left;
+  margin: 0 0 20px;
+}
+@media (max-width: 479px) {
+  #touch body .page-container .octoprint-container .circ-slider {
+    float: none;
+    display: block;
+    width: 100%;
+  }
+}
+#touch body .page-container .octoprint-container .circ-slider.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+#touch body .page-container .octoprint-container .jcs {
+  position: relative;
+  border-style: solid;
+  border-radius: 100%;
+  border-color: #00B0FF;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-width: 5px;
+  cursor: pointer;
+}
+#touch body .page-container .octoprint-container .jcs-value {
+  position: absolute;
+  text-align: center;
+  pointer-events: none;
+  line-height: 4em;
+  color: white;
+  outline: none;
+  top: 35px !important;
+  font-size: 18px;
+  line-height: 22px;
+}
+#touch body .page-container .octoprint-container .jcs-value b {
+  display: block;
+}
+#touch body .page-container .octoprint-container .jcs-indicator {
+  position: absolute;
+  border-radius: 100%;
+  background-color: #00B0FF;
+  border: 0 none;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  pointer-events: none;
+  width: 30px;
+  height: 30px;
+}
+#touch body .page-container .octoprint-container .jcs-panel {
+  position: relative;
+  display: block;
+  border-style: solid;
+  border-color: transparent;
+  cursor: pointer;
+  margin: 0 auto;
+  width: 140px;
+}
+#touch body .page-container .octoprint-container .jcs-value img {
+  border-radius: 100%;
+  background: transparent;
+  width: inherit;
+  height: inherit;
+}
+#touch body .page-container .octoprint-container .noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#touch body .footer {
+  font-size: 14px;
+}
+#touch body .footer ul li {
+  display: inline-block;
+  margin-left: 0;
+  font-size: 85%;
+  width: auto;
+}
+#touch body .footer ul li a {
+  display: inline-block;
+  width: 20px;
+  color: #555;
+  height: 20px;
+  overflow: hidden;
+  margin: 0;
+  font-size: 18px;
+  padding: 0;
+}
+#touch body .footer ul li a:hover {
+  color: white;
+  text-decoration: none;
+}
+#touch body #control {
+  margin: 0 auto;
+  max-width: 700px;
+  overflow: visible;
+  position: relative;
+}
+#touch body #control > .jog-panel {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+#touch body #control > .jog-panel#x-y-panel {
+  display: block;
+  overflow: hidden;
+  float: none;
+  margin: 0 -20px;
+  padding-top: 10px;
+}
+#touch body #control > .jog-panel#x-y-panel .jog-panel button {
+  font-size: 36px;
+  color: white;
+  background: transparent;
+  display: inline;
+  padding: 0 !important;
+  margin: 0;
+  font-weight: normal;
+  width: 16vw;
+  height: 16vw;
+  font-size: 11vw;
+}
+@media (min-width: 700px) {
+  #touch body #control > .jog-panel#x-y-panel .jog-panel button {
+    font-size: 80px !important;
+    width: 120px;
+    height: 120px;
+  }
+}
+#touch body #control > .jog-panel#x-y-panel .jog-panel:nth-child(1) h1:after {
+  content: "+";
+  padding-left: 15px;
+  margin-right: -25px;
+}
+#touch body #control > .jog-panel#x-y-panel .jog-panel:nth-child(2) h1:before {
+  content: "+";
+  padding-right: 15px;
+  margin-left: -25px;
+}
+#touch body #control > .jog-panel#e-panel {
+  position: absolute;
+  margin: 85px 0 0;
+  width: 45%;
+  right: 0;
+}
+#touch body #control > .jog-panel#e-panel h1 {
+  display: none;
+}
+#touch body #control > .jog-panel:last-child {
+  width: 45%;
+  margin: 85px 0 0;
+}
+#touch body #control > .jog-panel#e-panel .btn-group.control-box,
+#touch body #control > .jog-panel:last-child .btn-group.control-box {
+  height: auto;
+  margin: 0 0 20px;
+}
+#touch body #control > .jog-panel#e-panel .btn-group.control-box button,
+#touch body #control > .jog-panel:last-child .btn-group.control-box button {
+  margin: 0;
+}
+#touch body #control > .jog-panel#e-panel .input-append.control-box,
+#touch body #control > .jog-panel:last-child .input-append.control-box {
+  height: auto;
+  margin: 0 38px 20px 0;
+}
+#touch body #control > .jog-panel#e-panel .input-append.control-box .add-on,
+#touch body #control > .jog-panel:last-child .input-append.control-box .add-on {
+  padding: 10px;
+  color: black;
+  border-left: 1px solid black;
+  z-index: 200;
+}
+#touch body #control > .jog-panel#e-panel .input-append.control-box input,
+#touch body #control > .jog-panel:last-child .input-append.control-box input {
+  margin: 0;
+}
+#touch body #control > .jog-panel#e-panel button,
+#touch body #control > .jog-panel:last-child button,
+#touch body #control > .jog-panel#e-panel input,
+#touch body #control > .jog-panel:last-child input {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  -moz-box-sizing: border-box;
+  width: 100% !important;
+  height: 40px;
+  box-sizing: border-box;
+}
+@media (max-width: 400px) {
+  #touch body #control > .jog-panel#e-panel,
+  #touch body #control > .jog-panel:last-child {
+    position: static;
+    top: auto;
+    right: auto;
+    width: 100%;
+  }
+}
+@media (max-width: 400px) {
+  #touch body #control > .jog-panel:last-child {
+    margin: 0 0 80px;
+  }
+}
+#touch body #control > .jog-panel#extra-panel {
+  position: absolute;
+  top: 43px;
+  right: -20px;
+}
+#touch body #control > .jog-panel#extra-panel h1 {
+  display: none;
+}
+#touch body #control > .jog-panel#extra-panel button {
+  font-size: 36px;
+  color: white;
+  background: transparent;
+  padding: 0 !important;
+  margin: 0;
+  font-weight: normal;
+  overflow: hidden;
+  width: 16vw;
+  height: 16vw;
+  font-size: 11vw;
+  line-height: 200vw;
+}
+@media (min-width: 700px) {
+  #touch body #control > .jog-panel#extra-panel button {
+    font-size: 80px !important;
+    width: 120px;
+    height: 120px;
+  }
+}
+#touch body #control > .jog-panel#extra-panel button:before,
+#touch body #control > .jog-panel#extra-panel button:after {
+  color: white;
+  font-family: FontAwesome;
+  text-shadow: 0 0 0 transparent;
+  display: block;
+  overflow: hidden;
+  line-height: 17vw;
+}
+@media (min-width: 700px) {
+  #touch body #control > .jog-panel#extra-panel button:before,
+  #touch body #control > .jog-panel#extra-panel button:after {
+    line-height: 120px;
+  }
+}
+#touch body #control > .jog-panel#extra-panel div button {
+  position: relative;
+}
+#touch body #control > .jog-panel#extra-panel div button:before {
+  content: "";
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iOTkuODUiIHZpZXdCb3g9IjAgMCAxMDAgOTkuODUzIiBmaWxsPSJ3aGl0ZSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDk5Ljg1MyI+PHBhdGggZD0ibTYyLjg0MSA0Ni44MDljNC4wMy0xLjQ0NyAxMC43NTctMi4zNjYgMTcuMjE2IDEuMjIyIDEwLjk3OSA2LjA5NyAyMS4yOTktMy4xOCAxOS43OTctMTMuNDUyLTEuMzMyLTkuMTAzLTYuOTU0LTE4LjM3MS0xNC4wOS0yMi4wOS0xMC42NzgtNS41NjUtMTguNzYyLTIuNDY4LTI1LjAyIDQuMzIzLTQuMDk3IDQuNDUtOC4zODIgMTIuMjk4LTguNzE0IDE5Ljc2Mi0uMTU3IDMuNTE0LTQuMjM3IDMuMzI5LTUuMjE4LjU5MS0xLjQ0OC00LjAzLTIuMzY3LTEwLjc1OCAxLjIxOS0xNy4yMTUgNi4xLTEwLjk4MS0zLjE3OC0yMS4zMDItMTMuNDQ5LTE5Ljc5OS05LjEwNCAxLjMzNC0xOC4zNzEgNi45NTMtMjIuMDkgMTQuMS01LjU2NiAxMC42NzctMi40NjkgMTguNzYxIDQuMzIyIDI1LjAyIDQuNDQ5IDQuMDk4IDEyLjMwMSA4LjM4NSAxOS43NjIgOC43MTcgMy41MTUuMTU2IDMuMzMgNC4yMzYuNTkyIDUuMjE2LTQuMDMgMS40NDktMTAuNzYgMi4zNjktMTcuMjE2LTEuMjE5LTEwLjk4MS02LjEtMjEuMzAyIDMuMTc5LTE5Ljc5OCAxMy40NTEgMS4zMzIgOS4xMDQgNi45NTMgMTguMzcxIDE0LjEgMjIuMDkgMTAuNjc3IDUuNTY3IDE4Ljc2MSAyLjQ2OSAyNS4wMi00LjMyMiA0LjA5OC00LjQ0OCA4LjM4NC0xMi4yOTkgOC43MTUtMTkuNzYxLjE1Ny0zLjUxNiA0LjIzNi0zLjMyOSA1LjIxOC0uNTk2IDEuNDQ3IDQuMDMgMi4zNjcgMTAuNzYtMS4yMiAxNy4yMTktNi4xIDEwLjk3OCAzLjE3OCAyMS4yOTkgMTMuNDUgMTkuNzk1IDkuMTA0LTEuMzMyIDE4LjM3MS02Ljk0OSAyMi4wOS0xNC4wOSA1LjU2OS0xMC42NzkgMi40Ny0xOC43Ni00LjMyMS0yNS4wMi00LjQ0OC00LjA5NS0xMi4zMDEtOC4zODMtMTkuNzYxLTguNzEzLTMuNTE1LS4xNTctMy4zMjktNC4yMzYtLjU5Mi01LjIxOW0tMTIuODQxIDguMjY1Yy0yLjgwMSAwLTUuMDcyLTIuMjcxLTUuMDcyLTUuMDcyIDAtMi44MDEgMi4yNzEtNS4wNzIgNS4wNzItNS4wNzIgMi44MDIgMCA1LjA3MiAyLjI3MSA1LjA3MiA1LjA3MiAwIDIuODAxLTIuMjcgNS4wNzItNS4wNzIgNS4wNzIiLz48L3N2Zz4=) center center no-repeat;
+  background-size: 65% 65%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+#touch body #control > .jog-panel#extra-panel div button.touch-focus:before {
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iOTkuODUiIHZpZXdCb3g9IjAgMCAxMDAgOTkuODUzIiBmaWxsPSJibGFjayIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDk5Ljg1MyI+PHBhdGggZD0ibTYyLjg0MSA0Ni44MDljNC4wMy0xLjQ0NyAxMC43NTctMi4zNjYgMTcuMjE2IDEuMjIyIDEwLjk3OSA2LjA5NyAyMS4yOTktMy4xOCAxOS43OTctMTMuNDUyLTEuMzMyLTkuMTAzLTYuOTU0LTE4LjM3MS0xNC4wOS0yMi4wOS0xMC42NzgtNS41NjUtMTguNzYyLTIuNDY4LTI1LjAyIDQuMzIzLTQuMDk3IDQuNDUtOC4zODIgMTIuMjk4LTguNzE0IDE5Ljc2Mi0uMTU3IDMuNTE0LTQuMjM3IDMuMzI5LTUuMjE4LjU5MS0xLjQ0OC00LjAzLTIuMzY3LTEwLjc1OCAxLjIxOS0xNy4yMTUgNi4xLTEwLjk4MS0zLjE3OC0yMS4zMDItMTMuNDQ5LTE5Ljc5OS05LjEwNCAxLjMzNC0xOC4zNzEgNi45NTMtMjIuMDkgMTQuMS01LjU2NiAxMC42NzctMi40NjkgMTguNzYxIDQuMzIyIDI1LjAyIDQuNDQ5IDQuMDk4IDEyLjMwMSA4LjM4NSAxOS43NjIgOC43MTcgMy41MTUuMTU2IDMuMzMgNC4yMzYuNTkyIDUuMjE2LTQuMDMgMS40NDktMTAuNzYgMi4zNjktMTcuMjE2LTEuMjE5LTEwLjk4MS02LjEtMjEuMzAyIDMuMTc5LTE5Ljc5OCAxMy40NTEgMS4zMzIgOS4xMDQgNi45NTMgMTguMzcxIDE0LjEgMjIuMDkgMTAuNjc3IDUuNTY3IDE4Ljc2MSAyLjQ2OSAyNS4wMi00LjMyMiA0LjA5OC00LjQ0OCA4LjM4NC0xMi4yOTkgOC43MTUtMTkuNzYxLjE1Ny0zLjUxNiA0LjIzNi0zLjMyOSA1LjIxOC0uNTk2IDEuNDQ3IDQuMDMgMi4zNjcgMTAuNzYtMS4yMiAxNy4yMTktNi4xIDEwLjk3OCAzLjE3OCAyMS4yOTkgMTMuNDUgMTkuNzk1IDkuMTA0LTEuMzMyIDE4LjM3MS02Ljk0OSAyMi4wOS0xNC4wOSA1LjU2OS0xMC42NzkgMi40Ny0xOC43Ni00LjMyMS0yNS4wMi00LjQ0OC00LjA5NS0xMi4zMDEtOC4zODMtMTkuNzYxLTguNzEzLTMuNTE1LS4xNTctMy4zMjktNC4yMzYtLjU5Mi01LjIxOW0tMTIuODQxIDguMjY1Yy0yLjgwMSAwLTUuMDcyLTIuMjcxLTUuMDcyLTUuMDcyIDAtMi44MDEgMi4yNzEtNS4wNzIgNS4wNzItNS4wNzIgMi44MDIgMCA1LjA3MiAyLjI3MSA1LjA3MiA1LjA3MiAwIDIuODAxLTIuMjcgNS4wNzItNS4wNzIgNS4wNzIiLz48L3N2Zz4=) center center no-repeat;
+  background-size: 65% 65%;
+}
+#touch body #control > .jog-panel#extra-panel div button:first-child:before {
+  background: transparent;
+  content: "\f011";
+}
+#touch body #control > .jog-panel#extra-panel div button:last-child:after {
+  content: "\f057";
+  color: red !important;
+  font-size: 8vw;
+  position: absolute;
+  top: -2vw;
+  right: 1vw;
+  text-indent: 2000px;
+}
+@media (min-width: 700px) {
+  #touch body #control > .jog-panel#extra-panel div button:last-child:after {
+    font-size: 58px;
+    top: -16px;
+    right: 13px;
+  }
+}
+#touch body #control > .jog-panel #jog_distance {
+  position: absolute;
+  top: -4px;
+  overflow: hidden;
+  left: 39%;
+  width: 22%;
+  max-width: 200px;
+  height: 0;
+  min-width: 70px;
+  padding: 45px 0 0;
+}
+@media (max-width: 430px) {
+  #touch body #control > .jog-panel #jog_distance {
+    left: 47%;
+  }
+}
+#touch body #control > .jog-panel #jog_distance.open {
+  height: auto;
+  background-color: white;
+  z-index: 1000;
+}
+#touch body #control > .jog-panel #jog_distance.open:after {
+  top: -5000px;
+}
+#touch body #control > .jog-panel #jog_distance.open button {
+  color: black;
+}
+#touch body #control > .jog-panel #jog_distance:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  height: 100%;
+  cursor: pointer;
+}
+#touch body #control > .jog-panel #jog_distance button {
+  width: 100%;
+  display: block;
+  background: transparent;
+  color: white;
+  margin: 0;
+  border: 0 none !important;
+  box-shadow: none !important;
+}
+#touch body #control > .jog-panel #jog_distance button.active {
+  top: 0px;
+  position: absolute;
+}
+#touch body #control > .jog-panel #jog_distance button.active:after {
+  font-family: FontAwesome !important;
+  content: "\f0d7";
+  padding-left: 9px;
+}
+#touch body #control > .jog-panel .jog-panel {
+  float: right;
+  margin: 0;
+  margin-right: 23%;
+}
+#touch body #control > .jog-panel .jog-panel:first-child {
+  float: left;
+  margin: 0;
+}
+@media (max-width: 430px) {
+  #touch body #control > .jog-panel .jog-panel:first-child h1 {
+    width: 40vw;
+  }
+}
+@media (max-width: 430px) {
+  #touch body #control > .jog-panel .jog-panel:nth-child(2) h1 {
+    position: relative;
+    left: 20vw;
+  }
+}
+#touch body #control > .jog-panel .jog-panel h1 {
+  color: #828282;
+  margin: -10px 0 5px;
+  font-size: 27px;
+  text-align: center;
+}
+#touch body #control > .jog-panel .distance {
+  float: none;
+  clear: both;
+  margin: 40px 0 0;
+}
+#touch body #control > .jog-panel .distance .btn-group {
+  width: 50%;
+  display: block;
+}
+#touch body #control > .jog-panel .distance .btn-group button {
+  width: 25%;
+  padding: 13px;
+  border: 1px solid !important;
+  font-size: 27px !important;
+}
+#touch body #control > .jog-panel .slider .slider-track,
+#touch body #control > .jog-panel .slider button {
+  display: none;
+}
+#touch body #control > .jog-panel .slider input {
+  display: block !important;
+}
+#touch body #connection {
+  height: auto !important;
+}
+#touch body #scroll {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+#touch body #scroll .page-container,
+#touch body #scroll #terminal-scroll pre {
+  position: absolute;
+  z-index: 1;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+}
+#touch body #scroll #terminal-scroll {
+  position: relative;
+}
+#touch body #scroll .iScrollIndicator {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 0 none !important;
+}
+#touch body button,
+#touch body .btn {
+  color: black;
+  background: #F3F3F3;
+  padding: 6px 15px;
+}
+#touch body button:active,
+#touch body .btn:active {
+  background: #ECECEC;
+}
+#touch body button:focus,
+#touch body .btn:focus {
+  outline: 0 none;
+}
+#touch body button-primary,
+#touch body .btn-primary {
+  color: white;
+  background: #00B0FF;
+}
+#touch body button-primary:active,
+#touch body .btn-primary:active {
+  background: #009CE2;
+}
+#touch body button-danger,
+#touch body .btn-danger {
+  color: white;
+  background: #D40000;
+}
+#touch body button-danger:active,
+#touch body .btn-danger:active {
+  background: #9E0000;
+}
+#touch body a {
+  color: #009CE2;
+}
+#touch body a.close {
+  color: black;
+}
+#touch body .nav-tabs > li,
+#touch body .nav-pills > li {
+  color: #009CE2;
+}
+#touch body .nav-pills > .active > a,
+#touch body .nav-pills > .active > a:hover,
+#touch body .nav-list > .active > a,
+#touch body .nav-list > .active > a:hover {
+  background: #00B0FF;
+  color: white;
+}
+#touch body .dropdown-menu a {
+  display: block;
+  color: black;
+}
+#touch body .dropdown-menu a:hover {
+  color: white;
+  background: #00B0FF;
+}
+#touch body .divider {
+  margin: 5px 0;
+  background-color: black;
+  border: 0 none;
+}
+#touch body .no-pointer * {
+  pointer-events: none !important;
+}
+#touch body .ui-pnotify-container {
+  border-radius: 0;
+}
+#touch body .ui-pnotify-closer {
+  visibility: visible !important;
+  padding: 5px 10px;
+  font-size: 28px;
+}
+#touch body .ui-pnotify-sticker {
+  display: none;
+}
+#touch body .ui-pnotify {
+  position: absolute;
+  left: 0;
+  width: 100% !important;
+  right: auto !important;
+}
+#touch body #files_wrapper .entry,
+#touch body #temp .row-fluid table {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#touch body .ui-keyboard-button {
+  min-width: 0px !important;
+  height: 13vh !important;
+  min-width: 8vw !important;
+  margin: 1px !important;
+  padding: 0 !important;
+  background-color: #00B0FF;
+  border: 0 none;
+  color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.65);
+  font-size: 3vw;
+  line-height: 3vw !important;
+}
+#touch body .ui-keyboard-space {
+  width: 40vw !important;
+}
+#touch body .ui-keyboard {
+  background: #313131;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  top: auto !important;
+  bottom: 0;
+  width: 100%;
+}
+#touch body .ui-keyboard-accept span,
+#touch body .ui-keyboard-cancel span {
+  padding: 0 10px !important;
+}
+#touch body .ui-keyboard {
+  padding: .3em;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 16000;
+}
+#touch body .ui-keyboard-has-focus {
+  z-index: 16001;
+}
+#touch body .ui-keyboard div {
+  font-size: 1.1em;
+}
+#touch body .ui-keyboard-button {
+  height: 2em;
+  min-width: 2em;
+  margin: .1em;
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 2em;
+  -moz-user-focus: ignore;
+}
+#touch body .ui-keyboard-button span {
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+  display: inline-block;
+}
+#touch body .ui-keyboard-button-endrow {
+  clear: left;
+}
+#touch body .ui-keyboard-space {
+  width: 15em;
+}
+#touch body .ui-keyboard-empty span,
+#touch body .ui-keyboard-space span {
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+}
+#touch body .ui-keyboard-preview-wrapper {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#touch body .ui-keyboard-preview {
+  text-align: left;
+  margin: 0 0 3px;
+}
+#touch body .ui-keyboard-keyset {
+  text-align: center;
+  white-space: nowrap;
+}
+#touch body .ui-keyboard-input {
+  text-align: left;
+}
+#touch body .ui-keyboard-input-current {
+  -moz-box-shadow: 0 0 5px #4d90fe;
+  -webkit-box-shadow: 0 0 5px #4d90fe;
+  box-shadow: 0 0 5px #4d90fe;
+}
+#touch body .ui-keyboard-placeholder {
+  color: #888;
+}
+#touch body .ui-keyboard-nokeyboard {
+  color: #888;
+  border-color: #888;
+}
+#touch body .ui-keyboard-spacer {
+  display: inline-block;
+  width: 1px;
+  height: 0;
+  cursor: default;
+}
+#touch body .ui-keyboard-LRM span,
+#touch body .ui-keyboard-NBSP span,
+#touch body .ui-keyboard-RLM span,
+#touch body .ui-keyboard-ZWJ span,
+#touch body .ui-keyboard-ZWNJ span,
+#touch body .ui-keyboard-ZWSP span {
+  font-size: .5em;
+  line-height: 1.5em;
+  white-space: normal;
+}
+#touch body .ui-keyboard-button.ui-keyboard-combo.ui-state-default {
+  border-color: #ffaf0f;
+}
+#touch body button.ui-keyboard-accept.ui-keyboard-valid-input {
+  border-color: #0c0;
+  background: #080;
+  color: #fff;
+}
+#touch body button.ui-keyboard-accept.ui-keyboard-valid-input:hover {
+  background: #0a0;
+}
+#touch body button.ui-keyboard-accept.ui-keyboard-invalid-input {
+  border-color: #c00;
+  background: #800;
+  color: #fff;
+  opacity: .5;
+  filter: alpha(opacity=50);
+}
+#touch body button.ui-keyboard-accept.ui-keyboard-invalid-input:hover {
+  background: #a00;
+}
+#touch body .ui-keyboard-caret {
+  background: #c00;
+  width: 1px;
+  margin-top: 3px;
+}
+#touch body div.ui-body.ui-keyboard button.ui-keyboard-button.ui-btn {
+  padding: .5em 1em;
+  border-color: transparent;
+}
+#touch body .ui-body .ui-keyboard-button {
+  width: 3em;
+  height: 3em;
+  display: inline-block;
+}
+#touch body .ui-body .ui-keyboard-widekey {
+  width: 5.5em;
+}
+#touch body .ui-body .ui-keyboard-space {
+  width: 15em;
+}
+#touch body .ui-body .ui-keyboard-space span {
+  visibility: hidden;
+}
+#touch body .ui-body .ui-keyboard-keyset {
+  line-height: 0.5em;
+}
+#touch body .ui-body input.ui-input-text,
+#touch body .ui-body textarea.ui-input-text {
+  width: 95%;
+}
+#touch body .ui-body .ui-btn-inner {
+  height: 2em;
+  padding: .2em 0;
+  margin: 0;
+}
+#touch body .ui-body .ui-btn {
+  margin: 0;
+  font-size: 13px;
+}
+#touch body button.ui-keyboard-button.btn {
+  padding: 1px 6px;
+}
+#touch body button.ui-keyboard-toggle span {
+  width: .8em;
+  height: .8em;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzExMSI+PHBhdGggZD0iTTguNyw0LjRINy41SDUuMHYtMS45YzAtMS40LTEuMS0yLjUtMi41LTIuNWMtMS40LDAtMi41LDEuMS0yLjUsMi41djEuOWgxLjIgdi0xLjljMC0wLjcsMC42LTEuMiwxLjItMS4yczEuMiwwLjYsMS4yLDEuMnYxLjljLTAuNywwLTEuMiwwLjYtMS4yLDEuMlY4LjggYzAsMC43LDAuNiwxLjIsMS4yLDEuMmg1LjBDOS40LDEwLDEwLDkuNCwxMCw4LjhWNS42QzEwLDUuMCw5LjQsNC40LDguOCw0LjR6IE02LjYsNy40djEuMCBjMCwwLjItMC4xLDAuMy0wLjMsMC4zUzYuMCw4LjYsNi4wLDguNFY3LjRjLTAuMi0wLjEtMC4zLTAuMy0wLjMtMC41YzAtMC4zLDAuMy0wLjYsMC42LTAuNiBTNi45LDYuNiw2LjksNi45QzYuOSw3LjEsNi44LDcuMyw2LjYsNy40eiIvPjwvc3ZnPg==);
+}
+#touch body .ui-keyboard-dark-theme button.ui-keyboard-toggle span {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iI2VlZSI+PHBhdGggZD0iTTguNyw0LjRINy41SDUuMHYtMS45YzAtMS40LTEuMS0yLjUtMi41LTIuNWMtMS40LDAtMi41LDEuMS0yLjUsMi41djEuOWgxLjIgdi0xLjljMC0wLjcsMC42LTEuMiwxLjItMS4yczEuMiwwLjYsMS4yLDEuMnYxLjljLTAuNywwLTEuMiwwLjYtMS4yLDEuMlY4LjggYzAsMC43LDAuNiwxLjIsMS4yLDEuMmg1LjBDOS40LDEwLDEwLDkuNCwxMCw4LjhWNS42QzEwLDUuMCw5LjQsNC40LDguOCw0LjR6IE02LjYsNy40djEuMCBjMCwwLjItMC4xLDAuMy0wLjMsMC4zUzYuMCw4LjYsNi4wLDguNFY3LjRjLTAuMi0wLjEtMC4zLTAuMy0wLjMtMC41YzAtMC4zLDAuMy0wLjYsMC42LTAuNiBTNi45LDYuNiw2LjksNi45QzYuOSw3LjEsNi44LDcuMyw2LjYsNy40eiIvPjwvc3ZnPg==);
+}
+#touch body button.ui-keyboard-toggle.ui-keyboard-disabled span {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iIzExMSI+PHBhdGggZD0iTTcuNCA0LjRWMi41YzAtMS40LTEuMS0yLjUtMi41LTIuNWMtMS40IDAtMi41IDEuMS0yLjUgMi41djEuOSBjLTAuNyAwLTEuMiAwLjUtMS4yIDEuMnYzLjFDMS4zIDkuNCAxLjggMTAgMi41IDEwaDQuOWMwLjcgMCAxLjItMC42IDEuMi0xLjJWNS42IEM4LjcgNC45IDguMSA0LjQgNy40IDQuNHogTTUuMyA3LjR2MS4wYzAgMC4yLTAuMSAwLjMtMC4zIDAuM2MtMC4yIDAtMC4zLTAuMS0wLjMtMC4zVjcuNCBjLTAuMi0wLjEtMC4zLTAuMy0wLjMtMC41YzAtMC4zIDAuMy0wLjYgMC42LTAuNmMwLjMgMCAwLjYgMC4zIDAuNiAwLjYgQzUuNiA3LjEgNS41IDcuMyA1LjMgNy40eiBNNi4yIDQuNEgzLjdWMi41YzAtMC43IDAuNS0xLjIgMS4yLTEuMmMwLjcgMCAxLjIgMC42IDEuMiAxLjIgVjQuNHoiLz48L3N2Zz4=);
+}
+#touch body .ui-keyboard-dark-theme button.ui-keyboard-toggle.ui-keyboard-disabled span {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iI2VlZSI+PHBhdGggZD0iTTcuNCA0LjRWMi41YzAtMS40LTEuMS0yLjUtMi41LTIuNWMtMS40IDAtMi41IDEuMS0yLjUgMi41djEuOSBjLTAuNyAwLTEuMiAwLjUtMS4yIDEuMnYzLjFDMS4zIDkuNCAxLjggMTAgMi41IDEwaDQuOWMwLjcgMCAxLjItMC42IDEuMi0xLjJWNS42IEM4LjcgNC45IDguMSA0LjQgNy40IDQuNHogTTUuMyA3LjR2MS4wYzAgMC4yLTAuMSAwLjMtMC4zIDAuM2MtMC4yIDAtMC4zLTAuMS0wLjMtMC4zVjcuNCBjLTAuMi0wLjEtMC4zLTAuMy0wLjMtMC41YzAtMC4zIDAuMy0wLjYgMC42LTAuNmMwLjMgMCAwLjYgMC4zIDAuNiAwLjYgQzUuNiA3LjEgNS41IDcuMyA1LjMgNy40eiBNNi4yIDQuNEgzLjdWMi41YzAtMC43IDAuNS0xLjIgMS4yLTEuMmMwLjcgMCAxLjIgMC42IDEuMiAxLjIgVjQuNHoiLz48L3N2Zz4=);
+}
+#touch body .ui-keyboard.ui-keyboard-disabled button:not(.ui-keyboard-toggle),
+#touch body .ui-keyboard.ui-keyboard-disabled input {
+  opacity: 0.5;
+}
+#touch body .ui-keyboard-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+#touch body .ui-keyboard-popup {
+  display: inline-block;
+  max-width: 22em;
+}
+#touch body div.ui-keyboard-extender {
+  float: right;
+  margin-left: 5px;
+}
+#touch body button.ui-keyboard-extender span {
+  width: .9em;
+  height: .9em;
+  display: inline-block;
+  margin-bottom: 3px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgc3R5bGU9ImZpbGw6IzExMSI+PGc+PHBhdGggc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6IzExMSIgZD0iTSAwLjUsNC41IDE1LjUsNC41IDE1LjUsMTUuNSAwLjUsMTUuNSBaIj48L3BhdGg+PHJlY3Qgd2lkdGg9IjIiIGhlaWdodD0iMiIgeD0iMiIgeT0iNiI+PC9yZWN0PjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjUiIHk9IjYiPjwvcmVjdD48cmVjdCB3aWR0aD0iMiIgaGVpZ2h0PSIyIiB4PSI4IiB5PSI2Ij48L3JlY3Q+PHBhdGggZD0ibSAxMSw2IDMsMCAwLDUgLTIsMCAwLC0zIC0xLDAgeiI+PC9wYXRoPjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjEyIiB5PSIxMiI+PC9yZWN0PjxyZWN0IHdpZHRoPSI2IiBoZWlnaHQ9IjIiIHg9IjUiIHk9IjEyIj48L3JlY3Q+PHJlY3Qgd2lkdGg9IjIiIGhlaWdodD0iMiIgeD0iOSIgeT0iOSI+PC9yZWN0PjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjYiIHk9IjkiPjwvcmVjdD48cmVjdCB3aWR0aD0iMiIgaGVpZ2h0PSIyIiB4PSIyIiB5PSIxMiI+PC9yZWN0PjxyZWN0IHdpZHRoPSIzIiBoZWlnaHQ9IjIiIHg9IjIiIHk9IjkiPjwvcmVjdD48L2c+PC9zdmc+);
+}
+#touch body .ui-keyboard-dark-theme button.ui-keyboard-extender span {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgc3R5bGU9ImZpbGw6I2VlZSI+PGc+PHBhdGggc3R5bGU9ImZpbGw6bm9uZTtzdHJva2U6I2VlZSIgZD0iTSAwLjUsNC41IDE1LjUsNC41IDE1LjUsMTUuNSAwLjUsMTUuNSBaIj48L3BhdGg+PHJlY3Qgd2lkdGg9IjIiIGhlaWdodD0iMiIgeD0iMiIgeT0iNiI+PC9yZWN0PjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjUiIHk9IjYiPjwvcmVjdD48cmVjdCB3aWR0aD0iMiIgaGVpZ2h0PSIyIiB4PSI4IiB5PSI2Ij48L3JlY3Q+PHBhdGggZD0ibSAxMSw2IDMsMCAwLDUgLTIsMCAwLC0zIC0xLDAgeiI+PC9wYXRoPjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjEyIiB5PSIxMiI+PC9yZWN0PjxyZWN0IHdpZHRoPSI2IiBoZWlnaHQ9IjIiIHg9IjUiIHk9IjEyIj48L3JlY3Q+PHJlY3Qgd2lkdGg9IjIiIGhlaWdodD0iMiIgeD0iOSIgeT0iOSI+PC9yZWN0PjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIHg9IjYiIHk9IjkiPjwvcmVjdD48cmVjdCB3aWR0aD0iMiIgaGVpZ2h0PSIyIiB4PSIyIiB5PSIxMiI+PC9yZWN0PjxyZWN0IHdpZHRoPSIzIiBoZWlnaHQ9IjIiIHg9IjIiIHk9IjkiPjwvcmVjdD48L2c+PC9zdmc+);
+}
+@media all and (max-width: 319px) {
+  #touch body .ui-keyboard div {
+    font-size: 9px;
+  }
+  #touch body .ui-keyboard .ui-keyboard-input {
+    font-size: 12px;
+  }
+  #touch body .ui-body .ui-btn {
+    margin: 0;
+    font-size: 9px;
+  }
+  #touch body .ui-body .ui-keyboard-button {
+    width: 1.8em;
+    height: 2.5em;
+  }
+  #touch body .ui-body .ui-keyboard-widekey {
+    width: 4em;
+  }
+  #touch body .ui-body .ui-keyboard-space {
+    width: 8em;
+  }
+  #touch body .ui-body .ui-btn-inner {
+    height: 2.5em;
+    padding: 0.3em 0;
+  }
+}
+@media all and (min-width: 320px) and (max-width: 479px) {
+  #touch body .ui-keyboard div {
+    font-size: 9px;
+  }
+  #touch body .ui-keyboard .ui-keyboard-input {
+    font-size: 14px;
+  }
+  #touch body .ui-body .ui-btn {
+    margin: 0;
+    font-size: 11px;
+  }
+  #touch body .ui-body .ui-keyboard-button {
+    width: 1.8em;
+    height: 3em;
+  }
+  #touch body .ui-body .ui-keyboard-widekey {
+    width: 4.5em;
+  }
+  #touch body .ui-body .ui-keyboard-space {
+    width: 10em;
+  }
+  #touch body .ui-body .ui-btn-inner {
+    height: 3em;
+    padding: 0.7em 0;
+  }
+}
+@media all and (min-width: 480px) and (max-width: 767px) {
+  #touch body .ui-keyboard div {
+    font-size: 13px;
+  }
+  #touch body .ui-keyboard .ui-keyboard-input {
+    font-size: 14px;
+  }
+  #touch body .ui-body .ui-btn {
+    margin: 0;
+    font-size: 10px;
+  }
+  #touch body .ui-body .ui-keyboard-button {
+    height: 2.5em;
+  }
+  #touch body .ui-body .ui-btn-inner {
+    height: 2.5em;
+    padding: 0.5em 0;
+  }
+}
+#touch body #term .iScrollIndicator {
+  background: rgba(0, 255, 80, 0.7) !important;
+  border: 0 none !important;
+}

@@ -1,0 +1,123 @@
+#temp {
+	#temperature-graph {
+		margin-bottom: 10px;
+		height: 85vh;
+		background-size: contain;
+
+		.tickLabel {
+			color: rgb(169, 169, 169);
+		}
+		table {
+			tr {
+				background: transparent !important;
+
+				&:hover {
+					background: transparent !important;
+
+					td {
+						background: transparent !important;
+					}
+				}
+
+				td {
+					background: transparent !important;
+					color: white;
+
+					&.legendLabel {
+						padding: 0 15px 0 5px;
+					}
+				}
+			}
+		}
+	}
+
+	.row-fluid {
+		table {
+			width: 161vw !important;
+			margin: 20px 0 40px -40px !important;
+			transition: left 0.5s ease;
+			cursor: w-resize;
+			position: relative;
+			left: 0;
+
+			&.open {
+				left: -61vw !important;
+			}
+
+			@media(min-width: 700px) {
+				margin-left: -40px !important;
+				left: 0 !important;
+			}
+
+			tr {
+				&:first-child {
+					th {
+						&:first-child {
+							width: 11% !important;
+						}
+					}
+				}
+
+				th, td {
+					&:nth-child(1) {
+						text-align: right;
+					}
+					&:nth-child(2) {
+						text-align: center !important;
+					}
+					&:last-child {
+						.input-append {
+							padding-right: 120px;
+						}
+					}
+					.dropdown-menu {
+						margin: 2px 0 5px;
+						bottom: 100%;
+						top: auto;
+						left: auto;
+						right: 0;
+					}
+					.input-append {
+						box-sizing: border-box;
+						position: relative;
+						padding-right: 160px;
+
+						input {
+							width: 100%;
+							margin-right: 0px;
+							padding: 7px 15px;
+							border-radius: 0;
+							text-align: left;
+						}
+						.btn-group,
+						> button {
+							position: absolute;
+							right: 0;
+							border-radius: 0;
+						}
+						.add-on {
+							padding: 7px;
+							color: black;
+						}
+						button {
+							padding: 7px 15px;
+							border-radius: 0;
+
+							.caret {
+								width: 11px;
+
+								&:after {
+									content: "\f0d7";
+									font-family: FontAwesome;
+									font-size: 18px;
+									top: -7px;
+									position: relative;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

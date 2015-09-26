@@ -1,0 +1,176 @@
+#navbar {
+	height: 70px;
+	background-color: #00B0FF;
+	border: 0 none !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+
+	.navbar-inner {
+		background: transparent !important;
+		border: 0 none !important;
+		padding: 0;
+		margin: 0;
+	}
+
+	.container {
+		height: 66px;
+		border:0 none;
+	}
+	.nav {
+		position: relative;
+		z-index: 23;
+	}
+
+	.dropdown-menu {
+		margin-top: 6px;
+		right: 10px;
+
+		&:after {
+			border-bottom-color: #00B0FE !important;
+		}
+
+		li {
+
+			&.offline {
+				a:before {
+					color: red;
+				}
+			}
+			&.online {
+				a:before {
+					color: #9AFD00;
+				}
+			}
+
+			a {
+				box-sizing: border-box;
+				-moz-box-sizing: border-box;
+
+				color: white;
+				display: block;
+				text-align: left;
+				width: 100% !important;
+				max-width: 100% !important;
+				height: auto !important;
+				padding: 10px 20px !important;
+				float: none;
+
+				.icon-wrench{
+					display: none;
+				}
+
+				&:before {
+					font: normal normal normal 14px/1 FontAwesome;
+					content: "";
+					display: inline-block;
+					margin: 0 15px 0 0;
+					font-size: 20px;
+					position: relative;
+					top: 2px;
+				}
+
+			}
+
+			&#conn_link2 {
+				a:before {
+					content: "\f1eb";
+				}
+			}
+			&#timelapse_link2 {
+				a:before {
+					content: "\f03e";
+				}
+			}
+			&#gcode_link2 {
+				a:before {
+					content: "\f248";
+				}
+			}
+			&#navbar_settings2 {
+				a:before {
+					content: "\f013";
+				}
+			}
+			#usersettings_button {
+				&:before {
+					content: "\f007";
+				}
+			}
+			#logout_button {
+				&:before {
+					content: "\f08b";
+				}
+			}
+
+		}
+	}
+
+	#navbar_settings {
+		display: none;
+	}
+	#navbar_login {
+		&.offline:after {
+			color: white;
+			animation-name: blink_offline;
+		}
+		&.online:after {
+			color: white;
+			animation-name: blink_online;
+		}
+		&:after {
+			animation-duration: 0.6s;
+			animation-iteration-count: 5;
+			content: "\f0c9";
+		}
+	}
+	@keyframes blink_offline {
+		0% {
+			color: white;
+		}
+		50% {
+			color: red;
+		}
+		100% {
+			color: white;
+		}
+	}
+
+	@keyframes blink_online {
+		0% {
+			color: white;
+		}
+		50% {
+			color: #9AFD00;
+		}
+		100% {
+			color: white;
+		}
+	}
+}
+
+#tabs {
+	#temp_link:after {
+		content: "\f0e4";
+	}
+	#control_link:after {
+		content: "\f11b";
+	}
+	#gcode_link:after {
+		content: "\f248";
+	}
+	#term_link:after {
+		content: "\f120";
+	}
+	#webcam_link:after {
+		content: "\f030";
+		font-size: 26px;
+		line-height: 38px;
+	}
+	#print_link {
+		&:after {
+			content: "\f233";
+		}
+	}
+}

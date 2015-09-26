@@ -1,0 +1,154 @@
+
+#term {
+	position: relative;
+
+	.icon-caret-down:before,
+	.icon-caret-right:before {
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		content: "\f078";
+	}
+	.icon-caret-right:before {
+		content: "\f054";
+	}
+	span.muted {
+		color: rgba(0, 255, 0, 0.5);
+	}
+
+	.row-fluid {
+		clear: both;
+		padding-top: 5px;
+	}
+
+	.iScrollIndicator {
+		background: rgba(0, 255, 80, 0.7) !important;
+		border: 0 none !important;
+	}
+
+	.terminal {
+		margin-bottom: 70px;
+
+		small {
+			&.pull-left {
+				margin-right: 30px;
+			}
+			&.pull-right {
+				position: absolute;
+				right: 0;
+			}
+
+			button {
+				padding: 3px 10px;
+
+				+ span {
+					padding-left: 7px;
+				}
+			}
+		}
+		a {
+			font-size: 35px;
+			color: #0F0;
+
+			i:before {
+				font-family: FontAwesome;
+			}
+		}
+
+		button {
+			background: white;
+			color: black;
+			padding: 4px 12px;
+
+			&.active {
+				background: #0F0;
+			}
+		}
+	}
+	#termin-filterpanel {
+		width: 100%;
+	}
+	#terminal-scroll {
+		border: 1px solid #0F0;
+		overflow: hidden;
+		border-radius: 5px 5px 0 0;
+		height: 66vh;
+		min-height: 150px;
+		margin-bottom: 40px;
+		background-color: transparent;
+	}
+	#terminal-output {
+		margin-bottom: 26px;
+		border: 0 none;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		margin: 0;
+		background-color: transparent;
+		height: auto;
+		min-height: 0;
+		max-height: none;
+		overflow: hidden;
+		color: #0F0;
+
+		&:before {
+			content: "╔╦╗┌─┐┬    ┬┌─┐┬    ┬╦    ╦╦\A     ║    │    ││    ││        ├─┤║    ║║\A     ╩    └─┘└─┘└─┘┴    ┴╚═╝╩";
+			display: block;
+			width: 280px;
+			margin: 10px auto 30px;
+			position: relative;
+			line-height: 14px;
+			font-size: 14px;
+			text-align: center;
+			font-family: FontAwesome;
+			transform: scale(0.75, 1.25);
+		}
+		&:after {
+			content: "v?.?.?";
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 70px;
+			line-height: 17px;
+			font-size: 14px;
+			width: 100%;
+			text-align: center;
+		}
+	}
+	#terminal-sendpanel {
+		position: absolute;
+		left: -1px;
+		width: 100%;
+		margin: 0;
+		top: 66vh;
+
+		.muted {
+			display: none;
+		}
+		input {
+			width: 100%;
+			box-sizing: border-box;
+			background-color: black;
+			color: #0F0;
+			border: 1px solid #0F0;
+			padding: 14px;
+			border-radius: 0 0 5px 5px;
+		}
+		button {
+			margin-left: -61px;
+			width: 60px;
+			background-color: black;
+			color: white;
+			text-shadow: 0 0 0 transparent;
+			border: 0 none;
+			border-left: 1px solid #0F0;
+			border-radius: 0 0 5px 0;
+			margin-top: 1px;
+			z-index: 21;
+			position: relative;
+			color: #0F0;
+			padding: 4px 12px;
+		}
+	}
+}

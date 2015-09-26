@@ -26,14 +26,15 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.TemplatePlugin):
 
 	def on_startup(self, host, port):
-		__tmp = self.get_plugin_data_folder().replace("data/touchui", "generated/webassets/fonts/")
+		__tmp = self.get_plugin_data_folder().replace("data/touchui", "generated/webassets/")
 
-		shutil.copytree(self.get_asset_folder() + '/fonts/', __tmp)
-		shutil.copy2(self.get_asset_folder() + '/css/libs/fontawesome.css', __tmp)
+		shutil.copytree(self.get_asset_folder() + '/fonts/', __tmp + "fonts/")
+		shutil.copy2(self.get_asset_folder() + '/css/libs/fontawesome.css', __tmp + "fonts/")
 
-		self._logger.info("Copied font files to '" + __tmp + "'")
+		self._logger.info("Copied font files to '" + __tmp + "fonts/'")
 
 	def get_assets(self):
+
 		return dict(
 			js=[
 				"js/libs/iscroll.js",
@@ -53,8 +54,9 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
 			],
-			less=[
-				"less/touchui.less"
+			less=[],
+			css=[
+				"css/touchui.css"
 			]
 		)
 

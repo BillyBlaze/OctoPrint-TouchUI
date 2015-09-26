@@ -1,0 +1,46 @@
+button,
+.btn {
+	color: black;
+	background: #F3F3F3;
+	padding: 6px 15px;
+
+	&:active {
+		background: #ECECEC;
+	}
+	&:focus {
+		outline: 0 none;
+	}
+
+	&-primary {
+		color: white;
+		background: #00B0FF;
+
+		&:active {
+			background: #009CE2;
+		}
+	}
+	&-danger {
+		color: white;
+		background: #D40000;
+
+		&:active {
+			background: #9E0000;
+		}
+	}
+}
+
+a {
+	color: #009CE2;
+
+	&.close {
+		color: black;
+	}
+}
+.nav-tabs>li, .nav-pills>li {
+	color: #009CE2;
+}
+.nav-pills>.active>a, .nav-pills>.active>a:hover,
+.nav-list>.active>a, .nav-list>.active>a:hover {
+	background: #00B0FF;
+	color: white;
+}

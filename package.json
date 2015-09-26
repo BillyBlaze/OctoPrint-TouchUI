@@ -1,0 +1,18 @@
+{
+  "author": "",
+  "name": "OctoPrint-TouchUI",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BillyBlaze/OctoPrint-TouchUI.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gulp-less": "^3.0.3",
+    "gulp-watch-less": "^1.0.1"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}

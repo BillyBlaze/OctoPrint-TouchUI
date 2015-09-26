@@ -1,0 +1,43 @@
+.tabbable > .nav-tabs li,
+#navbar .nav li {
+	overflow: hidden;
+	position: relative;
+
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: white;
+
+	&:after {
+		position: absolute;
+		z-index: 1;
+		top: 50%;
+		left: 0;
+		width: 100%;
+		text-align: center;
+		font-size: 32px;
+		vertical-align: middle;
+		display: block;
+		margin-top: -16px;
+	}
+	a {
+		width: 100px;
+		width: 18vw;
+		max-width: 100px;
+		height: 50px;
+		background: transparent;
+		text-indent: -5000px;
+		position: relative;
+		z-index: 2;
+		min-width: 37px;
+		padding: 10px 0;
+	}
+
+}
+#tabs.items-5 li {
+	a {
+		width: 15vw;
+	}
+}

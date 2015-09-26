@@ -3,13 +3,13 @@
 	var TouchUInstance = function() {
 		var self = this;
 
-		if( document.location.hash === "#touch" || this.DOM.cookies.get("TouchUI.active") === "true") {
-			self.isActive = true;
+		if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
+			this.isActive = true;
 		}
 
 		return {
 			_instance: this,
-			cookies: this.cookies,
+			cookies: this.DOM.cookies,
 			domLoading: function(/*touchViewModel*/) {
 				self.main.init.call(self);
 			},

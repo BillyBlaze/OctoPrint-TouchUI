@@ -1,0 +1,149 @@
+.visible_touch {
+	display: block;
+}
+.hidden_touch {
+	display: none;
+}
+
+.accordion,
+#navbar .brand {
+	position: absolute;
+	top: -5000px;
+	left: -5000px;
+}
+
+.page-container {
+	color: white;
+	width: 100%;
+	height: auto;
+	min-height: 100%;
+	position: relative;
+
+	.octoprint-container {
+		margin: 0;
+
+		> .row {
+			margin-bottom: 40px;
+		}
+		> .footer {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			width: 100%;
+			box-sizing: border-box;
+			padding: 0 40px 0;
+		}
+
+		.tab-content {
+			box-sizing: border-box;
+			padding: 30px 35px 0;
+			overflow: hidden;
+
+			h1 {
+				color: white;
+				margin: 0;
+			}
+
+			.add-on {
+				color: black;
+			}
+
+			table {
+				tr {
+					&:first-child {
+						th {
+							margin: 0;
+							font-size: 18px;
+							border-bottom: 2px solid black;
+							background: #00B0FF;
+							padding: 13px 5px;
+						}
+					}
+
+					&:hover {
+						background-color: #333;
+					}
+
+					th, td {
+						border-bottom: 2px solid black;
+						background-color: #333;
+					}
+				}
+			}
+
+		}
+
+		* {
+			border: 0 none;
+		}
+
+		button, .btn {
+			background: #00B0FF;
+			color: white;
+
+			&:active {
+				background: #00B0FF;
+
+				&:active {
+					background: #009CE2;
+				}
+			}
+		}
+
+		button:focus {
+			outline: 0 none;
+		}
+
+		.touch-focus {
+			background-color: white !important;
+			color: black !important;
+			fill: black !important;
+
+			&:before, &:after, span, i {
+				color: black !important;
+				fill: black !important;
+			}
+		}
+		button,
+		.btn {
+			transition: background-color 0.2s ease, color 0.2s ease;
+
+			&.disabled, &[disabled] {
+				pointer-events: none;
+			}
+		}
+
+		.control-group {
+			.control-label,
+			.controls {
+				display: block;
+				float: none;
+				width: 100%;
+				margin: 0;
+				text-align: left;
+			}
+
+		}
+
+	}
+}
+
+.nav-tabs {
+	.active {
+		background: black;
+
+		a {
+			border-radius: 0;
+		}
+	}
+}
+
+.tabbable,
+.container {
+	width: 100%;
+}
+
+.container > .row,
+.container > .row > .tabbable {
+	margin: 0;
+}
