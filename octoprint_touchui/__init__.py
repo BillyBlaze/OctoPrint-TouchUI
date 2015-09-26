@@ -16,9 +16,9 @@ import octoprint.settings
 import octoprint.util
 
 def dump(obj):
-   for attr in dir(obj):
-       if hasattr( obj, attr ):
-           print( "obj.%s = %s" % (attr, getattr(obj, attr)))
+	for attr in dir(obj):
+		if hasattr( obj, attr ):
+			print( "obj.%s = %s" % (attr, getattr(obj, attr)))
 
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.StartupPlugin,
@@ -27,26 +27,31 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def on_startup(self, host, port):
 		__tmp = self.get_plugin_data_folder().replace("data/touchui", "generated/webassets/fonts/")
-		
+
 		shutil.copytree(self.get_asset_folder() + '/fonts/', __tmp)
 		shutil.copy2(self.get_asset_folder() + '/css/libs/fontawesome.css', __tmp)
-		
+
 		self._logger.info("Copied font files to '" + __tmp + "'")
-	
+
 	def get_assets(self):
 		return dict(
 			js=[
-				"js/main.js",
-				"js/files.js",
-				"js/keyboard.js",
-				"js/scroll.js",
-				"js/slider.js",
-				"js/modal.js",
-				"js/DOM.js",
-				"js/animate.js",
-				"js/setup-knockout.js",
-				"js/libs/iscroll.js", 
-				"js/libs/jquery.keyboard.js"
+				"js/libs/iscroll.js",
+				"js/libs/jquery.keyboard.js",
+
+				"js/includes/main.js",
+				"js/includes/files.js",
+				"js/includes/keyboard.js",
+				"js/includes/scroll.js",
+				"js/includes/slider.js",
+				"js/includes/modal.js",
+				"js/includes/DOM.js",
+				"js/includes/animate.js",
+				"js/includes/terminal.js",
+				"js/includes/knockout.js",
+
+				"js/jquery.touchui.js",
+				"js/knockout.touchui.js"
 			],
 			less=[
 				"less/touchui.less"
@@ -62,12 +67,12 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		return dict(
 			version=self._plugin_version
 		)
-		
+
 	def get_version(self):
 		return self._plugin_version
 
 	def get_update_information(self):
-	
+
 		return dict(
 			touchui=dict(
 				displayName="TouchUI Plugin",
