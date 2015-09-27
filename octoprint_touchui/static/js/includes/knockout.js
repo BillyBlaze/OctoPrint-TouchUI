@@ -12,14 +12,6 @@
 			this.DOM.create.init.call(this);
 			this.scroll.beforeLoad.call(this);
 
-			// Hide topbar if clicking an item
-			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before.
-			// TODO: Make this a setting in the options
-			$(document).on("click", '#tabs [data-toggle="tab"]', function() {
-				self.scroll.iScrolls.body.refresh();
-				self.animate.hide.call(self, "navbar");
-			});
-
 		},
 
 		isReady: function(viewModels) {
@@ -27,7 +19,8 @@
 				terminalViewModel = viewModels[0],
 				connectionViewModel = viewModels[1],
 				settingsViewModel = viewModels[2],
-				softwareUpdateViewModel = viewModels[3];
+				softwareUpdateViewModel = viewModels[3],
+				controlViewModel = viewModels[4];
 
 			this.terminal.init.call(this, terminalViewModel);
 
@@ -67,6 +60,19 @@
 
 			// Add class with how many tab-items
 			$("#tabs").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+			// Hide topbar if clicking an item
+			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
+			// TODO: Make this a setting in the options
+			$(document).on("click", '#tabs [data-toggle="tab"]', function() {
+				self.scroll.iScrolls.body.refresh();
+				self.animate.hide.call(self, "navbar");
+			});
+
+			// (Re-)Apply bindings to the new webcam div
+			if($("#webcam").length > 0) {
+				ko.applyBindings(controlViewModel, $("#webcam")[0])
+			}
 
 		}
 	}

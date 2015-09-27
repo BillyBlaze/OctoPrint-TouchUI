@@ -140,12 +140,6 @@
   margin: 0;
   text-align: left;
 }
-#touch body .nav-tabs .active {
-  background: black;
-}
-#touch body .nav-tabs .active a {
-  border-radius: 0;
-}
 #touch body .tabbable,
 #touch body .container {
   width: 100%;
@@ -240,6 +234,12 @@
 }
 #touch body #navbar .dropdown-menu:after {
   border-bottom-color: #00B0FE !important;
+}
+#touch body #navbar .dropdown-menu .btn {
+  background: #009CE2;
+}
+#touch body #navbar .dropdown-menu .btn:active {
+  background: #006D9E;
 }
 #touch body #navbar .dropdown-menu li.offline a:before {
   color: red;
@@ -418,6 +418,23 @@
 }
 #touch body #tabs.items-5 li a {
   width: 15vw;
+}
+#touch body #tabs.nav-tabs .active {
+  background: black;
+  /* Show a hidden tab background */
+}
+#touch body #tabs.nav-tabs .active a {
+  border-radius: 0;
+}
+#touch body #tabs.nav-tabs .active.hidden_touch {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-indent: -4000px;
+}
+#touch body #tabs.nav-tabs .active.hidden_touch * {
+  visibility: hidden;
 }
 #touch body #webcam {
   margin: -30px -35px 0;
@@ -632,7 +649,27 @@
 }
 #touch body #printer .dropdown-menu {
   left: auto !important;
-  right: 0 !important;
+  right: -10px !important;
+  border: 1px solid black;
+  background: #00B0FF;
+  color: white;
+  top: 54px;
+}
+#touch body #printer .dropdown-menu a,
+#touch body #printer .dropdown-menu a i {
+  color: white !important;
+  font-size: 17px !important;
+}
+#touch body #printer .dropdown-menu .divider {
+  background-color: black !important;
+}
+#touch body #printer .dropdown-menu:before {
+  content: "";
+  border: 10px solid transparent;
+  border-bottom-color: #00B0FF;
+  position: absolute;
+  top: -18px;
+  right: 27px;
 }
 #touch body #term {
   position: relative;
@@ -1253,11 +1290,16 @@
 	width: 95% !important;
 	margin: 0 !important;
 	min-height: 100%;*/
+  /*Disable some other scroll libary*/
   border-radius: 0;
   -webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
   -moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
   -o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
   transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
+}
+#touch body .modal .slimScrollDiv,
+#touch body .modal #settings_plugin_pluginmanager_repositorydialog_list {
+  height: auto !important;
 }
 #touch body .modal .accordion-group {
   border: 0 none !important;
@@ -1285,9 +1327,6 @@
 }
 #touch body .modal.show-dropdown .modal-header .span3 {
   height: auto;
-}
-#touch body .modal .modal {
-  /* make a sticky footer */
 }
 #touch body .modal .modal-body {
   padding: 20px 25px;
@@ -1747,7 +1786,8 @@
 #touch body .pagination {
   color: transparent;
 }
-#touch body .pagination ul > li.disabled > a {
+#touch body .pagination ul > li.disabled > a,
+#touch body .pagination ul > li.active > a {
   background: transparent;
   color: #BFBFBF;
 }
@@ -1756,6 +1796,10 @@
   font-size: 21px;
   background: #00B0FF;
   color: white;
+}
+#touch body .pagination ul > li > a:active {
+  background: white;
+  color: #00B0FF;
 }
 #touch body .footer {
   font-size: 14px;

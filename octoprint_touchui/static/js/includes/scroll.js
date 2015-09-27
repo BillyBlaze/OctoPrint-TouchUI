@@ -57,8 +57,8 @@
 							});
 						}
 
-						$(document).off(event);
 						self.scroll.iScrolls.body.off("scrollStart");
+						$(document).off(event);
 					});
 
 				});
@@ -183,9 +183,8 @@
 					curModal.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
 					curModal.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
 
-					// Prevent default events (i.e. clones from showing), refresh the scrollHeight and scroll back to top
-					$modalElm.find('[data-toggle="tab"]').on("click", function(e) {
-						e.preventDefault();
+					// Refresh the scrollHeight and scroll back to top
+					$modalElm.find('[data-toggle="tab"], .pagination ul li a').on("click", function(e) {
 						curModal.stop();
 
 						setTimeout(function() {
@@ -195,7 +194,7 @@
 					});
 
 					$modalElm.one("destroy", function() {
-						$modalElm.find('[data-toggle="tab"]').off("click");
+						$modalElm.find('[data-toggle="tab"], .pagination ul li a').off("click");
 						curModal.destroy();
 						self.scroll.modal.stack.pop();
 					});
@@ -229,7 +228,6 @@
 				$document.on("dropdown-closed.touchui", function() {
 					// Enable active modal
 					self.scroll.modal.stack[self.scroll.modal.stack.length-1].enable();
-					self.scroll.modal.dropdown.destroy();
 				});
 
 			}

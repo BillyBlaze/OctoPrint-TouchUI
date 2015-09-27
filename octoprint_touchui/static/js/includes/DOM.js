@@ -6,96 +6,106 @@
 
 			init: function() {
 
-				this.DOM.create.connection.init.call(this);
-				this.DOM.create.settings.init.call(this);
-				this.DOM.create.printer.init.call(this);
-				this.DOM.create.gcode.init.call(this);
+				this.DOM.move.connection.init( this.DOM.create.tabbar );
+				this.DOM.move.settings.init( this.DOM.create.tabbar );
+				this.DOM.create.printer.init( this.DOM.create.tabbar );
+				this.DOM.move.gcode.init( this.DOM.create.tabbar );
 
 				if ($("#webcam_container").length > 0) {
-					this.DOM.create.webcam.init.call(this);
+					this.DOM.create.webcam.init( this.DOM.create.tabbar );
 				}
 
 				// Remove unwanted spaces
 				$("#navbar_settings2 a").html($("#navbar_settings2 a").text().trim());
 
-				//Add hr after the G-CODE viewer
+				//Add hr before the settings icon
 				$('<li class="divider"></li>').insertBefore("#navbar_settings2");
+
+				// Move all other items from tabbar into dropdown
+				this.DOM.move.tabs.init();
+
 			},
 
-			connection: {
-				//Move the connection accordion tab to a modal and add it to the settings dropdown
-				init: function() {
-					var self = this,
-						text = $("#connection_wrapper .accordion-heading").text().trim();
+			// Tabbar helper
+			tabbar: {
 
-					// Clone usersettings modal
-					var modal = $("#usersettings_dialog").clone().attr("id", "connection_dialog").insertAfter("#usersettings_dialog");
-
-					// Remove all html from clone
-					modal.find(".modal-body").html("");
-
-					// Append tab contents to modal
-					$("#connection_wrapper").appendTo(modal.find(".modal-body"))
-
-					// Set modal header to accordion header
-					modal.find(".modal-header h3").text(text);
-
-					// Create a link in the dropdown
-					$('<li id="conn_link2"><a href="#connection_dialog" data-toggle="modal">'+text+'</a></li>').prependTo("#login_dropdown_loggedin");
+				createItem: function(itemId, linkId, toggle, text) {
+					return $('<li id="'+itemId+'"><a href="#'+linkId+'" data-toggle="'+toggle+'">'+text+'</a></li>');
 				}
+
 			},
 
+			// Create a print status and files link and tab
 			printer: {
-				init: function() {
-					// Create a print status and files link and tab
-					$('<li id="print_link"><a href="#printer" data-toggle="tab"></a></li>').insertBefore("#tabs li:first-child");
-					$('<div id="printer"><div class="row-fluid"></div></div>').addClass("tab-pane").insertBefore("#temp");
+
+				menu: {
+					cloneTo: "#tabs"
+				},
+
+				container: {
+					cloneTo: "#temp"
+				},
+
+				move: {
+					$state: $("#state_wrapper"),
+					$files: $("#files_wrapper")
+				},
+
+				init: function( tabbar ) {
+					this.menu.$elm = tabbar.createItem("print_link", "printer", "tab").prependTo(this.menu.cloneTo);
+					this.container.$elm = $('<div id="printer" class="tab-pane"><div class="row-fluid"></div></div>').insertBefore(this.container.cloneTo);
+
+					// Move the contents of the hidden accordions to the new print status and files tab
+					this.move.$state.appendTo(this.container.$elm.find(".row-fluid"));
+					this.move.$files.insertAfter(this.container.$elm.find(".row-fluid #state_wrapper"));
 				}
 			},
 
-			gcode: {
-				init: function() {
-					// Clone the G-CODE viewer, hide the orginal and place it in the dropdown
-					$("#gcode_link").clone().attr("id", "gcode_link2").insertAfter("#conn_link2").click(function(e) {
-						e.preventDefault();
-						e.stopPropagation();
-
-						$("#gcode_link a").click();
-					});
-					$("#gcode_link").addClass("hidden_touch");;
-				}
-			},
-
-			settings: {
-				init: function() {
-					// Move the settings option into the dropdown for more screen
-					var tmp = $("#navbar_settings").clone().attr("id", "navbar_settings2")
-					var tmp2 = tmp.find("#navbar_show_settings").attr("data-bind", "").attr("id", "");
-
-					tmp.insertAfter($('#conn_link2'));
-					tmp2.click(function(e) {
-						$("#navbar_settings").find("a").click();
-					});
-				}
-			},
-
+			// Create a tab with webcam feed, and move timelapse into settings dropdown
 			webcam: {
-				init: function() {
-					var self = this.DOM.create.webcam;
 
-					$("#timelapse_link").clone().attr("id", "timelapse_link2").insertAfter("#conn_link2").click(function(e) {
-						e.preventDefault();
-						e.stopPropagation();
+				menu: {
+					webcam: {
+						cloneTo: "#term_link"
+					},
+					timelapse: {
+						$cloneContainer: $("#timelapse_link"),
+						cloneId: "timelapse_link2",
+						cloneTo: "#conn_link2"
+					}
+				},
 
-						$("#timelapse_link a").click();
-					});
+				container: {
+					cloneTo: "#timelapse",
 
-					self.container = $('<div id="webcam" class="tab-pane"></div>').insertAfter("#timelapse");
-					self.menuItem = $('<li id="webcam_link"><a href="#webcam" data-toggle="tab"></a></li>').insertBefore("#term_link");
+					webcam: {
+						$container: $("#webcam_container"),
+						cloneTo: "#webcam"
+					}
+				},
 
-					$("#webcam_container + div").appendTo("#webcam");
-					$("#webcam_container").prependTo("#webcam");
-					$("#timelapse_link").addClass("hidden_touch");
+				init: function( tabbar ) {
+					var self = this;
+
+					this.menu.timelapse.$elm = this.menu.timelapse.$cloneContainer
+						.clone()
+						.attr("id", this.menu.timelapse.cloneId)
+						.insertAfter(this.menu.timelapse.cloneTo)
+						.click(function(e) {
+							e.preventDefault();
+							e.stopPropagation();
+
+							self.menu.timelapse.$cloneContainer.find("a").click();
+						});
+
+					this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').insertAfter(this.container.cloneTo);
+					this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertBefore(this.menu.webcam.cloneTo);
+
+					this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
+					this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
+
+					// Hide orginal link
+					this.menu.timelapse.$cloneContainer.addClass("hidden_touch");
 
 				}
 			}
@@ -104,20 +114,92 @@
 		move: {
 
 			init: function() {
-
 				this.DOM.move.controls.init();
-
-				// Move the contents of the hidden accordions to the new print status and files tab
-				$('#state_wrapper').appendTo("#printer .row-fluid");
-				$('#files_wrapper').insertAfter("#printer .row-fluid #state_wrapper");
-
 			},
 
+			// Move all items, exepct this mainTabItems into the dropdown
+			tabs: {
+				mainTabItems: ['#print_link', '#temp_link', '#control_link', '#webcam_link', '#term_link', '.hidden_touch'],
+				init: function() {
+					$items = $("#tabs li:not("+this.mainTabItems+")").appendTo('#login_dropdown_loggedin');
+				}
+			},
+
+			//Move the connection accordion tab to a modal and add it to the settings dropdown
+			connection: {
+				$container: null,
+				containerId: "connection_dialog",
+				$cloneContainer: $("#usersettings_dialog"),
+				$cloneModal: $("#connection_wrapper"),
+				cloneTo: "#login_dropdown_loggedin",
+
+				init: function( tabbar ) {
+					var text = this.$cloneModal.find(".accordion-heading").text().trim();
+
+					// Clone usersettings modal
+					this.$container = this.$cloneContainer.clone().attr("id", this.containerId).insertAfter(this.$cloneContainer);
+					this.$containerBody = this.$container.find(".modal-body");
+
+					// Remove all html from clone
+					this.$containerBody.html("");
+
+					// Append tab contents to modal
+					this.$cloneModal.appendTo(this.$containerBody);
+
+					// Set modal header to accordion header
+					this.$container.find(".modal-header h3").text(text);
+
+					// Create a link in the dropdown
+					this.$menuItem = tabbar.createItem("conn_link2", this.containerId, "modal", text).prependTo(this.cloneTo);
+				}
+			},
+
+			// Move the G-CODE viewer, hide the orginal and place it in the dropdown
+			gcode: {
+				$item: $("#gcode_link"),
+				cloneId: "gcode_link2",
+				cloneTo: "#conn_link2",
+
+				init: function() {
+					var self = this;
+
+					this.$item.clone().attr("id", this.cloneId).insertAfter(this.cloneTo).click(function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+
+						self.$item.find("a").click();
+					});
+
+					this.$item.addClass("hidden_touch");
+				}
+			},
+
+			// Move the settings option into the dropdown for more screen
+			settings: {
+				$item: $("#navbar_settings"),
+				cloneId: "navbar_settings2",
+				cloneTo: "#conn_link2",
+				findLinkWithin: "#navbar_show_settings",
+
+				init: function( tabbar ) {
+					var self = this;
+
+					// Clone the navbar settings item
+					this.$cloneItem = this.$item.clone().attr("id", this.cloneId).insertAfter(this.cloneTo);
+
+					// Remove binding and clicks from clone
+					this.$cloneItem.find(this.findLinkWithin).attr("data-bind", "").attr("id", "").click(function(e) {
+						// Pass on the click to the orginal element
+						self.$item.find(self.findLinkWithin).click();
+					});
+				}
+			},
+
+			// Move feed rate into new div and move flow rate
 			controls: {
 
 				init: function() {
 
-					//Copy feed rate into new div and grab flow rate
 					var tmp = $('<div class="jog-panel"></div>').appendTo('#control');
 
 					var jogPanels = $('#control > .jog-panel');

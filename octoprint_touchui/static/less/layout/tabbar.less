@@ -36,8 +36,36 @@
 	}
 
 }
-#tabs.items-5 li {
-	a {
-		width: 15vw;
+#tabs {
+
+	&.items-5 {
+		li {
+			a {
+				width: 15vw;
+			}
+		}
+	}
+
+	&.nav-tabs {
+		.active {
+			background: black;
+
+			a {
+				border-radius: 0;
+			}
+
+			/* Show a hidden tab background */
+			&.hidden_touch {
+				display: block;
+				position: absolute;
+				right: 0;
+				top: 0;
+				text-indent: -4000px;
+
+				* {
+					visibility: hidden;
+				}
+			}
+		}
 	}
 }

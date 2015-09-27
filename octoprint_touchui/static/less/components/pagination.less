@@ -4,7 +4,8 @@
 	ul {
 		> li {
 
-			&.disabled {
+			&.disabled,
+			&.active {
 				> a {
 					background: transparent;
 					color: #BFBFBF;
@@ -15,6 +16,11 @@
 				font-size: 21px;
 				background: #00B0FF;
 				color: white;
+
+				&:active {
+					background: white;
+					color: #00B0FF;
+				}
 			}
 
 		}

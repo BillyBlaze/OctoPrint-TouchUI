@@ -57,6 +57,11 @@
 	margin: 0 !important;
 	min-height: 100%;*/
 
+	/*Disable some other scroll libary*/
+	.slimScrollDiv, #settings_plugin_pluginmanager_repositorydialog_list {
+		height: auto !important;
+	}
+
 	border-radius: 0;
 
 	-webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out;
@@ -106,7 +111,6 @@
 	}
 
 	.modal {
-		/* make a sticky footer */
 		&-body {
 			padding: 20px 25px;
 			margin-bottom: 60px;

@@ -29,7 +29,7 @@ $(function() {
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel"],
+		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel"],
 		"#settings_plugin_touchui"
 	]);
 });

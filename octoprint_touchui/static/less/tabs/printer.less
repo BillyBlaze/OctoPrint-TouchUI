@@ -232,7 +232,29 @@
 	}
 	.dropdown-menu {
 		left: auto !important;
-		right: 0 !important;
+		right: -10px !important;
+		border: 1px solid black;
+		background: #00B0FF;
+		color: white;
+		top: 54px;
+
+		a, a i {
+			color: white !important;
+			font-size: 17px !important;
+		}
+
+		.divider {
+			background-color: black !important
+		}
+
+		&:before {
+			content: "";
+			border: 10px solid transparent;
+			border-bottom-color: #00B0FF;
+			position: absolute;
+			top: -18px;
+			right: 27px;
+		}
 	}
 
 }
