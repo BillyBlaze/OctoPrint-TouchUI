@@ -20,7 +20,8 @@
 				connectionViewModel = viewModels[1],
 				settingsViewModel = viewModels[2],
 				softwareUpdateViewModel = viewModels[3],
-				controlViewModel = viewModels[4];
+				controlViewModel = viewModels[4],
+				gcodeViewModel = viewModels[5];
 
 			this.terminal.init.call(this, terminalViewModel);
 
@@ -59,13 +60,12 @@
 			this.main.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
 
 			// Add class with how many tab-items
-			$("#tabs").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+			$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
 
 			// Hide topbar if clicking an item
 			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
 			// TODO: Make this a setting in the options
 			$(document).on("click", '#tabs [data-toggle="tab"]', function() {
-				self.scroll.iScrolls.body.refresh();
 				self.animate.hide.call(self, "navbar");
 			});
 

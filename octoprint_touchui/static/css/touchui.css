@@ -416,8 +416,11 @@
   min-width: 37px;
   padding: 10px 0;
 }
-#touch body #tabs.items-5 li a {
-  width: 15vw;
+#touch body #tabs.items-5 .nav li a,
+#touch body #navbar.items-5 .nav li a,
+#touch body #tabs.items-5.nav li a,
+#touch body #navbar.items-5.nav li a {
+  width: 16vw;
 }
 #touch body #tabs.nav-tabs .active {
   background: black;
@@ -735,7 +738,7 @@
   border: 1px solid #0F0;
   overflow: hidden;
   border-radius: 5px 5px 0 0;
-  height: 66vh;
+  height: 69vh;
   min-height: 150px;
   margin-bottom: 40px;
   background-color: transparent;
@@ -756,14 +759,13 @@
 #touch body #term #terminal-output:before {
   content: "╔╦╗┌─┐┬    ┬┌─┐┬    ┬╦    ╦╦\A     ║    │    ││    ││        ├─┤║    ║║\A     ╩    └─┘└─┘└─┘┴    ┴╚═╝╩";
   display: block;
-  width: 280px;
-  margin: 10px auto 30px;
+  width: 360px;
+  margin: 5px auto 30px;
   position: relative;
-  line-height: 14px;
-  font-size: 14px;
+  line-height: 17px;
+  font-size: 18px;
   text-align: center;
   font-family: FontAwesome;
-  transform: scale(0.75, 1.25);
 }
 #touch body #term #terminal-output:after {
   content: "v?.?.?";
@@ -776,12 +778,43 @@
   width: 100%;
   text-align: center;
 }
+@media (max-width: 500px) {
+  #touch body #term #terminal-output:before {
+    margin-top: 10px;
+    line-height: 14px;
+    font-size: 14px;
+    width: 280px;
+  }
+  #touch body #term #terminal-output:after {
+    top: 65px;
+  }
+}
+@media (max-width: 400px) {
+  #touch body #term #terminal-output:before {
+    font-size: 11px;
+    line-height: 11px;
+    width: 210px;
+  }
+  #touch body #term #terminal-output:after {
+    top: 56px;
+  }
+}
+@media (max-width: 300px) {
+  #touch body #term #terminal-output:before {
+    font-size: 8px;
+    line-height: 8px;
+    width: 153px;
+  }
+  #touch body #term #terminal-output:after {
+    top: 47px;
+  }
+}
 #touch body #term #terminal-sendpanel {
   position: absolute;
   left: -1px;
   width: 100%;
   margin: 0;
-  top: 66vh;
+  top: 69vh;
 }
 #touch body #term #terminal-sendpanel .muted {
   display: none;
@@ -1212,9 +1245,27 @@
 #touch body #control > .jog-panel .slider input {
   display: block !important;
 }
-#touch body #gcode_canvas {
+#touch body #gcode #gcode_canvas {
   width: 100% !important;
   height: 100% !important;
+  pointer-events: none !important;
+}
+#touch body #gcode .slider {
+  display: none;
+}
+#touch body #gcode .progress {
+  margin: 30px 0 20px;
+  width: 100%;
+}
+@media (max-width: 500px) {
+  #touch body #gcode .span7,
+  #touch body #gcode .span5 {
+    float: none;
+    width: 100%;
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
 }
 #touch body #connection {
   height: auto !important;

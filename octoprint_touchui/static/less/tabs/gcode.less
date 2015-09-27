@@ -1,4 +1,28 @@
-#gcode_canvas {
-	width: 100% !important;
-	height: 100% !important;
+#gcode {
+	#gcode_canvas {
+		width: 100% !important;
+		height: 100% !important;
+
+		// Disable hard all events
+		pointer-events: none !important;
+	}
+
+	.slider {
+		display: none;
+	}
+
+	.progress {
+		margin: 30px 0 20px;
+		width: 100%;
+	}
+
+	@media (max-width: 500px) {
+		.span7, .span5 {
+			float: none;
+			width: 100%;
+			display: block;
+			margin: 0;
+			padding: 0;
+		}
+	}
 }

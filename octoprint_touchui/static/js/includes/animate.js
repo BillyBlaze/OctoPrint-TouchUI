@@ -20,6 +20,7 @@
 				} else {
 					var self = this;
 
+					self.scroll.iScrolls.body.refresh();
 					if(self.scroll.iScrolls.body.maxScrollY < -navbarHeight) {
 						self.scroll.iScrolls.body.stop();
 

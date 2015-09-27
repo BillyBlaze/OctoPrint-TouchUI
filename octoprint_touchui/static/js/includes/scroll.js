@@ -31,13 +31,29 @@
 		init: function() {
 			var self = this;
 
-			if (!this.isTouch) {
+			if (this.isTouch) {
+				var innerHeight = $(window).height() - 40;
+
+				// Covert VH to ViewPort
+				$("#temperature-graph").height(innerHeight);
+				$("#terminal-scroll").height(innerHeight - 70);
+				$("#terminal-sendpanel").css("top", innerHeight - 70)
+
+				$(window).on("orientationchange", function() {
+					innerHeight = $(window).height() - 40;
+					$("#temperature-graph").height(innerHeight);
+					$("#terminal-scroll").height(innerHeight - 70);
+					$("#terminal-sendpanel").css("top", innerHeight - 70)
+				});
+
+			} else {
 
 				// Set overflow hidden for best performance
 				$("html").addClass("hasScrollTouch");
 
 				self.scroll.terminal.init.call(self);
 				self.scroll.body.init.call(self);
+				self.scroll.modal.init.call(self);
 
 				// Try to bind inputs, textareas and buttons to keyup rather then mousedown
 				// Not on selects since we can't cancel the preventDefault
@@ -61,6 +77,11 @@
 						$(document).off(event);
 					});
 
+				});
+
+				// Prevent no-pointer from disabling navigation
+				$('[data-toggle="dropdown"]').on("click", function(e) {
+					$(e.target).parents(".no-pointer").removeClass("no-pointer");
 				});
 
 			}
@@ -115,9 +136,6 @@
 
 			knockoutOverwrite: function(terminalViewModel) {
 				var self = this;
-
-				//Setup scroll events in modal
-				self.scroll.modal.init.call(self);
 
 				// Refresh terminal scroll height
 				terminalViewModel.displayedLines.subscribe(function() {
