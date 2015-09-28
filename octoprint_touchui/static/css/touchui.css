@@ -1000,6 +1000,9 @@
     height: 120px;
   }
 }
+#touch body #control > .jog-panel#x-y-panel .jog-panel:nth-child(1) {
+  margin: 0 0 0 -10px;
+}
 #touch body #control > .jog-panel#x-y-panel .jog-panel:nth-child(1) h1:after {
   content: "+";
   padding-left: 15px;
@@ -1012,7 +1015,7 @@
 }
 #touch body #control > .jog-panel#e-panel {
   position: absolute;
-  margin: 85px 0 0;
+  margin: 45px 0 0;
   width: 45%;
   right: 0;
 }
@@ -1021,7 +1024,7 @@
 }
 #touch body #control > .jog-panel:last-child {
   width: 45%;
-  margin: 85px 0 0;
+  margin: 45px 0 0;
 }
 #touch body #control > .jog-panel#e-panel .btn-group.control-box,
 #touch body #control > .jog-panel:last-child .btn-group.control-box {
@@ -1155,7 +1158,7 @@
   position: absolute;
   top: -4px;
   overflow: hidden;
-  left: 39%;
+  left: 37%;
   width: 22%;
   max-width: 200px;
   height: 0;
@@ -1285,8 +1288,7 @@
   color: white;
 }
 #touch body #connection_wrapper button:active {
-  background-color: white;
-  color: #00B0FF;
+  background-color: #009CE2;
 }
 #touch body #timelapse > h1 {
   margin: 30px 0 0;
@@ -1902,6 +1904,19 @@
 }
 #touch body .footer {
   font-size: 14px;
+}
+@media (max-width: 400px) {
+  #touch body .footer ul.pull-left li small {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  #touch body .footer ul.pull-left li span {
+    width: 39px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    line-height: 7px;
+  }
 }
 #touch body .footer ul li {
   display: inline-block;

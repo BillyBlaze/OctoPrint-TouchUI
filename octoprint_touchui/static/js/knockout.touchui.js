@@ -9,16 +9,7 @@ $(function() {
 		TouchUI.koLoading(self, viewModels);
 
 		self.toggleTouchUI = function() {
-
-			if(TouchUI.cookies.get("active") == "true") {
-				TouchUI.cookies.set("active", "false");
-				document.location.hash = "";
-			} else {
-				TouchUI.cookies.set("active", "true");
-				document.location.hash = "#touch";
-			}
-
-			document.location.reload();
+			TouchUI.toggleTouch();
 		};
 
 		self.onStartupComplete = function() {

@@ -10,12 +10,26 @@
 
 		return {
 			_instance: this,
-			cookies: this.DOM.cookies,
+			toggleTouch: function() {
+				if(self.DOM.cookies.get("active") == "true") {
+					self.DOM.cookies.set("active", "false");
+					document.location.hash = "";
+				} else {
+					self.DOM.cookies.set("active", "true");
+					document.location.hash = "#touch";
+				}
+
+				document.location.reload();
+			},
 			domLoading: function(/*touchViewModel*/) {
-				self.overwrite.init.call(self);
+				if(self.isActive) {
+					self.overwrite.init.call(self);
+				}
 			},
 			koLoading: function(/*touchViewModel, viewModels*/) {
-				self.knockout.beforeLoad.call(self);
+				if(self.isActive) {
+					self.knockout.beforeLoad.call(self);
+				}
 			},
 			koReady: function(touchViewModel, viewModels) {
 				if(self.isActive) {

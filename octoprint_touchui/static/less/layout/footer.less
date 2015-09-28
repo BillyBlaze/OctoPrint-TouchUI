@@ -2,6 +2,24 @@
 	font-size: 14px;
 
 	ul {
+		@media (max-width: 400px) {
+			&.pull-left {
+				li {
+					small {
+						display: inline-block;
+						white-space: nowrap;
+					}
+					span {
+						width: 39px;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						display: inline-block;
+						line-height: 7px;
+					}
+				}
+			}
+		}
+
 		li {
 			display: inline-block;
 			margin-left: 0;
