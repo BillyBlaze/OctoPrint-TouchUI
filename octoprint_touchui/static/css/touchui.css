@@ -93,6 +93,7 @@
 }
 #touch body .page-container .octoprint-container * {
   border: 0 none;
+  border-radius: 0 !important;
 }
 #touch body .page-container .octoprint-container button,
 #touch body .page-container .octoprint-container .btn {
@@ -131,6 +132,11 @@
 #touch body .page-container .octoprint-container button[disabled],
 #touch body .page-container .octoprint-container .btn[disabled] {
   pointer-events: none;
+}
+#touch body .page-container .octoprint-container .add-on {
+  background-color: #656565;
+  background-color: #4E4E4E;
+  color: white !important;
 }
 #touch body .control-group .control-label,
 #touch body .control-group .controls {
@@ -706,6 +712,10 @@
 #touch body #term .terminal small.pull-left {
   margin-right: 30px;
 }
+#touch body #term .terminal small.pull-left span {
+  display: block !important;
+  padding: 5px 0 0px 0 !important;
+}
 #touch body #term .terminal small.pull-right {
   position: absolute;
   right: 0;
@@ -847,6 +857,10 @@
   margin-bottom: 10px;
   height: 85vh;
   background-size: contain;
+}
+#touch body #temp #temperature-graph canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 #touch body #temp #temperature-graph .tickLabel {
   color: #a9a9a9;
@@ -1029,8 +1043,6 @@
 #touch body #control > .jog-panel#e-panel .input-append.control-box .add-on,
 #touch body #control > .jog-panel:last-child .input-append.control-box .add-on {
   padding: 10px;
-  color: black;
-  border-left: 1px solid black;
   z-index: 200;
 }
 #touch body #control > .jog-panel#e-panel .input-append.control-box input,
@@ -1270,8 +1282,53 @@
 #touch body #connection {
   height: auto !important;
 }
+#touch body #connection_wrapper button {
+  margin-top: 20px;
+  background-color: #00B0FF;
+  color: white;
+}
+#touch body #connection_wrapper button:active {
+  background-color: white;
+  color: #00B0FF;
+}
 #touch body #timelapse > h1 {
   margin: 30px 0 0;
+}
+#touch body #timelapse > .pull-right {
+  float: none;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+#touch body #timelapse input[type="text"],
+#touch body #timelapse input[type="number"],
+#touch body #timelapse input[type="password"],
+#touch body #timelapse select {
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: left;
+}
+#touch body #timelapse .input-append {
+  position: relative;
+  margin-bottom: 20px;
+}
+#touch body #timelapse .input-append input[type="text"],
+#touch body #timelapse .input-append input[type="number"],
+#touch body #timelapse .input-append input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 50px 10px 10px;
+  margin: 0 !important;
+  height: 32px;
+  border-radius: 5px;
+}
+#touch body #timelapse .input-append .add-on {
+  position: absolute;
+  right: 0;
+  border-left: 1px solid black;
+  padding: 6px;
+}
+#touch body #timelapse .checkbox {
+  margin-bottom: 20px;
 }
 #touch body #timelapse > table {
   margin: 5px -35px 0;

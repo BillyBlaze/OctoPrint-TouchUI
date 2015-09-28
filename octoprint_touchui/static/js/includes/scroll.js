@@ -81,7 +81,7 @@
 
 				// Prevent no-pointer from disabling navigation
 				$('[data-toggle="dropdown"]').on("click", function(e) {
-					$(e.target).parents(".no-pointer").removeClass("no-pointer");
+					$(e.target).closest(".no-pointer").removeClass("no-pointer");
 				});
 
 			}
@@ -201,7 +201,7 @@
 					curModal.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
 					curModal.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
 
-					// Refresh the scrollHeight and scroll back to top
+					// Refresh the scrollHeight and scroll back to top with these actions:
 					$modalElm.find('[data-toggle="tab"], .pagination ul li a').on("click", function(e) {
 						curModal.stop();
 
@@ -211,6 +211,7 @@
 						}, 0);
 					});
 
+					// Kill it with fire!
 					$modalElm.one("destroy", function() {
 						$modalElm.find('[data-toggle="tab"], .pagination ul li a').off("click");
 						curModal.destroy();
@@ -251,6 +252,7 @@
 			}
 		},
 
+		// Some diehard method of blocking any mousepointer event while scrolling with iScroll
 		blockEvents: {
 			timeout: false,
 			className: "no-pointer",
@@ -272,7 +274,7 @@
 
 				this.timeout = setTimeout(function() {
 					$elm.removeClass(self.className);
-				}, 300);
+				}, 150);
 
 				iScrollInstance.refresh();
 			}

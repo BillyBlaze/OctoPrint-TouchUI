@@ -9,7 +9,7 @@
 			$('<link href="/static/webassets/fonts/fontawesome.css" rel="stylesheet"></link>').appendTo("head");
 			$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/>').appendTo("head");
 
-			this.DOM.create.init.call(this);
+			this.DOM.init.call(this);
 			this.scroll.beforeLoad.call(this);
 
 		},
@@ -56,8 +56,7 @@
 				this.scroll.terminal.knockoutOverwrite.call(this, terminalViewModel);
 			}
 
-			this.DOM.move.init.call(this);
-			this.main.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
+			this.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
 
 			// Add class with how many tab-items
 			$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);

@@ -50,7 +50,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/libs/iscroll.js",
 				"js/libs/jquery.keyboard.js",
 
-				"js/includes/main.js",
+				"js/includes/version.js",
 				"js/includes/files.js",
 				"js/includes/keyboard.js",
 				"js/includes/scroll.js",
@@ -60,6 +60,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/includes/animate.js",
 				"js/includes/terminal.js",
 				"js/includes/knockout.js",
+				"js/includes/overwrite.js",
 
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"

@@ -4,14 +4,17 @@
 		var self = this;
 
 		if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
+			$("html").attr("id", this.id);
+
 			this.isActive = true;
+			this.DOM.cookies.set("active", "true");
 		}
 
 		return {
 			_instance: this,
 			cookies: this.DOM.cookies,
 			domLoading: function(/*touchViewModel*/) {
-				self.main.init.call(self);
+				self.overwrite.init.call(self);
 			},
 			koLoading: function(/*touchViewModel, viewModels*/) {
 				self.knockout.beforeLoad.call(self);
@@ -33,9 +36,13 @@
 	TouchUInstance.prototype = $.extend({
 		constructor: TouchUInstance,
 
+		id: "touch",
 		version: 0,
 		isActive: false,
 		isTouch: ("ontouchstart" in window || "onmsgesturechange" in window),
+
+		hiddenClass: "hidden_touch",
+		visibleClass: "visible_touch"
 
 	}, $.fn.TouchUI);
 

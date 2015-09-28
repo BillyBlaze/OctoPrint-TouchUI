@@ -2,29 +2,30 @@
 
 	$.fn.TouchUI.DOM = {
 
+		init: function() {
+
+			this.DOM.move.connection.init( this.DOM.create.tabbar );
+			this.DOM.move.settings.init( this.DOM.create.tabbar );
+			this.DOM.create.printer.init( this.DOM.create.tabbar );
+			this.DOM.move.gcode.init( this.DOM.create.tabbar );
+			this.DOM.move.controls.init();
+
+			if ($("#webcam_container").length > 0) {
+				this.DOM.create.webcam.init( this.DOM.create.tabbar );
+			}
+
+			// Remove unwanted spaces
+			$("#navbar_settings2 a").html($("#navbar_settings2 a").text().trim());
+
+			//Add hr before the settings icon
+			$('<li class="divider"></li>').insertBefore("#navbar_settings2");
+
+			// Move all other items from tabbar into dropdown
+			this.DOM.move.tabs.init();
+
+		},
+
 		create: {
-
-			init: function() {
-
-				this.DOM.move.connection.init( this.DOM.create.tabbar );
-				this.DOM.move.settings.init( this.DOM.create.tabbar );
-				this.DOM.create.printer.init( this.DOM.create.tabbar );
-				this.DOM.move.gcode.init( this.DOM.create.tabbar );
-
-				if ($("#webcam_container").length > 0) {
-					this.DOM.create.webcam.init( this.DOM.create.tabbar );
-				}
-
-				// Remove unwanted spaces
-				$("#navbar_settings2 a").html($("#navbar_settings2 a").text().trim());
-
-				//Add hr before the settings icon
-				$('<li class="divider"></li>').insertBefore("#navbar_settings2");
-
-				// Move all other items from tabbar into dropdown
-				this.DOM.move.tabs.init();
-
-			},
 
 			// Tabbar helper
 			tabbar: {
@@ -113,15 +114,22 @@
 
 		move: {
 
-			init: function() {
-				this.DOM.move.controls.init();
-			},
-
 			// Move all items, exepct this mainTabItems into the dropdown
 			tabs: {
 				mainTabItems: ['#print_link', '#temp_link', '#control_link', '#webcam_link', '#term_link', '.hidden_touch'],
 				init: function() {
-					$items = $("#tabs li:not("+this.mainTabItems+")").appendTo('#login_dropdown_loggedin');
+					$items = $("#tabs li:not("+this.mainTabItems+")");
+					$items.each(function(ind, elm) {
+						var $elm = $(elm);
+
+						// Clone the items into the dropdown, and make it click the orginal link
+						$elm.clone().attr("id", $elm.attr("id")+"2").appendTo('#login_dropdown_loggedin').click(function(e) {
+							e.preventDefault();
+							$elm.click();
+							return false;
+						});
+						$elm.addClass("hidden_touch");
+					});
 				}
 			},
 
