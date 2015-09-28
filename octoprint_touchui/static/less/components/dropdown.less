@@ -4,7 +4,7 @@
 		overflow: visible !important;
 
 		.dropdown-menu {
-			background-color: #00B0FE !important;
+			background-color: @main-color !important;
 
 			a {
 				text-indent: 0 !important;
@@ -15,18 +15,18 @@
 	.dropdown-menu {
 		a {
 			display: block;
-			color: black;
+			color: @dark-color;
 
 			&:hover {
-				color: white;
-				background: #00B0FF;
+				color: @light-color;
+				background: @main-color;
 			}
 		}
 	}
 
 	.divider {
 		margin: 5px 0;
-		background-color: black;
+		background-color: @dark-color;
 		border: 0 none;
 	}
 }

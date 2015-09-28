@@ -13,7 +13,7 @@
 }
 
 .page-container {
-	color: white;
+	color: @light-color;
 	width: 100%;
 	height: auto;
 	min-height: 100%;
@@ -40,12 +40,12 @@
 			overflow: hidden;
 
 			h1 {
-				color: white;
+				color: @light-color;
 				margin: 0;
 			}
 
 			.add-on {
-				color: black;
+				color: @dark-color;
 			}
 
 			table {
@@ -54,19 +54,19 @@
 						th {
 							margin: 0;
 							font-size: 18px;
-							border-bottom: 2px solid black;
-							background: #00B0FF;
+							border-bottom: 2px solid @dark-color;
+							background: @main-color;
 							padding: 13px 5px;
 						}
 					}
 
 					&:hover {
-						background-color: #333;
+						background-color: @dark-90-color;
 					}
 
 					th, td {
-						border-bottom: 2px solid black;
-						background-color: #333;
+						border-bottom: 2px solid @dark-color;
+						background-color: @dark-90-color;
 					}
 				}
 			}
@@ -79,14 +79,14 @@
 		}
 
 		button, .btn {
-			background: #00B0FF;
-			color: white;
+			background: @main-color;
+			color: @light-color;
 
 			&:active {
-				background: #00B0FF;
+				background: @main-color;
 
 				&:active {
-					background: #009CE2;
+					background: @main-color-dark;
 				}
 			}
 		}
@@ -96,13 +96,13 @@
 		}
 
 		.touch-focus {
-			background-color: white !important;
-			color: black !important;
-			fill: black !important;
+			background-color: @light-color !important;
+			color: @dark-color !important;
+			fill: @dark-color !important;
 
 			&:before, &:after, span, i {
-				color: black !important;
-				fill: black !important;
+				color: @dark-color !important;
+				fill: @dark-color !important;
 			}
 		}
 		button,
@@ -115,10 +115,8 @@
 		}
 
 		.add-on {
-			background-color: #656565;
-			color: white !important;
-			background-color: #4E4E4E;
-			color: white !important;
+			background-color: @dark-80-color;
+			color: @light-color !important;
 		}
 
 	}

@@ -1,6 +1,6 @@
 #navbar {
 	height: 70px;
-	background-color: #00B0FF;
+	background-color: @main-color;
 	border: 0 none !important;
 	position: absolute;
 	top: 0;
@@ -28,14 +28,14 @@
 		right: 10px;
 
 		&:after {
-			border-bottom-color: #00B0FE !important;
+			border-bottom-color: @main-color !important;
 		}
 
 		.btn {
-			background: #009CE2;
+			background: @main-color-dark;
 
 			&:active {
-				background: #006D9E;
+				background: @main-color-darker;
 			}
 		}
 
@@ -43,12 +43,12 @@
 
 			&.offline {
 				a:before {
-					color: red;
+					color: @offline-color;
 				}
 			}
 			&.online {
 				a:before {
-					color: #9AFD00;
+					color: @online-color;
 				}
 			}
 
@@ -56,7 +56,7 @@
 				box-sizing: border-box;
 				-moz-box-sizing: border-box;
 
-				color: white;
+				color: @light-color;
 				display: block;
 				text-align: left;
 				width: 100% !important;
@@ -121,11 +121,11 @@
 
 	#navbar_login {
 		&.offline:after {
-			color: white;
+			color: @light-color;
 			animation-name: blink_offline;
 		}
 		&.online:after {
-			color: white;
+			color: @light-color;
 			animation-name: blink_online;
 		}
 		&:after {
@@ -137,25 +137,25 @@
 
 	@keyframes blink_offline {
 		0% {
-			color: white;
+			color: @light-color;
 		}
 		50% {
-			color: red;
+			color: @offline-color;
 		}
 		100% {
-			color: white;
+			color: @light-color;
 		}
 	}
 
 	@keyframes blink_online {
 		0% {
-			color: white;
+			color: @light-color;
 		}
 		50% {
-			color: #9AFD00;
+			color: @online-color;
 		}
 		100% {
-			color: white;
+			color: @light-color;
 		}
 	}
 

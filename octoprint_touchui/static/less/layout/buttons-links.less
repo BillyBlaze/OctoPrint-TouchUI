@@ -1,46 +1,46 @@
 button,
 .btn {
-	color: black;
-	background: #F3F3F3;
+	color: @dark-color;
+	background: @light-90-color;
 	padding: 6px 15px;
 
 	&:active {
-		background: #ECECEC;
+		background: @light-90-color;
 	}
 	&:focus {
 		outline: 0 none;
 	}
 
 	&-primary {
-		color: white;
-		background: #00B0FF;
+		color: @light-color;
+		background: @main-color;
 
 		&:active {
-			background: #009CE2;
+			background: @main-color-dark;
 		}
 	}
 	&-danger {
-		color: white;
-		background: #D40000;
+		color: @light-color;
+		background: @danger-color;
 
 		&:active {
-			background: #9E0000;
+			background: @danger-active-color;
 		}
 	}
 }
 
 a {
-	color: #009CE2;
+	color: @main-color-dark;
 
 	&.close {
-		color: black;
+		color: @dark-color;
 	}
 }
 .nav-tabs>li, .nav-pills>li {
-	color: #009CE2;
+	color: @main-color-dark;
 }
 .nav-pills>.active>a, .nav-pills>.active>a:hover,
 .nav-list>.active>a, .nav-list>.active>a:hover {
-	background: #00B0FF;
-	color: white;
+	background: @main-color;
+	color: @light-color;
 }

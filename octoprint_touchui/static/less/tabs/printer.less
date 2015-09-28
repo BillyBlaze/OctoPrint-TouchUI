@@ -12,12 +12,12 @@
 			overflow: hidden;
 			border-radius: 0;
 			-moz-border-radius: 0;
-			background-color: white;
-			color: black;
+			background-color: @light-color;
+			color: @dark-color;
 
 			&-primary {
-				color: white;
-				background: #00B0FF;
+				color: @light-color;
+				background: @main-color;
 			}
 		}
 		i {
@@ -57,14 +57,14 @@
 		.accordion-heading {
 			display: block;
 			pointer-events: none;
-			background-color: #00B0FF;
+			background-color: @main-color;
 			margin: 40px -35px 0;
 			padding: 5px 20px;
-			color: white;
+			color: @light-color;
 			height: 40px;
 
 			> a, > a i {
-				color: white;
+				color: @light-color;
 				font-size: 23px;
 				padding-right: 0;
 			}
@@ -74,7 +74,7 @@
 			.icon-wrench,
 			.icon-sd-black-14 {
 				font-size: 23px;
-				color: white;
+				color: @light-color;
 			}
 			.icon-sd-black-14 {
 				background: transparent;
@@ -131,9 +131,9 @@
 				.entry {
 					padding: 15px 130px 15px 35px;
 					margin: 0;
-					background-color: #333;
-					border-bottom: 1px solid black;
-					border-top: 1px solid black;
+					background-color: @dark-90-color;
+					border-bottom: 1px solid @dark-color;
+					border-top: 1px solid @dark-color;
 					position: relative;
 					left: 0;
 					clear: both;
@@ -143,7 +143,7 @@
 
 					&.open {
 						left: -80px;
-						background: #920000;
+						background: @swipe-list-background-color;
 
 						&.large {
 							left: -180px;
@@ -151,7 +151,7 @@
 
 						&:hover,
 						&:after {
-							background: #920000;
+							background: @swipe-list-background-color;
 						}
 					}
 
@@ -162,17 +162,17 @@
 						top: 0;
 						height: 100%;
 						width: 200px;
-						background: #333;
+						background: @dark-90-color;
 						position: absolute;
 						transition: background 0.7s ease;
 					}
 
 					&:hover {
-						background: #333;
+						background: @dark-90-color;
 					}
 
 					div, div span {
-						color: white;
+						color: @light-color;
 					}
 
 					div.action-buttons {
@@ -200,7 +200,7 @@
 							z-index: 5;
 							border: 0 none;
 							box-shadow: 0 0 0 transparent;
-							color: white;
+							color: @light-color;
 							text-shadow: 0 0 0 transparent;
 
 							&:first-child {
@@ -223,7 +223,7 @@
 		}
 		.btn {
 			&-primary {
-				background: #00B0FF;
+				background: @main-color;
 			}
 		}
 	}
@@ -233,24 +233,24 @@
 	.dropdown-menu {
 		left: auto !important;
 		right: -10px !important;
-		border: 1px solid black;
-		background: #00B0FF;
-		color: white;
+		border: 1px solid @dark-color;
+		background: @main-color;
+		color: @light-color;
 		top: 54px;
 
 		a, a i {
-			color: white !important;
+			color: @light-color !important;
 			font-size: 17px !important;
 		}
 
 		.divider {
-			background-color: black !important
+			background-color: @dark-color !important
 		}
 
 		&:before {
 			content: "";
 			border: 10px solid transparent;
-			border-bottom-color: #00B0FF;
+			border-bottom-color: @main-color;
 			position: absolute;
 			top: -18px;
 			right: 27px;

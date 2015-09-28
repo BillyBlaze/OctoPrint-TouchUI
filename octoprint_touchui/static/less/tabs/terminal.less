@@ -54,7 +54,7 @@
 		}
 		a {
 			font-size: 35px;
-			color: #0F0;
+			color: @terminal-color;
 
 			i:before {
 				font-family: FontAwesome;
@@ -63,11 +63,11 @@
 
 		button {
 			background: white;
-			color: black;
+			color: @dark-color;
 			padding: 4px 12px;
 
 			&.active {
-				background: #0F0;
+				background: @terminal-color;
 			}
 		}
 	}
@@ -75,7 +75,7 @@
 		width: 100%;
 	}
 	#terminal-scroll {
-		border: 1px solid #0F0;
+		border: 1px solid @terminal-color;
 		overflow: hidden;
 		border-radius: 5px 5px 0 0;
 		height: 69vh;
@@ -94,7 +94,7 @@
 		min-height: 0;
 		max-height: none;
 		overflow: hidden;
-		color: #0F0;
+		color: @terminal-color;
 
 		&:before {
 			content: "╔╦╗┌─┐┬    ┬┌─┐┬    ┬╦    ╦╦\A     ║    │    ││    ││        ├─┤║    ║║\A     ╩    └─┘└─┘└─┘┴    ┴╚═╝╩";
@@ -165,25 +165,25 @@
 		input {
 			width: 100%;
 			box-sizing: border-box;
-			background-color: black;
-			color: #0F0;
-			border: 1px solid #0F0;
+			background-color: @dark-color;
+			color: @terminal-color;
+			border: 1px solid @terminal-color;
 			padding: 14px;
 			border-radius: 0 0 5px 5px;
 		}
 		button {
 			margin-left: -61px;
 			width: 60px;
-			background-color: black;
+			background-color: @dark-color;
 			color: white;
 			text-shadow: 0 0 0 transparent;
 			border: 0 none;
-			border-left: 1px solid #0F0;
+			border-left: 1px solid @terminal-color;
 			border-radius: 0 0 5px 0;
 			margin-top: 1px;
 			z-index: 21;
 			position: relative;
-			color: #0F0;
+			color: @terminal-color;
 			padding: 4px 12px;
 		}
 	}
