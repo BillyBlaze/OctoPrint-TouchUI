@@ -4,8 +4,6 @@
 		var self = this;
 
 		if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
-			$("html").attr("id", this.id);
-
 			this.isActive = true;
 			this.DOM.cookies.set("active", "true");
 		}
@@ -21,6 +19,7 @@
 			},
 			koReady: function(touchViewModel, viewModels) {
 				if(self.isActive) {
+					$("html").attr("id", self.id);
 					self.modal.init.call(self);
 					self.slider.init.call(self);
 					self.files.init.call(self);
