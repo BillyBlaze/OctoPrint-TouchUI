@@ -54,11 +54,35 @@
 		tr {
 
 			td, th {
+
 				&:first-child {
 					padding-left: 35px;
 				}
 				&:last-child {
 					padding-right: 35px;
+				}
+			}
+
+			.timelapse_files_action {
+				width: 95px;
+			}
+
+			td {
+				line-height: 40px;
+
+				a {
+					padding: 6px;
+					margin: -6px;
+					display: inline-block;
+					color: @main-color;
+
+					&:before {
+						font-size: 21px;
+						line-height: 36px;
+					}
+				 	&:active {
+						color: @light-color;
+					}
 				}
 			}
 

@@ -88,7 +88,7 @@
 }
 #touch body .page-container .octoprint-container .tab-content table tr th,
 #touch body .page-container .octoprint-container .tab-content table tr td {
-  border-bottom: 2px solid black;
+  border-bottom: 1px solid black;
   background-color: #313131;
 }
 #touch body .page-container .octoprint-container * {
@@ -1341,6 +1341,25 @@
 #touch body #timelapse > table tr td:last-child,
 #touch body #timelapse > table tr th:last-child {
   padding-right: 35px;
+}
+#touch body #timelapse > table tr .timelapse_files_action {
+  width: 95px;
+}
+#touch body #timelapse > table tr td {
+  line-height: 40px;
+}
+#touch body #timelapse > table tr td a {
+  padding: 6px;
+  margin: -6px;
+  display: inline-block;
+  color: #00B0FF;
+}
+#touch body #timelapse > table tr td a:before {
+  font-size: 21px;
+  line-height: 36px;
+}
+#touch body #timelapse > table tr td a:active {
+  color: white;
 }
 #touch body .modal-backdrop {
   background: black !important;
