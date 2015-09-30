@@ -117,7 +117,8 @@
 			min-height: auto !important;
 			max-height: none !important;
 
-			.span3.scrollable {
+			.span3.scrollable,
+			.nav.nav-pills {
 				display: none;
 			}
 			.span9.scrollable {
@@ -154,6 +155,7 @@
 			span.hidden {
 				display: inline-block !important;
 				position: relative;
+				padding-left: 10px;
 
 				&:before {
 					content: "/";
@@ -177,17 +179,37 @@
 					top: 40px;
 					left: 0;
 					overflow: hidden;
-					height: 68vh;
+					max-height: 68vh;
+					height: auto;
 					z-index: 29;
 					min-height: 0 !important;
 					margin-bottom: 100px;
+					min-width: 170px;
 
 					background-color: @light-color;
 					border: 1px solid @light-darker-darker-color;
 
-					li a {
-						font-size: 15px;
-						padding: 10px 15px;
+					ul {
+						margin: 0;
+						padding: 0;
+
+						.nav-header {
+							margin: 0;
+							box-sizing: border-box;
+						}
+					}
+
+					li {
+						display: block;
+						width: 100%;
+
+						a {
+							font-size: 15px;
+							padding: 10px 15px;
+							line-height: 24px;
+							margin: 0;
+							border-radius: 0;
+						}
 					}
 
 					.iScrollIndicator {

@@ -2,19 +2,20 @@
 
 	$.fn.TouchUI.modal = {
 		init: function() {
-			this.modal.dropdown.init.call(this);
+			this.modal.dropdown.create("#settings_dialog_menu", "special-dropdown-uni", "#settings_dialog_label");
+			this.modal.dropdown.create("#usersettings_dialog ul.nav", "special-dropdown-uni-2", "#usersettings_dialog h3");
 		},
 		dropdown: {
-			init: function() {
+			create: function(cloneId, newId, appendTo) {
+				// Remove unwanted whitespaces
+				$(appendTo).text($(appendTo).text().trim());
 
 				// Create a label that is clickable
 				var settingsLabel = $("<span></span>")
 					.addClass("hidden")
-					.attr("id", "special-dropdown-uni")
-					.appendTo("#settings_dialog_label")
-					.text($("#settings_dialog_menu .active")
-					.text()
-					.trim())
+					.attr("id", newId)
+					.appendTo(appendTo)
+					.text($(cloneId+" .active").text().trim())
 					.on("click", function(e) {
 
 						// Stop if we clicked on the dropdown and stop the dropdown from regenerating more then once
@@ -23,7 +24,7 @@
 						}
 
 						// Clone the main settings menu
-						var elm = $("#settings_dialog_menu")
+						var elm = $(cloneId)
 							.clone()
 							.attr("id", "")
 							.appendTo(this)
@@ -34,7 +35,7 @@
 
 							if(
 								$(event.target).closest('[data-toggle="tab"]').length > 0 || //Check if we clicked on a tab-link
-								$(event.target).closest("#special-dropdown-uni").length === 0 //Check if we clicked outside the dropdown
+								$(event.target).closest("#"+newId).length === 0 //Check if we clicked outside the dropdown
 							) {
 								var href = settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
 								$(document).off(event).trigger("dropdown-closed.touchui"); // Trigger event for enabling scrolling

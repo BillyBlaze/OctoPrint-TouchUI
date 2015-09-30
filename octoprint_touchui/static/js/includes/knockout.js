@@ -5,10 +5,6 @@
 		beforeLoad: function() {
 			var self = this;
 
-			// Inject newer fontawesome
-			$('<link href="/static/webassets/fonts/fontawesome.css" rel="stylesheet"></link>').appendTo("head");
-			$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/>').appendTo("head");
-
 			this.DOM.init.call(this);
 			this.scroll.beforeLoad.call(this);
 

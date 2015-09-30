@@ -1,3 +1,20 @@
+#usersettings_plugin_touchui .btn-box {
+  display: block;
+  margin: 10px 0;
+}
+#usersettings_plugin_touchui button {
+  border: 0 none;
+  border-radius: 0;
+}
+#usersettings_plugin_touchui .label {
+  font-size: 14px;
+  padding: 9px;
+  margin-left: -10px;
+  display: inline-block;
+  top: 1px;
+  position: relative;
+  border-radius: 0;
+}
 #touch {
   width: 100%;
   height: 100%;
@@ -703,15 +720,23 @@
   background: rgba(0, 255, 80, 0.7) !important;
   border: 0 none !important;
 }
-#touch body #term .terminal {
-  margin-bottom: 70px;
+#touch body #term a {
+  color: #0F0;
+}
+#touch body #term button {
+  background: #0F0;
+  color: black;
+}
+#touch body #term button:active {
+  background: transparent;
+  color: #0F0;
 }
 #touch body #term .terminal small.pull-left {
   margin-right: 30px;
 }
 #touch body #term .terminal small.pull-left span {
   display: block !important;
-  padding: 5px 0 0px 0 !important;
+  padding: 10px 0 0 0 !important;
 }
 #touch body #term .terminal small.pull-right {
   position: absolute;
@@ -725,15 +750,14 @@
 }
 #touch body #term .terminal a {
   font-size: 35px;
-  color: #0F0;
 }
 #touch body #term .terminal a i:before {
   font-family: FontAwesome;
 }
 #touch body #term .terminal button {
+  padding: 4px 12px;
   background: white;
   color: black;
-  padding: 4px 12px;
 }
 #touch body #term .terminal button.active {
   background: #0F0;
@@ -747,7 +771,7 @@
   border-radius: 5px 5px 0 0;
   height: 69vh;
   min-height: 150px;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   background-color: transparent;
 }
 #touch body #term #terminal-output {
@@ -1460,7 +1484,8 @@
   min-height: auto !important;
   max-height: none !important;
 }
-#touch body .modal .modal-body .span3.scrollable {
+#touch body .modal .modal-body .span3.scrollable,
+#touch body .modal .modal-body .nav.nav-pills {
   display: none;
 }
 #touch body .modal .modal-body .span9.scrollable {
@@ -1494,6 +1519,7 @@
 #touch body .modal .modal-header span.hidden {
   display: inline-block !important;
   position: relative;
+  padding-left: 10px;
 }
 #touch body .modal .modal-header span.hidden:before {
   content: "/";
@@ -1516,16 +1542,33 @@
   top: 40px;
   left: 0;
   overflow: hidden;
-  height: 68vh;
+  max-height: 68vh;
+  height: auto;
   z-index: 29;
   min-height: 0 !important;
   margin-bottom: 100px;
+  min-width: 170px;
   background-color: white;
   border: 1px solid #777;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown ul {
+  margin: 0;
+  padding: 0;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown ul .nav-header {
+  margin: 0;
+  box-sizing: border-box;
+}
+#touch body .modal .modal-header span.hidden .show-dropdown li {
+  display: block;
+  width: 100%;
 }
 #touch body .modal .modal-header span.hidden .show-dropdown li a {
   font-size: 15px;
   padding: 10px 15px;
+  line-height: 24px;
+  margin: 0;
+  border-radius: 0;
 }
 #touch body .modal .modal-header span.hidden .show-dropdown .iScrollIndicator {
   background: rgba(105, 105, 105, 0.7) !important;

@@ -27,8 +27,21 @@
 		border: 0 none !important;
 	}
 
+	a {
+		color: @terminal-color;
+	}
+
+	button {
+		background: @terminal-color;
+		color: @dark-color;
+
+		&:active {
+			background: transparent;
+			color: @terminal-color;
+		}
+	}
+
 	.terminal {
-		margin-bottom: 70px;
 
 		small {
 			&.pull-left {
@@ -36,7 +49,7 @@
 
 				span {
 					display: block !important;
-					padding: 5px 0 0px 0 !important;
+					padding: 10px 0 0 0 !important;
 				}
 			}
 			&.pull-right {
@@ -54,7 +67,6 @@
 		}
 		a {
 			font-size: 35px;
-			color: @terminal-color;
 
 			i:before {
 				font-family: FontAwesome;
@@ -62,9 +74,9 @@
 		}
 
 		button {
-			background: white;
-			color: @dark-color;
 			padding: 4px 12px;
+			background: @light-color;
+			color: @dark-color;
 
 			&.active {
 				background: @terminal-color;
@@ -80,7 +92,7 @@
 		border-radius: 5px 5px 0 0;
 		height: 69vh;
 		min-height: 150px;
-		margin-bottom: 40px;
+		margin-bottom: 28px;
 		background-color: transparent;
 	}
 	#terminal-output {

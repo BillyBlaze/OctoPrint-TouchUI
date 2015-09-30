@@ -2,6 +2,7 @@
 
 	$.fn.TouchUI.keyboard = {
 
+		isActive: false,
 		config: {
 
 			default: {
@@ -109,6 +110,20 @@
 					beforeClose: self.keyboard.onClose
 				};
 
+				// First check without delegation (trigger first)
+				$("input, textarea").on("mousedown", function(e) {
+					if(!self.keyboard.isActive) {
+						var $elm = $(e.target);
+
+						if($elm.data("keyboard")) {
+							$elm.data("keyboard").destroy();
+						}
+
+						e.stopPropagation();
+					}
+				});
+
+				// First check with delegation (trigger later)
 				$(document).on("mousedown", "input, textarea", function(e) {
 					var $elm = $(e.target);
 

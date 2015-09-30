@@ -2,6 +2,32 @@
 
 	$.fn.TouchUI.DOM = {
 
+		pluginLoaded: function() {
+			if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
+				// Inject newer fontawesome
+				$('<link href="/static/webassets/fonts/fontawesome.css" rel="stylesheet"></link>').appendTo("head");
+				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/>').appendTo("head");
+
+				$("html").attr("id", this.id);
+				this.isActive = true;
+				this.keyboard.isActive = (this.DOM.cookies.get("keyboardActive") === "true");
+				this.animate.isHidebarActive = (this.DOM.cookies.get("hideNavbarActive") === "true");
+
+				// Enforce active cookie
+				this.DOM.cookies.set("active", "true");
+
+				// Create keyboard cookie if not existing
+				if(this.DOM.cookies.get("keyboardActive") === false) {
+					this.DOM.cookies.set("keyboardActive", "true");
+				}
+
+				// Create hide navbar on click if not existing
+				if(this.DOM.cookies.get("hideNavbarActive") === false) {
+					this.DOM.cookies.set("hideNavbarActive", "true");
+				}
+			}
+		},
+
 		init: function() {
 
 			this.DOM.move.connection.init( this.DOM.create.tabbar );
@@ -241,7 +267,7 @@
 					while (c.charAt(0)==' ') c = c.substring(1);
 					if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
 				}
-				return "";
+				return false;
 			},
 
 			set: function(key, value) {
@@ -249,6 +275,19 @@
 				d.setTime(d.getTime()+(360*24*60*60*1000));
 				var expires = "expires="+d.toUTCString();
 				document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+			},
+
+			toggleBoolean: function(key) {
+				var value = $.parseJSON(this.get(key) || "false");
+
+				if(value === true) {
+					this.set(key, "false");
+				} else {
+					this.set(key, "true");
+				}
+
+				return !value;
+
 			}
 
 		}

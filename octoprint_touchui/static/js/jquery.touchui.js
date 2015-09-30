@@ -3,23 +3,28 @@
 	var TouchUInstance = function() {
 		var self = this;
 
-		if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
-			this.isActive = true;
-			this.DOM.cookies.set("active", "true");
-		}
+		this.DOM.pluginLoaded.call(this);
 
 		return {
 			_instance: this,
-			toggleTouch: function() {
-				if(self.DOM.cookies.get("active") == "true") {
-					self.DOM.cookies.set("active", "false");
-					document.location.hash = "";
-				} else {
-					self.DOM.cookies.set("active", "true");
-					document.location.hash = "#touch";
-				}
 
+			isActive: this.isActive,
+			isKeyboardActive: this.keyboard.isActive,
+			isHidebarActive: this.animate.isHidebarActive,
+
+			toggleTouch: function() {
+				if(self.DOM.cookies.toggleBoolean("active")) {
+					document.location.hash = "#touch";
+				} else {
+					document.location.hash = "";
+				}
 				document.location.reload();
+			},
+			toggleKeyboard: function() {
+				return self.keyboard.isActive = self.DOM.cookies.toggleBoolean("keyboardActive");
+			},
+			toggleHidebar: function() {
+				return self.animate.isHidebarActive = self.DOM.cookies.toggleBoolean("hideNavbarActive");
 			},
 			domLoading: function(/*touchViewModel*/) {
 				if(self.isActive) {
@@ -33,7 +38,6 @@
 			},
 			koReady: function(touchViewModel, viewModels) {
 				if(self.isActive) {
-					$("html").attr("id", self.id);
 					self.modal.init.call(self);
 					self.slider.init.call(self);
 					self.files.init.call(self);

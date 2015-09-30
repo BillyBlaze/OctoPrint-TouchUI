@@ -32,7 +32,7 @@
 			var self = this;
 
 			if (this.isTouch) {
-				var innerHeight = $(window).height() - 40;
+				var innerHeight = $(window).innerHeight() - 40;
 
 				// Covert VH to ViewPort
 				$("#temperature-graph").height(innerHeight);
@@ -187,14 +187,16 @@
 					// Store into stack
 					self.scroll.modal.stack.push(curModal);
 
-					// Force iScroll to get the correct scrollHeight
-					setTimeout(function() {
-						curModal.refresh();
-					}, 0);
-					// And Refresh again after animation
-					setTimeout(function() {
-						curModal.refresh();
-					}, 800);
+					try {
+						// Force iScroll to get the correct scrollHeight
+						setTimeout(function() {
+							curModal.refresh();
+						}, 0);
+						// And Refresh again after animation
+						setTimeout(function() {
+							curModal.refresh();
+						}, 800);
+					} catch(err) { }
 
 					// Disable all JS events while scrolling for best performance
 					curModal.on("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $modalElm, curModal));

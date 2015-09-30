@@ -24,7 +24,7 @@ or manually using this URL:
 
 ## Configuration
 To active the touch interface open the OctoPrint interface with '#touch' at the end. Such as `http://192.168.1.255:5000/#touch`
-Alternative you can toggle the touch interface within the Settings modal under `Plugins > TouchUI`.
+Alternative you can toggle the touch interface within the `User settings` modal under `Plugins > TouchUI`.
 
 Activating touch will set a cookie on the client so it will remember to active the touch interface (up to a year).
 
