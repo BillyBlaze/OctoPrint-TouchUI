@@ -59,9 +59,15 @@
 
 			button {
 				padding: 3px 10px;
+				background: transparent;
+				color: @terminal-color;
 
 				+ span {
 					padding-left: 7px;
+				}
+				&.active {
+					background: @terminal-color;
+					color: @dark-color;
 				}
 			}
 		}

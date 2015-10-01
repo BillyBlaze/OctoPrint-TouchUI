@@ -744,9 +744,15 @@
 }
 #touch body #term .terminal small button {
   padding: 3px 10px;
+  background: transparent;
+  color: #0F0;
 }
 #touch body #term .terminal small button + span {
   padding-left: 7px;
+}
+#touch body #term .terminal small button.active {
+  background: #0F0;
+  color: black;
 }
 #touch body #term .terminal a {
   font-size: 35px;
@@ -941,6 +947,15 @@
   top: auto;
   left: auto;
   right: 0;
+}
+#touch body #temp .row-fluid table tr th .dropdown-menu li a:hover,
+#touch body #temp .row-fluid table tr td .dropdown-menu li a:hover,
+#touch body #temp .row-fluid table tr th .dropdown-menu li a:active,
+#touch body #temp .row-fluid table tr td .dropdown-menu li a:active,
+#touch body #temp .row-fluid table tr th .dropdown-menu li a.active,
+#touch body #temp .row-fluid table tr td .dropdown-menu li a.active {
+  background: #00B0FF;
+  color: white;
 }
 #touch body #temp .row-fluid table tr th .input-append,
 #touch body #temp .row-fluid table tr td .input-append {
@@ -1687,10 +1702,17 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  padding: 4px;
 }
 #touch body .ui-keyboard-preview {
   text-align: left;
-  margin: 0 0 3px;
+  display: block !important;
+  width: 100%;
+  padding: 18px 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 #touch body .ui-keyboard-keyset {
   text-align: center;

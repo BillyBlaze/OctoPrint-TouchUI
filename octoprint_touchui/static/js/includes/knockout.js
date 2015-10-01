@@ -2,7 +2,7 @@
 
 	$.fn.TouchUI.knockout = {
 
-		beforeLoad: function() {
+		beforeLoad: function(viewModels) {
 			var self = this;
 
 			this.DOM.init.call(this);
@@ -16,8 +16,7 @@
 				connectionViewModel = viewModels[1],
 				settingsViewModel = viewModels[2],
 				softwareUpdateViewModel = viewModels[3],
-				controlViewModel = viewModels[4],
-				gcodeViewModel = viewModels[5];
+				controlViewModel = viewModels[4];
 
 			this.terminal.init.call(this, terminalViewModel);
 
@@ -59,7 +58,6 @@
 
 			// Hide topbar if clicking an item
 			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
-			// TODO: Make this a setting in the options
 			$(document).on("click", '#tabs [data-toggle="tab"]', function() {
 				self.animate.hide.call(self, "navbar");
 			});
@@ -68,6 +66,12 @@
 			if($("#webcam").length > 0) {
 				ko.applyBindings(controlViewModel, $("#webcam")[0])
 			}
+
+			setTimeout(function() {
+				if( !self.isTouch ) {
+					self.scroll.iScrolls.body.refresh();
+				}
+			}, 600);
 
 		}
 	}

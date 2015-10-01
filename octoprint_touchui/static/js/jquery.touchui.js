@@ -31,9 +31,9 @@
 					self.overwrite.init.call(self);
 				}
 			},
-			koLoading: function(/*touchViewModel, viewModels*/) {
+			koLoading: function(touchViewModel, viewModels) {
 				if(self.isActive) {
-					self.knockout.beforeLoad.call(self);
+					self.knockout.beforeLoad.call(self, viewModels);
 				}
 			},
 			koReady: function(touchViewModel, viewModels) {

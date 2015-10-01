@@ -81,6 +81,15 @@
 						top: auto;
 						left: auto;
 						right: 0;
+
+						li {
+							a {
+								&:hover, &:active, &.active {
+									background: @main-color;
+									color: @light-color;
+								}
+							}
+						}
 					}
 					.input-append {
 						box-sizing: border-box;

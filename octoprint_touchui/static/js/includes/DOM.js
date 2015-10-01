@@ -4,11 +4,12 @@
 
 		pluginLoaded: function() {
 			if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
+				$("html").attr("id", this.id);
+
 				// Inject newer fontawesome
 				$('<link href="/static/webassets/fonts/fontawesome.css" rel="stylesheet"></link>').appendTo("head");
 				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/>').appendTo("head");
 
-				$("html").attr("id", this.id);
 				this.isActive = true;
 				this.keyboard.isActive = (this.DOM.cookies.get("keyboardActive") === "true");
 				this.animate.isHidebarActive = (this.DOM.cookies.get("hideNavbarActive") === "true");
@@ -17,7 +18,7 @@
 				this.DOM.cookies.set("active", "true");
 
 				// Create keyboard cookie if not existing
-				if(this.DOM.cookies.get("keyboardActive") === false) {
+				if(this.DOM.cookies.get("keyboardActive") === false && !this.isTouch) {
 					this.DOM.cookies.set("keyboardActive", "true");
 				}
 
@@ -25,6 +26,12 @@
 				if(this.DOM.cookies.get("hideNavbarActive") === false) {
 					this.DOM.cookies.set("hideNavbarActive", "true");
 				}
+
+				// $("#terminal-output span").attr("data-bind", $("#terminal-output span").attr("data-bind").replace("text: line", "html: line"));
+				$(".octoprint-container .tab-content .active").removeClass('active');
+
+				this.DOM.create.printer.init( this.DOM.create.tabbar );
+				this.DOM.create.printer.menu.$elm.find('a').trigger("click");
 			}
 		},
 
@@ -32,7 +39,6 @@
 
 			this.DOM.move.connection.init( this.DOM.create.tabbar );
 			this.DOM.move.settings.init( this.DOM.create.tabbar );
-			this.DOM.create.printer.init( this.DOM.create.tabbar );
 			this.DOM.move.gcode.init( this.DOM.create.tabbar );
 			this.DOM.move.controls.init();
 
@@ -48,7 +54,6 @@
 
 			// Move all other items from tabbar into dropdown
 			this.DOM.move.tabs.init();
-
 		},
 
 		create: {
@@ -81,7 +86,7 @@
 
 				init: function( tabbar ) {
 					this.menu.$elm = tabbar.createItem("print_link", "printer", "tab").prependTo(this.menu.cloneTo);
-					this.container.$elm = $('<div id="printer" class="tab-pane"><div class="row-fluid"></div></div>').insertBefore(this.container.cloneTo);
+					this.container.$elm = $('<div id="printer" class="tab-pane active"><div class="row-fluid"></div></div>').insertBefore(this.container.cloneTo);
 
 					// Move the contents of the hidden accordions to the new print status and files tab
 					this.move.$state.appendTo(this.container.$elm.find(".row-fluid"));
