@@ -4,8 +4,8 @@
  */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('/plugin/touchui/static/fonts/fontawesome-webfont.eot?v=4.4.0');
-  src: url('/plugin/touchui/static/fonts/fontawesome-webfont.eot?#iefix&v=4.4.0') format('embedded-opentype'), url('/plugin/touchui/static/fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2'), url('/plugin/touchui/static/fonts/fontawesome-webfont.woff?v=4.4.0') format('woff'), url('/plugin/touchui/static/fonts/fontawesome-webfont.ttf?v=4.4.0') format('truetype'), url('/plugin/touchui/static/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular') format('svg');
+  src: url('/plugin/touchui/static/fonts/fontawesome/fontawesome-webfont.eot?v=4.4.0');
+  src: url('/plugin/touchui/static/fonts/fontawesome/fontawesome-webfont.eot?#iefix&v=4.4.0') format('embedded-opentype'), url('/plugin/touchui/static/fonts/fontawesome/fontawesome-webfont.woff2?v=4.4.0') format('woff2'), url('/plugin/touchui/static/fonts/fontawesome/fontawesome-webfont.woff?v=4.4.0') format('woff'), url('/plugin/touchui/static/fonts/fontawesome/fontawesome-webfont.ttf?v=4.4.0') format('truetype'), url('/plugin/touchui/static/fonts/fontawesome/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -2018,6 +2018,30 @@
 .fa-fonticons:before {
   content: "\f280";
 }
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Source Code Pro Light'), local('SourceCodePro-Light'), url(@{sourcecodepro-path}leqv3v-yTsJNC7nFznSMqdbE_oMaV8t2eFeISPpzbdE.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Code Pro'), local('SourceCodePro-Regular'), url(@{sourcecodepro-path}mrl8jkM18OlOQN8JLgasDxM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Source Code Pro Semibold'), local('SourceCodePro-Semibold'), url(@{sourcecodepro-path}leqv3v-yTsJNC7nFznSMqZ6-ys_j0H4QL65VLqzI3wI.woff) format('woff');
+}
+@font-face {
+  font-family: 'Source Code Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Source Code Pro Bold'), local('SourceCodePro-Bold'), url(@{sourcecodepro-path}leqv3v-yTsJNC7nFznSMqVkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
+}
 #usersettings_plugin_touchui .btn-box {
   display: block;
   margin: 10px 0;
@@ -2072,7 +2096,7 @@
   background: black;
 }
 #touch body * {
-  font-family: monospace;
+  font-family: 'Source Code Pro', monospace;
   text-shadow: none !important;
   /* This should increase performance */
   box-shadow: none !important;
