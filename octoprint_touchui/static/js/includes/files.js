@@ -28,32 +28,34 @@
 			$(document).on("mousedown touchstart", "#files .entry, #temp .row-fluid", function(e) {
 				touch = e.currentTarget;
 				start = e.pageX || e.originalEvent.targetTouches[0].pageX;
-			});
 
-			$(document).on("mouseup touchend", "#files .entry, #temp .row-fluid", function(e) {
-				touch = false;
-				start = 0;
-			});
+				var move = function(event) {
+					if(touch !== false) {
+						var current = event.pageX || event.originalEvent.targetTouches[0].pageX;
 
-			$(document).on("mousemove touchmove", "#files .entry, #temp .row-fluid", function(e) {
-				console.log(e, touch, start);
-				if(touch !== false) {
-					var current = e.pageX || e.originalEvent.targetTouches[0].pageX;
+						if(current > start + 80) {
+							$(document).trigger("files.open", event.target);
+							$(touch).removeClass("open");
+							start = current;
+						} else if(current < start - 80) {
+							$(document).trigger("files.closed", event.target);
+							$(touch).addClass("open");
+							start = current;
 
-					if(current > start + 80) {
-						$(document).trigger("files.open", e.target);
-						$(touch).removeClass("open");
-						start = current;
-					} else if(current < start - 80) {
-						$(document).trigger("files.closed", e.target);
-						$(touch).addClass("open");
-						start = current;
-
-						if( $(touch).find(".btn-group").children().length > 4 ) {
-							$(touch).addClass("large");
+							if( $(touch).find(".btn-group").children().length > 4 ) {
+								$(touch).addClass("large");
+							}
 						}
 					}
-				}
+				};
+
+				$(document).one("mouseup touchend", function(e) {
+					touch = false;
+					start = 0;
+					$(document).off("mousemove touchmove");
+				});
+
+				$(document).on("mousemove touchmove", move);
 			});
 
 		}

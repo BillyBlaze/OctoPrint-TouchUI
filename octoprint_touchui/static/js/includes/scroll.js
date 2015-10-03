@@ -8,7 +8,8 @@
 				mouseWheel: true,
 				interactiveScrollbars: true,
 				shrinkScrollbars: "scale",
-				fadeScrollbars: true
+				fadeScrollbars: true,
+				disablePointer: true
 			}
 		},
 

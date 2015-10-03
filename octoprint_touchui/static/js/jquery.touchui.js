@@ -41,10 +41,10 @@
 			},
 			koReady: function(touchViewModel, viewModels) {
 				if(self.isActive) {
+					self.files.init.call(self);
 					self.modal.init.call(self);
 					self.slider.init.call(self);
-					self.files.init.call(self);
-					self.scroll.init.call(self);;
+					self.scroll.init.call(self);
 					self.keyboard.init.call(self);
 
 					self.knockout.isReady.call(self, touchViewModel, viewModels);

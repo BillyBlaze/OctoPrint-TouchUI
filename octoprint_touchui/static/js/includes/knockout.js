@@ -71,11 +71,11 @@
 				ko.applyBindings(controlViewModel, $("#webcam")[0])
 			}
 
-			// setTimeout(function() {
-			// 	if( !self.isTouch ) {
-			// 		self.scroll.iScrolls.body.refresh();
-			// 	}
-			// }, 600);
+			setTimeout(function() {
+				if( !self.isTouch ) {
+					self.scroll.iScrolls.body.refresh();
+				}
+			}, 600);
 
 		}
 	}
