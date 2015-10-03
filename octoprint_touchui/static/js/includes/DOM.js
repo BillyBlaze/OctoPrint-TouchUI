@@ -6,8 +6,7 @@
 			if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
 				$("html").attr("id", this.id);
 
-				// Inject newer fontawesome
-				$('<link href="/static/webassets/fonts/fontawesome.css" rel="stylesheet"></link>').appendTo("head");
+				// Force mobile browser to set the window size to their format
 				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/>').appendTo("head");
 
 				this.isActive = true;

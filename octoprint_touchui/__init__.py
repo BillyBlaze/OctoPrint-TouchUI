@@ -1,13 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-### (Don't forget to remove me)
-# This is a basic skeleton for your plugin's __init__.py. You probably want to adjust the class name of your plugin
-# as well as the plugin mixins it's subclassing from. This is really just a basic skeleton to get you started,
-# defining your plugin as a template plugin.
-#
-# Take a look at the documentation on what other plugin mixins are available.
-
 import shutil
 import os
 import logging
@@ -15,35 +8,11 @@ import octoprint.plugin
 import octoprint.settings
 import octoprint.util
 
-dev = True
-#dev = False
-
-def dump(obj):
-	for attr in dir(obj):
-		if hasattr( obj, attr ):
-			print( "obj.%s = %s" % (attr, getattr(obj, attr)))
-
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
-					octoprint.plugin.StartupPlugin,
 					octoprint.plugin.AssetPlugin,
 					octoprint.plugin.TemplatePlugin):
 
-	def on_startup(self, host, port):
-		__tmp = self.get_plugin_data_folder().replace("data/touchui", "generated/webassets/")
-
-		shutil.copytree(self.get_asset_folder() + '/fonts/', __tmp + "fonts/")
-		shutil.copy2(self.get_asset_folder() + '/css/libs/fontawesome.css', __tmp + "fonts/")
-
-		self._logger.info("Copied font files to '" + __tmp + "fonts/'")
-
 	def get_assets(self):
-
-		if dev == True:
-			less = []
-			css = ["css/touchui.css"]
-		else:
-			less = []
-			css = ["css/touchui.css"]
 
 		return dict(
 			js=[
@@ -65,8 +34,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
 			],
-			less=less,
-			css=css
+			less=[],
+			css= ["css/touchui.css"]
 		)
 
 	def get_template_configs(self):
@@ -100,11 +69,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			)
 		)
 
-# If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
-# ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
-# can be overwritten via __plugin_xyz__ control properties. See the documentation for that.
 __plugin_name__ = "TouchUI Plugin"
-
 def __plugin_load__():
 	global __plugin_implementation__
 	__plugin_implementation__ = TouchUIPlugin()
