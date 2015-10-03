@@ -30,12 +30,13 @@
 				start = e.pageX || e.originalEvent.targetTouches[0].pageX;
 			});
 
-			$(document).on("mouseup touchend", function(e) {
+			$(document).on("mouseup touchend", "#files .entry, #temp .row-fluid", function(e) {
 				touch = false;
 				start = 0;
 			});
 
-			$(document).on("mousemove touchmove", function(e) {
+			$(document).on("mousemove touchmove", "#files .entry, #temp .row-fluid", function(e) {
+				console.log(e, touch, start);
 				if(touch !== false) {
 					var current = e.pageX || e.originalEvent.targetTouches[0].pageX;
 

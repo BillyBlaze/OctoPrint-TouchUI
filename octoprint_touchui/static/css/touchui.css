@@ -2022,25 +2022,25 @@
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Source Code Pro Light'), local('SourceCodePro-Light'), url(@{sourcecodepro-path}leqv3v-yTsJNC7nFznSMqdbE_oMaV8t2eFeISPpzbdE.woff) format('woff');
+  src: local('Source Code Pro Light'), local('SourceCodePro-Light'), url('/plugin/touchui/static/fonts/sourcecodepro/leqv3v-yTsJNC7nFznSMqdbE_oMaV8t2eFeISPpzbdE.woff') format('woff');
 }
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: 400;
-  src: local('Source Code Pro'), local('SourceCodePro-Regular'), url(@{sourcecodepro-path}mrl8jkM18OlOQN8JLgasDxM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+  src: local('Source Code Pro'), local('SourceCodePro-Regular'), url('/plugin/touchui/static/fonts/sourcecodepro/mrl8jkM18OlOQN8JLgasDxM0YzuT7MdOe03otPbuUS0.woff') format('woff');
 }
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: 600;
-  src: local('Source Code Pro Semibold'), local('SourceCodePro-Semibold'), url(@{sourcecodepro-path}leqv3v-yTsJNC7nFznSMqZ6-ys_j0H4QL65VLqzI3wI.woff) format('woff');
+  src: local('Source Code Pro Semibold'), local('SourceCodePro-Semibold'), url('/plugin/touchui/static/fonts/sourcecodepro/leqv3v-yTsJNC7nFznSMqZ6-ys_j0H4QL65VLqzI3wI.woff') format('woff');
 }
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: 700;
-  src: local('Source Code Pro Bold'), local('SourceCodePro-Bold'), url(@{sourcecodepro-path}leqv3v-yTsJNC7nFznSMqVkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
+  src: local('Source Code Pro Bold'), local('SourceCodePro-Bold'), url('/plugin/touchui/static/fonts/sourcecodepro/leqv3v-yTsJNC7nFznSMqVkQc6VGVFSmCnC_l7QZG60.woff') format('woff');
 }
 #usersettings_plugin_touchui .btn-box {
   display: block;
@@ -2078,6 +2078,7 @@
 #touch.touch .show-dropdown,
 #touch.touch #terminal-scroll {
   overflow-y: scroll !important;
+  -webkit-overflow-scrolling: auto;
 }
 #touch.touch body ::-webkit-scrollbar {
   width: 2px;
@@ -3527,6 +3528,8 @@
   left: -100% !important;
   width: 95% !important;
   margin: 0 !important;
+  min-height: 100%;
+  box-sizing: border-box;
   /*Disable some other scroll libary*/
 }
 #touch body .modal-scrollable .modal .slimScrollDiv,
@@ -3556,20 +3559,9 @@
 #touch body .modal-scrollable .modal.show-dropdown .modal-header .span3 {
   height: auto;
 }
-#touch body .modal-scrollable .modal .modal {
-  /*&-footer {
-				border-radius: 0;
-				box-sizing: border-box;
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				width: 100%;
-				padding-right: 30px;
-				z-index: 2;
-			}*/
-}
 #touch body .modal-scrollable .modal .modal-body {
   padding: 20px 25px;
+  margin-bottom: 60px;
   min-height: auto !important;
   max-height: none !important;
 }
@@ -3581,6 +3573,16 @@
   width: 100% !important;
   margin: 0;
   padding: 0;
+}
+#touch body .modal-scrollable .modal .modal-footer {
+  border-radius: 0;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-right: 30px;
+  z-index: 2;
 }
 #touch body .modal-scrollable .modal .modal-header {
   padding: 20px 25px;

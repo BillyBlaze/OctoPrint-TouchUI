@@ -64,6 +64,8 @@
 		left: -100% !important;
 		width: 95% !important;
 		margin: 0 !important;
+		min-height: 100%;
+		box-sizing: border-box;
 
 		/*Disable some other scroll libary*/
 		.slimScrollDiv, #settings_plugin_pluginmanager_repositorydialog_list {
@@ -109,7 +111,7 @@
 		.modal {
 			&-body {
 				padding: 20px 25px;
-				//margin-bottom: 60px;
+				margin-bottom: 60px;
 				min-height: auto !important;
 				max-height: none !important;
 
@@ -123,16 +125,16 @@
 					padding: 0;
 				}
 			}
-			/*&-footer {
+			&-footer {
 				border-radius: 0;
 				box-sizing: border-box;
-				position: fixed;
+				position: absolute;
 				bottom: 0;
 				left: 0;
 				width: 100%;
 				padding-right: 30px;
 				z-index: 2;
-			}*/
+			}
 			&-header {
 				padding: 20px 25px;
 

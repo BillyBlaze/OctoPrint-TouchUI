@@ -59,7 +59,7 @@
 		id: "touch",
 		version: 0,
 		isActive: false,
-		isTouch: ("ontouchstart" in window || "onmsgesturechange" in window),
+		isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
 		isFullscreen: false,
 
 		hiddenClass: "hidden_touch",
