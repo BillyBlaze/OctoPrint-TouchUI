@@ -25,7 +25,7 @@
 				touch = false,
 				start = 0;
 
-			$(document).on("mousedown touchstart", "#files .entry, #temp .row-fluid table", function(e) {
+			$(document).on("mousedown touchstart", "#files .entry, #temp .row-fluid", function(e) {
 				touch = e.currentTarget;
 				start = e.pageX || e.originalEvent.targetTouches[0].pageX;
 			});

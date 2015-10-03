@@ -14,10 +14,20 @@
 &.touch {
 	.show-dropdown,
 	#terminal-scroll {
-		overflow: scroll !important;
+		overflow-y: scroll !important;
 	}
 
 	body {
+
+		::-webkit-scrollbar {
+			width: 2px;
+			height: 2px;
+			background: transparent;
+		}
+		::-webkit-scrollbar-thumb {
+			background: @main-color;
+		}
+
 		.modal-scrollable {
 			position: fixed !important;
 		}

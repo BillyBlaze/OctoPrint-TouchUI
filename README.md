@@ -19,7 +19,7 @@ or manually using this URL:
 6. Now press ``Ctrl+X``, then ``Y`` and ``enter`` to save the changes
 7. Open ``Iceweavel ``
 8. Type in about:config in the address field and hit enter. Now find the ``browser.sessionstore.resume_from_crash`` line and double click to change it to false.
-9. Go into fullscreen mode
+9. Go into fullscreen mode (Toggle fullscreen within the `User settings` modal under `Plugins > TouchUI`)
 10. Reboot and iceweavel should connect directly and in fullscreen
 
 ## Configuration
