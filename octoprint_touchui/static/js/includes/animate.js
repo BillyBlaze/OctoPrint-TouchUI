@@ -12,6 +12,8 @@
 						navbarHeight = parseFloat(navbar.height());
 
 					if(this.isTouch) {
+						// Hide navigation bar on mobile
+						window.scrollTo(0,1);
 
 						if(parseFloat($("html,body").prop('scrollHeight')) > ($(window).height() + navbarHeight)) {//hasEnoughScroll?
 							$("html,body").stop().animate({

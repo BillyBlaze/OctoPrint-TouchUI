@@ -2049,6 +2049,10 @@
 #touch.hasScrollTouch body .show-dropdown {
   overflow: hidden;
 }
+#touch.touch .show-dropdown,
+#touch.touch #terminal-output {
+  overflow: scroll !important;
+}
 #touch body {
   width: 100%;
   height: 100%;
@@ -3217,16 +3221,19 @@
   position: absolute;
   top: -4px;
   overflow: hidden;
-  left: 37%;
-  width: 22%;
-  max-width: 200px;
+  left: 34%;
+  width: 27%;
+  max-width: 150px;
   height: 0;
-  min-width: 70px;
+  min-width: 80px;
   padding: 45px 0 0;
 }
 @media (max-width: 430px) {
   #touch body #control > .jog-panel #jog_distance {
-    left: 47%;
+    left: 39%;
+  }
+  #touch body #control > .jog-panel #jog_distance button {
+    font-size: 22px !important;
   }
 }
 #touch body #control > .jog-panel #jog_distance.open {
@@ -3250,6 +3257,17 @@
   height: 100%;
   cursor: pointer;
 }
+#touch body #control > .jog-panel #jog_distance:before {
+  font-family: FontAwesome !important;
+  content: "\f0d7";
+  padding-left: 9px;
+  font-size: 24px;
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 13px;
+  color: white;
+}
 #touch body #control > .jog-panel #jog_distance button {
   width: 100%;
   display: block;
@@ -3258,15 +3276,11 @@
   margin: 0;
   border: 0 none !important;
   box-shadow: none !important;
+  text-indent: -10px;
 }
 #touch body #control > .jog-panel #jog_distance button.active {
   top: 0px;
   position: absolute;
-}
-#touch body #control > .jog-panel #jog_distance button.active:after {
-  font-family: FontAwesome !important;
-  content: "\f0d7";
-  padding-left: 9px;
 }
 #touch body #control > .jog-panel .jog-panel {
   float: right;
@@ -3583,6 +3597,8 @@
   min-height: 0 !important;
   margin-bottom: 100px;
   min-width: 170px;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
   background-color: white;
   border: 1px solid #777;
 }

@@ -7,7 +7,7 @@
 				$("html").attr("id", this.id);
 
 				// Force mobile browser to set the window size to their format
-				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"/>').appendTo("head");
+				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimal-ui"/>').appendTo("head");
 
 				this.isActive = true;
 				this.keyboard.isActive = (this.DOM.cookies.get("keyboardActive") === "true");

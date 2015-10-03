@@ -103,45 +103,43 @@
 				$("#jog_distance").toggleClass("open");
 			});
 
-			// Add virtual keyboard if no touch
-			if(!this.isTouch) {
-				var obj = {
-					visible: self.keyboard.onShow,
-					beforeClose: self.keyboard.onClose
-				};
+			// Add virtual keyboard
+			var obj = {
+				visible: self.keyboard.onShow,
+				beforeClose: self.keyboard.onClose
+			};
 
-				// First check without delegation (trigger first)
-				$("input, textarea").on("mousedown", function(e) {
-					if(!self.keyboard.isActive) {
-						var $elm = $(e.target);
-
-						if($elm.data("keyboard")) {
-							$elm.data("keyboard").destroy();
-						}
-
-						e.stopPropagation();
-					}
-				});
-
-				// First check with delegation (trigger later)
-				$(document).on("mousedown", "input, textarea", function(e) {
+			// First check without delegation (trigger first)
+			$("input, textarea").on("mousedown", function(e) {
+				if(!self.keyboard.isActive) {
 					var $elm = $(e.target);
 
-					// $elm already has a keyboard
 					if($elm.data("keyboard")) {
-						return;
+						$elm.data("keyboard").destroy();
 					}
 
-					if($elm.attr("type") === "number") {
-						$elm.keyboard($.extend(self.keyboard.config.number, obj));
-					} else if($elm.attr("id") === "terminal-command") {
-						$elm.keyboard($.extend(self.keyboard.config.terminal, obj));
-					} else {
-						$elm.keyboard($.extend(self.keyboard.config.default, obj));
-					}
+					e.stopPropagation();
+				}
+			});
 
-				});
-			}
+			// First check with delegation (trigger later)
+			$(document).on("mousedown", "input, textarea", function(e) {
+				var $elm = $(e.target);
+
+				// $elm already has a keyboard
+				if($elm.data("keyboard")) {
+					return;
+				}
+
+				if($elm.attr("type") === "number") {
+					$elm.keyboard($.extend(self.keyboard.config.number, obj));
+				} else if($elm.attr("id") === "terminal-command") {
+					$elm.keyboard($.extend(self.keyboard.config.terminal, obj));
+				} else {
+					$elm.keyboard($.extend(self.keyboard.config.default, obj));
+				}
+
+			});
 		},
 
 		onShow: function(event, keyboard, el) {
