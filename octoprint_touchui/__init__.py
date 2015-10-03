@@ -18,6 +18,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			js=[
 				"js/libs/iscroll.js",
 				"js/libs/jquery.keyboard.js",
+				"js/libs/jquery.fullscreen.js",
 
 				"js/includes/version.js",
 				"js/includes/files.js",
@@ -30,6 +31,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/includes/terminal.js",
 				"js/includes/knockout.js",
 				"js/includes/overwrite.js",
+				"js/includes/fullscreen.js",
 
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
@@ -40,7 +42,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def get_template_configs(self):
 		return [
-			dict(type="usersettings", template="touch_settings.jinja2", custom_bindings=True)
+			dict(type="usersettings", template="touch_usersettings.jinja2", custom_bindings=True)
 		]
 
 	def get_settings_defaults(self):
@@ -55,7 +57,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 		return dict(
 			touchui=dict(
-				displayName="TouchUI Plugin",
+				displayName="TouchUI",
 				displayVersion=self._plugin_version,
 
 				# version check: github repository
@@ -69,7 +71,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			)
 		)
 
-__plugin_name__ = "TouchUI Plugin"
+__plugin_name__ = "TouchUI"
 def __plugin_load__():
 	global __plugin_implementation__
 	__plugin_implementation__ = TouchUIPlugin()

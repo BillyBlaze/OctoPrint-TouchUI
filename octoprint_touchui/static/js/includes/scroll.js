@@ -40,10 +40,12 @@
 				$("#terminal-sendpanel").css("top", innerHeight - 70)
 
 				$(window).on("orientationchange", function() {
-					innerHeight = $(window).height() - 40;
-					$("#temperature-graph").height(innerHeight);
-					$("#terminal-scroll").height(innerHeight - 70);
-					$("#terminal-sendpanel").css("top", innerHeight - 70)
+					setTimeout(function() {
+						innerHeight = $(window).innerHeight() - 40;
+						$("#temperature-graph").height(innerHeight);
+						$("#terminal-scroll").height(innerHeight - 70);
+						$("#terminal-sendpanel").css("top", innerHeight - 70)
+					}, 100);
 				});
 
 			} else {

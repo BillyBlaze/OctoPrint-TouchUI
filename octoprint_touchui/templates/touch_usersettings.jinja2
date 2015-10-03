@@ -13,4 +13,8 @@
 		<button class="btn btn-primary" data-bind="click: toggleHidebar, disable: !isUIActive">{{ _('Toggle hide navigation bar') }}</button>
 		<span class="label" data-bind="text: isHidebarActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isHidebarActive() ? 'label-success' : 'label-danger'"></span>
 	</div>
+	<div class="btn-box">
+		<button class="btn btn-primary" data-bind="click: toggleFullscreen">{{ _('Toggle fullscreen') }}</button>
+		<span class="label" data-bind="text: isFullscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isFullscreen() ? 'label-success' : 'label-danger'"></span>
+	</div>
 </form>

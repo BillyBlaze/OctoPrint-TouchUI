@@ -11,6 +11,7 @@ $(function() {
 		self.isUIActive = TouchUI.isActive;
 		self.isKeyboardActive = ko.observable(TouchUI.isKeyboardActive);
 		self.isHidebarActive = ko.observable(TouchUI.isHidebarActive);
+		self.isFullscreen = ko.observable(TouchUI.isFullscreen);
 
 		self.toggleTouchUI = function() {
 			TouchUI.toggleTouch();
@@ -24,6 +25,9 @@ $(function() {
 			if(self.isUIActive) {
 				self.isHidebarActive(TouchUI.toggleHidebar());
 			}
+		}
+		self.toggleFullscreen = function() {
+			TouchUI.toggleFullscreen();
 		}
 
 		self.onStartupComplete = function() {

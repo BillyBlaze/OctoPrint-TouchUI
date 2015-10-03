@@ -10,7 +10,7 @@
 
 		},
 
-		isReady: function(viewModels) {
+		isReady: function(touchViewModel, viewModels) {
 			var self = this,
 				terminalViewModel = viewModels[0],
 				connectionViewModel = viewModels[1],
@@ -51,10 +51,14 @@
 				this.scroll.terminal.knockoutOverwrite.call(this, terminalViewModel);
 			}
 
-			this.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
+			// Bind fullscreenChange to knockout
+			$(document).bind("fullscreenchange", function() {
+				self.isFullscreen = ($(document).fullScreen() !== false);
+				touchViewModel.isFullscreen(self.isFullscreen);
+				self.DOM.cookies.set("fullscreen", self.isFullscreen);
+			});
 
-			// Add class with how many tab-items
-			$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+			this.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
 
 			// Hide topbar if clicking an item
 			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
@@ -67,11 +71,11 @@
 				ko.applyBindings(controlViewModel, $("#webcam")[0])
 			}
 
-			setTimeout(function() {
-				if( !self.isTouch ) {
-					self.scroll.iScrolls.body.refresh();
-				}
-			}, 600);
+			// setTimeout(function() {
+			// 	if( !self.isTouch ) {
+			// 		self.scroll.iScrolls.body.refresh();
+			// 	}
+			// }, 600);
 
 		}
 	}

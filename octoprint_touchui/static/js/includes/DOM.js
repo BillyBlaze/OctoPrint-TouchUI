@@ -7,23 +7,39 @@
 				$("html").attr("id", this.id);
 
 				// Force mobile browser to set the window size to their format
-				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimal-ui"/>').appendTo("head");
+				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui"/>').appendTo("head");
 
 				this.isActive = true;
 				this.keyboard.isActive = (this.DOM.cookies.get("keyboardActive") === "true");
 				this.animate.isHidebarActive = (this.DOM.cookies.get("hideNavbarActive") === "true");
+				this.isFullscreen = (this.DOM.cookies.get("fullscreen") === "true");
 
 				// Enforce active cookie
 				this.DOM.cookies.set("active", "true");
 
 				// Create keyboard cookie if not existing
-				if(this.DOM.cookies.get("keyboardActive") === false && !this.isTouch) {
-					this.DOM.cookies.set("keyboardActive", "true");
+				if(this.DOM.cookies.get("keyboardActive") === false) {
+					if(!this.isTouch) {
+						this.DOM.cookies.set("keyboardActive", "true");
+					} else {
+						this.DOM.cookies.set("keyboardActive", "false");
+					}
 				}
 
 				// Create hide navbar on click if not existing
 				if(this.DOM.cookies.get("hideNavbarActive") === false) {
 					this.DOM.cookies.set("hideNavbarActive", "true");
+				}
+
+				// Create fullscreen cookie if not existing and trigger pNotification
+				if(this.DOM.cookies.get("fullscreen") === false) {
+					this.DOM.cookies.set("fullscreen", "false");
+					this.fullscreen.ask.call(this);
+				} else {
+					//Cookie say user wants fullscreen, ask it!
+					if(this.DOM.cookies.get("fullscreen") === "true") {
+						this.fullscreen.ask.call(this);
+					}
 				}
 
 				// $("#terminal-output span").attr("data-bind", $("#terminal-output span").attr("data-bind").replace("text: line", "html: line"));
@@ -53,6 +69,9 @@
 
 			// Move all other items from tabbar into dropdown
 			this.DOM.move.tabs.init();
+
+			// Add class with how many tab-items
+			$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
 		},
 
 		create: {

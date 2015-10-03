@@ -26,6 +26,9 @@
 			toggleHidebar: function() {
 				return self.animate.isHidebarActive = self.DOM.cookies.toggleBoolean("hideNavbarActive");
 			},
+			toggleFullscreen: function() {
+				$(document).toggleFullScreen();
+			},
 			domLoading: function(/*touchViewModel*/) {
 				if(self.isActive) {
 					self.overwrite.init.call(self);
@@ -44,7 +47,7 @@
 					self.scroll.init.call(self);;
 					self.keyboard.init.call(self);
 
-					self.knockout.isReady.call(self, viewModels);
+					self.knockout.isReady.call(self, touchViewModel, viewModels);
 				}
 			}
 		};
@@ -57,6 +60,7 @@
 		version: 0,
 		isActive: false,
 		isTouch: ("ontouchstart" in window || "onmsgesturechange" in window),
+		isFullscreen: false,
 
 		hiddenClass: "hidden_touch",
 		visibleClass: "visible_touch"
