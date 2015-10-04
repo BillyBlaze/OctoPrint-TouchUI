@@ -100,15 +100,19 @@
 				self.scroll.iScrolls.body = new IScroll("#scroll", self.scroll.defaults.iScroll);
 
 				// Prevent dropdowns from closing when scrolling with them
-				$(document).on("mousedown", function(e) {
-					var $elm = ( $(e.target).parents(".dropdown-menu").length > 0 ) ? $(e.target).parents(".dropdown-menu") : false;
+				$(document).on("mousedown", ".dropdown-menu", function(e) {
+					var $elm = $(e.currentTarget);
 
 					// Add CSS pointer-events: none; to block all JS events
-					if( $elm !== false ) {
-						self.scroll.iScrolls.body.on("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-						self.scroll.iScrolls.body.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-						self.scroll.iScrolls.body.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-					}
+					self.scroll.iScrolls.body.on("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+					self.scroll.iScrolls.body.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+					self.scroll.iScrolls.body.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+
+					$(document).one("mouseup", function() {
+						self.scroll.iScrolls.body.off("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+						self.scroll.iScrolls.body.off("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+						self.scroll.iScrolls.body.off("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+					});
 
 				});
 
@@ -259,28 +263,15 @@
 
 		// Some diehard method of blocking any mousepointer event while scrolling with iScroll
 		blockEvents: {
-			timeout: false,
 			className: "no-pointer",
 
 			scrollStart: function($elm, iScrollInstance) {
-				if(this.timeout !== false) {
-					clearTimeout(this.timeout);
-					this.timeout = false;
-				}
 				$elm.addClass(this.className);
 			},
 
 			scrollEnd: function($elm, iScrollInstance) {
 				var self = this;
-
-				if(this.timeout !== false) {
-					clearTimeout(this.timeout);
-				}
-
-				this.timeout = setTimeout(function() {
-					$elm.removeClass(self.className);
-				}, 150);
-
+				$elm.removeClass(self.className);
 				iScrollInstance.refresh();
 			}
 
