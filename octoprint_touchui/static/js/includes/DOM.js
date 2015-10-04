@@ -251,6 +251,8 @@
 
 					// Remove binding and clicks from clone
 					this.$cloneItem.find(this.findLinkWithin).attr("data-bind", "").attr("id", "").click(function(e) {
+						e.preventDefault();
+
 						// Pass on the click to the orginal element
 						self.$item.find(self.findLinkWithin).click();
 					});
