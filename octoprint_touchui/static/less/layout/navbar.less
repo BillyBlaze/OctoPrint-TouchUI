@@ -118,11 +118,15 @@
 
 	.dropdown {
 		margin: 0;
+
+		.divider {
+			background: @dropdown-divider-color;
+		}
 	}
 
 	#navbar_systemmenu {
 		> a {
-			border-top: 1px solid @dark-color;
+			border-top: 1px solid @dropdown-divider-color;
 			margin-top: 4px;
 			padding-top: 14px !important;
 			position: relative;
