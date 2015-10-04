@@ -3,7 +3,7 @@
 	$.fn.TouchUI.DOM = {
 
 		pluginLoaded: function() {
-			if( document.location.hash === "#touch" || this.DOM.cookies.get("active") === "true") {
+			if( document.location.hash === "#touch" || document.location.href.indexOf("?touch") !== -1 || this.DOM.cookies.get("active") === "true") {
 				$("html").attr("id", this.id);
 
 				// Force mobile browser to set the window size to their format

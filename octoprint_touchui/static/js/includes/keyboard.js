@@ -123,7 +123,7 @@
 			});
 
 			// First check with delegation (trigger later)
-			$(document).on("mousedown", "input, textarea", function(e) {
+			$(document).on("mousedown", 'input:not([type="file"]), textarea', function(e) {
 				var $elm = $(e.target);
 
 				// $elm already has a keyboard

@@ -95,10 +95,18 @@
 			outline: 0 none;
 		}
 
+		input[type="file"] {
+			color: transparent !important;
+		}
+
 		.touch-focus {
 			background-color: @light-color !important;
 			color: @dark-color !important;
 			fill: @dark-color !important;
+
+			&[type="file"] {
+				color: transparent !important;
+			}
 
 			&:before, &:after, span, i {
 				color: @dark-color !important;

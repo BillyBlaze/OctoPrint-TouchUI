@@ -3,11 +3,24 @@
 	$.fn.TouchUI.knockout = {
 
 		beforeLoad: function(viewModels) {
-			var self = this;
+			var self = this,
+				terminalViewModel = viewModels[0],
+				connectionViewModel = viewModels[1],
+				settingsViewModel = viewModels[2],
+				softwareUpdateViewModel = viewModels[3],
+				controlViewModel = viewModels[4],
+				gcodeFilesViewModel = viewModels[5];
 
 			this.DOM.init.call(this);
 			this.scroll.beforeLoad.call(this);
 
+			gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
+				if( !self.isTouch ) {
+					setTimeout(function() {
+						self.scroll.iScrolls.body.refresh();
+					}, 600);
+				}
+			});
 		},
 
 		isReady: function(touchViewModel, viewModels) {
@@ -16,7 +29,8 @@
 				connectionViewModel = viewModels[1],
 				settingsViewModel = viewModels[2],
 				softwareUpdateViewModel = viewModels[3],
-				controlViewModel = viewModels[4];
+				controlViewModel = viewModels[4],
+				gcodeFilesViewModel = viewModels[5];
 
 			this.terminal.init.call(this, terminalViewModel);
 
@@ -70,12 +84,10 @@
 			if($("#webcam").length > 0) {
 				ko.applyBindings(controlViewModel, $("#webcam")[0])
 			}
-
-			setTimeout(function() {
-				if( !self.isTouch ) {
-					self.scroll.iScrolls.body.refresh();
-				}
-			}, 600);
+			// (Re-)Apply bindings to the new div's
+			if($("#control").length > 0) {
+				ko.applyBindings(controlViewModel, $("#control")[0])
+			}
 
 		}
 	}
