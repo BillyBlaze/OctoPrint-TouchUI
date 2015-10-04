@@ -5,6 +5,8 @@ All these options are set clientside, so we won't interfere with other clients. 
 
 You can find the TouchUI settings in the `User settings` modal under `Plugins > TouchUI`. Remember this are stored on your device, so if you login with your desktop computer you won't get the touch interface.
 
+![TouchUI Interface](https://billyblaze.github.io/OctoPrint-TouchUI/images/touchui.gif)
+
 ## Setup
 
 Install via the bundled [Plugin Manager](https://github.com/foosel/OctoPrint/wiki/Plugin:-Plugin-Manager)
