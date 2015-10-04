@@ -46,6 +46,7 @@
 								$(touch).addClass("large");
 							}
 						}
+
 					}
 				};
 

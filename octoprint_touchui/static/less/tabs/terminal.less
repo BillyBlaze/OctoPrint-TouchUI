@@ -115,15 +115,16 @@
 		color: @terminal-color;
 
 		&:before {
-			content: "╔╦╗┌─┐┬    ┬┌─┐┬    ┬╦    ╦╦\A     ║    │    ││    ││        ├─┤║    ║║\A     ╩    └─┘└─┘└─┘┴    ┴╚═╝╩";
+			font-family: "touchui";
+			content: "\e601\e605\e604\e603\e602\e600";
 			display: block;
-			width: 360px;
+			width: 100%;
 			margin: 5px auto 30px;
 			position: relative;
-			line-height: 17px;
-			font-size: 18px;
+			font-size: 34px;
+			line-height: 62px;
+			letter-spacing: 3px;
 			text-align: center;
-			font-family: FontAwesome;
 
 		}
 		&:after {
@@ -138,35 +139,13 @@
 			text-align: center;
 		}
 
-		@media (max-width: 500px) {
-			&:before {
-				margin-top: 10px;
-				line-height: 14px;
-				font-size: 14px;
-				width: 280px;
-			}
-			&:after {
-				top: 65px;
-			}
-		}
 		@media (max-width: 400px) {
 			&:before {
-				font-size: 11px;
-				line-height: 11px;
-				width: 210px;
+				font-size: 8vw;
+				line-height: 14vw;
 			}
 			&:after {
-				top: 56px;
-			}
-		}
-		@media (max-width: 300px) {
-			&:before {
-				font-size: 8px;
-				line-height: 8px;
-				width: 153px;
-			}
-			&:after {
-				top: 47px;
+				top: 17vw;
 			}
 		}
 	}

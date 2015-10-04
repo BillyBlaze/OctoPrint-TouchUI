@@ -260,9 +260,8 @@
 
 				init: function() {
 
-					var tmp = $('<div class="jog-panel"></div>').appendTo('#control');
-
 					var jogPanels = $('#control > .jog-panel');
+					var tmp = $('<div class="jog-panel" data-bind="'+$(jogPanels[0]).data("bind")+'"></div>').appendTo('#control');
 
 					$(jogPanels[0]).attr("id", "x-y-panel");
 					$(jogPanels[1]).attr("id", "e-panel");

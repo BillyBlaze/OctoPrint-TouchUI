@@ -46,7 +46,7 @@
 						$("#temperature-graph").height(innerHeight);
 						$("#terminal-scroll").height(innerHeight - 70);
 						$("#terminal-sendpanel").css("top", innerHeight - 70)
-					}, 100);
+					}, 600);
 				});
 
 			} else {
