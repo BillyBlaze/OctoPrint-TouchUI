@@ -13,23 +13,22 @@ source: https://github.com/BillyBlaze/OctoPrint-TouchUI
 archive: https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 follow_dependency_links: false
 
-# TODO
 tags:
 - ui
 - touchscreen
 - mobile
 
-# TODO
 screenshots:
-- url: url of a screenshot
-  alt: alt-text of a screenshot
-  caption: caption of a screenshot
-- url: url of another screenshot
-  alt: alt-text of another screenshot
-  caption: caption of another screenshot
-- ...
+- url: https://billyblaze.github.io/OctoPrint-TouchUI/images/screenshot1.png
+  alt: Control tab
+  caption: Control tab
+- url: https://billyblaze.github.io/OctoPrint-TouchUI/images/screenshot2.png
+  alt: Terminal tab
+  caption: Terminal tab
+- url: https://billyblaze.github.io/OctoPrint-TouchUI/images/screenshot3.png
+  alt: TouchUI Settings
+  caption: TouchUI Settings
 
-# TODO
 featuredimage: https://billyblaze.github.io/OctoPrint-TouchUI/images/touchuisample.png
 
 compatibility:
