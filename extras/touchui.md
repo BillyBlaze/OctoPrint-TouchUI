@@ -1,30 +1,23 @@
 ---
 layout: plugin
 
-id: touch.ui
-title: OctoPrint-Touch.ui
-description: A touch friendly interface for [D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[4~[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[D[D[D[D[D[CTFT modules
+id: touchui
+title: TouchUI
+description: A touch friendly interface for Mobile and TFT touch modules
 author: Paul de Vries
 license: AGPLv3
+date: 2015-10-04
 
-# TODO
-date: today's date in format YYYY-MM-DD, e.g. 2015-04-21
-
-homepage: https://github.com/BillyBlaze/OctoPrint-Touch.ui
-source: https://github.com/BillyBlaze/OctoPrint-Touch.ui
-archive: https://github.com/BillyBlaze/OctoPrint-Touch.ui/archive/master.zip
-
-# TODO set this to true if your plugin uses the dependency_links setup parameter to include
-# library versions not yet published on PyPi. SHOULD ONLY BE USED IF THERE IS NO OTHER OPTION!
+homepage: https://github.com/BillyBlaze/OctoPrint-TouchUI
+source: https://github.com/BillyBlaze/OctoPrint-TouchUI
+archive: https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 follow_dependency_links: false
 
 # TODO
 tags:
-- a list
-- of tags
-- that apply
-- to your plugin
-- (take a look at the existing plugins for what makes sense here)
+- ui
+- touchscreen
+- mobile
 
 # TODO
 screenshots:
@@ -37,19 +30,22 @@ screenshots:
 - ...
 
 # TODO
-featuredimage: url of a featured image for your plugin
+featuredimage: https://touchui.github.io/OctoPrint/touchuisample.png
 
 compatibility:
   # list of compatible versions, for example 1.2.0. If left empty no specific version requirement will be assumed
   octoprint:
-  - 1.2.0
+  - 1.2.6
 
   # list of compatible operating systems, valid values are linux, windows, macos, leaving empty defaults to all
-  os:
-  - linux
-  - windows
-  - macos
+  browsers:
+  - Iceweavel
+  - Chrome 44+
+  - Firefox 40+
+  - IE Edge
+  - Safari (mobile)
+  - Chrome (mobile)
 ---
 
 **TODO**: Longer description of your plugin, configuration examples etc. This part will be visible on the page at
-http://plugins.octoprint.org/plugin/touch.ui/
+http://plugins.octoprint.org/plugin/touchui/
