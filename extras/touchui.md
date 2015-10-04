@@ -1,55 +1,54 @@
 ---
 layout: plugin
 
-id: touch.ui
-title: OctoPrint-Touch.ui
-description: A touch friendly interface for [D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[D[4~[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[D[D[D[D[D[CTFT modules
+id: touchui
+title: TouchUI
+description: A touch friendly interface for Mobile and TFT touch modules
 author: Paul de Vries
 license: AGPLv3
+date: 2015-10-04
 
-# TODO
-date: today's date in format YYYY-MM-DD, e.g. 2015-04-21
-
-homepage: https://github.com/BillyBlaze/OctoPrint-Touch.ui
-source: https://github.com/BillyBlaze/OctoPrint-Touch.ui
-archive: https://github.com/BillyBlaze/OctoPrint-Touch.ui/archive/master.zip
-
-# TODO set this to true if your plugin uses the dependency_links setup parameter to include
-# library versions not yet published on PyPi. SHOULD ONLY BE USED IF THERE IS NO OTHER OPTION!
+homepage: https://billyblaze.github.io/OctoPrint-TouchUI
+source: https://github.com/BillyBlaze/OctoPrint-TouchUI
+archive: https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 follow_dependency_links: false
 
-# TODO
 tags:
-- a list
-- of tags
-- that apply
-- to your plugin
-- (take a look at the existing plugins for what makes sense here)
+- ui
+- touchscreen
+- mobile
 
-# TODO
 screenshots:
-- url: url of a screenshot
-  alt: alt-text of a screenshot
-  caption: caption of a screenshot
-- url: url of another screenshot
-  alt: alt-text of another screenshot
-  caption: caption of another screenshot
-- ...
+- url: https://billyblaze.github.io/OctoPrint-TouchUI/images/screenshot1.png
+  alt: Control tab
+  caption: Control tab
+- url: https://billyblaze.github.io/OctoPrint-TouchUI/images/screenshot2.png
+  alt: Terminal tab
+  caption: Terminal tab
+- url: https://billyblaze.github.io/OctoPrint-TouchUI/images/screenshot3.png
+  alt: TouchUI Settings
+  caption: TouchUI Settings
 
-# TODO
-featuredimage: url of a featured image for your plugin
+featuredimage: https://billyblaze.github.io/OctoPrint-TouchUI/images/touchuisample.png
 
 compatibility:
   # list of compatible versions, for example 1.2.0. If left empty no specific version requirement will be assumed
   octoprint:
-  - 1.2.0
+  - 1.2.6
 
   # list of compatible operating systems, valid values are linux, windows, macos, leaving empty defaults to all
-  os:
-  - linux
-  - windows
-  - macos
+  browsers:
+  - Iceweavel
+  - Chrome 44+
+  - Firefox 40+
+  - IE Edge
+  - Safari (mobile)
+  - Chrome (mobile)
 ---
+This plugin will transform the OctoPrint layout into a Mobile/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible. It will mimick pointer events as touch, so you can hook up those touchscreens. It also supports a virtual keyboard.
 
-**TODO**: Longer description of your plugin, configuration examples etc. This part will be visible on the page at
-http://plugins.octoprint.org/plugin/touch.ui/
+All these options are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year.
+
+You can find the TouchUI settings in the `User settings` modal under `TouchUI`. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.
+
+![TouchUI Interface](https://billyblaze.github.io/OctoPrint-TouchUI/images/touchui.gif)

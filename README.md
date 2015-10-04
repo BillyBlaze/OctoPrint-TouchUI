@@ -1,6 +1,11 @@
-# OctoPrint-TouchUI 0.0.1
-##Currently in production; do not install untill atleast 0.1.0
-This plugin will transform the layout in a Touch/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible.
+# OctoPrint-TouchUI 0.0.1 (beta)
+This plugin will transform the OctoPrint layout into a Mobile/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible. It will mimick pointer events as touch, so you can hook up those touchscreens. It also supports a virtual keyboard.
+
+All these options are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year.
+
+You can find the TouchUI settings in the `User settings` modal under `TouchUI`. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.
+
+![TouchUI Interface](https://billyblaze.github.io/OctoPrint-TouchUI/images/touchui.gif)
 
 ## Setup
 
@@ -19,16 +24,16 @@ or manually using this URL:
 6. Now press ``Ctrl+X``, then ``Y`` and ``enter`` to save the changes
 7. Open ``Iceweavel ``
 8. Type in about:config in the address field and hit enter. Now find the ``browser.sessionstore.resume_from_crash`` line and double click to change it to false.
-9. Go into fullscreen mode (Toggle fullscreen within the `User settings` modal under `Plugins > TouchUI`)
+9. Go into fullscreen mode
 10. Reboot and iceweavel should connect directly and in fullscreen
 
 ## Configuration
-To active the touch interface open the OctoPrint interface with '#touch' at the end. Such as `http://192.168.1.255:5000/#touch`
+To active the touch interface open the OctoPrint interface with `#touch` at the end. Such as `http://myprinter.local/#touch`
 Alternative you can toggle the touch interface within the `User settings` modal under `Plugins > TouchUI`.
 
-Activating touch will set a cookie on the client so it will remember to active the touch interface (up to a year).
-
 ## Supported browsers
-1. Firefox/Iceweasel
-2. Chrome 30+
-3. ....
+1. Iceweasel
+1. Chrome 30+
+1. Firefox 40+
+1. Safari Mobile
+1. Chrome Mobile
