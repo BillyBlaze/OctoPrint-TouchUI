@@ -8,7 +8,7 @@ author: Paul de Vries
 license: AGPLv3
 date: 2015-10-04
 
-homepage: https://github.com/BillyBlaze/OctoPrint-TouchUI
+homepage: https://billyblaze.github.io/OctoPrint-TouchUI
 source: https://github.com/BillyBlaze/OctoPrint-TouchUI
 archive: https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 follow_dependency_links: false
