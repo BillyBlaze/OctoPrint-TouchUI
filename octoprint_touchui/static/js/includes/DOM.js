@@ -12,15 +12,12 @@
 				$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
 
 				this.isActive = true;
-				this.keyboard.isActive = (this.DOM.cookies.get("keyboardActive") === "true");
-				this.animate.isHidebarActive = (this.DOM.cookies.get("hideNavbarActive") === "true");
-				this.isFullscreen = (this.DOM.cookies.get("fullscreen") === "true");
 
 				// Enforce active cookie
 				this.DOM.cookies.set("active", "true");
 
 				// Create keyboard cookie if not existing
-				if(this.DOM.cookies.get("keyboardActive") === false) {
+				if(this.DOM.cookies.get("keyboardActive") === undefined) {
 					if(!this.isTouch) {
 						this.DOM.cookies.set("keyboardActive", "true");
 					} else {
@@ -29,12 +26,12 @@
 				}
 
 				// Create hide navbar on click if not existing
-				if(this.DOM.cookies.get("hideNavbarActive") === false) {
+				if(this.DOM.cookies.get("hideNavbarActive") === undefined) {
 					this.DOM.cookies.set("hideNavbarActive", "true");
 				}
 
 				// Create fullscreen cookie if not existing and trigger pNotification
-				if(this.DOM.cookies.get("fullscreen") === false) {
+				if(this.DOM.cookies.get("fullscreen") === undefined) {
 					this.DOM.cookies.set("fullscreen", "false");
 					this.fullscreen.ask.call(this);
 				} else {
@@ -43,6 +40,11 @@
 						this.fullscreen.ask.call(this);
 					}
 				}
+
+				// Get state of cookies
+				this.keyboard.isActive = (this.DOM.cookies.get("keyboardActive") === "true");
+				this.animate.isHidebarActive = (this.DOM.cookies.get("hideNavbarActive") === "true");
+				this.isFullscreen = (this.DOM.cookies.get("fullscreen") === "true");
 
 				// $("#terminal-output span").attr("data-bind", $("#terminal-output span").attr("data-bind").replace("text: line", "html: line"));
 				$(".octoprint-container .tab-content .active").removeClass('active');
@@ -291,7 +293,7 @@
 					while (c.charAt(0)==' ') c = c.substring(1);
 					if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
 				}
-				return false;
+				return undefined;
 			},
 
 			set: function(key, value) {
