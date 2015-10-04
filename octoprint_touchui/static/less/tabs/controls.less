@@ -5,8 +5,7 @@
 	position: relative;
 
 	> .jog-panel {
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
+		.box-sizing(border-box);
 		margin: 0;
 		padding: 0;
 
@@ -98,10 +97,9 @@
 			button, input {
 				padding: 10px 20px;
 				margin: 0 0 20px;
-				-moz-box-sizing: border-box;
 				width: 100% !important;
 				height: 40px;
-				box-sizing: border-box;
+				.box-sizing(border-box);
 			}
 
 			@media (max-width: 400px) {
@@ -150,7 +148,7 @@
 				&:after {
 					color: white;
 					font-family: FontAwesome;
-					text-shadow: 0 0 0 transparent;
+					.text-shadow(0 0 0 transparent);
 					display: block;
 					overflow: hidden;
 					line-height: 17vw;
@@ -278,7 +276,7 @@
 				color: white;
 				margin: 0;
 				border: 0 none !important;
-				box-shadow: none !important;
+				.box-shadow(none) !important;
 				text-indent: -10px;
 
 				&.active {

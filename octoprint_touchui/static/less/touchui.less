@@ -1,4 +1,5 @@
 @import "_variables.less";
+@import "_mixins.less";
 @import "fonts/fontawesome.less";
 @import "fonts/sourcecodepro.less";
 @import "fonts/touchui.less";
@@ -18,8 +19,8 @@
 
 		* {
 			font-family: 'Source Code Pro', monospace;
-			text-shadow: none !important; /* This should increase performance */
-			box-shadow: none !important; /* This should increase performance */
+			.text-shadow(none) !important; /* This should increase performance */
+			.box-shadow(none) !important; /* This should increase performance */
 		}
 
 		.no-pointer * {
@@ -59,16 +60,8 @@
 		// For phone users
 		#files_wrapper .entry,
 		#temp .row-fluid table {
-			-webkit-transform: translateZ(0);
-			-moz-transform: translateZ(0);
-			-ms-transform: translateZ(0);
-			-o-transform: translateZ(0);
-			transform: translateZ(0);
-			-webkit-touch-callout: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			user-select: none;
+			.transform(translateZ(0));
+			.user-select(none);
 		}
 
 	}

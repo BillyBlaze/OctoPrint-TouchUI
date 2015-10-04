@@ -3,11 +3,7 @@
 
 	.icon-caret-down:before,
 	.icon-caret-right:before {
-		font: normal normal normal 14px/1 FontAwesome;
-		font-size: inherit;
-		text-rendering: auto;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
+		.font-icon-reset(FontAwesome);
 		content: "\f078";
 	}
 	.icon-caret-right:before {
@@ -23,7 +19,7 @@
 	}
 
 	.iScrollIndicator {
-		background: rgba(0, 255, 80, 0.7) !important;
+		background: @terminal-iScroll-color !important;
 		border: 0 none !important;
 	}
 
@@ -95,17 +91,16 @@
 	#terminal-scroll {
 		border: 1px solid @terminal-color;
 		overflow: hidden;
-		border-radius: 5px 5px 0 0;
+		.border-radius(5px, 5px, 0, 0);
 		height: 69vh;
 		min-height: 150px;
 		margin-bottom: 28px;
 		background-color: transparent;
 	}
 	#terminal-output {
+		.box-sizing(border-box);
 		margin-bottom: 26px;
 		border: 0 none;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
 		margin: 0;
 		background-color: transparent;
 		height: auto;
@@ -161,22 +156,21 @@
 		}
 		input {
 			width: 100%;
-			box-sizing: border-box;
 			background-color: @dark-color;
 			color: @terminal-color;
 			border: 1px solid @terminal-color;
 			padding: 14px;
-			border-radius: 0 0 5px 5px;
+			.box-sizing(border-box);
+			.border-radius(0, 0, 5px, 5px);
 		}
 		button {
 			margin-left: -61px;
 			width: 60px;
 			background-color: @dark-color;
-			color: white;
-			text-shadow: 0 0 0 transparent;
 			border: 0 none;
 			border-left: 1px solid @terminal-color;
-			border-radius: 0 0 5px 0;
+			.text-shadow(0 0 0 transparent);
+			.border-radius(0, 0, 5px, 0);
 			margin-top: 1px;
 			z-index: 21;
 			position: relative;

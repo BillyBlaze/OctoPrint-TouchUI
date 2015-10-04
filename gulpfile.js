@@ -3,7 +3,7 @@ var less = require('gulp-less');
 
 gulp.task('less', function () {
 	return gulp.src('octoprint_touchui/static/less/touchui.less')
-		.pipe(less())
+		.pipe(less({compress: true}))
 		.pipe(gulp.dest('octoprint_touchui/static/css'));
 });
 gulp.task('watch', function () {

@@ -10,8 +10,7 @@
 			padding: 12px 0;
 			height: 50px;
 			overflow: hidden;
-			border-radius: 0;
-			-moz-border-radius: 0;
+			.border-radius(0);
 			background-color: @light-color;
 			color: @dark-color;
 
@@ -114,10 +113,10 @@
 					@media (min-width: 510px) {
 						width: 50%;
 						display:inline-block;
-						border-radius: 0 5px 5px 0;
+						.border-radius(0, 5px, 5px, 0);
 
 						&:first-child {
-							border-radius: 5px 0 0 5px;
+							.border-radius(5px, 0, 0, 5px);
 						}
 					}
 				}
@@ -187,7 +186,7 @@
 						}
 
 						.btn.disabled, .btn[disabled] {
-							opacity: 0.2;
+							.opacity(0.2);
 						}
 
 						.btn {
@@ -195,13 +194,13 @@
 							position: absolute;
 							right: -50px;
 							top: 14px;
-							border-radius: 0;
+							.border-radius(0);
 							background: transparent !important;
 							z-index: 5;
 							border: 0 none;
-							box-shadow: 0 0 0 transparent;
 							color: @light-color;
-							text-shadow: 0 0 0 transparent;
+							.box-shadow(0 0 0 transparent);
+							.text-shadow(0 0 0 transparent);
 
 							&:first-child {
 								right: 70px;

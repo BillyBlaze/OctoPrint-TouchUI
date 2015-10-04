@@ -15,11 +15,10 @@
 }
 .ui-keyboard {
 	background: @dark-light-color;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	top: auto !important;
 	bottom: 0;
 	width: 100%;
+	.box-sizing(border-box);
 }
 .ui-keyboard-accept span,
 .ui-keyboard-cancel span {
@@ -62,24 +61,22 @@
 .ui-keyboard-empty span,
 .ui-keyboard-space span {
 	font: 0/0 a;
-	text-shadow: none;
+	.text-shadow(none);
 	color: transparent;
 }
 .ui-keyboard-preview-wrapper {
 	text-align: center;
 	position: relative;
 	overflow: hidden;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
 	padding: 4px;
+	.box-sizing(border-box);
 }
 .ui-keyboard-preview {
 	text-align: left;
 	display: block !important;
 	width: 100%;
 	padding: 18px 10px;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
+	.box-sizing(border-box);
 }
 .ui-keyboard-keyset {
 	text-align: center;
@@ -126,8 +123,7 @@ button.ui-keyboard-accept.ui-keyboard-invalid-input {
 	border-color: #c00;
 	background: #800;
 	color: #fff;
-	opacity: 0.5;
-	filter:alpha(opacity=50);
+	.opacity(0.5);
 }
 button.ui-keyboard-accept.ui-keyboard-invalid-input:hover {
 	background: #a00;

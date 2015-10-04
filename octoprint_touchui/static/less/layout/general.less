@@ -30,14 +30,14 @@
 			left: 0;
 			bottom: 0;
 			width: 100%;
-			box-sizing: border-box;
 			padding: 0 40px 0;
+			.box-sizing(border-box);
 		}
 
 		.tab-content {
-			box-sizing: border-box;
 			padding: 30px 35px 0;
 			overflow: hidden;
+			.box-sizing(border-box);
 
 			h1 {
 				color: @light-color;
@@ -75,7 +75,7 @@
 
 		* {
 			border: 0 none;
-			border-radius: 0 !important;
+			.border-radius(0) !important;
 		}
 
 		button, .btn {
