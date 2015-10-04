@@ -177,13 +177,22 @@
 						var $elm = $(elm);
 
 						// Clone the items into the dropdown, and make it click the orginal link
-						$elm.clone().attr("id", $elm.attr("id")+"2").appendTo('#login_dropdown_loggedin').click(function(e) {
-							e.preventDefault();
+						$elm.clone().attr("id", $elm.attr("id")+"2").appendTo("#login_dropdown_loggedin").click(function(e) {
 							$elm.click();
+							e.preventDefault();
 							return false;
 						});
 						$elm.addClass("hidden_touch");
 					});
+
+					var dropdownMenu = $("#navbar_systemmenu").find(".dropdown-menu");
+					$("#navbar_systemmenu").appendTo("#login_dropdown_loggedin").find("a").click(function(e) {
+						$(e.target).toggleClass("active");
+						dropdownMenu.toggleClass("dropdown-menu").toggleClass("dropdown").toggleClass("open");
+
+						e.preventDefault();
+						return false;
+					}).text($("#navbar_systemmenu").find('a').text().trim());
 				}
 			},
 

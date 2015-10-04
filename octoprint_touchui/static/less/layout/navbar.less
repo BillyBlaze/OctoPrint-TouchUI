@@ -75,7 +75,9 @@
 					margin: 0 15px 0 0;
 					font-size: 20px;
 					position: relative;
+					width: 30px;
 					top: 2px;
+					text-align: center;
 				}
 
 			}
@@ -111,6 +113,46 @@
 				}
 			}
 
+		}
+	}
+
+	.dropdown {
+		margin: 0;
+	}
+
+	#navbar_systemmenu {
+		> a {
+			border-top: 1px solid @dark-color;
+			margin-top: 4px;
+			padding-top: 14px !important;
+			position: relative;
+
+			&.active {
+				&:after {
+					content: "\f0d8";
+				}
+			}
+
+			&:before {
+				content: "\f085";
+			}
+			i {
+				display: none;
+			}
+			&:after {
+				content: "\f0d7";
+				font-family: Fontawesome;
+				right: 18px;
+				position: absolute;
+				top: 17px;
+			}
+		}
+		.dropdown {
+			a {
+				&:before {
+					content: "\f101";
+				}
+			}
 		}
 	}
 
