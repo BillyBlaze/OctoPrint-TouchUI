@@ -10,7 +10,6 @@
 			padding: 12px 0;
 			height: 50px;
 			overflow: hidden;
-			.border-radius(0);
 			background-color: @light-color;
 			color: @dark-color;
 
@@ -109,6 +108,10 @@
 					display: block;
 					width: 100%;
 					margin-left: 0;
+
+					&:last-child {
+						border-left: 1px solid black;
+					}
 
 					@media (min-width: 510px) {
 						width: 50%;
@@ -239,7 +242,7 @@
 
 		a, a i {
 			color: @light-color !important;
-			font-size: 17px !important;
+			font-size: 15px !important;
 		}
 
 		.divider {

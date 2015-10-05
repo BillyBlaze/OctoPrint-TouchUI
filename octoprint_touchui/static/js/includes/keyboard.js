@@ -123,7 +123,8 @@
 			});
 
 			// First check with delegation (trigger later)
-			$(document).on("mousedown", 'input:not([type="file"]), textarea', function(e) {
+			var notThis = ['[type="file"]','[type="checkbox"]','[type="radio"]'];
+			$(document).on("mousedown", 'input:not('+notThis+'), textarea', function(e) {
 				var $elm = $(e.target);
 
 				// $elm already has a keyboard

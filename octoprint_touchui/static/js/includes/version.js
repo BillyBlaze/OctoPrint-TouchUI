@@ -10,7 +10,7 @@
 			this.version.build = settingsViewModel.settings.plugins.touchui.version();
 
 			// Update the content of the version
-			$('head').append('<style id="touch_updates_css">#term pre:after{ content: "v'+this.version.build+'" !important; }</style>');
+			$('head').append('<style id="touch_updates_css">#term pre span:first-child:before{ content: "v'+this.version.build+'" !important; }</style>');
 
 			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
 
@@ -20,7 +20,7 @@
 
 				if( touchui !== false && (touchui.information.remote.value !== self.version.build && touchui.information.remote.value !== null) ) {
 					$("#touch_updates_css").remove();
-					$('head').append('<style id="touch_updates_css">#term pre:after{ content: "v'+self.version.build+" outdated, new version: v"+touchui.information.remote.value+'" !important; }</style>');
+					$('head').append('<style id="touch_updates_css">#term pre span:first-child:before{ content: "v'+self.version.build+" outdated, new version: v"+touchui.information.remote.value+'" !important; }</style>');
 				}
 
 			});

@@ -18,6 +18,10 @@
 		padding-top: 5px;
 	}
 
+	::-webkit-scrollbar-thumb {
+		background: @terminal-color;
+	}
+
 	.iScrollIndicator {
 		background: @terminal-iScroll-color !important;
 		border: 0 none !important;
@@ -114,33 +118,30 @@
 			content: "\e601\e605\e604\e603\e602\e600";
 			display: block;
 			width: 100%;
-			margin: 5px auto 30px;
+			margin: 5px auto 0;
 			position: relative;
 			font-size: 34px;
 			line-height: 62px;
 			letter-spacing: 3px;
 			text-align: center;
 
-		}
-		&:after {
-			content: "v?.?.?";
-			display: block;
-			position: absolute;
-			left: 0;
-			top: 70px;
-			line-height: 17px;
-			font-size: 14px;
-			width: 100%;
-			text-align: center;
+			@media (max-width: 350px) {
+				font-size: 10vw;
+			}
+
 		}
 
-		@media (max-width: 400px) {
+		span:first-child {
 			&:before {
-				font-size: 8vw;
-				line-height: 14vw;
-			}
-			&:after {
-				top: 17vw;
+				content: "v?.?.?";
+				display: block;
+				position: relative;
+				left: 0;
+				margin: -5px 0 10px;
+				line-height: 17px;
+				font-size: 14px;
+				width: 100%;
+				text-align: center;
 			}
 		}
 	}

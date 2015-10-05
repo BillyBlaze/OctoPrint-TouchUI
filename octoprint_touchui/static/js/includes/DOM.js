@@ -10,6 +10,7 @@
 				$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
 				$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
 				$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
+				$('<span></span>').prependTo("#terminal-output");
 
 				this.isActive = true;
 
@@ -186,12 +187,12 @@
 					});
 
 					var dropdownMenu = $("#navbar_systemmenu").find(".dropdown-menu");
-					$("#navbar_systemmenu").appendTo("#login_dropdown_loggedin").find("a").click(function(e) {
+					$("#navbar_systemmenu").appendTo("#login_dropdown_loggedin").find("a").on("mousedown touchstart", function(e) {
 						$(e.target).toggleClass("active");
 						dropdownMenu.toggleClass("dropdown-menu").toggleClass("dropdown").toggleClass("open");
 
+						e.stopPropagation();
 						e.preventDefault();
-						return false;
 					}).text($("#navbar_systemmenu").find('a').text().trim());
 				}
 			},

@@ -34,9 +34,14 @@
 			.box-sizing(border-box);
 		}
 
+		input.disabled, select.disabled, textarea.disabled,
+		input[disabled], select[disabled], textarea[disabled] {
+			opacity: 0.5;
+		}
+
 		.tab-content {
 			padding: 30px 35px 0;
-			overflow: hidden;
+			overflow: visible;
 			.box-sizing(border-box);
 
 			h1 {
@@ -97,6 +102,7 @@
 
 		input[type="file"] {
 			color: transparent !important;
+			opacity: 0 !important;
 		}
 
 		.touch-focus {

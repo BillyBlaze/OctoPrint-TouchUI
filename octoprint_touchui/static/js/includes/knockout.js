@@ -55,15 +55,15 @@
 
 			// Redo scroll-to-end interface
 			$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
-				if (!self.isTouch) {
-					terminalViewModel.scrollToEnd();
-					return false;
-				}
+				terminalViewModel.scrollToEnd();
+				return false;
 			});
 
-			if( !this.isTouch ) {
-				this.scroll.terminal.knockoutOverwrite.call(this, terminalViewModel);
-			}
+			// Overwrite terminal knockout functions (i.e. scroll to end)
+			this.scroll.koOverwrite.call(this, terminalViewModel);
+
+			// Setup version tracking in terminal
+			this.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
 
 			// Bind fullscreenChange to knockout
 			$(document).bind("fullscreenchange", function() {
@@ -71,8 +71,6 @@
 				touchViewModel.isFullscreen(self.isFullscreen);
 				self.DOM.cookies.set("fullscreen", self.isFullscreen);
 			});
-
-			this.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
 
 			// Hide topbar if clicking an item
 			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
