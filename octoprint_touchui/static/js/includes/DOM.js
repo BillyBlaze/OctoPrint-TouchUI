@@ -47,7 +47,7 @@
 				this.animate.isHidebarActive = (this.DOM.cookies.get("hideNavbarActive") === "true");
 				this.isFullscreen = (this.DOM.cookies.get("fullscreen") === "true");
 
-				// $("#terminal-output span").attr("data-bind", $("#terminal-output span").attr("data-bind").replace("text: line", "html: line"));
+				// Set new printer tab as active
 				$(".octoprint-container .tab-content .active").removeClass('active');
 
 				this.DOM.create.printer.init( this.DOM.create.tabbar );
@@ -193,7 +193,13 @@
 
 						e.stopPropagation();
 						e.preventDefault();
+						return false;
+					}).click(function(e) {
+						e.preventDefault();
+						return false;
 					}).text($("#navbar_systemmenu").find('a').text().trim());
+
+					$("#navbar_plugin_navbartemp").appendTo("#login_dropdown_loggedin");
 				}
 			},
 
@@ -275,11 +281,12 @@
 				init: function() {
 
 					var jogPanels = $('#control > .jog-panel');
-					var tmp = $('<div class="jog-panel" data-bind="'+$(jogPanels[0]).data("bind")+'"></div>').appendTo('#control');
 
 					$(jogPanels[0]).attr("id", "x-y-panel");
 					$(jogPanels[1]).attr("id", "e-panel");
 					$(jogPanels[2]).attr("id", "extra-panel");
+
+					var tmp = $('<div class="jog-panel" id="rate-panel" data-bind="'+$(jogPanels[0]).data("bind")+'"></div>').insertAfter($(jogPanels[2]));
 
 					$(jogPanels[0]).children('button:last-child').appendTo(tmp);
 					$(jogPanels[0]).children('[type="number"]:last-child').appendTo(tmp);

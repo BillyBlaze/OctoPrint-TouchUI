@@ -118,6 +118,7 @@
 
 	.dropdown {
 		margin: 0;
+		z-index: 2;
 
 		.divider {
 			background: @dropdown-divider-color;
@@ -129,7 +130,10 @@
 			border-top: 1px solid @dropdown-divider-color;
 			margin-top: 4px;
 			padding-top: 14px !important;
+			padding-bottom: 14px !important;
 			position: relative;
+			display: block;
+			float: none;
 
 			&.active {
 				&:after {

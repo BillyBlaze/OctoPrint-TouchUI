@@ -66,14 +66,14 @@
 				display: none;
 			}
 		}
-		&:last-child {
+		&#rate-panel {
 			width: 45%;
-			margin: 45px 0 0;
+			margin: 45px 0 20px;
 
 		}
 
 		&#e-panel,
-		&:last-child {
+		&#rate-panel {
 			.btn-group.control-box {
 				height: auto;
 				margin: 0 0 20px;
@@ -110,7 +110,7 @@
 			}
 		}
 		@media (max-width: 400px) {
-			&:last-child {
+			&#rate-panel {
 				margin: 0 0 80px;
 			}
 		}
@@ -247,7 +247,7 @@
 			}
 
 			&:after {
-				content: "";
+				content: "_____";
 				position: absolute;
 				top: 0;
 				left: 0;
@@ -255,6 +255,11 @@
 				z-index: 2;
 				height: 100%;
 				cursor: pointer;
+				color: white;
+				font-size: 22px;
+				line-height: 62px;
+				text-align: center;
+				text-indent: -10px;
 			}
 
 			&:before {
