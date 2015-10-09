@@ -226,7 +226,7 @@
 					curModal.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
 
 					// Refresh the scrollHeight and scroll back to top with these actions:
-					$modalElm.find('[data-toggle="tab"], .pagination ul li a').on("click", function(e) {
+					$document.on("click.touchui", '[data-toggle="tab"], .pagination ul li a', function(e) {
 						curModal.stop();
 
 						setTimeout(function() {
@@ -237,7 +237,7 @@
 
 					// Kill it with fire!
 					$modalElm.one("destroy", function() {
-						$modalElm.find('[data-toggle="tab"], .pagination ul li a').off("click");
+						$document.off("click.touchui");
 						curModal.destroy();
 						self.scroll.modal.stack.pop();
 					});
