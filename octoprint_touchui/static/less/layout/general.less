@@ -133,6 +133,38 @@
 			color: @light-color !important;
 		}
 
+		.dropdown-menu {
+			border: 1px solid @dark-color;
+			background: @main-color;
+			color: @light-color;
+			top: 54px;
+
+			a, a i {
+				color: @light-color !important;
+				font-size: 15px !important;
+				width: 100%;
+				.box-sizing(border-box);
+
+				&:hover, &:hover i {
+					color: @main-color !important;
+					background: @light-color !important
+				}
+			}
+
+			.divider {
+				background-color: @dropdown-divider-color !important
+			}
+
+			&:before {
+				content: "";
+				border: 10px solid transparent;
+				border-bottom-color: @main-color;
+				position: absolute;
+				top: -18px;
+				right: 27px;
+			}
+		}
+
 	}
 }
 

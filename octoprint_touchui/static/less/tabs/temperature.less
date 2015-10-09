@@ -78,19 +78,19 @@
 						}
 					}
 					.dropdown-menu {
-						margin: 2px 0 5px;
+						margin: 2px 0 9px;
 						bottom: 100%;
 						top: auto;
 						left: auto;
 						right: 0;
 
-						li {
-							a {
-								&:hover, &:active, &.active {
-									background: @main-color;
-									color: @light-color;
-								}
-							}
+						&:before {
+							border: 10px solid transparent;
+							border-top-color: #00B0FF;
+							position: absolute;
+							top: auto;
+							bottom: -18px;
+							right: 9px;
 						}
 					}
 					.input-append {

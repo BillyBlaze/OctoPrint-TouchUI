@@ -83,8 +83,8 @@
 				ko.applyBindings(controlViewModel, $("#webcam")[0])
 			}
 			// (Re-)Apply bindings to the new div's
-			if($("#control").length > 0) {
-				ko.applyBindings(controlViewModel, $("#control")[0])
+			if($("#rate-panel").length > 0) {
+				ko.applyBindings(controlViewModel, $("#rate-panel")[0])
 			}
 
 		}

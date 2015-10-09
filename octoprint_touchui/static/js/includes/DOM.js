@@ -199,7 +199,9 @@
 						return false;
 					}).text($("#navbar_systemmenu").find('a').text().trim());
 
-					$("#navbar_plugin_navbartemp").appendTo("#login_dropdown_loggedin");
+					var navBarTmp = $("#navbar_plugin_navbartemp").appendTo("#login_dropdown_loggedin");
+					$("<!-- ko allowBindings: false -->").insertBefore(navBarTmp);
+					$("<!-- /ko -->").insertAfter(navBarTmp);
 				}
 			},
 
