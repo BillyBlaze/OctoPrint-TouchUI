@@ -28,7 +28,7 @@
 
 				// Create hide navbar on click if not existing
 				if(this.DOM.cookies.get("hideNavbarActive") === undefined) {
-					this.DOM.cookies.set("hideNavbarActive", "true");
+					this.DOM.cookies.set("hideNavbarActive", "false");
 				}
 
 				// Create fullscreen cookie if not existing and trigger pNotification

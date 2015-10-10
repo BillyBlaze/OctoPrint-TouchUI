@@ -42,7 +42,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def get_template_configs(self):
 		return [
-			dict(type="usersettings", template="touch_usersettings.jinja2", custom_bindings=True)
+			dict(type="usersettings", template="touch_usersettings.jinja2", custom_bindings=True),
+			dict(type="settings", template="touch_settings_help.jinja2", custom_bindings=True)
 		]
 
 	def get_settings_defaults(self):

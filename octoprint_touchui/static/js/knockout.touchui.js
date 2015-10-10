@@ -34,11 +34,17 @@ $(function() {
 			TouchUI.koReady(self, viewModels);
 		}
 
+		self.showUserSettings = function() {
+			viewModels[6].usersettings.show();
+			$("#usersettings_plugin_touchui_link a").trigger("click");
+			$("#special-dropdown-uni-2").trigger("click");
+		}
+
 	}
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel"],
-		"#usersettings_plugin_touchui"
+		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel"],
+		["#usersettings_plugin_touchui", "#settings_plugin_touchui"]
 	]);
 });
