@@ -3,7 +3,11 @@
 	$.fn.TouchUI.DOM = {
 
 		pluginLoaded: function() {
-			if( document.location.hash === "#touch" || document.location.href.indexOf("?touch") !== -1 || this.DOM.cookies.get("active") === "true") {
+			if(
+				document.location.hash === "#touch" ||
+				document.location.href.indexOf("?touch") > 0 ||
+				this.DOM.cookies.get("active") === "true"
+			) {
 				$("html").attr("id", this.id);
 
 				// Force mobile browser to set the window size to their format
@@ -199,9 +203,11 @@
 						return false;
 					}).text($("#navbar_systemmenu").find('a').text().trim());
 
-					var navBarTmp = $("#navbar_plugin_navbartemp").appendTo("#login_dropdown_loggedin");
-					$("<!-- ko allowBindings: false -->").insertBefore(navBarTmp);
-					$("<!-- /ko -->").insertAfter(navBarTmp);
+					if( $("#navbar_plugin_navbartemp").length > 0 ) {
+						var navBarTmp = $("#navbar_plugin_navbartemp").appendTo("#login_dropdown_loggedin");
+						$("<!-- ko allowBindings: false -->").insertBefore(navBarTmp);
+						$("<!-- /ko -->").insertAfter(navBarTmp);
+					}
 				}
 			},
 
