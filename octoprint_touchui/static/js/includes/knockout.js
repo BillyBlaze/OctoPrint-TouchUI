@@ -72,7 +72,7 @@
 				self.DOM.cookies.set("fullscreen", self.isFullscreen);
 			});
 
-			// Hide topbar if clicking an item
+			// Hide topbar and/or refresh the scrollheight if clicking an item
 			// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
 			$(document).on("click", '#tabs [data-toggle="tab"]', function() {
 				self.animate.hide.call(self, "navbar");

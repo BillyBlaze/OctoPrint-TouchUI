@@ -4,6 +4,7 @@
 
 		isHidebarActive: false,
 		hide: function(whatEl) {
+			var self = this;
 
 			//Lets hide the navbar by scroll
 			if(whatEl === "navbar") {
@@ -22,7 +23,6 @@
 						}
 
 					} else {
-						var self = this;
 
 						self.scroll.iScrolls.body.refresh();
 						if(self.scroll.iScrolls.body.maxScrollY < -navbarHeight) {
@@ -34,6 +34,14 @@
 							}, 0);
 						}
 					}
+				} else {
+
+					if(!this.isTouch) {
+						setTimeout(function() {
+							self.scroll.iScrolls.body.refresh();
+						}, 0);
+					}
+
 				}
 			}
 		}
