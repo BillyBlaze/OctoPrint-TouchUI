@@ -7,12 +7,16 @@
 			if( !this.isTouch ) {
 				// Refresh body on dropdown click
 				$(document).on("click", ".container .dropdown-menu li a", function() {
-					self.scroll.iScrolls.body.refresh();
+					setTimeout(function() {
+						self.scroll.iScrolls.body.refresh();
+					}, 0);
 				});
 
 				// Refresh body and scroll to previous element
 				$(document).on("click", ".container .pagination ul li a", function(e) {
-					self.scroll.iScrolls.body.refresh();
+					setTimeout(function() {
+						self.scroll.iScrolls.body.refresh();
+					}, 0);
 				});
 			}
 
