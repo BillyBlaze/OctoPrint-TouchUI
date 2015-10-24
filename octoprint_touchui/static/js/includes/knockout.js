@@ -102,9 +102,10 @@
 					}
 				});
 			}
-			if($("#navbar_systemmenu").length > 0) {
-				ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
-			}
+
+if($("#navbar_systemmenu").length > 0) {
+	ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
+}
 
 		}
 	}
