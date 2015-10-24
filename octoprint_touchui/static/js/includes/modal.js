@@ -43,6 +43,10 @@
 								$('.show-dropdown').remove();
 								$('[href="'+href+'"]').click();
 								settingsLabel.text($('[href="'+href+'"]').text());
+
+								setTimeout(function() {
+									self.scroll.iScrolls.body.refresh();
+								}, 0);
 							}
 
 						});
