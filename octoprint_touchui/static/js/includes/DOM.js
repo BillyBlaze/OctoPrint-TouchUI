@@ -3,6 +3,9 @@
 	$.fn.TouchUI.DOM = {
 
 		pluginLoaded: function() {
+
+			console.log(this.canLoadAutomatically);
+
 			if(
 				document.location.hash === "#touch" ||
 				document.location.href.indexOf("?touch") > 0 ||

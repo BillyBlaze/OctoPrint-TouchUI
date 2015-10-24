@@ -62,6 +62,7 @@
 		isActive: false,
 		isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
 		isFullscreen: false,
+		canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
 
 		hiddenClass: "hidden_touch",
 		visibleClass: "visible_touch"

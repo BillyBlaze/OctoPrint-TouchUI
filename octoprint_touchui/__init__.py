@@ -46,11 +46,19 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		)
 
 	def get_template_configs(self):
-		return [
-			dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
-			dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
-			dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
-		]
+		if self._settings.get(["automaticallyLoad"]) is True:
+			return [
+				dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
+				dict(type="generic", template="touchui_load.jinja2", custom_bindings=True),
+				dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
+				dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
+			]
+		else:
+			return [
+				dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
+				dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
+				dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
+			]
 
 	def get_settings_defaults(self):
 		return dict(

@@ -83,11 +83,9 @@
 			if($("#webcam").length > 0) {
 				ko.applyBindings(controlViewModel, $("#webcam")[0])
 			}
-			// (Re-)Apply bindings to the new div's
 			if($("#rate-panel").length > 0) {
 				ko.applyBindings(controlViewModel, $("#rate-panel")[0])
 			}
-			// (Re-)Apply bindings to the new div's
 			if($("#navbar_login").length > 0) {
 				ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);
 
@@ -102,10 +100,9 @@
 					}
 				});
 			}
-
-if($("#navbar_systemmenu").length > 0) {
-	ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
-}
+			if($("#navbar_systemmenu").length > 0) {
+				ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
+			}
 
 		}
 	}
