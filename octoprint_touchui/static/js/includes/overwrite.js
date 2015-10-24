@@ -19,6 +19,7 @@
 					// Create modal, store into variable so we can trigger an event first before return
 					var tmp = $(this).modalBup(option, args);
 					$(this).trigger("modal.touchui", this);
+
 					return tmp;
 				};
 				$.fn.modal.prototype = { constructor: $.fn.modal };

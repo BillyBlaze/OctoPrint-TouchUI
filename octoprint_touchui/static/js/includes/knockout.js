@@ -30,7 +30,8 @@
 				settingsViewModel = viewModels[2],
 				softwareUpdateViewModel = viewModels[3],
 				controlViewModel = viewModels[4],
-				gcodeFilesViewModel = viewModels[5];
+				gcodeFilesViewModel = viewModels[5],
+				navigationViewModel = viewModels[7];
 
 			this.terminal.init.call(this, terminalViewModel);
 
@@ -43,7 +44,7 @@
 
 			// Watch the operational binder for visual online/offline
 			var subscription = connectionViewModel.isOperational.subscribe(function(newOperationalState) {
-				var printLink = $("#navbar_login");
+				var printLink = $("#all_touchui_settings");
 				if( !newOperationalState ) {
 					printLink.addClass("offline").removeClass("online");
 					$("#conn_link2").addClass("offline").removeClass("online");
@@ -63,7 +64,7 @@
 			this.scroll.koOverwrite.call(this, terminalViewModel);
 
 			// Setup version tracking in terminal
-			this.version.init.call(this, settingsViewModel, softwareUpdateViewModel);
+			this.version.init.call(this, softwareUpdateViewModel);
 
 			// Bind fullscreenChange to knockout
 			$(document).bind("fullscreenchange", function() {
@@ -85,6 +86,24 @@
 			// (Re-)Apply bindings to the new div's
 			if($("#rate-panel").length > 0) {
 				ko.applyBindings(controlViewModel, $("#rate-panel")[0])
+			}
+			// (Re-)Apply bindings to the new div's
+			if($("#navbar_login").length > 0) {
+				ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);
+
+				// Force the dropdown to appear open when logedIn
+				navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
+					if( loggedIn ) {
+						$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
+						$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
+					} else {
+						$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
+						$('#login_dropdown_loggedin').removeClass('visible_touch');
+					}
+				});
+			}
+			if($("#navbar_systemmenu").length > 0) {
+				ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
 			}
 
 		}

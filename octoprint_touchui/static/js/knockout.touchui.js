@@ -12,6 +12,19 @@ $(function() {
 		self.isKeyboardActive = ko.observable(TouchUI.isKeyboardActive);
 		self.isHidebarActive = ko.observable(TouchUI.isHidebarActive);
 		self.isFullscreen = ko.observable(TouchUI.isFullscreen);
+		self.touchuiModal = $('#touchui_settings_dialog');
+		self.settings = {};
+
+		self.onStartupComplete = function() {
+			TouchUI.koReady(self, viewModels);
+		}
+		self.onBeforeBinding = function () {
+			self.settings = viewModels[2].settings.plugins.touchui;
+		}
+
+		self.show = function() {
+			self.touchuiModal.modal("show");
+		}
 
 		self.toggleTouchUI = function() {
 			TouchUI.toggleTouch();
@@ -30,21 +43,11 @@ $(function() {
 			TouchUI.toggleFullscreen();
 		}
 
-		self.onStartupComplete = function() {
-			TouchUI.koReady(self, viewModels);
-		}
-
-		self.showUserSettings = function() {
-			viewModels[6].usersettings.show();
-			$("#usersettings_plugin_touchui_link a").trigger("click");
-			$("#special-dropdown-uni-2").trigger("click");
-		}
-
 	}
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel"],
-		["#usersettings_plugin_touchui", "#settings_plugin_touchui"]
+		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel", "navigationViewModel"],
+		["#touchui_settings_dialog", "#settings_plugin_touchui", "#navbar_plugin_touchui"]
 	]);
 });

@@ -1,9 +1,6 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-import shutil
-import os
-import logging
 import octoprint.plugin
 import octoprint.settings
 import octoprint.util
@@ -11,6 +8,14 @@ import octoprint.util
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.AssetPlugin,
 					octoprint.plugin.TemplatePlugin):
+
+	def __init__(self):
+		self.hasVisibleSettings = False
+		self.automaticallyLoad = True
+
+	def on_after_startup(self):
+		self.hasVisibleSettings = self._settings.get(["hasVisibleSettings"])
+		self.automaticallyLoad = self._settings.get(["automaticallyLoad"])
 
 	def get_assets(self):
 
@@ -42,20 +47,21 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def get_template_configs(self):
 		return [
-			dict(type="usersettings", template="touch_usersettings.jinja2", custom_bindings=True),
-			dict(type="settings", template="touch_settings_help.jinja2", custom_bindings=True)
+			dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
+			dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
+			dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
 		]
 
 	def get_settings_defaults(self):
 		return dict(
-			version=self._plugin_version
+			hasVisibleSettings=self.hasVisibleSettings,
+			automaticallyLoad=self.automaticallyLoad
 		)
 
 	def get_version(self):
 		return self._plugin_version
 
 	def get_update_information(self):
-
 		return dict(
 			touchui=dict(
 				displayName="TouchUI",

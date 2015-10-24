@@ -47,6 +47,7 @@
 					self.scroll.init.call(self);
 					self.keyboard.init.call(self);
 
+					self.settings = touchViewModel.settings || {};
 					self.knockout.isReady.call(self, touchViewModel, viewModels);
 				}
 			}

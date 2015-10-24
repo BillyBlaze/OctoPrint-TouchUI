@@ -23,6 +23,10 @@
 		z-index: 23;
 	}
 
+	#youcanhazlogin {
+		margin: 0;
+	}
+
 	.dropdown-menu {
 		margin-top: 6px;
 		right: 10px;
@@ -37,6 +41,23 @@
 			&:active {
 				background: @main-color-darker;
 			}
+		}
+
+		a.dropdown-toggle {
+			&:after {
+				content: "\f0d7";
+				font: normal normal normal 14px/1 FontAwesome;
+				position: absolute;
+				right: 20px;
+				margin: 5px;
+			}
+			&:before {
+				content: "\f023";
+			}
+		}
+
+		#login_dropdown_loggedout {
+			border-top: 1px solid @dropdown-divider-color;
 		}
 
 		li {
@@ -87,17 +108,17 @@
 					content: "\f1eb";
 				}
 			}
-			&#timelapse_link2 {
+			&#timelapse_link {
 				a:before {
 					content: "\f03e";
 				}
 			}
-			&#gcode_link2 {
+			&#gcode_link {
 				a:before {
 					content: "\f248";
 				}
 			}
-			&#navbar_settings2 {
+			&#navbar_settings {
 				a:before {
 					content: "\f013";
 				}
@@ -112,6 +133,14 @@
 					content: "\f08b";
 				}
 			}
+			#navbar_touchui_settings {
+				&:before {
+					font-family: "touchui";
+					content: "\e600";
+					font-weight: bold;
+					font-size: 16px;
+				}
+			}
 
 		}
 	}
@@ -122,6 +151,11 @@
 
 		.divider {
 			background: @dropdown-divider-color;
+		}
+
+		.dropdown-menu:after,
+		.dropdown-menu:before {
+			right: 4vw;
 		}
 	}
 
@@ -164,11 +198,7 @@
 		}
 	}
 
-	#navbar_settings {
-		display: none;
-	}
-
-	#navbar_login {
+	#all_touchui_settings {
 		&.offline:after {
 			color: @light-color;
 			animation-name: blink_offline;
@@ -181,6 +211,9 @@
 			animation-duration: 0.6s;
 			animation-iteration-count: 5;
 			content: "\f0c9";
+		}
+		> .dropdown-menu {
+			min-width: 250px;
 		}
 	}
 
