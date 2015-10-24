@@ -215,11 +215,6 @@
 
 					}.bind(this));
 
-					// $('<li id="fake_link"><a href="#somethingsomethingdarkside" data-toggle="tab"></a></li>').appendTo("#tabs");
-
-					// $("#tabs > li a").on("click", function(e) {
-					// 	$('#fake_link').removeClass('active');
-					// });
 				}
 			},
 
