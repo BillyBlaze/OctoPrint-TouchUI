@@ -2,11 +2,13 @@
 
 	$.fn.TouchUI.modal = {
 		init: function() {
-			this.modal.dropdown.create("#settings_dialog_menu", "special-dropdown-uni", "#settings_dialog_label");
-			this.modal.dropdown.create("#usersettings_dialog ul.nav", "special-dropdown-uni-2", "#usersettings_dialog h3");
+			this.modal.dropdown.create.call(this, "#settings_dialog_menu", "special-dropdown-uni", "#settings_dialog_label");
+			this.modal.dropdown.create.call(this, "#usersettings_dialog ul.nav", "special-dropdown-uni-2", "#usersettings_dialog h3");
 		},
 		dropdown: {
 			create: function(cloneId, newId, appendTo) {
+				var self = this;
+
 				// Remove unwanted whitespaces
 				$(appendTo).text($(appendTo).text().trim());
 
@@ -45,7 +47,7 @@
 								settingsLabel.text($('[href="'+href+'"]').text());
 
 								setTimeout(function() {
-									self.scroll.iScrolls.body.refresh();
+									self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
 								}, 0);
 							}
 
