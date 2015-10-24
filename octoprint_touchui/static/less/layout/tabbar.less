@@ -45,11 +45,23 @@
 		}
 	}
 }
+#all_touchui_settings.active {
+	background: @dark-color;
+}
 #tabs {
 
 	&.nav-tabs {
+		.touch_notactive {
+			background: @main-color !important;
+
+			a {
+				pointer-events: all;
+				cursor: pointer;
+			}
+		}
+
 		.active {
-			background: @dark-color;
+			#all_touchui_settings.active;
 
 			a {
 				.border-radius(0);

@@ -58,7 +58,7 @@
 				this.DOM.create.printer.init( this.DOM.create.tabbar );
 				this.DOM.create.printer.menu.$elm.find('a').trigger("click");
 
-				// Create a new persitent dropdown
+				// Create a new persistent dropdown
 				this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
 
 				// Move all other items from tabbar into dropdown
@@ -93,7 +93,7 @@
 
 			},
 
-			// Create a persitent dropdown
+			// Create a persistent dropdown
 			dropdown: {
 
 				menuItem: {
@@ -204,13 +204,22 @@
 					$items = $("#tabs > li:not("+this.DOM.move.tabbar.mainItems+")");
 					$items.each(function(ind, elm) {
 						var $elm = $(elm);
-						$elm.appendTo(this.DOM.create.dropdown.container);
-						$elm.find('a').text($elm.text().trim()).click(function() {
 
+						// Clone the items into the dropdown, and make it click the orginal link
+						$elm.clone().attr("id", $elm.attr("id")+"2").appendTo("#all_touchui_settings .dropdown-menu").find('a').click(function(e) {
+							$elm.find('a').click();
+							e.preventDefault();
+							return false;
 						});
+						$elm.addClass("hidden_touch");
 
 					}.bind(this));
 
+					// $('<li id="fake_link"><a href="#somethingsomethingdarkside" data-toggle="tab"></a></li>').appendTo("#tabs");
+
+					// $("#tabs > li a").on("click", function(e) {
+					// 	$('#fake_link').removeClass('active');
+					// });
 				}
 			},
 
