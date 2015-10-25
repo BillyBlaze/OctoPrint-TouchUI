@@ -77,7 +77,6 @@
 					// Reset it all, turn events back on
 					$(document).on("mouseup"+namespace+" touchend"+namespace, function(event) {
 						var $elm = $(event.target);
-						console.log($elm.parents(".dropdown-menu").length);
 
 						if(
 							( $dropdown.hasClass("no-pointer") || hasScroll ) ||
