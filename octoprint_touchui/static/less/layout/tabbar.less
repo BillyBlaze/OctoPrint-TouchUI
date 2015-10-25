@@ -47,6 +47,16 @@
 }
 #tabs {
 
+	// Pevent FOUT! (not dutch error!)
+	&:first-child {
+		&:before {
+			font-family: "touchui";
+			content: "";
+			position: absolute;
+			top: -5000px;
+		}
+	}
+
 	&.nav-tabs {
 
 		.active {

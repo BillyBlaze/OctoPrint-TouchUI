@@ -14,6 +14,7 @@
 		},
 
 		iScrolls: {},
+		currentActive: null,
 
 		beforeLoad: function() {
 
@@ -63,30 +64,37 @@
 				// Not on selects since we can't cancel the preventDefault
 				$('input, textarea, button').on("mousedown", function(e) {
 					e.preventDefault();
-
-					var scrolled = false;
-					self.scroll.iScrolls.body.on("scrollStart", function(event) {
-						scrolled = true;
-					});
-
-					$(document).on("mouseup", function(event) {
-
-						if(!scrolled && $(event.target).parents($(e.delegateTarget)).length > 0) {
-							$(e.delegateTarget).focus().addClass('touch-focus').animate({opacity:1}, 300, function() {
-								$(e.delegateTarget).removeClass('touch-focus');
-							});
-						}
-
-						self.scroll.iScrolls.body.off("scrollStart");
-						$(document).off(event);
-					});
-
+					$(e.target).addClass("no-pointer");
 				});
+				// $(document).on("mousedown", 'input, textarea, button', function(e) {
+				//
+				// 	var scrolled = false,
+				// 		toggle = function(event) {
+				// 			scrolled = true;
+				// 		};
+				//
+				// 	self.scroll.currentActive.on("scrollStart", toggle);
+				//
+				// 	$(document).on("mouseup", function(event) {
+				//
+				// 		if(!scrolled && $(event.target).parents($(e.delegateTarget)).length > 0) {
+				// 			$(e.delegateTarget).focus()/*.addClass('touch-focus').animate({opacity:1}, 300, function() {
+				// 				$(e.delegateTarget).removeClass('touch-focus');
+				// 			})*/;
+				// 		}
+				//
+				// 		self.scroll.currentActive.off("scrollStart", toggle);
+				// 		$(document).off(event);
+				// 	});
+				//
+				// 	return false;
+				//
+				// });
 
 				// Prevent no-pointer from disabling navigation
-				$('[data-toggle="dropdown"]').on("click", function(e) {
-					$(e.target).closest(".no-pointer").removeClass("no-pointer");
-				});
+				// $('[data-toggle="dropdown"]').on("click", function(e) {
+				// 	$(e.target).closest(".no-pointer").removeClass("no-pointer");
+				// });
 
 			}
 
@@ -143,27 +151,67 @@
 		body: {
 
 			init: function() {
-				var self = this;
+				var self = this,
+					scrollStart = false;
 
 				// Create main body scroll
 				self.scroll.iScrolls.body = new IScroll("#scroll", self.scroll.defaults.iScroll);
+				self.scroll.currentActive = self.scroll.iScrolls.body;
 
-				// Prevent dropdowns from closing when scrolling with them
-				$(document).on("mousedown", ".dropdown-menu", function(e) {
-					var $elm = $(e.currentTarget);
+				// Create a hidden div and initiialze to get prototype instance
+				var dropdown = $('<div></div>').dropdown().data("dropdown");
 
-					// Add CSS pointer-events: none; to block all JS events
-					self.scroll.iScrolls.body.on("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-					self.scroll.iScrolls.body.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-					self.scroll.iScrolls.body.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+				// Improve scrolling while dropdown is open
+				$(document).off('.dropdown.data-api');
+				$(document)
+					.on('click.dropdown touchstart.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+					.on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
+					.on('click.dropdown.data-api touchstart.dropdown.data-api', '[data-toggle=dropdown]', function(e) {
+						var dropdownToggle = this,
+							$dropdown = $('.page-container');
 
-					$(document).one("mouseup", function() {
-						self.scroll.iScrolls.body.off("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-						self.scroll.iScrolls.body.off("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
-						self.scroll.iScrolls.body.off("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.iScrolls.body));
+						// Stop default
+						e.preventDefault()
+
+						// Toggle dropdown through memory prototype
+						if( !$(dropdownToggle).parent().hasClass('open') ) {
+							$(dropdownToggle).parent().addClass('open');
+						} else {
+							$(dropdownToggle).parent().removeClass('open');
+							return; //Do not create events
+						}
+
+						// Store bindings into variable for future reference
+						var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $dropdown, self.scroll.currentActivey),
+							scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $dropdown, self.scroll.currentActive);
+
+						// Block everthing while scrolling
+						self.scroll.iScrolls.body.on("scrollStart", scrollStart);
+						self.scroll.iScrolls.body.on("scrollEnd", scrollEnd);
+						self.scroll.iScrolls.body.on("scrollCancel", scrollEnd);
+
+						// Reset it all, turn events back on
+						$(document).on("mouseup.dropdown-toggle.touchui touchend.dropdown-toggle.touchui", function(event) {
+							var $elm = $(event.target);
+
+							if( $dropdown.hasClass("no-pointer") || $elm.hasClass("dropdown-menu") || ($elm.parents(".dropdown-menu").length > 0 && $elm.prop("tagName") !== "A") ) {
+								return;
+							} else {
+								$(document).off(".dropdown-toggle.touchui");
+
+								self.scroll.iScrolls.body.off("scrollStart", scrollStart);
+								self.scroll.iScrolls.body.off("scrollEnd", scrollEnd);
+								self.scroll.iScrolls.body.off("scrollCancel", scrollEnd);
+
+								// If clicked element is same as dropdown toggle, close it
+								if( !$elm.parent().is($(dropdownToggle).parent()) ) {
+									$(dropdownToggle).parent().removeClass('open');
+								}
+
+							}
+						});
+
 					});
-
-				});
 
 			}
 		},
@@ -220,10 +268,14 @@
 						}, 800);
 					} catch(err) { }
 
+					// Store bindings into variable for future reference
+					var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $modalElm, curModal),
+						scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal);
+
 					// Disable all JS events while scrolling for best performance
-					curModal.on("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $modalElm, curModal));
-					curModal.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
-					curModal.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal));
+					curModal.on("scrollStart", scrollStart);
+					curModal.on("scrollEnd", scrollEnd);
+					curModal.on("scrollCancel", scrollEnd);
 
 					// Refresh the scrollHeight and scroll back to top with these actions:
 					$document.on("click.touchui", '[data-toggle="tab"], .pagination ul li a', function(e) {
@@ -240,6 +292,16 @@
 						$document.off("click.touchui");
 						curModal.destroy();
 						self.scroll.modal.stack.pop();
+
+						if(self.scroll.modal.stack.length > 0) {
+							self.scroll.currentActive = self.scroll.modal.stack[self.scroll.modal.stack.length-1];
+						} else {
+							self.scroll.currentActive = self.scroll.iScrolls.body;
+						}
+
+						curModal.off("scrollStart", scrollStart);
+						curModal.off("scrollEnd", scrollEnd);
+						curModal.off("scrollCancel", scrollEnd);
 					});
 
 				});
@@ -262,15 +324,24 @@
 					// Disable scrolling in active modal
 					self.scroll.modal.stack[self.scroll.modal.stack.length-1].disable();
 
-					// Disable all JS events for smooth scrolling
-					self.scroll.modal.dropdown.on("scrollStart", self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown));
-					self.scroll.modal.dropdown.on("scrollEnd", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown));
-					self.scroll.modal.dropdown.on("scrollCancel", self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown));
-				});
+					// Store bindings into variable for future reference
+					var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown),
+						scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown);
 
-				$document.on("dropdown-closed.touchui", function() {
-					// Enable active modal
-					self.scroll.modal.stack[self.scroll.modal.stack.length-1].enable();
+					// Disable all JS events for smooth scrolling
+					self.scroll.modal.dropdown.on("scrollStart", scrollStart);
+					self.scroll.modal.dropdown.on("scrollEnd", scrollEnd);
+					self.scroll.modal.dropdown.on("scrollCancel", scrollEnd);
+
+					$document.on("dropdown-closed.touchui", function() {
+						// Enable active modal
+						self.scroll.modal.stack[self.scroll.modal.stack.length-1].enable();
+
+						self.scroll.modal.dropdown.off("scrollStart", scrollStart);
+						self.scroll.modal.dropdown.off("scrollEnd", scrollEnd);
+						self.scroll.modal.dropdown.off("scrollCancel", scrollEnd);
+					});
+
 				});
 
 			}

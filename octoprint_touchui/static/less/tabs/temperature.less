@@ -1,8 +1,18 @@
 #temp {
+	margin-left: -30px;
+	margin-right: -30px;
+	overflow: hidden;
+
 	#temperature-graph {
 		margin-bottom: 10px;
 		height: 85vh;
 		background-size: contain;
+		// padding-left: 30px !important;
+		// padding-right: 30px !important;
+		.box-sizing(border-box);
+
+		width: 90vw;
+		margin: 0 auto;
 
 		canvas {
 			width: 100% !important;
@@ -35,10 +45,13 @@
 			}
 		}
 	}
-
+	.row {
+		.box-sizing(border-box);
+		width: 100vw;
+	}
 	.row-fluid {
 		width: 161vw !important;
-		margin: 20px 0 40px -40px !important;
+		margin: 20px 0 40px 0 !important;
 		transition: left 0.5s ease;
 		cursor: w-resize;
 		position: relative;
@@ -47,12 +60,6 @@
 		&.open {
 			left: -61vw !important;
 		}
-
-		@media(min-width: 700px) {
-			margin-left: -40px !important;
-			left: 0 !important;
-		}
-
 
 		table {
 

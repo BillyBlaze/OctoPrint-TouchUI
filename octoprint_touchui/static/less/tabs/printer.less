@@ -71,14 +71,24 @@
 			}
 			.icon-wrench,
 			.icon-sd-black-14 {
-				font-size: 23px;
-				color: @light-color;
+				display: none !important;
 			}
-			.icon-sd-black-14 {
+			.dropdown-toggle {
 				background: transparent;
 
-				&:before {
-					content: "\f15b";
+				&:after {
+					.font-icon-reset(FontAwesome);
+					font-size: 21px;
+					color: @light-color;
+					content: "\f0b0";
+				}
+			}
+
+			.sd-trigger {
+				.dropdown-toggle {
+					&:after {
+						content: "\f0ea";
+					}
 				}
 			}
 		}

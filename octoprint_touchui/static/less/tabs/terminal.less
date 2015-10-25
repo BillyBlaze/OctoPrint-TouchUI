@@ -99,19 +99,20 @@
 		height: 69vh;
 		min-height: 150px;
 		margin-bottom: 28px;
-		background-color: transparent;
+		background: @dark-color;
+		z-index: 2;
 	}
 	#terminal-output {
 		.box-sizing(border-box);
 		margin-bottom: 26px;
 		border: 0 none;
 		margin: 0;
-		background-color: transparent;
 		height: auto;
 		min-height: 0;
 		max-height: none;
 		overflow: hidden;
 		color: @terminal-color;
+		background-color: transparent;
 
 		&:before {
 			font-family: "touchui";
@@ -154,6 +155,13 @@
 
 		.muted {
 			display: none;
+		}
+
+		input, button {
+			&:disabled, .disabled {
+				opacity: 1;
+				background: rgba(0,255,0,0.3);
+			}
 		}
 		input {
 			width: 100%;
