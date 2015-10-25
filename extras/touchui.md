@@ -47,8 +47,8 @@ compatibility:
 ---
 This plugin will transform the OctoPrint layout into a Mobile/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible. It will mimick pointer events as touch, so you can hook up those touchscreens. It also supports a virtual keyboard.
 
-All these options are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year.
+All these settings are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year. You can find the `TouchUI settings` in a dedicated modal. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.
 
-You can find the TouchUI settings in the `User settings` modal under `TouchUI`. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.
+From v0.2.0 the interface will automatically start while loading OctoPrint. This will only start if the browser is smaller then 980 pixels in width or if you're browsing with a touch device. You can turn this off in the `Settings` modal under `TouchUI`.
 
 ![TouchUI Interface](https://billyblaze.github.io/OctoPrint-TouchUI/images/touchui.gif)

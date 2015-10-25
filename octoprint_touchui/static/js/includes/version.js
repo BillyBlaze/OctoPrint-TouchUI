@@ -6,6 +6,8 @@
 		init: function(softwareUpdateViewModel) {
 			var self = this;
 
+			$("<span></span>").appendTo("#terminal-output");
+
 			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
 
 				touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
