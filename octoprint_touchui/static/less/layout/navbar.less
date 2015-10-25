@@ -25,39 +25,69 @@
 
 	#youcanhazlogin {
 		margin: 0;
-	}
-
-	.dropdown-menu {
-		margin-top: 6px;
-		right: 10px;
-
-		&:after {
-			border-bottom-color: @main-color !important;
-		}
-
-		.btn {
-			background: @main-color-dark;
-
-			&:active {
-				background: @main-color-darker;
-			}
-		}
-
-		a.dropdown-toggle {
-			&:after {
-				content: "\f0d7";
-				font: normal normal normal 14px/1 FontAwesome;
-				position: absolute;
-				right: 20px;
-				margin: 5px;
-			}
-			&:before {
-				content: "\f023";
-			}
-		}
 
 		#login_dropdown_loggedout {
 			border-top: 1px solid @dropdown-divider-color;
+			margin-top: 5px;
+		}
+	}
+
+
+	.dropdown {
+		margin: 0;
+		z-index: 2;
+
+		.dropdown-menu {
+
+			.dropdown-menu {
+				position: static;
+				z-index: 0;
+				margin: 0;
+				float: none;
+				border: 0 none;
+				padding: 0;
+			}
+
+			&:after,
+			&:before {
+				right: 6vw;
+				top: -10px;
+				border-left-width: 10px;
+				border-right-width: 10px;
+				border-bottom-width: 10px;
+			}
+
+			&:after {
+				border-bottom-color: @main-color !important;
+			}
+
+			.btn {
+				background: @main-color-dark;
+
+				&:active {
+					background: @main-color-darker;
+				}
+			}
+
+			a.dropdown-toggle {
+				&:after {
+					content: "\f0d7";
+					font: normal normal normal 14px/1 FontAwesome;
+					position: absolute;
+					right: 20px;
+					margin: 5px;
+				}
+				&:before {
+					content: "\f023";
+				}
+			}
+		}
+	}
+	.dropdown,
+	.dropdown-menu {
+
+		.divider {
+			background: @dropdown-divider-color;
 		}
 
 		li {
@@ -146,26 +176,8 @@
 		}
 	}
 
-	.dropdown {
-		margin: 0;
-		z-index: 2;
-
-		.divider {
-			background: @dropdown-divider-color;
-		}
-
-		.dropdown-menu:after,
-		.dropdown-menu:before {
-			right: 4vw;
-		}
-	}
-
 	#navbar_systemmenu {
 		> a {
-			border-top: 1px solid @dropdown-divider-color;
-			margin-top: 4px;
-			padding-top: 14px !important;
-			padding-bottom: 14px !important;
 			position: relative;
 			display: block;
 			float: none;
@@ -187,10 +199,10 @@
 				font-family: Fontawesome;
 				right: 18px;
 				position: absolute;
-				top: 17px;
+				top: 9px;
 			}
 		}
-		.dropdown {
+		.dropdown-menu {
 			a {
 				&:before {
 					content: "\f101";
@@ -214,7 +226,8 @@
 			content: "\f0c9";
 		}
 		> .dropdown-menu {
-			min-width: 250px;
+			min-width: 253px;
+			margin-top: 12px;
 		}
 	}
 

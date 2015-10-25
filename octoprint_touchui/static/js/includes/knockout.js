@@ -102,6 +102,7 @@
 			}
 			if($("#navbar_systemmenu").length > 0) {
 				ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
+				ko.applyBindings(navigationViewModel, $("#divider_systemmenu")[0]);
 			}
 
 		}

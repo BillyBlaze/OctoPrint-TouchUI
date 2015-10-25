@@ -206,18 +206,10 @@
 					$('<!-- /ko -->').insertAfter($elm);
 				});
 
-				// Force dropdown in menu to not close the main dropdown
-				$('#all_touchui_settings > ul li .dropdown-toggle').on("mousedown touchstart", function(e) {
-					$(e.target).toggleClass("active");
-					$(e.target).siblings().toggleClass("dropdown-menu").toggleClass("dropdown").toggleClass("open");
+				//Add hr before the settings icon
+				$('<li class="divider"></li>').insertBefore("#navbar_settings");
+				$('<li class="divider" id="divider_systemmenu" style="display: none;"></li>').insertBefore("#navbar_systemmenu").attr("data-bind", $("#navbar_systemmenu").attr("data-bind"));
 
-					e.stopPropagation();
-					e.preventDefault();
-					return false;
-				}).click(function(e) {
-					e.preventDefault();
-					return false;
-				});
 			},
 
 			// Move all items, exepct this mainTabItems into the dropdown
@@ -254,26 +246,12 @@
 
 					}.bind(this));
 
+					// Move TouchUI to main dropdown
 					$("#navbar_plugin_touchui").insertAfter("#navbar_settings");
+
+					// Create and Move login form to main dropdown
 					$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
 					$('#navbar_login').appendTo('#youcanhazlogin').find('a.dropdown-toggle').text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim());
-
-					// Manually move system commands
-					// if( $("#navbar_systemmenu").length > 0 ) {
-					// 	var dropdownMenu = $("#navbar_systemmenu").find(".dropdown-menu");
-					// 	$("#navbar_systemmenu").appendTo(this.DOM.create.dropdown.container).find("a").on("mousedown touchstart", function(e) {
-					// 		$(e.target).toggleClass("active");
-					// 		dropdownMenu.toggleClass("dropdown-menu").toggleClass("dropdown").toggleClass("open");
-					//
-					// 		e.stopPropagation();
-					// 		e.preventDefault();
-					// 		return false;
-					// 	}).click(function(e) {
-					// 		e.preventDefault();
-					// 		return false;
-					// 	}).text($("#navbar_systemmenu").find('a').text().trim());
-					// 	$('<li class="divider"></li>').insertBefore("#navbar_systemmenu");
-					// }
 
 					// Manually move navbar temp (hard move)
 					if( $("#navbar_plugin_navbartemp").length > 0 ) {
@@ -282,9 +260,6 @@
 						$("<!-- ko allowBindings: false -->").insertBefore(navBarTmp);
 						$("<!-- /ko -->").insertAfter(navBarTmp);
 					}
-
-					//Add hr before the settings icon
-					$('<li class="divider"></li>').insertBefore("#navbar_settings");
 
 				}
 			},
