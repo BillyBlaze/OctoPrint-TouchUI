@@ -150,41 +150,6 @@
 	}
 }
 
-.dropdown-menu {
-	background: @main-color;
-	color: @light-color;
-	.border-radius(0);
-	margin-top: 15px;
-
-	a {
-		padding: 8px 15px;
-	}
-	a, i {
-		color: @light-color !important;
-		font-size: 15px !important;
-		width: 100%;
-		.box-sizing(border-box);
-
-		&:hover, &:hover i {
-			color: @main-color !important;
-			background: @light-color !important
-		}
-	}
-
-	.divider {
-		background-color: @dropdown-divider-color;
-		border: 0 none;
-	}
-
-	&:before {
-		content: "";
-		border: 10px solid transparent;
-		border-bottom-color: @main-color;
-		position: absolute;
-		top: -18px;
-		right: 27px;
-	}
-}
 .modal {
 	.dropdown-menu:before {
 		content: "";

@@ -32,82 +32,7 @@
 
 		// Add scrolling with mousedown if there is no touch
 		init: function() {
-			var self = this,
-				namespace = ".dropdown-toggle.touchui";
-
-			// Create a hidden div and initiialze to get prototype instance
-			var dropdown = $('<div></div>').dropdown().data("dropdown");
-
-			// Improve scrolling while dropdown is open
-			$(document)
-				.off('.dropdown.data-api')
-				.on('click.dropdown touchstart.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
-				.on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
-				.on('click.dropdown.data-api touchend.dropdown.data-api', '[data-toggle=dropdown]', function(e) {
-					var dropdownToggle = this,
-						hasScroll = false,
-						$dropdown = $('.page-container');
-
-					// Toggle dropdown through memory prototype
-					if( !$(dropdownToggle).parent().hasClass('open') ) {
-						$(dropdownToggle).parent().addClass('open');
-					} else {
-						$(dropdownToggle).parent().removeClass('open');
-						return true; //Do not create events
-					}
-
-					// Store bindings into variable for future reference
-					var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $dropdown, self.scroll.currentActivey),
-						scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $dropdown, self.scroll.currentActive);
-
-					// Block everthing while scrolling
-					if ( !self.isTouch ) {
-						self.scroll.currentActive.on("scrollStart", scrollStart);
-						self.scroll.currentActive.on("scrollEnd", scrollEnd);
-						self.scroll.currentActive.on("scrollCancel", scrollEnd);
-					} else {
-						scrollStart = function() {
-							hasScroll = true;
-						};
-
-						$(window).on('scroll', scrollStart);
-						$(".modal-scrollable").on('scroll', scrollStart);
-					}
-
-					// Reset it all, turn events back on
-					$(document).on("mouseup"+namespace+" touchend"+namespace, function(event) {
-						var $elm = $(event.target);
-
-						if(
-							( $dropdown.hasClass("no-pointer") || hasScroll ) ||
-							$elm.hasClass("dropdown-menu") ||
-							( $elm.parents(".dropdown-menu").length > 0 && ($elm.prop("tagName") !== "A" || $elm.attr('data-toggle') === "dropdown") )
-						) {
-							hasScroll = false;
-							return;
-						} else {
-							$(document).off(namespace);
-
-							if ( !self.isTouch ) {
-								self.scroll.currentActive.off("scrollStart", scrollStart);
-								self.scroll.currentActive.off("scrollEnd", scrollEnd);
-								self.scroll.currentActive.off("scrollCancel", scrollEnd);
-							} else {
-								$(window).off('scroll', scrollStart);
-								$(".modal-scrollable").off('scroll', scrollStart);
-							}
-
-							// If clicked element is same as dropdown toggle, close it
-							if( !$elm.parent().is($(dropdownToggle).parent()) || self.isTouch ) {
-								$(dropdownToggle).parent().removeClass('open');
-							}
-
-						}
-					});
-
-					return false;
-
-				});
+			var self = this;
 
 			if (this.isTouch) {
 				var innerHeight = $(window).innerHeight() - 40;
@@ -136,6 +61,8 @@
 				self.scroll.modal.init.call(self);
 
 			}
+
+			self.scroll.dropdown.init.call(self);
 
 		},
 
@@ -198,6 +125,103 @@
 				self.scroll.currentActive = self.scroll.iScrolls.body;
 
 			}
+		},
+
+		dropdown: {
+
+			init: function() {
+
+				var self = this,
+					namespace = ".dropdown-toggle.touchui",
+					$noPointer = $('.page-container');
+
+				$(document)
+					.on("mouseup.prevent.pointer touchend.prevent.pointer", function() {
+						$noPointer.removeClass('no-pointer');
+					});
+
+				// Improve scrolling while dropdown is open
+				$(document)
+					.off('.dropdown')
+					.on('click.dropdown touchstart.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+					.on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
+					.on('click.dropdown.data-api', '[data-toggle=dropdown]', function(e) {
+						var $dropdownToggle = $(e.target),
+							dropdownToggle = e.target,
+							scrollStart, removeEvents,
+							hasScroll = false;
+
+						e.preventDefault();
+						e.stopPropagation();
+
+						// Toggle dropdown
+						$dropdownToggle.parent().toggleClass('open');
+
+						// Refresh current scroll
+						if ( !self.isTouch ) {
+							var translateY = parseFloat($('.page-container').css("transform").split(",")[5].replace("-",""));
+							$('.octoprint-container').css("min-height", $dropdownToggle.next().outerHeight() + $dropdownToggle.next().offset().top + translateY);
+							self.scroll.currentActive.refresh();
+						}
+
+						// Skip everything if we are in the main dropdown toggle dropdowns
+						if( $dropdownToggle.parents('#all_touchui_settings .dropdown-menu').length > 0 ) {
+							return;
+						}
+
+						// Remove all other active dropdowns
+						$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
+
+						// Stop creating to many events
+						if ( $dropdownToggle.parent().hasClass('hasEvents') ) {
+							return;
+						}
+
+						// Prevent the many events
+						$dropdownToggle.parent().addClass("hasEvents");
+
+						// Store bindings into variable for future reference
+						scrollStart = function() { hasScroll = true };
+
+						// Block everthing while scrolling
+						if ( !self.isTouch ) {
+							scrollStart = function() { hasScroll = true; $noPointer.addClass("no-pointer"); };
+							self.scroll.currentActive.on("scrollStart", scrollStart);
+						}
+
+						$(document).on("click"+namespace, function(event) {
+
+							if( !hasScroll || self.isTouch ) {
+								var $elm = $(event.target);
+
+								$(document).off(namespace);
+
+								if ( !self.isTouch ) {
+									self.scroll.currentActive.off("scrollStart", scrollStart);
+									$('.octoprint-container').css("min-height", 0);
+									self.scroll.currentActive.refresh();
+								}
+
+								$dropdownToggle.parent().removeClass("hasEvents");
+								$(e.target).parent().removeClass('open');
+
+								event.preventDefault();
+								event.stopPropagation();
+								return false;
+
+							} else {
+
+								hasScroll = false;
+
+							}
+
+						});
+
+					});
+
+			}
+
+
 		},
 
 		terminal: {
@@ -341,8 +365,7 @@
 			},
 
 			scrollEnd: function($elm, iScrollInstance) {
-				var self = this;
-				$elm.removeClass(self.className);
+				$elm.removeClass(this.className);
 				iScrollInstance.refresh();
 			}
 
