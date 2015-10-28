@@ -14,13 +14,13 @@
 			this.DOM.init.call(this);
 			this.scroll.beforeLoad.call(this);
 
-			gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
-				if( !self.isTouch ) {
+			if( !self.isTouch ) {
+				gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 					setTimeout(function() {
 						self.scroll.iScrolls.body.refresh();
-					}, 600);
-				}
-			});
+					}, 0);
+				});
+			}
 		},
 
 		isReady: function(touchViewModel, viewModels) {
@@ -98,6 +98,11 @@
 						$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 						$('#login_dropdown_loggedin').removeClass('visible_touch');
 					}
+
+					// Refresh scroll view when login state changed
+					setTimeout(function() {
+						self.scroll.currentActive.refresh();
+					}, 0);
 				});
 			}
 			if($("#navbar_systemmenu").length > 0) {
