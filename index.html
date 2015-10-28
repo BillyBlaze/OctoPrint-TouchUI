@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="TouchUI : A touch friendly interface for a small TFT module or phone">
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>TouchUI by BillyBlaze</title>
+    <title>TouchUI</title>
   </head>
 
   <body>
 
-    <header>
-      <div class="container">
-        <h1>TouchUI</h1>
-        <h2>A touch friendly interface for a small TFT module or phone</h2>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/BillyBlaze/OctoPrint-TouchUI">View on GitHub</a>
 
-        <section id="downloads">
-          <a href="https://github.com/BillyBlaze/OctoPrint-TouchUI/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/BillyBlaze/OctoPrint-TouchUI/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/BillyBlaze/OctoPrint-TouchUI" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+          <h1 id="project_title">TouchUI</h1>
+          <h2 id="project_tagline">A touch friendly interface for a small TFT module or phone</h2>
 
-    <div class="container">
-      <section id="main_content">
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/BillyBlaze/OctoPrint-TouchUI/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/BillyBlaze/OctoPrint-TouchUI/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
-<a id="octoprint-touchui-010" class="anchor" href="#octoprint-touchui-010" aria-hidden="true"><span class="octicon octicon-link"></span></a>OctoPrint-TouchUI 0.1.0</h1>
+<a id="octoprint-touchui-020" class="anchor" href="#octoprint-touchui-020" aria-hidden="true"><span class="octicon octicon-link"></span></a>OctoPrint-TouchUI 0.2.0</h1>
 
 <p>This plugin will transform the OctoPrint layout into a Mobile/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible. It will mimick pointer events as touch, so you can hook up those touchscreens. It also supports a virtual keyboard.</p>
 
-<p>All these options are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year.</p>
+<p>All these settings are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year. You can find the <code>TouchUI settings</code> in a dedicated modal. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.</p>
 
-<p>You can find the TouchUI settings in the <code>User settings</code> modal under <code>TouchUI</code>. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.</p>
+<p>From v0.2.0 the interface will automatically start while loading OctoPrint. This will only start if the browser is smaller then 980 pixels in width or if you're browsing with a touch device. You can turn this off in the <code>Settings</code> modal under <code>TouchUI</code>.</p>
 
 <p><img src="https://billyblaze.github.io/OctoPrint-TouchUI/images/touchui.gif" alt="TouchUI Interface"></p>
 
@@ -73,8 +76,11 @@ or manually using this URL:</p>
 <h2>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
 
-<p>To active the touch interface open the OctoPrint interface with <code>#touch</code> at the end. Such as <code>http://myprinter.local/#touch</code>
-Alternative you can toggle the touch interface within the <code>User settings</code> modal under <code>Plugins &gt; TouchUI</code>.</p>
+<p>In v0.2.0 the TouchUI interface will automatically load based on resolution and device.</p>
+
+<p>You can still activate it manually by adding <code>#touch</code> at the end of your octoprint url. Such as <code>http://myprinter.local/#touch</code>.</p>
+
+<p>Alternative you can toggle the touch interface within the <code>TouchUI Settings</code> modal.</p>
 
 <h2>
 <a id="supported-browsers" class="anchor" href="#supported-browsers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supported browsers</h2>
@@ -89,6 +95,15 @@ Alternative you can toggle the touch interface within the <code>User settings</c
       </section>
     </div>
 
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">TouchUI maintained by <a href="https://github.com/BillyBlaze">BillyBlaze</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
     
+
   </body>
 </html>
