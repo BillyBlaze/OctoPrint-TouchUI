@@ -30,11 +30,10 @@
 
 		},
 
-		// Add scrolling with mousedown if there is no touch
 		init: function() {
 			var self = this;
 
-			if (this.isTouch) {
+			if ( this.isTouch ) {
 
 				// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
 				$("#temperature-graph").height($("#temperature-graph").outerHeight());
@@ -55,6 +54,13 @@
 				self.scroll.terminal.init.call(self);
 				self.scroll.body.init.call(self);
 				self.scroll.modal.init.call(self);
+
+				// Refresh body on dropdown click
+				$(document).on("click", ".container .pagination ul li a", function() {
+					setTimeout(function() {
+						self.scroll.currentActive.refresh();
+					}, 0);
+				});
 
 			}
 
@@ -162,9 +168,11 @@
 
 						// Refresh current scroll
 						if ( !self.isTouch ) {
-							var translateY = parseFloat($('.page-container').css("transform").split(",")[5].replace("-",""));
-							$('.octoprint-container').css("min-height", $dropdownToggle.next().outerHeight() + $dropdownToggle.next().offset().top + translateY);
-							self.scroll.currentActive.refresh();
+							setTimeout(function() {
+								var translateY = parseFloat($('.page-container').css("transform").split(",")[5].replace("-",""));
+								$('.octoprint-container').css("min-height", $dropdownToggle.next().outerHeight() + $dropdownToggle.next().offset().top + translateY);
+								self.scroll.currentActive.refresh();
+							}, 0);
 						}
 
 						// Skip everything if we are in the main dropdown toggle dropdowns
