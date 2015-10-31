@@ -36,7 +36,7 @@
 
 			if (this.isTouch) {
 
-				// Covert VH to ViewPort
+				// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
 				$("#temperature-graph").height($("#temperature-graph").outerHeight());
 				$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
 				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight())

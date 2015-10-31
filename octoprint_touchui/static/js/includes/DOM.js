@@ -91,7 +91,7 @@
 				// Move all other items from tabbar into dropdown
 				this.DOM.move.tabbar.init.call( this );
 				this.DOM.move.navbar.init.call( this );
-				this.DOM.move.afterTabAndNav.call( this )
+				this.DOM.move.afterTabAndNav.call( this );
 			}
 		},
 
@@ -306,7 +306,7 @@
 
 				init: function() {
 
-					// backward compatibility with <1.2.6
+					// backward compatibility with <1.3.0
 					if($('#control-jog-feedrate').length === 0) {
 						var jogPanels = $('#control > .jog-panel');
 

@@ -22,10 +22,11 @@
 				});
 			}
 
-			// Prevent
+			// Prevent the onTabChange function from hiding the webcam on the new webcam tab
 			var oldTabChange = controlViewModel.onTabChange;
 			controlViewModel.onTabChange = function(previous, current) {
-				//Pretend we are #control
+
+				//Pretend we are #control, and not control on control
 				current = (current === "#control") ? "#control_without_webcam" : current;
 				current = (current === "#webcam") ? "#control" : current;
 
