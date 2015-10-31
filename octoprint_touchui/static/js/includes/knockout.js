@@ -18,9 +18,28 @@
 				gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 					setTimeout(function() {
 						self.scroll.iScrolls.body.refresh();
-					}, 0);
+					}, 300);
 				});
 			}
+
+			// Prevent
+			var oldTabChange = controlViewModel.onTabChange;
+			controlViewModel.onTabChange = function(previous, current) {
+				//Pretend we are #control
+				current = (current === "#control") ? "#control_without_webcam" : current;
+				current = (current === "#webcam") ? "#control" : current;
+
+				previous = (previous === "#control") ? "#control_without_webcam" : previous;
+				previous = (previous === "#webcam") ? "#control" : previous;
+
+				if( !self.isTouch ) {
+					setTimeout(function() {
+						self.scroll.iScrolls.body.refresh();
+					}, 100);
+				}
+
+				oldTabChange.call(this, previous, current);
+			};
 		},
 
 		isReady: function(touchViewModel, viewModels) {
@@ -81,10 +100,10 @@
 
 			// (Re-)Apply bindings to the new webcam div
 			if($("#webcam").length > 0) {
-				ko.applyBindings(controlViewModel, $("#webcam")[0])
+				ko.applyBindings(controlViewModel, $("#webcam")[0]);
 			}
-			if($("#rate-panel").length > 0) {
-				ko.applyBindings(controlViewModel, $("#rate-panel")[0])
+			if($("#control-jog-feedrate").length > 0) {
+				ko.applyBindings(controlViewModel, $("#control-jog-feedrate")[0]);
 			}
 			if($("#navbar_login").length > 0) {
 				ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);

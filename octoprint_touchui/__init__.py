@@ -10,7 +10,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.TemplatePlugin):
 
 	def __init__(self):
-		self.hasVisibleSettings = False
+		self.hasVisibleSettings = True
 		self.automaticallyLoad = True
 
 	def on_after_startup(self):

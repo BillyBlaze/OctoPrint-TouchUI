@@ -13,7 +13,10 @@
 
 				return true;
 
-			} else if(this.canLoadAutomatically) {
+			} else if(
+				this.canLoadAutomatically &&
+				this.DOM.cookies.get("active") !== "false"
+			) {
 
 				if($(window).width() < 980) {
 					return true;
@@ -192,6 +195,11 @@
 					this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
 					this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
 
+					$('<!-- /ko -->').insertBefore(this.container.$elm);
+					$('<!-- ko allowBindings: false -->').insertBefore(this.container.$elm);
+
+					$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
+
 				}
 			}
 		},
@@ -298,21 +306,22 @@
 
 				init: function() {
 
-					var jogPanels = $('#control > .jog-panel');
+					// backward compatibility with <1.2.6
+					if($('#control-jog-feedrate').length === 0) {
+						var jogPanels = $('#control > .jog-panel');
 
-					$(jogPanels[0]).attr("id", "x-y-panel");
-					$(jogPanels[1]).attr("id", "e-panel");
-					$(jogPanels[2]).attr("id", "extra-panel");
+						$(jogPanels[0]).attr("id", "control-jog-xy");
+						$(jogPanels[1]).attr("id", "control-jog-extrusion");
+						$(jogPanels[2]).attr("id", "control-jog-general");
 
-					var tmp = $('<div class="jog-panel" id="rate-panel" data-bind="'+$(jogPanels[0]).data("bind")+'"></div>').insertAfter($(jogPanels[2]));
+						$('<div class="jog-panel" id="control-jog-feedrate"></div>').insertAfter($(jogPanels[2]));
 
-					$(jogPanels[0]).children('button:last-child').appendTo(tmp);
-					$(jogPanels[0]).children('[type="number"]:last-child').appendTo(tmp);
-					$(jogPanels[0]).children('.slider:last-child').appendTo(tmp);
+					}
 
-					$(jogPanels[1]).find('div > button:last-child').appendTo(tmp);
-					$(jogPanels[1]).find('div > [type="number"]:last-child').appendTo(tmp);
-					$(jogPanels[1]).find('div > .slider:last-child').appendTo(tmp);
+					$("#control-jog-feedrate").attr("data-bind", $("#control-jog-extrusion").data("bind")).insertAfter("#control-jog-extrusion");
+					$("#control-jog-extrusion button:last-child").prependTo("#control-jog-feedrate");
+					$("#control-jog-extrusion input:last-child").prependTo("#control-jog-feedrate");
+					$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
 
 				}
 

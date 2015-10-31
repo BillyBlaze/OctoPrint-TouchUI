@@ -35,20 +35,16 @@
 			var self = this;
 
 			if (this.isTouch) {
-				var innerHeight = $(window).innerHeight() - 40;
 
 				// Covert VH to ViewPort
-				$("#temperature-graph").height(innerHeight);
-				$("#terminal-scroll").height(innerHeight - 70);
-				$("#terminal-sendpanel").css("top", innerHeight - 70)
+				$("#temperature-graph").height($("#temperature-graph").outerHeight());
+				$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
+				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight())
 
-				$(window).on("orientationchange", function() {
-					setTimeout(function() {
-						innerHeight = $(window).innerHeight() - 40;
-						$("#temperature-graph").height(innerHeight);
-						$("#terminal-scroll").height(innerHeight - 70);
-						$("#terminal-sendpanel").css("top", innerHeight - 70)
-					}, 600);
+				$(window).on("resize", function() {
+					$("#temperature-graph").attr("style", "").height($("#temperature-graph").outerHeight());
+					$("#terminal-scroll").attr("style", "").height($("#terminal-scroll").outerHeight());
+					$("#terminal-sendpanel").attr("style", "").css("top", $("#terminal-scroll").outerHeight());
 				});
 
 			} else {
@@ -70,6 +66,13 @@
 			var self = this;
 
 			if ( !this.isTouch ) {
+
+				// Enforce no scroll jumping
+				$("#scroll").on("scroll", function() {
+					if($("#scroll").scrollTop() !== 0) {
+						$("#scroll").scrollTop(0);
+					}
+				});
 
 				// Refresh terminal scroll height
 				terminalViewModel.displayedLines.subscribe(function() {
