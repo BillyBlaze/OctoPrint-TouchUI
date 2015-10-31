@@ -27,13 +27,21 @@
 			/* Add touch friendly files list */
 			var self = this,
 				touch = false,
-				start = 0;
+				start = 0,
+				namespace = ".files.touchui";
 
 			$(document).on("mousedown touchstart", "#files .entry, #temp .row-fluid", function(e) {
 				touch = e.currentTarget;
 				start = e.pageX || e.originalEvent.targetTouches[0].pageX;
 
-				var move = function(event) {
+				$(document).one("mouseup"+namespace+" touchend"+namespace, function(e) {
+					touch = false;
+					start = 0;
+
+					$(document).off(namespace);
+				});
+
+				$(document).on("mousemove"+namespace+" touchmove"+namespace, function(event) {
 					if(touch !== false) {
 						var current = event.pageX || event.originalEvent.targetTouches[0].pageX;
 
@@ -52,15 +60,8 @@
 						}
 
 					}
-				};
-
-				$(document).one("mouseup touchend", function(e) {
-					touch = false;
-					start = 0;
-					$(document).off("mousemove touchmove");
 				});
 
-				$(document).on("mousemove touchmove", move);
 			});
 
 		}
