@@ -218,7 +218,6 @@
 						}
 
 						$(document).on("click"+namespace, function(event) {
-							console.log(hasScroll);
 
 							if( !hasScroll || self.isTouch ) {
 								var $elm = $(event.target);
