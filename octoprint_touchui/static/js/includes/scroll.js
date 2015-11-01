@@ -34,16 +34,23 @@
 			var self = this;
 
 			if ( this.isTouch ) {
+				var width = $(window).width();
 
 				// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
 				$("#temperature-graph").height($("#temperature-graph").outerHeight());
 				$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
-				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight())
+				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight());
 
 				$(window).on("resize", function() {
-					$("#temperature-graph").attr("style", "").height($("#temperature-graph").outerHeight());
-					$("#terminal-scroll").attr("style", "").height($("#terminal-scroll").outerHeight());
-					$("#terminal-sendpanel").attr("style", "").css("top", $("#terminal-scroll").outerHeight());
+
+					if(width !== $(window).width()) {
+						$("#temperature-graph").attr("style", "").height($("#temperature-graph").outerHeight());
+						$("#terminal-scroll").attr("style", "").height($("#terminal-scroll").outerHeight());
+						$("#terminal-sendpanel").attr("style", "").css("top", $("#terminal-scroll").outerHeight());
+						width = $(window).width();
+					}
+
+
 				});
 
 			} else {
@@ -157,8 +164,9 @@
 					.on('click.dropdown.data-api', '[data-toggle=dropdown]', function(e) {
 						var $dropdownToggle = $(e.target),
 							dropdownToggle = e.target,
-							scrollStart, removeEvents,
-							hasScroll = false;
+							hasScroll = false,
+							scrollTimeout = false,
+							scrollEnd, scrollStart, removeEvent;
 
 						e.preventDefault();
 						e.stopPropagation();
@@ -191,16 +199,26 @@
 						// Prevent the many events
 						$dropdownToggle.parent().addClass("hasEvents");
 
-						// Store bindings into variable for future reference
-						scrollStart = function() { hasScroll = true };
-
 						// Block everthing while scrolling
 						if ( !self.isTouch ) {
-							scrollStart = function() { hasScroll = true; $noPointer.addClass("no-pointer"); };
+							scrollStart = function() {
+								hasScroll = true;
+								$noPointer.addClass("no-pointer");
+							};
+							scrollEnd = function() {
+								if(scrollTimeout !== false) {
+									clearTimeout(scrollTimeout);
+								}
+								scrollTimeout = setTimeout(function() { hasScroll = false; scrollTimeout = false; }, 100);
+							};
+
 							self.scroll.currentActive.on("scrollStart", scrollStart);
+							self.scroll.currentActive.on("scrollCancel", scrollEnd);
+							self.scroll.currentActive.on("scrollEnd", scrollEnd);
 						}
 
 						$(document).on("click"+namespace, function(event) {
+							console.log(hasScroll);
 
 							if( !hasScroll || self.isTouch ) {
 								var $elm = $(event.target);
@@ -209,6 +227,8 @@
 
 								if ( !self.isTouch ) {
 									self.scroll.currentActive.off("scrollStart", scrollStart);
+									self.scroll.currentActive.off("scrollCancel", scrollEnd);
+									self.scroll.currentActive.off("scrollEnd", scrollEnd);
 									$('.octoprint-container').css("min-height", 0);
 									self.scroll.currentActive.refresh();
 								}
