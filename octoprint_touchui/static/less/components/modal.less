@@ -40,6 +40,9 @@
 		.border-radius(0);
 		-webkit-overflow-scrolling: auto;
 
+		background: @modal-background;
+		color: contrast(@modal-background);
+
 		-webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
 		-moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
 		-o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
@@ -97,6 +100,7 @@
 		}
 
 		.modal {
+
 			&-body {
 				padding: 20px 25px;
 				margin-bottom: 60px;
@@ -112,10 +116,28 @@
 					margin: 0;
 					padding: 0;
 				}
+				.pagination ul > li {
+					> a {
+						color: contrast(@main-color);
+
+						&:active {
+							color: contrast(@main-color-darker);
+						}
+					}
+					&.active,
+					&.disabled {
+						> a {
+							color: contrast(@modal-background);
+						}
+					}
+				}
 			}
 			&-footer {
 				.border-radius(0);
 				.box-sizing(border-box);
+
+				background: @modal-footer-background;
+				border-top-color: @modal-border;
 				position: absolute;
 				bottom: 0;
 				left: 0;
@@ -125,6 +147,7 @@
 			}
 			&-header {
 				padding: 20px 25px;
+				border-bottom-color: @modal-border;
 
 				#settings_dialog_label {
 					font-size: 1.4rem;
@@ -132,10 +155,16 @@
 				}
 
 				.close {
+					color: contrast(@modal-background);
 					font-size: 42px;
 					padding: 13px;
 					margin-top: -10px;
 					background: transparent;
+					opacity:0.6;
+
+					&:hover {
+						opacity:1;
+					}
 				}
 
 				span.hidden {
@@ -145,7 +174,7 @@
 
 					&:before {
 						content: "/";
-						color: @light-darker-darker-color;
+						color: contrast(@modal-background, @light-darker-darker-color, white);
 						margin-right: 10px;
 					}
 					&:after {
@@ -173,8 +202,8 @@
 						overflow-scrolling: touch;
 						-webkit-overflow-scrolling: touch;
 
-						background-color: @light-color;
-						border: 1px solid @light-darker-darker-color;
+						background-color: @modal-background;
+						border: 1px solid contrast(@modal-background, @light-darker-darker-color, white);
 
 						ul {
 							margin: 0;
@@ -200,7 +229,7 @@
 						}
 
 						.iScrollIndicator {
-							background: @dropdown-iScroll-color !important;
+							background: contrast(@modal-background, @dropdown-iScroll-color, white) !important;
 							border: 0 none !important;
 						}
 

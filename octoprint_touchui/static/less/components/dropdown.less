@@ -17,10 +17,10 @@
 
 		a {
 			display: block;
-			color: @dark-color;
+			color: contrast(@main-color);
 
 			&:hover {
-				color: @light-color;
+				color: contrast(@main-color);
 				background: @main-color;
 			}
 		}
@@ -43,16 +43,22 @@ html.notouch {
 }
 .dropdown-menu {
 	background: @main-color;
-	color: @light-color;
+	color: contrast(@main-color);
+	border: 1px solid @dropdown-divider-color;
 	.border-radius(0);
 	.transform(translateZ(0));
 	margin-top: 15px;
 
 	a {
 		padding: 8px 15px;
+
+		&:hover {
+			color: contrast(@main-color);
+			background: @main-color;
+		}
 	}
 	a, i {
-		color: @light-color !important;
+		color: contrast(@main-color) !important;
 		font-size: 15px !important;
 		width: 100%;
 		.box-sizing(border-box);
@@ -70,6 +76,11 @@ html.notouch {
 		position: absolute;
 		top: -18px;
 		right: 27px;
+	}
+}
+.dropdown-toggle.open {
+	.dropdown-menu {
+		display: block;
 	}
 }
 div#login_dropdown_loggedout {

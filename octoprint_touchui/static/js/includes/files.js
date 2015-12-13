@@ -29,11 +29,11 @@
 						var current = event.pageX || event.originalEvent.targetTouches[0].pageX;
 
 						if(current > start + 80) {
-							$(document).trigger("files.open", event.target);
+							$(document).trigger("fileclose" + namespace, event.target);
 							$(touch).removeClass("open");
 							start = current;
 						} else if(current < start - 80) {
-							$(document).trigger("files.closed", event.target);
+							$(document).trigger("fileopen" + namespace, event.target);
 							$(touch).addClass("open");
 							start = current;
 

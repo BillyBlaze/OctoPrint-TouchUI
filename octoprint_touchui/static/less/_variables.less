@@ -2,32 +2,63 @@
 @sourcecodepro-path: "/plugin/touchui/static/fonts/sourcecodepro/";
 @touchui-path: "/plugin/touchui/static/fonts/touchui/";
 
+/* General */
 @main-color: #00B0FF;
-@main-color-dark: #009CE2;
-@main-color-darker: #006D9E;
-@main-iScroll-color: rgba(255, 255, 255, 0.7);
+@main-color-dark: darken(@main-color, 5%);
+@main-color-darker: darken(@main-color, 15%);
+@main-iScroll-color: fade(contrast(@main-background), 70%);
 
-@dark-color: black;
-@dark-light-color: #313131;
-@dark-lighter-color: #4E4E4E;
+@main-background: @dark-color;
+@text-color: @light-color;
+@link-color: @main-color;
 
-@neutral-color: #555;
+/* Tables, fileList, progress */
+@table-row-background: mix(@main-background, contrast(@main-background), 80%);
+@table-row-header-background: @main-color;
 
-@light-color: white;
-@light-dark-color: #F3F3F3;
-@light-darker-color: #CCC;
-@light-darker-dark-color: #888;
-@light-darker-darker-color: #777;
+/* Progress */
+@progress-background: @table-row-background;
+@progress-active-background: @main-color;
 
-@online-color: #9AFD00;
-@offline-color: red;
+/* fileList */
+@swipe-list-background-color: @table-row-background;
+@swipe-list-background-open-color: mix(@main-color, @dark-color, 60%);
 
-@swipe-list-background-color: #920000;
+/* Modal */
+@modal-background: @light-color;
+@modal-footer-background: fade(contrast(@modal-background), 5%);
+@modal-border: fade(contrast(@modal-background), 7%);
+@modal-text: @dark-color;
+
+/* Buttons */
+@default-btn-color: @light-dark-color;
 
 @danger-color: #D40000;
 @danger-active-color: #9E0000;
 
+/* Dropdown + indication */
+@online-color: #9AFD00;
+@offline-color: red;
+@dropdown-iScroll-color: fade(@light-darker-dark-color, 70%);
+@dropdown-divider-color: @main-color-dark;
+
+/* Termional */
 @terminal-color: #0F0;
-@terminal-iScroll-color: rgba(0, 255, 80, 0.7);
-@dropdown-iScroll-color: rgba(105, 105, 105, 0.7);
-@dropdown-divider-color: #0082AB;
+@terminal-background: @main-background;
+@terminal-text-color: @terminal-color;
+@terminal-iScroll-color: fade(@terminal-color, 70%);
+
+
+
+/* More General styles used for contrast etc. */
+@dark-color: black;
+@dark-light-color: lighten(@dark-color, 20%);
+@dark-lighter-color: lighten(@dark-color, 30%);
+
+@neutral-color: #555;
+
+@light-color: white;
+@light-dark-color: darken(@light-color, 2%);
+@light-darker-color: darken(@light-color, 20%);
+@light-darker-dark-color: darken(@light-color, 50%);
+@light-darker-darker-color: darken(@light-color, 55%);

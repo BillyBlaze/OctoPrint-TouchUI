@@ -106,6 +106,10 @@
 
 			// Add class with how many tab-items
 			$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+			$("#tabs li a").on("click", function() {
+				$("#all_touchui_settings").removeClass("item_active");
+			});
 		},
 
 		create: {
@@ -230,8 +234,9 @@
 						var $elm = $(elm);
 
 						// Clone the items into the dropdown, and make it click the orginal link
-						$elm.clone().attr("id", $elm.attr("id")+"2").appendTo("#all_touchui_settings .dropdown-menu").find('a').click(function(e) {
+						$elm.clone().attr("id", $elm.attr("id")+"2").appendTo("#all_touchui_settings .dropdown-menu").find('a').off("click").on("click", function(e) {
 							$elm.find('a').click();
+							$("#all_touchui_settings").addClass("item_active");
 							e.preventDefault();
 							return false;
 						});
@@ -251,7 +256,6 @@
 						var $elm = $(elm);
 						$elm.appendTo(this.DOM.create.dropdown.container);
 						$elm.find('a').text($elm.text().trim());
-
 					}.bind(this));
 
 					// Move TouchUI to main dropdown

@@ -9,8 +9,9 @@
 	.icon-caret-right:before {
 		content: "\f054";
 	}
+
 	span.muted {
-		color: rgba(0, 255, 0, 0.5);
+		color: fade(@terminal-color, 50%);
 	}
 
 	.row-fluid {
@@ -22,18 +23,13 @@
 		background: @terminal-color;
 	}
 
-	.iScrollIndicator {
-		background: @terminal-iScroll-color !important;
-		border: 0 none !important;
-	}
-
 	a {
 		color: @terminal-color;
 	}
 
 	button {
 		background: @terminal-color;
-		color: @dark-color;
+		color: contrast(@terminal-color);
 
 		&:active {
 			background: transparent;
@@ -67,7 +63,7 @@
 				}
 				&.active {
 					background: @terminal-color;
-					color: @dark-color;
+					color: contrast(@terminal-color);
 				}
 			}
 		}
@@ -81,11 +77,12 @@
 
 		button {
 			padding: 4px 12px;
-			background: @light-color;
-			color: @dark-color;
+			background: @main-background;
+			color: contrast(@main-background);
 
 			&.active {
 				background: @terminal-color;
+				color: contrast(@terminal-color);
 			}
 		}
 	}
@@ -99,7 +96,7 @@
 		height: 69vh;
 		min-height: 150px;
 		margin-bottom: 28px;
-		background: @dark-color;
+		background: @terminal-background;
 		z-index: 2;
 	}
 	#terminal-output {
@@ -111,7 +108,7 @@
 		min-height: 0;
 		max-height: none;
 		overflow: hidden;
-		color: @terminal-color;
+		color: @terminal-text-color;
 		background-color: transparent;
 
 		&:before {
@@ -160,31 +157,44 @@
 		input, button {
 			&:disabled, .disabled {
 				opacity: 1;
-				background: rgba(0,255,0,0.3);
+				background: mix(@terminal-color, @main-background, 30%);
+				color: @terminal-color;
 			}
 		}
 		input {
 			width: 100%;
-			background-color: @dark-color;
+			background-color: @main-background;
 			color: @terminal-color;
 			border: 1px solid @terminal-color;
 			padding: 14px;
+			display: inline-block;
+			z-index: 2;
+
 			.box-sizing(border-box);
 			.border-radius(0, 0, 5px, 5px);
 		}
 		button {
 			margin-left: -61px;
 			width: 60px;
-			background-color: @dark-color;
+			background-color: @terminal-color;
+			color: @main-background;
 			border: 0 none;
+			border-top: 1px solid @terminal-color;
 			border-left: 1px solid @terminal-color;
 			.text-shadow(0 0 0 transparent);
 			.border-radius(0, 0, 5px, 0);
-			margin-top: 1px;
 			z-index: 21;
 			position: relative;
-			color: @terminal-color;
 			padding: 4px 12px;
+		}
+	}
+}
+
+#scroll {
+	#term {
+		.iScrollIndicator {
+			background: @terminal-iScroll-color !important;
+			border: 0 none !important;
 		}
 	}
 }

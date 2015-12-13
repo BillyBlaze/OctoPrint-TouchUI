@@ -9,7 +9,9 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-less": "^3.0.3"
+    "gulp-cssimport": "^2.1.1",
+    "gulp-less": "^3.0.3",
+    "gulp-rename": "^1.2.2"
   },
   "optionalDependencies": {},
   "engines": {

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import octoprint.plugin
 import octoprint.settings
 import octoprint.util
+import os
 
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.AssetPlugin,
@@ -13,11 +14,28 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		self.hasVisibleSettings = True
 		self.automaticallyLoad = True
 
+		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + '/static/css/touchui.custom.less')
+		self.colors = False
+
+	def on_settings_save(self, data):
+		octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
+
+		customCSS = open(os.path.dirname(__file__) + '/static/css/touchui.custom.less', 'w+')
+		customCSS.write('@import "touchui.generated.less";' + "\n" + self._settings.get(["colors"]))
+		customCSS.close()
+
 	def on_after_startup(self):
 		self.hasVisibleSettings = self._settings.get(["hasVisibleSettings"])
 		self.automaticallyLoad = self._settings.get(["automaticallyLoad"])
+		self.colors = self._settings.get(["colors"])
 
 	def get_assets(self):
+		if self.activeCustomCSS is False:
+			css = ["css/touchui.css"]
+			less = []
+		else:
+			css = []
+			less = []
 
 		return dict(
 			js=[
@@ -37,33 +55,40 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/includes/knockout.js",
 				"js/includes/overwrite.js",
 				"js/includes/fullscreen.js",
+				"js/includes/less.js",
+				"js/includes/plugins.js",
 
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
 			],
-			less=[],
-			css= ["css/touchui.css"]
+			less=less,
+			css= css
 		)
 
 	def get_template_configs(self):
+		files = [
+			dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
+			dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
+			dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
+		]
+
 		if self._settings.get(["automaticallyLoad"]) is True:
-			return [
-				dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
-				dict(type="generic", template="touchui_load.jinja2", custom_bindings=True),
-				dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
-				dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
-			]
-		else:
-			return [
-				dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
-				dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
-				dict(type="navbar", template="touchui_menu_item.jinja2", custom_bindings=True)
-			]
+			files.append(
+				dict(type="generic", template="touchui_load.jinja2", custom_bindings=True)
+			)
+
+		if self.activeCustomCSS is not False:
+			files.append(
+				dict(type="generic", template="touchui_load_less.jinja2", custom_bindings=True)
+			)
+
+		return files
 
 	def get_settings_defaults(self):
 		return dict(
 			hasVisibleSettings=self.hasVisibleSettings,
-			automaticallyLoad=self.automaticallyLoad
+			automaticallyLoad=self.automaticallyLoad,
+			colors=self.colors
 		)
 
 	def get_version(self):

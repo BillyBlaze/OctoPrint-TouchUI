@@ -1,6 +1,6 @@
 #temp {
-	margin-left: -30px;
-	margin-right: -30px;
+	margin-left: -35px;
+	margin-right: -35px;
 	overflow: hidden;
 
 	#temperature-graph {
@@ -19,9 +19,10 @@
 			height: 100% !important;
 		}
 
-		.tickLabel {
-			color: rgb(169, 169, 169);
+		.tickLabel, .legendLabel {
+			color: contrast(@main-background);
 		}
+
 		table {
 			tr {
 				background: transparent !important;
@@ -36,7 +37,7 @@
 
 				td {
 					background: transparent !important;
-					color: white;
+					color: contrast(@main-color);
 
 					&.legendLabel {
 						padding: 0 15px 0 5px;
@@ -45,11 +46,13 @@
 			}
 		}
 	}
+
 	.row {
 		.box-sizing(border-box);
 		width: 100vw;
 	}
-	.row-fluid {
+
+	.row-fluid:last-child {
 		width: 161vw !important;
 		margin: 0 0 20px 0 !important;
 		transition: left 0.5s ease;
@@ -93,7 +96,7 @@
 
 						&:before {
 							border: 10px solid transparent;
-							border-top-color: #00B0FF;
+							border-top-color: @main-color;
 							position: absolute;
 							top: auto;
 							bottom: -18px;

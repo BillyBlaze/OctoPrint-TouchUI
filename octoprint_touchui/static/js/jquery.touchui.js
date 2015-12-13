@@ -49,6 +49,7 @@
 
 					self.settings = touchViewModel.settings || {};
 					self.knockout.isReady.call(self, touchViewModel, viewModels);
+					self.plugins.init.call(self, touchViewModel, viewModels);
 				}
 			}
 		};

@@ -17,7 +17,11 @@
 			if( !self.isTouch ) {
 				gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 					setTimeout(function() {
-						self.scroll.iScrolls.body.refresh();
+						try {
+							self.scroll.iScrolls.body.refresh();
+						} catch(err) {
+							// Do nothing
+						};
 					}, 300);
 				});
 			}
@@ -35,7 +39,11 @@
 
 				if( !self.isTouch ) {
 					setTimeout(function() {
-						self.scroll.iScrolls.body.refresh();
+						try {
+							self.scroll.iScrolls.body.refresh();
+						} catch(err) {
+							// Do nothing
+						};
 					}, 100);
 				}
 
@@ -51,7 +59,7 @@
 				softwareUpdateViewModel = viewModels[3],
 				controlViewModel = viewModels[4],
 				gcodeFilesViewModel = viewModels[5],
-				navigationViewModel = viewModels[7];
+				navigationViewModel = viewModels[6];
 
 			this.terminal.init.call(this, terminalViewModel);
 

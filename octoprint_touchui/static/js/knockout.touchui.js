@@ -22,6 +22,10 @@ $(function() {
 			self.settings = viewModels[2].settings.plugins.touchui;
 		}
 
+		self.compile = function() {
+			TouchUI._instance.less.compile();
+		}
+
 		self.show = function() {
 			self.touchuiModal.modal("show");
 		}
@@ -47,7 +51,7 @@ $(function() {
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel", "navigationViewModel"],
+		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel", "pluginManagerViewModel"],
 		["#touchui_settings_dialog", "#settings_plugin_touchui", "#navbar_plugin_touchui"]
 	]);
 });

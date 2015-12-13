@@ -8,18 +8,18 @@
 			&.active {
 				> a {
 					background: transparent;
-					color: @light-darker-color;
+					color: @text-color;
 				}
 			}
 			> a {
 				padding: 10px 15px;
 				font-size: 21px;
 				background: @main-color;
-				color: @light-color;
+				color: contrast(@main-color);
 
 				&:active {
-					background: @light-color;
-					color: @main-color;
+					background: @main-color-darker;
+					color: contrast(@main-color-darker);
 				}
 			}
 

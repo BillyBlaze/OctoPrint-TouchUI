@@ -1,29 +1,35 @@
 button,
 .btn {
-	color: @dark-color;
-	background: @light-dark-color;
+	background: @default-btn-color;
+	color: contrast(@default-btn-color);
 	padding: 6px 15px;
 
+	&:disabled {
+		opacity: .4;
+	}
 	&:active {
-		background: @light-dark-color;
+		background: @default-btn-color;
+		color: contrast(@default-btn-color);
 	}
 	&:focus {
 		outline: 0 none;
 	}
 
 	&-primary {
-		color: @light-color;
 		background: @main-color;
+		color: contrast(@main-color);
 
 		&:active {
 			background: @main-color-dark;
+			color: contrast(@main-color-dark);
 		}
 	}
 	&-danger {
-		color: @light-color;
+		color: contrast(@danger-color);
 		background: @danger-color;
 
 		&:active {
+			color: contrast(@danger-active-color);
 			background: @danger-active-color;
 		}
 	}
@@ -42,5 +48,5 @@ a {
 .nav-pills>.active>a, .nav-pills>.active>a:hover,
 .nav-list>.active>a, .nav-list>.active>a:hover {
 	background: @main-color;
-	color: @light-color;
+	color: contrast(@main-color);
 }

@@ -11,7 +11,7 @@
 		.box-sizing(border-box);
 
 		h1 {
-			color: @light-darker-dark-color;
+			color: contrast(@main-background);
 			margin: -10px 0 5px;
 			font-size: 27px;
 			text-align: center;
@@ -63,9 +63,10 @@
 			padding-top: 10px;
 
 			button {
-				font-size: 36px;
-				color: white;
+				color: contrast(@main-background);
 				background: transparent;
+
+				font-size: 36px;
 				display: inline;
 				padding: 0 !important;
 				margin: 0;
@@ -158,7 +159,7 @@
 
 		button {
 			font-size: 36px;
-			color: white;
+			color: contrast(@main-background);
 			background: transparent;
 			padding: 0 !important;
 			margin: 0;
@@ -178,7 +179,7 @@
 
 			&:before,
 			&:after {
-				color: white;
+				color: contrast(@main-background);
 				font-family: FontAwesome;
 				.text-shadow(0 0 0 transparent);
 				display: block;
@@ -197,27 +198,13 @@
 				position: relative;
 
 				&:before {
-					content: "";
-
-					background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iOTkuODUiIHZpZXdCb3g9IjAgMCAxMDAgOTkuODUzIiBmaWxsPSJ3aGl0ZSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDk5Ljg1MyI+PHBhdGggZD0ibTYyLjg0MSA0Ni44MDljNC4wMy0xLjQ0NyAxMC43NTctMi4zNjYgMTcuMjE2IDEuMjIyIDEwLjk3OSA2LjA5NyAyMS4yOTktMy4xOCAxOS43OTctMTMuNDUyLTEuMzMyLTkuMTAzLTYuOTU0LTE4LjM3MS0xNC4wOS0yMi4wOS0xMC42NzgtNS41NjUtMTguNzYyLTIuNDY4LTI1LjAyIDQuMzIzLTQuMDk3IDQuNDUtOC4zODIgMTIuMjk4LTguNzE0IDE5Ljc2Mi0uMTU3IDMuNTE0LTQuMjM3IDMuMzI5LTUuMjE4LjU5MS0xLjQ0OC00LjAzLTIuMzY3LTEwLjc1OCAxLjIxOS0xNy4yMTUgNi4xLTEwLjk4MS0zLjE3OC0yMS4zMDItMTMuNDQ5LTE5Ljc5OS05LjEwNCAxLjMzNC0xOC4zNzEgNi45NTMtMjIuMDkgMTQuMS01LjU2NiAxMC42NzctMi40NjkgMTguNzYxIDQuMzIyIDI1LjAyIDQuNDQ5IDQuMDk4IDEyLjMwMSA4LjM4NSAxOS43NjIgOC43MTcgMy41MTUuMTU2IDMuMzMgNC4yMzYuNTkyIDUuMjE2LTQuMDMgMS40NDktMTAuNzYgMi4zNjktMTcuMjE2LTEuMjE5LTEwLjk4MS02LjEtMjEuMzAyIDMuMTc5LTE5Ljc5OCAxMy40NTEgMS4zMzIgOS4xMDQgNi45NTMgMTguMzcxIDE0LjEgMjIuMDkgMTAuNjc3IDUuNTY3IDE4Ljc2MSAyLjQ2OSAyNS4wMi00LjMyMiA0LjA5OC00LjQ0OCA4LjM4NC0xMi4yOTkgOC43MTUtMTkuNzYxLjE1Ny0zLjUxNiA0LjIzNi0zLjMyOSA1LjIxOC0uNTk2IDEuNDQ3IDQuMDMgMi4zNjcgMTAuNzYtMS4yMiAxNy4yMTktNi4xIDEwLjk3OCAzLjE3OCAyMS4yOTkgMTMuNDUgMTkuNzk1IDkuMTA0LTEuMzMyIDE4LjM3MS02Ljk0OSAyMi4wOS0xNC4wOSA1LjU2OS0xMC42NzkgMi40Ny0xOC43Ni00LjMyMS0yNS4wMi00LjQ0OC00LjA5NS0xMi4zMDEtOC4zODMtMTkuNzYxLTguNzEzLTMuNTE1LS4xNTctMy4zMjktNC4yMzYtLjU5Mi01LjIxOW0tMTIuODQxIDguMjY1Yy0yLjgwMSAwLTUuMDcyLTIuMjcxLTUuMDcyLTUuMDcyIDAtMi44MDEgMi4yNzEtNS4wNzIgNS4wNzItNS4wNzIgMi44MDIgMCA1LjA3MiAyLjI3MSA1LjA3MiA1LjA3MiAwIDIuODAxLTIuMjcgNS4wNzItNS4wNzIgNS4wNzIiLz48L3N2Zz4=) center center no-repeat;
-					background-size: 65% 65%;
-
-					position: absolute;
-					top: 0;
-					left: 0;
-					bottom: 0;
-					right: 0;
-				}
-
-				&.touch-focus {
-					&:before {
-						background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iOTkuODUiIHZpZXdCb3g9IjAgMCAxMDAgOTkuODUzIiBmaWxsPSJibGFjayIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDk5Ljg1MyI+PHBhdGggZD0ibTYyLjg0MSA0Ni44MDljNC4wMy0xLjQ0NyAxMC43NTctMi4zNjYgMTcuMjE2IDEuMjIyIDEwLjk3OSA2LjA5NyAyMS4yOTktMy4xOCAxOS43OTctMTMuNDUyLTEuMzMyLTkuMTAzLTYuOTU0LTE4LjM3MS0xNC4wOS0yMi4wOS0xMC42NzgtNS41NjUtMTguNzYyLTIuNDY4LTI1LjAyIDQuMzIzLTQuMDk3IDQuNDUtOC4zODIgMTIuMjk4LTguNzE0IDE5Ljc2Mi0uMTU3IDMuNTE0LTQuMjM3IDMuMzI5LTUuMjE4LjU5MS0xLjQ0OC00LjAzLTIuMzY3LTEwLjc1OCAxLjIxOS0xNy4yMTUgNi4xLTEwLjk4MS0zLjE3OC0yMS4zMDItMTMuNDQ5LTE5Ljc5OS05LjEwNCAxLjMzNC0xOC4zNzEgNi45NTMtMjIuMDkgMTQuMS01LjU2NiAxMC42NzctMi40NjkgMTguNzYxIDQuMzIyIDI1LjAyIDQuNDQ5IDQuMDk4IDEyLjMwMSA4LjM4NSAxOS43NjIgOC43MTcgMy41MTUuMTU2IDMuMzMgNC4yMzYuNTkyIDUuMjE2LTQuMDMgMS40NDktMTAuNzYgMi4zNjktMTcuMjE2LTEuMjE5LTEwLjk4MS02LjEtMjEuMzAyIDMuMTc5LTE5Ljc5OCAxMy40NTEgMS4zMzIgOS4xMDQgNi45NTMgMTguMzcxIDE0LjEgMjIuMDkgMTAuNjc3IDUuNTY3IDE4Ljc2MSAyLjQ2OSAyNS4wMi00LjMyMiA0LjA5OC00LjQ0OCA4LjM4NC0xMi4yOTkgOC43MTUtMTkuNzYxLjE1Ny0zLjUxNiA0LjIzNi0zLjMyOSA1LjIxOC0uNTk2IDEuNDQ3IDQuMDMgMi4zNjcgMTAuNzYtMS4yMiAxNy4yMTktNi4xIDEwLjk3OCAzLjE3OCAyMS4yOTkgMTMuNDUgMTkuNzk1IDkuMTA0LTEuMzMyIDE4LjM3MS02Ljk0OSAyMi4wOS0xNC4wOSA1LjU2OS0xMC42NzkgMi40Ny0xOC43Ni00LjMyMS0yNS4wMi00LjQ0OC00LjA5NS0xMi4zMDEtOC4zODMtMTkuNzYxLTguNzEzLTMuNTE1LS4xNTctMy4zMjktNC4yMzYtLjU5Mi01LjIxOW0tMTIuODQxIDguMjY1Yy0yLjgwMSAwLTUuMDcyLTIuMjcxLTUuMDcyLTUuMDcyIDAtMi44MDEgMi4yNzEtNS4wNzIgNS4wNzItNS4wNzIgMi44MDIgMCA1LjA3MiAyLjI3MSA1LjA3MiA1LjA3MiAwIDIuODAxLTIuMjcgNS4wNzItNS4wNzIgNS4wNzIiLz48L3N2Zz4=) center center no-repeat;
-						background-size: 65% 65%;
-					}
+					font-family: touchui;
+					content: "\e900"
 				}
 
 				&:first-child {
 					&:before {
+						font-family: FontAwesome;
 						background: transparent;
 						content: "\f011";
 					}
@@ -266,7 +253,7 @@
 
 		&.open {
 			height: auto;
-			background-color: white;
+			background-color: @light-color;
 			z-index: 1000;
 
 			&:after {
@@ -287,7 +274,7 @@
 			z-index: 2;
 			height: 100%;
 			cursor: pointer;
-			color: white;
+			color: contrast(@main-background);
 			font-size: 22px;
 			line-height: 62px;
 			text-align: center;
@@ -303,7 +290,7 @@
 			position: absolute;
 			right: 10px;
 			top: 13px;
-			color: white;
+			color: contrast(@main-background);
 		}
 
 		button {
@@ -311,7 +298,7 @@
 			width: 100%;
 			display: block;
 			background: transparent;
-			color: white;
+			color: contrast(@main-background);
 			margin: 0;
 			border: 0 none !important;
 			.box-shadow(none) !important;

@@ -7,7 +7,7 @@
 			// Destroy bootstrap control sliders
 			$('#control .slider').each(function(ind, elm) {
 				$(elm).addClass("hidden");
-				$('<input type="number">').insertAfter(elm).on("change", function(e) {
+				$('<input type="number">').attr("data-bind", "enable: isOperational() && loginState.isUser()").insertAfter($(elm).next()).on("change", function(e) {
 					var slider = $(elm).children("input").data('slider'),
 						val = parseFloat($(e.delegateTarget).val());
 

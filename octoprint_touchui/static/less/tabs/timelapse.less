@@ -20,7 +20,9 @@
 	}
 
 	.help-block {
-		color: @light-color;
+		color: fade(contrast(@main-background), 80%);
+		padding: 0 0 20px;
+		margin-top: -10px;
 	}
 
 	.input-append {
@@ -78,14 +80,14 @@
 					padding: 6px;
 					margin: -6px;
 					display: inline-block;
-					color: @main-color;
+					color: @link-color;
 
 					&:before {
 						font-size: 21px;
 						line-height: 36px;
 					}
 				 	&:active {
-						color: @light-color;
+						color: @link-color;
 					}
 				}
 			}

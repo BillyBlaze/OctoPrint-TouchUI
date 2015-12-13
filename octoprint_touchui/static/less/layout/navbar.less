@@ -18,20 +18,26 @@
 		height: 66px;
 		border:0 none;
 	}
+
 	.nav {
 		position: relative;
 		z-index: 23;
+
+		li {
+			width: 100%;
+		}
 	}
 
 	#youcanhazlogin {
 		margin: 0;
+		width: 100%;
+		overflow: hidden;
 
 		#login_dropdown_loggedout {
 			border-top: 1px solid @dropdown-divider-color;
 			margin-top: 5px;
 		}
 	}
-
 
 	.dropdown {
 		margin: 0;
@@ -119,7 +125,7 @@
 			a {
 				.box-sizing(border-box);
 
-				color: @light-color;
+				color: contrast(@main-color);
 				display: block;
 				text-align: left;
 				width: 100% !important;
@@ -230,12 +236,17 @@
 	}
 
 	#all_touchui_settings {
+		&.item_active {
+			background: @main-background;
+
+			&:after {
+				color: contrast(@main-background);
+			}
+		}
 		&.offline:after {
-			color: @light-color;
 			animation-name: blink_offline;
 		}
 		&.online:after {
-			color: @light-color;
 			animation-name: blink_online;
 		}
 		&:after {
@@ -251,25 +262,25 @@
 
 	@keyframes blink_offline {
 		0% {
-			color: @light-color;
+			color: contrast(@main-color);
 		}
 		50% {
 			color: @offline-color;
 		}
 		100% {
-			color: @light-color;
+			color: contrast(@main-color);
 		}
 	}
 
 	@keyframes blink_online {
 		0% {
-			color: @light-color;
+			color: contrast(@main-color);
 		}
 		50% {
 			color: @online-color;
 		}
 		100% {
-			color: @light-color;
+			color: contrast(@main-color);
 		}
 	}
 

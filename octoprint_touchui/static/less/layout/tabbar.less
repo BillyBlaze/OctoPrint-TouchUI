@@ -1,10 +1,13 @@
 .tabbable > .nav-tabs li,
-#navbar .nav li {
+#navbar .nav > li {
 	overflow: hidden;
 	position: relative;
 
+	width: 18%;
+	max-width: 100px;
+
 	.font-icon-reset(FontAwesome);
-	color: white;
+	color: contrast(@main-color);
 
 	&:after {
 		position: absolute;
@@ -19,9 +22,6 @@
 		margin-top: -16px;
 	}
 	a {
-		width: 100px;
-		width: 18vw;
-		max-width: 100px;
 		height: 50px;
 		background: transparent;
 		text-indent: -5000px;
@@ -32,16 +32,24 @@
 	}
 
 }
-#tabs,
-#navbar {
+#navbar .nav > li {
+	width: 100%;
+	float: right;
+}
+#tabs {
 	&.items-5 {
 		.nav,
 		&.nav {
 			li {
-				a {
-					width: 16vw;
-				}
+				width: 16%;
 			}
+		}
+	}
+}
+#navbar {
+	&.items-5 {
+		.navbar-inner > .container > .nav-collapse > .nav {
+			width: 16%;
 		}
 	}
 }
@@ -58,25 +66,12 @@
 	}
 
 	&.nav-tabs {
-
 		.active {
-			background: @dark-color;
+			background: @main-background;
+			color: contrast(@main-background);
 
 			a {
 				.border-radius(0);
-			}
-
-			/* Show a hidden tab background */
-			&.hidden_touch {
-				display: block;
-				position: absolute;
-				right: 0;
-				top: 0;
-				text-indent: -4000px;
-
-				* {
-					visibility: hidden;
-				}
 			}
 		}
 	}

@@ -27,7 +27,7 @@
 }
 
 .page-container {
-	color: @light-color;
+	color: @text-color;
 	width: 100%;
 	height: auto;
 	min-height: 100%;
@@ -35,6 +35,11 @@
 
 	.octoprint-container {
 		margin: 0;
+
+		* {
+			border: 0 none;
+			.border-radius(0) !important;
+		}
 
 		> .row {
 			margin-bottom: 40px;
@@ -59,7 +64,7 @@
 			.box-sizing(border-box);
 
 			h1 {
-				color: @light-color;
+				color: @text-color;
 				margin: 0;
 			}
 
@@ -73,40 +78,35 @@
 						th {
 							margin: 0;
 							font-size: 18px;
-							border-bottom: 2px solid @dark-color;
-							background: @main-color;
+							border-bottom: 1px solid @main-background;
+							background: @table-row-header-background;
+							color: contrast(@table-row-header-background);
 							padding: 13px 5px;
 						}
 					}
 
 					&:hover {
-						background-color: @dark-light-color;
+						background-color: @table-row-background;
+						color: contrast(@table-row-background);
 					}
 
 					th, td {
-						border-bottom: 1px solid @dark-color;
-						background-color: @dark-light-color;
+						border-bottom: 1px solid @main-background;
+						background-color: @table-row-background;
+						color: contrast(@table-row-background);
 					}
 				}
 			}
 
 		}
 
-		* {
-			border: 0 none;
-			.border-radius(0) !important;
-		}
-
 		button, .btn {
 			background: @main-color;
-			color: @light-color;
+			color: contrast(@main-color);
 
 			&:active {
-				background: @main-color;
-
-				&:active {
-					background: @main-color-dark;
-				}
+				background: @main-color-dark;
+				color: contrast(@main-color-dark);
 			}
 		}
 

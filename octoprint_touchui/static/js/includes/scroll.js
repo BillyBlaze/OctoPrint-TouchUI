@@ -177,9 +177,13 @@
 						// Refresh current scroll
 						if ( !self.isTouch ) {
 							setTimeout(function() {
-								var translateY = parseFloat($('.page-container').css("transform").split(",")[5].replace("-",""));
-								$('.octoprint-container').css("min-height", $dropdownToggle.next().outerHeight() + $dropdownToggle.next().offset().top + translateY);
-								self.scroll.currentActive.refresh();
+								try {
+									var translateY = parseFloat($('.page-container').css("transform").split(",")[5].replace("-",""));
+									$('.octoprint-container').css("min-height", $dropdownToggle.next().outerHeight() + $dropdownToggle.next().offset().top + translateY);
+									self.scroll.currentActive.refresh();
+								} catch(err) {
+									// wee
+								}
 							}, 0);
 						}
 

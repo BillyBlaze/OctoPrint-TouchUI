@@ -1,20 +1,22 @@
 #printer {
-	.accordion-heading {
-		display: none;
-	}
-	.accordion-inner {
-		padding: 0;
+	.accordion {
+		&-heading {
+			display: none;
+		}
+		&-inner {
+			padding: 0;
+		}
 	}
 	.print-control {
 		.btn {
 			padding: 12px 0;
 			height: 50px;
 			overflow: hidden;
-			background-color: @light-color;
-			color: @dark-color;
+			background-color: contrast(@main-background);
+			color: contrast(contrast(@main-background));
 
 			&-primary {
-				color: @light-color;
+				color: contrast(@main-color);
 				background: @main-color;
 			}
 		}
@@ -55,14 +57,15 @@
 		.accordion-heading {
 			display: block;
 			pointer-events: none;
-			background-color: @main-color;
 			margin: 40px -35px 0;
 			padding: 5px 20px;
-			color: @light-color;
 			height: 40px;
 
+			background-color: @main-color;
+			color: contrast(@main-color);
+
 			> a, > a i {
-				color: @light-color;
+				color: contrast(@main-color);
 				font-size: 23px;
 				padding-right: 0;
 			}
@@ -79,7 +82,7 @@
 				&:after {
 					.font-icon-reset(FontAwesome);
 					font-size: 25px;
-					color: @light-color;
+					color: contrast(@main-color);
 					content: "\f0b0";
 				}
 			}
@@ -120,7 +123,7 @@
 					margin-left: 0;
 
 					&:last-child {
-						border-left: 1px solid black;
+						border-left: 1px solid @main-background;
 					}
 
 					@media (min-width: 510px) {
@@ -141,21 +144,22 @@
 				padding: 0;
 
 				.entry {
+					background-color: @swipe-list-background-color;
+					border-top: 1px solid @main-background;
+
 					padding: 15px 130px 15px 35px;
 					margin: 0;
-					background-color: @dark-light-color;
-					border-bottom: 1px solid @dark-color;
-					border-top: 1px solid @dark-color;
 					position: relative;
 					left: 0;
 					clear: both;
 					cursor: w-resize;
 
-					transition: left 0.4s ease, background 0.7s ease;
+					transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
 
 					&.open {
 						left: -80px;
-						background: @swipe-list-background-color;
+						background: @swipe-list-background-open-color;
+						color: contrast(@swipe-list-background-open-color);
 
 						&.large {
 							left: -180px;
@@ -163,28 +167,33 @@
 
 						&:hover,
 						&:after {
-							background: @swipe-list-background-color;
+							background: @swipe-list-background-open-color;
+							color: contrast(@swipe-list-background-open-color);
+						}
+
+						.btn {
+							color: contrast(@swipe-list-background-open-color) !important;
 						}
 					}
 
 					&:after {
+						transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
+
 						content: "";
 						display: block;
 						right: -200px;
 						top: 0;
 						height: 100%;
 						width: 200px;
-						background: @dark-light-color;
 						position: absolute;
 						transition: background 0.7s ease;
-					}
 
-					&:hover {
-						background: @dark-light-color;
+						background: @swipe-list-background-color;
+						color: contrast(@swipe-list-background-color);
 					}
 
 					div, div span {
-						color: @light-color;
+						color: inherit;
 					}
 
 					div.action-buttons {
@@ -211,9 +220,11 @@
 							background: transparent !important;
 							z-index: 5;
 							border: 0 none;
-							color: @light-color;
 							.box-shadow(0 0 0 transparent);
 							.text-shadow(0 0 0 transparent);
+
+							color: contrast(@swipe-list-background-color);
+							transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
 
 							&:first-child {
 								right: 70px;
@@ -236,6 +247,7 @@
 		.btn {
 			&-primary {
 				background: @main-color;
+				color: contrast(@main-color);
 			}
 		}
 	}
