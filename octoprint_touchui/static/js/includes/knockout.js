@@ -82,6 +82,20 @@
 				}
 			});
 
+			// Refresh LESS file after saving settings
+			settingsViewModel.sending.subscribe(function(isSending) {
+				var $less = $("#touchui-custom-less");
+				if($less.length === 0) {
+					$('<link href="/plugin/touchui/static/less/_generated/touchui.custom.less" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("head");
+					less.sheets[0] = document.getElementById('touchui-custom-less');
+				}
+				if(!isSending) {
+					$("#touchui-custom-less").attr("href", "/plugin/touchui/static/less/_generated/touchui.custom.less?v=" + new Date().getTime());
+					$("#touchui-custom-less").next('style').remove();
+					less.refresh();
+				}
+			});
+
 			// Redo scroll-to-end interface
 			$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
 				terminalViewModel.scrollToEnd();

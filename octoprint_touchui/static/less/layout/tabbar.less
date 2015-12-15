@@ -6,29 +6,36 @@
 	width: 18%;
 	max-width: 100px;
 
-	.font-icon-reset(FontAwesome);
-	color: contrast(@main-color);
-
-	&:after {
-		position: absolute;
-		z-index: 1;
-		top: 50%;
-		left: 0;
-		width: 100%;
-		text-align: center;
-		font-size: 32px;
-		vertical-align: middle;
-		display: block;
-		margin-top: -16px;
-	}
-	a {
-		height: 50px;
+	> a {
+		height: 70px;
 		background: transparent;
-		text-indent: -5000px;
 		position: relative;
 		z-index: 2;
 		min-width: 37px;
-		padding: 10px 0;
+		padding: 0;
+		white-space: nowrap;
+		text-align: right;
+		color: @main-color;
+
+		&:after {
+			.font-icon-reset(FontAwesome);
+			color: @main-color-text;
+
+			text-align: center;
+			font-size: 32px;
+			line-height: 70px;
+
+			display: block;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+
+			@media(max-width: 320px) {
+				font-size: 10vw !important;
+			}
+		}
 	}
 
 }
@@ -68,10 +75,14 @@
 	&.nav-tabs {
 		.active {
 			background: @main-background;
-			color: contrast(@main-background);
 
 			a {
 				.border-radius(0);
+				color: @main-background;
+
+				&:after {
+					color: contrast(@main-background);
+				}
 			}
 		}
 	}

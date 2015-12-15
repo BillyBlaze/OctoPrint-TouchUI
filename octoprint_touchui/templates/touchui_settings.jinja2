@@ -1,23 +1,76 @@
+<script src="/plugin/touchui/static/js/libs/tinycolorpicker.min.js"></script>
+<link href="/plugin/touchui/static/css/libs/tinycolorpicker.css" media="all" rel="stylesheet">
+
 <form class="form-horizontal">
+
 	<div class="control-group">
+
 		<div class="controls">
 			<label class="checkbox">
 				<input type="checkbox" data-bind="checked: settings.hasVisibleSettings"> Display 'TouchUI settings' when the touch interface is inactive.
 			</label>
 		</div>
+
 		<div class="controls">
 			<label class="checkbox">
 				<input type="checkbox" data-bind="checked: settings.automaticallyLoad"> Start TouchUI automatically onload based on resolution or touch device. <br><span class="muted">(Resolution: anything smaller then 980 will start TouchUI)</span>
 			</label>
 		</div>
 
-		<textarea id="touchui-less-variables" data-bind="value: settings.colors">
-@main-color: #F00;
-@main-background: white;
-@text-color: black;
-@terminal-color: #F00;
-		</textarea>
-		<button data-bind="click: compile">Test</button>
+	</div>
 
+	<div class="control-group">
+		<fieldset>
+			<legend>Customization:</legend>
+			<div class="colorPickers">
+				<div class="controls">
+					<label>Main color:</label>
+					<div class="colorPicker" id="colorPicker1">
+						<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.mainColor">
+						<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.mainColor }"></span></a>
+						<div class="track"></div>
+						<ul class="dropdown"><li></li></ul>
+					</div>
+				</div>
+
+				<div class="controls">
+					<label>Terminal color:</label>
+					<div class="colorPicker" id="colorPicker2">
+						<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.termColor">
+						<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.termColor }"></span></a>
+						<div class="track"></div>
+						<ul class="dropdown"><li></li></ul>
+					</div>
+				</div>
+
+				<div class="controls">
+					<label>Background color:</label>
+					<div class="colorPicker" id="colorPicker3">
+						<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.bgColor">
+						<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.bgColor }"></span></a>
+						<div class="track"></div>
+						<ul class="dropdown"><li></li></ul>
+					</div>
+				</div>
+
+				<div class="controls">
+					<label>Text color:</label>
+					<div class="colorPicker" id="colorPicker4">
+						<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.textColor">
+						<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.textColor }"></span></a>
+						<div class="track"></div>
+						<ul class="dropdown"><li></li></ul>
+					</div>
+				</div>
+
+			</div>
+		</fieldset>
 	</div>
 </form>
+
+<script type="text/javascript">
+	var picker1 = tinycolorpicker(document.getElementById("colorPicker1"))
+	var picker2 = tinycolorpicker(document.getElementById("colorPicker2"))
+	var picker3 = tinycolorpicker(document.getElementById("colorPicker3"))
+	var picker4 = tinycolorpicker(document.getElementById("colorPicker4"))
+</script>

@@ -300,16 +300,18 @@
 					self.scroll.modal.stack.push(curModal);
 					self.scroll.currentActive = curModal;
 
-					try {
-						// Force iScroll to get the correct scrollHeight
-						setTimeout(function() {
+					// Force iScroll to get the correct scrollHeight
+					setTimeout(function() {
+						if(curModal) {
 							curModal.refresh();
-						}, 0);
-						// And Refresh again after animation
-						setTimeout(function() {
+						}
+					}, 0);
+					// And Refresh again after animation
+					setTimeout(function() {
+						if(curModal) {
 							curModal.refresh();
-						}, 800);
-					} catch(err) { }
+						}
+					}, 800);
 
 					// Store bindings into variable for future reference
 					var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $modalElm, curModal),

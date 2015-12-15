@@ -94,6 +94,8 @@
 		.dropdown-menu {
 			.open {
 				a.dropdown-toggle {
+					background: transparent;
+
 					&:after {
 						content: "\f0d8";
 					}
@@ -125,7 +127,7 @@
 			a {
 				.box-sizing(border-box);
 
-				color: contrast(@main-color);
+				color: @main-color-text;
 				display: block;
 				text-align: left;
 				width: 100% !important;
@@ -239,7 +241,7 @@
 		&.item_active {
 			background: @main-background;
 
-			&:after {
+			> a:after {
 				color: contrast(@main-background);
 			}
 		}
@@ -249,7 +251,7 @@
 		&.online:after {
 			animation-name: blink_online;
 		}
-		&:after {
+		> a:after {
 			animation-duration: 0.6s;
 			animation-iteration-count: 5;
 			content: "\f0c9";
@@ -262,25 +264,25 @@
 
 	@keyframes blink_offline {
 		0% {
-			color: contrast(@main-color);
+			color: @main-color-text;
 		}
 		50% {
 			color: @offline-color;
 		}
 		100% {
-			color: contrast(@main-color);
+			color: @main-color-text;
 		}
 	}
 
 	@keyframes blink_online {
 		0% {
-			color: contrast(@main-color);
+			color: @main-color-text;
 		}
 		50% {
 			color: @online-color;
 		}
 		100% {
-			color: contrast(@main-color);
+			color: @main-color-text;
 		}
 	}
 
@@ -289,35 +291,36 @@
 #tabs {
 
 	#temp_link {
-		&:after {
+		a:after {
 			content: "\f0e4";
 		}
 	}
 	#control_link {
-		&:after {
+		a:after {
 			content: "\f11b";
 		}
 	}
 	#gcode_link {
-		&:after {
+		a:after {
 			content: "\f248";
 		}
 	}
 	#term_link {
-		&:after {
+		a:after {
 			content: "\f120";
 		}
 	}
 	#webcam_link {
-		&:after {
+		a:after {
 			content: "\f030";
-			font-size: 26px;
-			line-height: 38px;
+			font-size: 29px;
+			line-height: 73px;
 		}
 	}
 	#print_link {
-		&:after {
+		a:after {
 			content: "\f233";
+			line-height: 74px;
 		}
 	}
 

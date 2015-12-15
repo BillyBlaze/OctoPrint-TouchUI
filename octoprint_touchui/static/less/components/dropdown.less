@@ -17,10 +17,10 @@
 
 		a {
 			display: block;
-			color: contrast(@main-color);
+			color: @main-color-text;
 
 			&:hover {
-				color: contrast(@main-color);
+				color: @main-color-text;
 				background: @main-color;
 			}
 		}
@@ -43,7 +43,7 @@ html.notouch {
 }
 .dropdown-menu {
 	background: @main-color;
-	color: contrast(@main-color);
+	color: @main-color-text;
 	border: 1px solid @dropdown-divider-color;
 	.border-radius(0);
 	.transform(translateZ(0));
@@ -53,12 +53,12 @@ html.notouch {
 		padding: 8px 15px;
 
 		&:hover {
-			color: contrast(@main-color);
+			color: @main-color-text;
 			background: @main-color;
 		}
 	}
 	a, i {
-		color: contrast(@main-color) !important;
+		color: @main-color-text !important;
 		font-size: 15px !important;
 		width: 100%;
 		.box-sizing(border-box);

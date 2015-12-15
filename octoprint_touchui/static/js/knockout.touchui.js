@@ -22,10 +22,6 @@ $(function() {
 			self.settings = viewModels[2].settings.plugins.touchui;
 		}
 
-		self.compile = function() {
-			TouchUI._instance.less.compile();
-		}
-
 		self.show = function() {
 			self.touchuiModal.modal("show");
 		}

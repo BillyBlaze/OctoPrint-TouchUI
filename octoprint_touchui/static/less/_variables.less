@@ -4,9 +4,12 @@
 
 /* General */
 @main-color: #00B0FF;
+@main-color-text: contrast(@main-color, @dark-color, @light-color, 51%);
+
 @main-color-dark: darken(@main-color, 5%);
+@main-color-dark-text: contrast(@main-color-dark, @dark-color, @light-color, 60%);
+
 @main-color-darker: darken(@main-color, 15%);
-@main-iScroll-color: fade(contrast(@main-background), 70%);
 
 @main-background: @dark-color;
 @text-color: @light-color;
@@ -15,6 +18,7 @@
 /* Tables, fileList, progress */
 @table-row-background: mix(@main-background, contrast(@main-background), 80%);
 @table-row-header-background: @main-color;
+@table-row-header-text-color: @main-color-text;
 
 /* Progress */
 @progress-background: @table-row-background;
@@ -32,21 +36,23 @@
 
 /* Buttons */
 @default-btn-color: @light-dark-color;
-
 @danger-color: #D40000;
 @danger-active-color: #9E0000;
 
 /* Dropdown + indication */
 @online-color: #9AFD00;
 @offline-color: red;
-@dropdown-iScroll-color: fade(@light-darker-dark-color, 70%);
 @dropdown-divider-color: @main-color-dark;
 
 /* Termional */
 @terminal-color: #0F0;
 @terminal-background: @main-background;
 @terminal-text-color: @terminal-color;
+
+/* iScroll Styling */
 @terminal-iScroll-color: fade(@terminal-color, 70%);
+@dropdown-iScroll-color: fade(@light-darker-dark-color, 70%);
+@main-iScroll-color: fade(contrast(@main-background), 70%);
 
 
 

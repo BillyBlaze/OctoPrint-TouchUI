@@ -13,10 +13,10 @@
 			height: 50px;
 			overflow: hidden;
 			background-color: contrast(@main-background);
-			color: contrast(contrast(@main-background));
+			color: @main-background;
 
 			&-primary {
-				color: contrast(@main-color);
+				color: @main-color-text;
 				background: @main-color;
 			}
 		}
@@ -62,10 +62,10 @@
 			height: 40px;
 
 			background-color: @main-color;
-			color: contrast(@main-color);
+			color: @main-color-text;
 
 			> a, > a i {
-				color: contrast(@main-color);
+				color: @main-color-text;
 				font-size: 23px;
 				padding-right: 0;
 			}
@@ -82,7 +82,7 @@
 				&:after {
 					.font-icon-reset(FontAwesome);
 					font-size: 25px;
-					color: contrast(@main-color);
+					color: @main-color-text;
 					content: "\f0b0";
 				}
 			}
@@ -247,7 +247,7 @@
 		.btn {
 			&-primary {
 				background: @main-color;
-				color: contrast(@main-color);
+				color: @main-color-text;
 			}
 		}
 	}

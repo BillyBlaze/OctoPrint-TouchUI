@@ -11,25 +11,34 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.TemplatePlugin):
 
 	def __init__(self):
+		self.customCSSPath = "/static/less/_generated/touchui.custom.less";
 		self.hasVisibleSettings = True
 		self.automaticallyLoad = True
 
-		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + '/static/css/touchui.custom.less')
-		self.colors = False
+		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
+		self.colors_mainColor = "#00B0FF"
+		self.colors_termColor = "#0F0"
+		self.colors_bgColor = "#000"
+		self.colors_textColor = "#FFF"
 
 	def on_settings_save(self, data):
 		octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
-
-		customCSS = open(os.path.dirname(__file__) + '/static/css/touchui.custom.less', 'w+')
-		customCSS.write('@import "touchui.generated.less";' + "\n" + self._settings.get(["colors"]))
-		customCSS.close()
+		self.save_custom_less()
 
 	def on_after_startup(self):
 		self.hasVisibleSettings = self._settings.get(["hasVisibleSettings"])
 		self.automaticallyLoad = self._settings.get(["automaticallyLoad"])
-		self.colors = self._settings.get(["colors"])
+
+		self.colors_mainColor = self._settings.get(["colors", "mainColor"])
+		self.colors_termColor = self._settings.get(["colors", "termColor"])
+		self.colors_bgColor = self._settings.get(["colors", "bgColor"])
+		self.colors_textColor = self._settings.get(["colors", "textColor"])
+
+		self.save_custom_less()
 
 	def get_assets(self):
+		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
+
 		if self.activeCustomCSS is False:
 			css = ["css/touchui.css"]
 			less = []
@@ -55,7 +64,6 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/includes/knockout.js",
 				"js/includes/overwrite.js",
 				"js/includes/fullscreen.js",
-				"js/includes/less.js",
 				"js/includes/plugins.js",
 
 				"js/jquery.touchui.js",
@@ -66,6 +74,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		)
 
 	def get_template_configs(self):
+		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
+
 		files = [
 			dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
 			dict(type="settings", template="touchui_settings.jinja2", custom_bindings=True),
@@ -88,8 +98,24 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		return dict(
 			hasVisibleSettings=self.hasVisibleSettings,
 			automaticallyLoad=self.automaticallyLoad,
-			colors=self.colors
+			activeCustomCSS=os.path.isfile(os.path.dirname(__file__) + self.customCSSPath),
+			colors=dict(
+				mainColor=self.colors_mainColor,
+				termColor=self.colors_termColor,
+				bgColor=self.colors_bgColor,
+				textColor=self.colors_textColor
+			)
 		)
+
+	def save_custom_less(self):
+		customCSS = open(os.path.dirname(__file__) + self.customCSSPath, 'w+')
+		customCSS.write('@import "touchui.generated.less";' + "\n" +
+			'@main-color:' + self._settings.get(["colors", "mainColor"]) + ';' +
+			'@terminal-color:' + self._settings.get(["colors", "termColor"]) + ';' +
+			'@text-color:' + self._settings.get(["colors", "textColor"]) + ';' +
+			'@main-background:' + self._settings.get(["colors", "bgColor"]) + ';')
+		customCSS.close()
+		self.activeCustomCSS = True
 
 	def get_version(self):
 		return self._plugin_version

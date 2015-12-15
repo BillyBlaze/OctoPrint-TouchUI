@@ -80,7 +80,7 @@
 							font-size: 18px;
 							border-bottom: 1px solid @main-background;
 							background: @table-row-header-background;
-							color: contrast(@table-row-header-background);
+							color: @table-row-header-text-color;
 							padding: 13px 5px;
 						}
 					}
@@ -102,11 +102,11 @@
 
 		button, .btn {
 			background: @main-color;
-			color: contrast(@main-color);
+			color: @main-color-text;
 
 			&:active {
 				background: @main-color-dark;
-				color: contrast(@main-color-dark);
+				color: @main-color-dark-text;
 			}
 		}
 

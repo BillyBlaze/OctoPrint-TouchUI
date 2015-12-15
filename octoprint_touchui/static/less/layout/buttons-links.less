@@ -17,20 +17,20 @@ button,
 
 	&-primary {
 		background: @main-color;
-		color: contrast(@main-color);
+		color: @main-color-text;
 
 		&:active {
 			background: @main-color-dark;
-			color: contrast(@main-color-dark);
+			color: @main-color-dark-text;
 		}
 	}
 	&-danger {
-		color: contrast(@danger-color);
 		background: @danger-color;
+		color: contrast(@danger-color);
 
 		&:active {
-			color: contrast(@danger-active-color);
 			background: @danger-active-color;
+			color: contrast(@danger-active-color);
 		}
 	}
 }
@@ -48,5 +48,5 @@ a {
 .nav-pills>.active>a, .nav-pills>.active>a:hover,
 .nav-list>.active>a, .nav-list>.active>a:hover {
 	background: @main-color;
-	color: contrast(@main-color);
+	color: @main-color-text;
 }
