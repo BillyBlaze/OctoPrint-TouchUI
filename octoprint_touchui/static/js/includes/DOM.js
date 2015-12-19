@@ -345,6 +345,9 @@
 					$("#control-jog-extrusion input:last-child").prependTo("#control-jog-feedrate");
 					$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
 
+					$("#control div.distance").prependTo("#control-jog-feedrate");
+					$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
+
 				}
 
 			}

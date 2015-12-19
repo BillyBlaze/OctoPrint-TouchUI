@@ -6,8 +6,17 @@
 
 			// Destroy bootstrap control sliders
 			$('#control .slider').each(function(ind, elm) {
-				$(elm).addClass("hidden");
-				$('<input type="number">').attr("data-bind", "enable: isOperational() && loginState.isUser()").insertAfter($(elm).next()).on("change", function(e) {
+				var $elm = $(elm),
+					$next = $(elm).next();
+
+				$elm.addClass("hidden");
+
+				var div = $('<div class="slider-container"></div>').insertAfter($elm);
+
+				$elm.appendTo(div);
+				$next.appendTo(div);
+
+				var inp = $('<input type="number">').attr("data-bind", "enable: isOperational() && loginState.isUser()").appendTo(div).on("change", function(e) {
 					var slider = $(elm).children("input").data('slider'),
 						val = parseFloat($(e.delegateTarget).val());
 
@@ -31,7 +40,9 @@
 							type: 'slide',
 							value: val
 						});
-				}).val($(elm).children("input").data('slider').getValue());
+				}).attr("id", "ui-inp-"+ind).val($(elm).children("input").data('slider').getValue());
+
+				$('<label for="ui-inp-'+ind+'"></label>').appendTo(div).text((ind === 0) ? "Flowrate:": "Feedrate:");
 			});
 		}
 	};

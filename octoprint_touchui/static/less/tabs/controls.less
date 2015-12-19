@@ -20,34 +20,24 @@
 		&#control-jog-xy {
 			float: left;
 			margin: 0;
+			position: relative;
 
 			h1 {
-				@media (max-width: 450px) {
-					width: 40vw;
-				}
-
-				&:after {
-					content: "+";
-					padding-left: 15px;
-					margin-right: -25px;
-				}
+				display: none;
 			}
 		}
 
 		&#control-jog-z {
-			margin-right: 25%;
+			position: absolute;
+			right: 26.5%;
+			top: 0;
+
+			@media (max-width: 450px) {
+				right: 28.5%;
+			}
 
 			h1 {
-				@media (max-width: 450px) {
-					position: relative;
-					left: 20vw;
-				}
-
-				&:before {
-					content: "+";
-					padding-right: 15px;
-					margin-left: -25px;
-				}
+				display: none;
 			}
 		}
 
@@ -56,11 +46,11 @@
 	> .jog-panel {
 
 		&:first-child {
+			position: relative;
 			display: block;
 			overflow: hidden;
 			float: none;
-			margin: 0 -20px;
-			padding-top: 10px;
+			margin: 10px -20px 0;
 
 			button {
 				color: contrast(@main-background);
@@ -81,6 +71,10 @@
 					width: 120px;
 					height: 120px;
 				}
+				@media (max-width: 450px) {
+					width: 14vw;
+					height: 16vw;
+				}
 			}
 		}
 	}
@@ -93,17 +87,74 @@
 			display: none;
 		}
 
+		> div {
+			> button {
+				width: 50%;
+				float: left;
+				border-right: 1px solid @main-background;
+
+				&:last-child {
+					border-right: 0 none;
+				}
+			}
+		}
+
 		@media (max-width: 450px) {
-			margin-top: 45px;
+			margin-bottom: 45px;
 		}
 	}
+
 	#control-jog-feedrate {
+		position: relative;
 		float: left;
 		width: 50%;
 		padding: 45px 15px 20px 0;
 
 		@media (max-width: 450px) {
-			margin-bottom: 45px;
+			margin-top: 45px;
+		}
+
+		.slider-container {
+			position: relative;
+			overflow: hidden;
+
+			button {
+				float: right;
+				width: 25% !important;
+				position: relative;
+				padding: 0;
+				margin: 0;
+				direction: rtl;
+				white-space: nowrap;
+				overflow: hidden;
+				text-indent: -700px;
+
+				&:after {
+					.font-icon-reset();
+					content: "\f00c";
+					width: 100%;
+					position: absolute;
+					right: 0;
+					text-indent: 0;
+					font-size: 21px;
+					line-height: 19px;
+				}
+			}
+
+			input {
+				float: left;
+				text-align: left;
+				width: 75% !important;
+				padding-left: 90px !important;
+				padding-right: 0 !important;
+			}
+
+			label {
+				position: absolute;
+				margin: 10px 0 10px 10px;
+				color: @dark-color;
+				z-index: 2;
+			}
 		}
 	}
 
@@ -132,9 +183,14 @@
 		button, input {
 			padding: 10px 20px;
 			margin: 0 0 20px;
-			width: 100% !important;
-			height: 40px;
+			width: 100%;
+			min-height: 40px;
+			height: auto;
 			.box-sizing(border-box);
+
+			span {
+				margin-left: 5px;
+			}
 		}
 
 		@media (max-width: 450px) {
@@ -150,7 +206,7 @@
 	}
 	#control-jog-general {
 		position: absolute;
-		top: 46px;
+		top: 0;
 		right: 0;
 
 		h1 {
@@ -176,6 +232,10 @@
 				width: 120px;
 				height: 120px;
 			}
+			@media (max-width: 450px) {
+				width: 14vw;
+				height: 16vw;
+			}
 
 			&:before,
 			&:after {
@@ -184,7 +244,7 @@
 				.text-shadow(0 0 0 transparent);
 				display: block;
 				overflow: hidden;
-				line-height: 17vw;
+				line-height: 16vw;
 
 				@media (min-width: 700px) {
 					line-height: 120px;
@@ -196,7 +256,6 @@
 
 			button {
 				position: relative;
-				font-size: 10vw;
 
 				&:before {
 					font-family: touchui;
@@ -233,22 +292,27 @@
 		}
 	}
 
-	#jog_distance {
+/*	#jog_distance {
 		position: absolute;
 		top: -4px;
 		overflow: hidden;
-		left: 33%;
-		width: 27%;
+		left: 34%;
+		width: 24%;
 		max-width: 150px;
 		height: 0;
-		min-width: 80px;
 		padding: 45px 0 0;
 
 		@media (max-width: 450px) {
-			left: 44%;
+			left: 40%;
 
 			button {
-				font-size: 22px !important;
+				font-size: 7vw !important;
+			}
+			&:after, &:before {
+				font-size: 7vw !important;
+			}
+			&:before {
+				right: 2px !important;
 			}
 		}
 
@@ -259,6 +323,11 @@
 
 			&:after {
 				top: -5000px;
+			}
+
+			&:before {
+				color: @dark-color;
+				content: "\f0d8";
 			}
 
 			button {
@@ -303,21 +372,18 @@
 			margin: 0;
 			border: 0 none !important;
 			.box-shadow(none) !important;
-			text-indent: -10px;
 
 			&.active {
 				top: 0px;
 				position: absolute;
+				text-indent: -10px;
 			}
 		}
 	}
-
-
-
 	.distance {
 		float: none;
 		clear: both;
-		margin: 40px 0 0;
+		margin: 0;
 
 		.btn-group {
 			width: 50%;
@@ -331,6 +397,29 @@
 			}
 		}
 
+	}*/
+	.distance {
+		.btn-group {
+			width: 100%;
+			margin: 0;
+
+			button {
+				width: 25% !important;
+				background: mix(@main-color-darker, @main-background, 70%);
+				border-right: 1px solid @main-background;
+				color: @main-color-text;
+				padding: 0 !important;
+
+				&:last-child {
+					border-right: 0 none;
+				}
+
+				&.active {
+					background: @main-color;
+					color: @main-color-text;
+				}
+			}
+		}
 	}
 
 	.slider {
