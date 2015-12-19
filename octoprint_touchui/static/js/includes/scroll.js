@@ -56,7 +56,7 @@
 			} else {
 
 				// Set overflow hidden for best performance
-				$("html").addClass("hasScrollTouch");
+				$("html").addClass("emulateTouch");
 
 				self.scroll.terminal.init.call(self);
 				self.scroll.body.init.call(self);

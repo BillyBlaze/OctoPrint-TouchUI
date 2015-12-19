@@ -2260,7 +2260,7 @@ width: 100%;
 height: 100%;
 background: @main-background;
 
-&.hasScrollTouch {
+&.emulateTouch {
 overflow: hidden;
 
 body {
@@ -2338,19 +2338,6 @@ border: 0 none;
 > .row {
 margin-bottom: 40px;
 }
-> .footer {
-position: absolute;
-left: 0;
-bottom: 0;
-width: 100%;
-padding: 0 40px 0;
-.box-sizing(border-box);
-}
-
-input.disabled, select.disabled, textarea.disabled,
-input[disabled], select[disabled], textarea[disabled] {
-opacity: 0.5;
-}
 
 .tab-content {
 padding: 30px 35px 0;
@@ -2414,15 +2401,10 @@ color: @main-color-text;
 background: @main-color-dark;
 color: @main-color-dark-text;
 }
-}
 
-button:focus {
+&:focus {
 outline: 0 none;
 }
-
-input[type="file"] {
-color: transparent !important;
-opacity: 0 !important;
 }
 
 .touch-focus {
@@ -2532,6 +2514,7 @@ background: @main-color-dark;
 color: @main-color-dark-text;
 }
 }
+
 &-danger {
 background: @danger-color;
 color: contrast(@danger-color);
@@ -2595,7 +2578,7 @@ position: static;
 z-index: 0;
 margin: 0;
 float: none;
-border: 0 none;
+border: 0 none !important;
 padding: 0;
 }
 
@@ -2961,6 +2944,19 @@ color: contrast(@main-background);
 }
 }
 
+input, select, textarea {
+
+&.disabled, &[disabled] {
+opacity: 0.5;
+}
+
+&[type="file"] {
+color: transparent !important;
+opacity: 0 !important;
+}
+
+}
+
 
 #webcam {
 margin: -30px -35px 0;
@@ -3272,7 +3268,7 @@ color: @terminal-color;
 
 button {
 background: @terminal-color;
-color: contrast(@terminal-color);
+color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 
 &:active {
 background: transparent;
@@ -3306,7 +3302,7 @@ padding-left: 7px;
 }
 &.active {
 background: @terminal-color;
-color: contrast(@terminal-color);
+color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 }
 }
 }
@@ -3325,7 +3321,7 @@ color: contrast(@main-background);
 
 &.active {
 background: @terminal-color;
-color: contrast(@terminal-color);
+color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 }
 }
 }
@@ -3498,17 +3494,8 @@ padding: 0 15px 0 5px;
 width: 100vw;
 }
 
-.row-fluid:last-child {
-width: 161vw !important;
-margin: 0 0 20px 0 !important;
-transition: left 0.5s ease;
-cursor: w-resize;
-position: relative;
-left: 0;
 
-&.open {
-left: -61vw !important;
-}
+.row-fluid:last-child {
 
 table {
 margin: 0;
@@ -3516,24 +3503,35 @@ margin: 0;
 tr {
 &:first-child {
 th {
+font-size: 18px;
+
 &:first-child {
-width: 11% !important;
+width: 13% !important;
 }
 }
 }
 
 th, td {
+font-size: 16px;
+
 &:nth-child(1) {
 text-align: right;
 }
+
 &:nth-child(2) {
 text-align: center !important;
 }
+
+&:nth-child(3) {
+padding-right: 30px;
+}
+
 &:last-child {
 .input-append {
 padding-right: 120px;
 }
 }
+
 .dropdown-menu {
 margin: 2px 0 9px;
 bottom: 100%;
@@ -3590,6 +3588,19 @@ position: relative;
 }
 }
 }
+}
+}
+
+@media (max-width: 800px) {
+width: 161vw !important;
+margin: 0 0 20px 0 !important;
+transition: left 0.5s ease;
+cursor: w-resize;
+position: relative;
+left: 0;
+
+&.open {
+left: -61vw !important;
 }
 }
 }
@@ -4126,7 +4137,7 @@ touch-action: pan-y;
 background: @dark-color !important;
 }
 
-.hasScrollTouch {
+.emulateTouch {
 .modal-scrollable {
 .modal {
 z-index: 1 !important;
@@ -4746,7 +4757,7 @@ background: @light-color !important
 .dropdown-menu {
 background: @main-color;
 color: @main-color-text;
-border: 1px solid @dropdown-divider-color;
+border: 1px solid @dropdown-divider-color !important;
 .border-radius(0);
 .transform(translateZ(0));
 margin-top: 15px;
@@ -4891,6 +4902,12 @@ margin: 0;
 
 .footer {
 font-size: 14px;
+position: absolute;
+left: 0;
+bottom: 0;
+width: 100%;
+padding: 0 40px 0;
+.box-sizing(border-box);
 
 ul {
 @media (max-width: 400px) {

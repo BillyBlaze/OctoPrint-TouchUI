@@ -38,11 +38,11 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def get_assets(self):
 		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
+		css = []
+		less = []
 
 		if self.activeCustomCSS is False:
-			css = ["css/touchui.css"]
-		else:
-			css = []
+			css.append("css/touchui.css")
 
 		return dict(
 			js=[
@@ -67,8 +67,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
 			],
-			less=[],
-			css= css
+			css=css,
+			less=less
 		)
 
 	def get_template_configs(self):

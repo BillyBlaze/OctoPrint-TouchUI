@@ -43,19 +43,6 @@
 		> .row {
 			margin-bottom: 40px;
 		}
-		> .footer {
-			position: absolute;
-			left: 0;
-			bottom: 0;
-			width: 100%;
-			padding: 0 40px 0;
-			.box-sizing(border-box);
-		}
-
-		input.disabled, select.disabled, textarea.disabled,
-		input[disabled], select[disabled], textarea[disabled] {
-			opacity: 0.5;
-		}
 
 		.tab-content {
 			padding: 30px 35px 0;
@@ -119,15 +106,10 @@
 				background: @main-color-dark;
 				color: @main-color-dark-text;
 			}
-		}
 
-		button:focus {
-			outline: 0 none;
-		}
-
-		input[type="file"] {
-			color: transparent !important;
-			opacity: 0 !important;
+			&:focus {
+				outline: 0 none;
+			}
 		}
 
 		.touch-focus {

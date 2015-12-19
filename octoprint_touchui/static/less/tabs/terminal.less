@@ -29,7 +29,7 @@
 
 	button {
 		background: @terminal-color;
-		color: contrast(@terminal-color);
+		color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 
 		&:active {
 			background: transparent;
@@ -63,7 +63,7 @@
 				}
 				&.active {
 					background: @terminal-color;
-					color: contrast(@terminal-color);
+					color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 				}
 			}
 		}
@@ -82,7 +82,7 @@
 
 			&.active {
 				background: @terminal-color;
-				color: contrast(@terminal-color);
+				color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 			}
 		}
 	}
@@ -108,7 +108,7 @@
 		min-height: 0;
 		max-height: none;
 		overflow: hidden;
-		color: @terminal-text-color; 
+		color: @terminal-text-color;
 		background-color: transparent;
 
 		&:before {
