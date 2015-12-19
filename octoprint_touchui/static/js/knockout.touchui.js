@@ -1,6 +1,5 @@
 $(function() {
 	var TouchUI = $(document).TouchUI();
-
 	TouchUI.domLoading();
 
 	function touchUIViewModel(viewModels) {

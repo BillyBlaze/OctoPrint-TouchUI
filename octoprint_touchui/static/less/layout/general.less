@@ -27,7 +27,6 @@
 }
 
 .page-container {
-	color: @text-color;
 	width: 100%;
 	height: auto;
 	min-height: 100%;
@@ -73,6 +72,9 @@
 			}
 
 			table {
+				margin: 0 -35px;
+				width: 100vw;
+
 				tr {
 					&:first-child {
 						th {
@@ -82,6 +84,15 @@
 							background: @table-row-header-background;
 							color: @table-row-header-text-color;
 							padding: 13px 5px;
+						}
+					}
+
+					td, th {
+						&:first-child {
+							padding-left: 35px;
+						}
+						&:last-child {
+							padding-right: 35px;
 						}
 					}
 

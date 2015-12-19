@@ -41,10 +41,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 		if self.activeCustomCSS is False:
 			css = ["css/touchui.css"]
-			less = []
 		else:
 			css = []
-			less = []
 
 		return dict(
 			js=[
@@ -69,7 +67,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				"js/jquery.touchui.js",
 				"js/knockout.touchui.js"
 			],
-			less=less,
+			less=[],
 			css= css
 		)
 

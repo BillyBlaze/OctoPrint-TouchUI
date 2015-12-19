@@ -1,9 +1,10 @@
 @import "_variables.less";
 @import "_mixins.less";
+
 @import "fonts/fontawesome.less";
 @import "fonts/sourcecodepro.less";
 @import "fonts/touchui.less";
-@import "layout/nontouch.less";
+
 @import "settings/touchui.less";
 
 #touch {
@@ -11,12 +12,24 @@
 	height: 100%;
 	background: @main-background;
 
-	@import "layout/hasScrollTouch.less";
+	&.hasScrollTouch {
+		overflow: hidden;
+
+		body {
+			overflow: hidden;
+
+			.modal-scrollable,
+			.show-dropdown {
+				overflow: hidden;
+			}
+		}
+	}
 
 	body {
 		width: 100%;
 		height: 100%;
 		background: @main-background;
+		color: @text-color;
 
 		* {
 			font-family: 'Source Code Pro', monospace;
@@ -33,12 +46,10 @@
 		}
 
 		@import "layout/general.less";
-		@import "layout/buttons-links.less";
-		@import "layout/progress.less";
+		@import "layout/links.less";
+		@import "layout/buttons.less";
 		@import "layout/navbar.less";
-		@import "layout/overlays.less";
 		@import "layout/tabbar.less";
-		@import "layout/filesList.less";
 
 		@import "tabs/webcam.less";
 		@import "tabs/printer.less";
@@ -49,12 +60,16 @@
 		@import "tabs/connection.less";
 		@import "tabs/timelapse.less";
 
+		@import "components/progress.less";
+		@import "components/overlays.less";
+		@import "components/files.less";
 		@import "components/modal.less";
 		@import "components/scroll.less";
 		@import "components/keyboard.less";
 		@import "components/dropdown.less";
 		@import "components/notifications.less";
 		@import "components/pagination.less";
+		@import "components/scrollbars.less";
 
 		@import "plugins/navbartemp.less";
 

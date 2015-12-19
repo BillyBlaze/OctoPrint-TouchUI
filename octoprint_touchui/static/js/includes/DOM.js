@@ -92,6 +92,7 @@
 				this.DOM.move.tabbar.init.call( this );
 				this.DOM.move.navbar.init.call( this );
 				this.DOM.move.afterTabAndNav.call( this );
+				this.DOM.move.overlays.init.call( this );
 			}
 		},
 
@@ -244,11 +245,16 @@
 
 					}.bind(this));
 
+					$items = $("#tabs > li > a");
+					$items.each(function(ind, elm) {
+						$(elm).text("");
+					}.bind(this));
+
 				}
 			},
 
 			navbar: {
-				mainItems: ['#all_touchui_settings', '#navbar_plugin_navbartemp', "#navbar_login", /*'#navbar_systemmenu',*/ '.hidden_touch'],
+				mainItems: ['#all_touchui_settings', '#navbar_plugin_navbartemp', '#navbar_login', /*'#navbar_systemmenu',*/ '.hidden_touch'],
 				init: function() {
 
 					$items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
@@ -265,13 +271,21 @@
 					$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
 					$('#navbar_login').appendTo('#youcanhazlogin').find('a.dropdown-toggle').text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim());
 
-					// Manually move navbar temp (hard move)
-					if( $("#navbar_plugin_navbartemp").length > 0 ) {
-						var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
-						$('<li class="divider"></li>').insertBefore(navBarTmp);
-						$("<!-- ko allowBindings: false -->").insertBefore(navBarTmp);
-						$("<!-- /ko -->").insertAfter(navBarTmp);
-					}
+					// Move the navbar temp plugin
+					this.plugins.navbarTemp.call(this);
+
+				}
+			},
+
+			//Move the overlays outside the scroll container so that they appear before modals
+			overlays: {
+				mainItems: ['#offline_overlay', '#reloadui_overlay', '#drop_overlay'],
+				init: function() {
+
+					$(this.DOM.move.overlays.mainItems).each(function(ind, elm) {
+						var $elm = $(elm);
+						$elm.appendTo('body');
+					}.bind(this));
 
 				}
 			},
