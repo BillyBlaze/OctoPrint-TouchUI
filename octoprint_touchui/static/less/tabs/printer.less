@@ -59,7 +59,6 @@
 			pointer-events: none;
 			margin: 40px -35px 0;
 			padding: 5px 20px;
-			overflow: hidden;
 			height: 40px;
 
 			background-color: @main-color;
@@ -79,6 +78,10 @@
 			}
 			.dropdown-toggle {
 				background: transparent;
+
+				@media (max-width: 300px) {
+					padding: 9px 4px;
+				}
 
 				&:after {
 					.font-icon-reset(FontAwesome);
@@ -109,6 +112,7 @@
 			.slimScrollDiv {
 				margin: 0 -35px 10px;
 				height: auto !important;
+				clear: both;
 			}
 
 			.text-right.muted {

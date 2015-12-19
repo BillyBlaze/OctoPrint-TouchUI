@@ -2495,7 +2495,7 @@ color: contrast(@default-btn-color);
 padding: 6px 15px;
 
 &:disabled {
-opacity: .4;
+opacity: .3;
 }
 &:active {
 background: @default-btn-color;
@@ -2946,7 +2946,7 @@ color: contrast(@main-background);
 input, select, textarea {
 
 &.disabled, &[disabled] {
-opacity: 0.5;
+opacity: .4;
 }
 
 &[type="file"] {
@@ -3034,7 +3034,6 @@ display: block;
 pointer-events: none;
 margin: 40px -35px 0;
 padding: 5px 20px;
-overflow: hidden;
 height: 40px;
 
 background-color: @main-color;
@@ -3054,6 +3053,10 @@ display: none !important;
 }
 .dropdown-toggle {
 background: transparent;
+
+@media (max-width: 300px) {
+padding: 9px 4px;
+}
 
 &:after {
 .font-icon-reset(FontAwesome);
@@ -3084,6 +3087,7 @@ display: none;
 .slimScrollDiv {
 margin: 0 -35px 10px;
 height: auto !important;
+clear: both;
 }
 
 .text-right.muted {
@@ -3516,6 +3520,7 @@ font-size: 16px;
 
 &:nth-child(1) {
 text-align: right;
+padding-left: 0;
 }
 
 &:nth-child(2) {
@@ -4850,6 +4855,10 @@ border: 1px solid @dropdown-divider-color !important;
 .border-radius(0);
 .transform(translateZ(0));
 margin-top: 15px;
+
+@media (max-width: 400px) {
+width: 90vw;
+}
 
 a {
 padding: 8px 15px;
