@@ -11,6 +11,7 @@
     "gulp": "^3.9.0",
     "gulp-cssimport": "^2.1.1",
     "gulp-less": "^3.0.3",
+    "gulp-remove-empty-lines": "0.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-strip-comments": "^1.1.1",
     "gulp-trimlines": "^1.0.0"

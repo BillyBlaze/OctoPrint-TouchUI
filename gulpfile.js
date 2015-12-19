@@ -4,6 +4,7 @@ var cssimport = require("gulp-cssimport");
 var rename = require("gulp-rename");
 var strip = require('gulp-strip-comments');
 var trimlines = require('gulp-trimlines');
+var removeEmptyLines = require('gulp-remove-empty-lines');
 
 gulp.task('default', ['lessc', 'combine']);
 gulp.task('less', ['lessc', 'combine']);
