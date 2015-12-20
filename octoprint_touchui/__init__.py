@@ -16,7 +16,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.StartupPlugin):
 
 	def __init__(self):
-		self.customCSSPath = "/static/less/_generated/touchui.custom.less";
+		self.customCSSPath = "/static/less/_generated/touchui.custom.less"
 		self.hasVisibleSettings = True
 		self.automaticallyLoad = True
 		self.useCustomization = False
