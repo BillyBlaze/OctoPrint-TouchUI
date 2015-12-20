@@ -248,6 +248,143 @@ line-height: 1;
 }
 
 
+
+
+
+
+
+
+
+.flex-display(@display: flex) {
+display: ~"-webkit-@{display}";
+display: ~"-moz-@{display}";
+display: ~"-ms-@{display}box";
+display: ~"-ms-@{display}";
+display: @display;
+}
+
+
+
+
+.flex(@columns: initial) {
+-webkit-flex: @columns;
+-moz-flex: @columns;
+-ms-flex: @columns;
+flex: @columns;
+}
+
+
+
+
+.flex-direction(@direction: row) {
+-webkit-flex-direction: @direction;
+-moz-flex-direction: @direction;
+-ms-flex-direction: @direction;
+flex-direction: @direction;
+}
+
+
+
+
+.flex-wrap(@wrap: nowrap) {
+-webkit-flex-wrap: @wrap;
+-moz-flex-wrap: @wrap;
+-ms-flex-wrap: @wrap;
+flex-wrap: @wrap;
+}
+
+
+
+
+.flex-flow(@flow) {
+-webkit-flex-flow: @flow;
+-moz-flex-flow: @flow;
+-ms-flex-flow: @flow;
+flex-flow: @flow;
+}
+
+
+
+
+.flex-order(@order: 0) {
+-webkit-order: @order;
+-moz-order: @order;
+-ms-order: @order;
+order: @order;
+}
+
+
+
+
+.flex-grow(@grow: 0) {
+-webkit-flex-grow: @grow;
+-moz-flex-grow: @grow;
+-ms-flex-grow: @grow;
+flex-grow: @grow;
+}
+
+
+
+
+.flex-shrink(@shrink: 1) {
+-webkit-flex-shrink: @shrink;
+-moz-flex-shrink: @shrink;
+-ms-flex-shrink: @shrink;
+flex-shrink: @shrink;
+}
+
+
+
+
+
+.flex-basis(@width: auto) {
+-webkit-flex-basis: @width;
+-moz-flex-basis: @width;
+-ms-flex-basis: @width;
+flex-basis: @width;
+}
+
+
+
+
+.justify-content(@justify: flex-start) {
+-webkit-justify-content: @justify;
+-moz-justify-content: @justify;
+-ms-justify-content: @justify;
+justify-content: @justify;
+}
+
+
+
+
+.align-content(@align: stretch) {
+-webkit-align-content: @align;
+-moz-align-content: @align;
+-ms-align-content: @align;
+align-content: @align;
+}
+
+
+
+
+.align-items(@align: stretch) {
+-webkit-align-items: @align;
+-moz-align-items: @align;
+-ms-align-items: @align;
+align-items: @align;
+}
+
+
+
+
+.align-self(@align: auto) {
+-webkit-align-self: @align;
+-moz-align-self: @align;
+-ms-align-self: @align;
+align-self: @align;
+}
+
+
 /*!
 *  Font Awesome 4.4.0 by @davegandy - http:
 *  License - http:
@@ -3422,7 +3559,7 @@ text-align: center;
 }
 #terminal-sendpanel {
 position: absolute;
-left: -1px;
+left: 0;
 width: 100%;
 margin: 0;
 top: 69vh;
@@ -3438,6 +3575,9 @@ background: mix(@terminal-color, @main-background, 30%);
 color: @terminal-color;
 }
 }
+.input-append {
+position: relative;
+}
 input {
 width: 100%;
 background-color: @main-background;
@@ -3451,8 +3591,8 @@ z-index: 2;
 .border-radius(0, 0, 5px, 5px);
 }
 button {
-margin-left: -61px;
-width: 60px;
+position: absolute;
+right: 1px;
 background-color: @terminal-color;
 color: @main-background;
 border: 0 none;
@@ -3461,7 +3601,6 @@ border-left: 1px solid @terminal-color;
 .text-shadow(0 0 0 transparent);
 .border-radius(0, 0, 5px, 0);
 z-index: 21;
-position: relative;
 padding: 4px 12px;
 }
 }
@@ -3565,11 +3704,11 @@ text-align: center !important;
 padding-right: 30px;
 }
 
-&:last-child {
-.input-append {
-padding-right: 120px;
-}
-}
+
+
+
+
+
 
 .dropdown-menu {
 margin: 2px 0 9px;
@@ -3589,25 +3728,79 @@ right: 9px;
 }
 .input-append {
 .box-sizing(border-box);
+
+.flex-display(flex);
+.flex-direction(row);
+.flex-wrap(nowrap);
+.justify-content(flex-start);
+.align-content(stretch);
+.align-items(flex-start);
+
+
+
+
+
+
+
+
+@media (max-width: 400px) {
+.flex-direction(column);
+.align-items(stretch);
+
+
+
 position: relative;
-padding-right: 160px;
+}
+
+> * {
+.flex-order(0);
+.flex(0 1 auto);
+.align-self(auto);
+
+
+
+
+}
 
 input {
-width: 100%;
+
+
+
+.flex-order(0);
+.flex(1 0 auto);
+.align-self(auto);
+
 margin-right: 0px;
 padding: 7px 15px;
 .border-radius(0);
 text-align: left;
+
+@media (max-width: 400px) {
+margin: 0 30px 5px 0;
+width: auto;
+}
 }
 .btn-group,
 > button {
-position: absolute;
-right: 0;
 .border-radius(0);
+
+@media (max-width: 400px) {
+button:first-child {
+width: 80%;
+}
+}
 }
 .add-on {
 padding: 7px;
 color: @dark-color;
+margin-right: 10px;
+
+@media (max-width: 400px) {
+margin-right: 0;
+position: absolute;
+top: 0;
+right: 0;
+}
 }
 button {
 padding: 7px 15px;
@@ -3622,6 +3815,14 @@ font-family: FontAwesome;
 font-size: 18px;
 top: -7px;
 position: relative;
+}
+}
+
+@media (max-width: 400px) {
+.box-sizing(border-box);
+
+&.dropdown-toggle {
+width: 20%;
 }
 }
 }

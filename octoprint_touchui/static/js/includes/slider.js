@@ -42,7 +42,7 @@
 						});
 				}).attr("id", "ui-inp-"+ind).val($(elm).children("input").data('slider').getValue());
 
-				$('<label for="ui-inp-'+ind+'"></label>').appendTo(div).text((ind === 0) ? "Flowrate:": "Feedrate:");
+				$('<label for="ui-inp-'+ind+'"></label>').appendTo(div).text($next.text().split(":")[0].replace(" ", "") + ":");
 			});
 		}
 	};

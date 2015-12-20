@@ -87,11 +87,11 @@
 						padding-right: 30px;
 					}
 
-					&:last-child {
-						.input-append {
-							padding-right: 120px;
-						}
-					}
+					// &:last-child {
+					// 	.input-append {
+					// 		padding-right: 120px;
+					// 	}
+					// }
 
 					.dropdown-menu {
 						margin: 2px 0 9px;
@@ -111,25 +111,79 @@
 					}
 					.input-append {
 						.box-sizing(border-box);
-						position: relative;
-						padding-right: 160px;
+
+						.flex-display(flex);
+						.flex-direction(row);
+						.flex-wrap(nowrap);
+						.justify-content(flex-start);
+						.align-content(stretch);
+						.align-items(flex-start);
+
+						// display: flex;
+						// flex-direction: row;
+						// flex-wrap: nowrap;
+						// justify-content: flex-start;
+						// align-content: stretch;
+						// align-items: flex-start;
+
+						@media (max-width: 400px) {
+							.flex-direction(column);
+							.align-items(stretch);
+
+							// flex-direction: column;
+							// align-items: stretch;
+							position: relative;
+						}
+
+						> * {
+							.flex-order(0);
+							.flex(0 1 auto);
+							.align-self(auto);
+
+							// order: 0;
+							// flex: 0 1 auto;
+							// align-self: auto;
+						}
 
 						input {
-							width: 100%;
+							// order: 0;
+							// flex: 1 0 auto;
+							// align-self: auto;
+							.flex-order(0);
+							.flex(1 0 auto);
+							.align-self(auto);
+
 							margin-right: 0px;
 							padding: 7px 15px;
 							.border-radius(0);
 							text-align: left;
+
+							@media (max-width: 400px) {
+								margin: 0 30px 5px 0;
+								width: auto;
+							}
 						}
 						.btn-group,
 						> button {
-							position: absolute;
-							right: 0;
 							.border-radius(0);
+
+							@media (max-width: 400px) {
+								button:first-child {
+									width: 80%;
+								}
+							}
 						}
 						.add-on {
 							padding: 7px;
 							color: @dark-color;
+							margin-right: 10px;
+
+							@media (max-width: 400px) {
+								margin-right: 0;
+								position: absolute;
+								top: 0;
+								right: 0;
+							}
 						}
 						button {
 							padding: 7px 15px;
@@ -144,6 +198,14 @@
 									font-size: 18px;
 									top: -7px;
 									position: relative;
+								}
+							}
+
+							@media (max-width: 400px) {
+								.box-sizing(border-box);
+
+								&.dropdown-toggle {
+									width: 20%;
 								}
 							}
 						}

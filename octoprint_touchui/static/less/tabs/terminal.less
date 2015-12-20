@@ -149,7 +149,7 @@
 	}
 	#terminal-sendpanel {
 		position: absolute;
-		left: -1px;
+		left: 0;
 		width: 100%;
 		margin: 0;
 		top: 69vh;
@@ -165,6 +165,9 @@
 				color: @terminal-color;
 			}
 		}
+		.input-append {
+			position: relative;
+		}
 		input {
 			width: 100%;
 			background-color: @main-background;
@@ -178,8 +181,8 @@
 			.border-radius(0, 0, 5px, 5px);
 		}
 		button {
-			margin-left: -61px;
-			width: 60px;
+			position: absolute;
+			right: 1px;
 			background-color: @terminal-color;
 			color: @main-background;
 			border: 0 none;
@@ -188,7 +191,6 @@
 			.text-shadow(0 0 0 transparent);
 			.border-radius(0, 0, 5px, 0);
 			z-index: 21;
-			position: relative;
 			padding: 4px 12px;
 		}
 	}
