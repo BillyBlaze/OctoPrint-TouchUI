@@ -15,6 +15,10 @@
 @text-color: @light-color;
 @link-color: @main-color;
 
+/* Grid properties */
+@main-gutter: 30px;
+@modal-gutter: 30px;
+
 /* Tables, fileList, progress */
 @table-row-background: mix(@main-background, contrast(@main-background), 80%);
 @table-row-header-background: @main-color;
@@ -30,6 +34,7 @@
 
 /* Modal */
 @modal-background: @light-color;
+@modal-backdrop: @dark-color;
 @modal-footer-background: fade(contrast(@modal-background), 5%);
 @modal-border: fade(contrast(@modal-background), 7%);
 @modal-text: @dark-color;
@@ -54,6 +59,12 @@
 @dropdown-iScroll-color: fade(@light-darker-dark-color, 70%);
 @main-iScroll-color: fade(contrast(@main-background), 70%);
 
+/* Inputs */
+@input-background: contrast(@main-background, @dark-light-color, @light-dark-color, 50%);
+@input-text-color: @dark-color;
+
+@addon-background: @dark-lighter-color;
+@addon-text-color: @light-color;
 
 
 /* More General styles used for contrast etc. */

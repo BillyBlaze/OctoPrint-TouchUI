@@ -46,7 +46,7 @@ $(function() {
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel", "pluginManagerViewModel"],
+		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel", "pluginManagerViewModel", "temperatureViewModel"],
 		["#touchui_settings_dialog", "#settings_plugin_touchui", "#navbar_plugin_touchui"]
 	]);
 });

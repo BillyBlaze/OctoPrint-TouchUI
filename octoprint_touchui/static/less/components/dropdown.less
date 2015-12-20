@@ -33,14 +33,6 @@
 	}
 }
 
-html.notouch {
-	.dropdown-menu {
-		&:hover, &:hover i {
-			color: @main-color !important;
-			background: @light-color !important
-		}
-	}
-}
 .dropdown-menu {
 	background: @main-color;
 	color: @main-color-text;
@@ -85,18 +77,5 @@ html.notouch {
 .dropdown-toggle.open {
 	.dropdown-menu {
 		display: block;
-	}
-}
-div#login_dropdown_loggedout {
-	padding: 15px 25px !important;
-
-	> * {
-		.box-sizing(border-box);
-	}
-
-	input[type="text"],
-	input[type="password"] {
-		width: 100%;
-		height: 30px;
 	}
 }

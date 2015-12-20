@@ -1,269 +1,269 @@
 #navbar {
-	height: 70px;
-	background-color: @main-color;
-	border: 0 none !important;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-
 	.navbar-inner {
-		background: transparent !important;
-		border: 0 none !important;
-		padding: 0;
-		margin: 0;
-	}
 
-	.container {
-		height: 66px;
-		border:0 none;
-	}
+		.container {
+			height: 66px;
+			border:0 none;
 
-	.nav {
-		position: relative;
-		z-index: 23;
+			.nav {
+				position: relative;
+				z-index: 23;
 
-		li {
-			width: 100%;
-		}
-	}
+				li {
+					width: 100%;
 
-	#youcanhazlogin {
-		margin: 0;
-		width: 100%;
-		overflow: hidden;
+					&.dropdown {
+						margin: 0;
+						z-index: 2;
 
-		#login_dropdown_loggedout {
-			border-top: 1px solid @dropdown-divider-color;
-			margin-top: 5px;
-		}
-	}
+						&#all_touchui_settings {
 
-	.dropdown {
-		margin: 0;
-		z-index: 2;
+							&.item_active {
+								background: @main-background;
 
-		.dropdown-menu {
+								> a:after {
+									color: contrast(@main-background);
+								}
+							}
 
-			.dropdown-menu {
-				position: static;
-				z-index: 0;
-				margin: 0;
-				float: none;
-				border: 0 none !important;
-				padding: 0;
+							&.offline > a:after {
+								animation-name: blink_offline;
+							}
 
-				@media (max-width: 300px) {
-					width: auto;
-				}
-			}
+							&.online > a:after {
+								animation-name: blink_online;
+							}
 
-			&:after,
-			&:before {
-				right: 6vw;
-				top: -10px;
-				border-left-width: 10px;
-				border-right-width: 10px;
-				border-bottom-width: 10px;
-			}
+							> a:after {
+								animation-duration: 0.6s;
+								animation-iteration-count: 5;
+								content: "\f0c9";
+							}
 
-			&:after {
-				border-bottom-color: @main-color !important;
-			}
+							&.open {
+								.dropdown-menu {
+									.open {
+										a.dropdown-toggle {
+											background: transparent;
 
-			.btn {
-				background: @main-color-dark;
+											&:after {
+												content: "\f0d8";
+											}
+										}
+									}
+								}
+							}
 
-				&:active {
-					background: @main-color-darker;
-				}
-			}
+							li {
 
-			a.dropdown-toggle {
-				&:after {
-					content: "\f0d7";
-					font: normal normal normal 14px/1 FontAwesome;
-					position: absolute;
-					right: 20px;
-					margin: 5px;
-				}
-				&:before {
-					content: "\f023";
-				}
-			}
-		}
-	}
+								&.offline {
+									a:before {
+										color: @offline-color;
+									}
+								}
 
-	#all_touchui_settings.open {
-		.dropdown-menu {
-			.open {
-				a.dropdown-toggle {
-					background: transparent;
+								&.online {
+									a:before {
+										color: @online-color;
+									}
+								}
 
-					&:after {
-						content: "\f0d8";
+								&#conn_link2 {
+									a:before {
+										content: "\f1eb";
+									}
+								}
+
+								&#timelapse_link2 {
+									a:before {
+										content: "\f03e";
+									}
+								}
+
+								&#gcode_link2 {
+									a:before {
+										content: "\f248";
+									}
+								}
+
+								&#navbar_settings {
+									a:before {
+										content: "\f013";
+									}
+								}
+
+								#usersettings_button {
+									&:before {
+										content: "\f007";
+									}
+								}
+
+								#logout_button {
+									&:before {
+										content: "\f08b";
+									}
+								}
+
+								#navbar_login {
+									a.dropdown-toggle {
+										&:after {
+											.font-icon-reset();
+											content: "\f0d7";
+											position: absolute;
+											right: 20px;
+											margin: 5px;
+										}
+										&:before {
+											content: "\f023";
+										}
+									}
+								}
+
+								&#navbar_plugin_touchui {
+									a:before {
+										content: "\f10b";
+										font-size: 28px;
+										line-height: 28px;
+										position: relative;
+										top: 5px;
+										margin-top: -9px;
+									}
+								}
+
+								&#navbar_systemmenu {
+									> a {
+										position: relative;
+										display: block;
+										float: none;
+
+										&.active {
+											&:after {
+												content: "\f0d8";
+											}
+										}
+
+										&:before {
+											content: "\f085";
+										}
+										i {
+											display: none;
+										}
+										&:after {
+											.font-icon-reset();
+											content: "\f0d7";
+											right: 18px;
+											position: absolute;
+											top: 9px;
+										}
+									}
+									.dropdown-menu {
+										a {
+											&:before {
+												content: "\f101";
+											}
+										}
+									}
+								}
+
+								a {
+									.box-sizing(border-box);
+
+									color: @main-color-text;
+									display: block;
+									text-align: left;
+									width: 100% !important;
+									max-width: 100% !important;
+									height: auto !important;
+									padding: 10px 20px !important;
+									float: none;
+
+									.icon-wrench{
+										display: none;
+									}
+
+									&:before {
+										.font-icon-reset();
+										content: "";
+										display: inline-block;
+										margin: 0 15px 0 0;
+										font-size: 20px;
+										position: relative;
+										width: 30px;
+										top: 2px;
+										text-align: center;
+									}
+
+								}
+							}
+						}
+
+						.dropdown-menu {
+
+							.dropdown-menu {
+								position: static;
+								z-index: 0;
+								margin: 0;
+								float: none;
+								border: 0 none !important;
+								padding: 0;
+
+								@media (max-width: 300px) {
+									width: auto;
+								}
+							}
+
+							&:after,
+							&:before {
+								right: 6vw;
+								top: -10px;
+								border-left-width: 10px;
+								border-right-width: 10px;
+								border-bottom-width: 10px;
+							}
+
+							&:after {
+								border-bottom-color: @main-color !important;
+							}
+
+							.btn {
+								background: @main-color-dark;
+
+								&:active {
+									background: @main-color-darker;
+								}
+							}
+						}
 					}
+
+					#youcanhazlogin {
+						margin: 0;
+						width: 100%;
+						overflow: hidden;
+
+						#login_dropdown_loggedout {
+							border-top: 1px solid @dropdown-divider-color;
+							margin-top: 0;
+							padding: 10px 25px 15px 25px !important;
+
+							> * {
+								.box-sizing(border-box);
+							}
+
+							input[type="text"],
+							input[type="password"] {
+								width: 100%;
+								height: 30px;
+							}
+						}
+					}
+
 				}
 			}
-		}
-	}
-
-	.dropdown,
-	.dropdown-menu {
-
-		.divider {
-			background: @dropdown-divider-color;
-		}
-
-		li {
-
-			&.offline {
-				a:before {
-					color: @offline-color;
-				}
-			}
-			&.online {
-				a:before {
-					color: @online-color;
-				}
-			}
-
-			a {
-				.box-sizing(border-box);
-
-				color: @main-color-text;
-				display: block;
-				text-align: left;
-				width: 100% !important;
-				max-width: 100% !important;
-				height: auto !important;
-				padding: 10px 20px !important;
-				float: none;
-
-				.icon-wrench{
-					display: none;
-				}
-
-				&:before {
-					font: normal normal normal 14px/1 FontAwesome;
-					content: "";
-					display: inline-block;
-					margin: 0 15px 0 0;
-					font-size: 20px;
-					position: relative;
-					width: 30px;
-					top: 2px;
-					text-align: center;
-				}
-
-			}
-
-			&#conn_link2 {
-				a:before {
-					content: "\f1eb";
-				}
-			}
-			&#timelapse_link2 {
-				a:before {
-					content: "\f03e";
-				}
-			}
-			&#gcode_link2 {
-				a:before {
-					content: "\f248";
-				}
-			}
-			&#navbar_settings {
-				a:before {
-					content: "\f013";
-				}
-			}
-			#usersettings_button {
-				&:before {
-					content: "\f007";
-				}
-			}
-			#logout_button {
-				&:before {
-					content: "\f08b";
-				}
-			}
-			#navbar_touchui_settings {
-				&:before {
-					content: "\f10b";
-					font-size: 28px;
-					line-height: 28px;
-					position: relative;
-					top: 5px;
-					margin-top: -9px;
-				}
-			}
-
 		}
 	}
 
 	#navbar_plugin_touchui {
 		float: none;
-	}
-
-	#navbar_systemmenu {
-		> a {
-			position: relative;
-			display: block;
-			float: none;
-
-			&.active {
-				&:after {
-					content: "\f0d8";
-				}
-			}
-
-			&:before {
-				content: "\f085";
-			}
-			i {
-				display: none;
-			}
-			&:after {
-				content: "\f0d7";
-				font-family: Fontawesome;
-				right: 18px;
-				position: absolute;
-				top: 9px;
-			}
-		}
-		.dropdown-menu {
-			a {
-				&:before {
-					content: "\f101";
-				}
-			}
-		}
-	}
-
-	#all_touchui_settings {
-		&.item_active {
-			background: @main-background;
-
-			> a:after {
-				color: contrast(@main-background);
-			}
-		}
-		&.offline:after {
-			animation-name: blink_offline;
-		}
-		&.online:after {
-			animation-name: blink_online;
-		}
-		> a:after {
-			animation-duration: 0.6s;
-			animation-iteration-count: 5;
-			content: "\f0c9";
-		}
-		> .dropdown-menu {
-			min-width: 253px;
-			margin-top: 12px;
-		}
 	}
 
 	@keyframes blink_offline {
@@ -287,44 +287,6 @@
 		}
 		100% {
 			color: @main-color-text;
-		}
-	}
-
-}
-
-#tabs {
-
-	#temp_link {
-		a:after {
-			content: "\f0e4";
-		}
-	}
-	#control_link {
-		a:after {
-			content: "\f11b";
-		}
-	}
-	#gcode_link {
-		a:after {
-			content: "\f248";
-		}
-	}
-	#term_link {
-		a:after {
-			content: "\f120";
-		}
-	}
-	#webcam_link {
-		a:after {
-			content: "\f030";
-			font-size: 29px;
-			line-height: 73px;
-		}
-	}
-	#print_link {
-		a:after {
-			content: "\f233";
-			line-height: 74px;
 		}
 	}
 

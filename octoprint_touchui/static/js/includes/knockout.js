@@ -26,6 +26,11 @@
 				});
 			}
 
+			$(window).on("resize", function() {
+				console.log(viewModels, viewModels[8]);
+				viewModels[8].updatePlot();
+			});
+
 			// Prevent the onTabChange function from hiding the webcam on the new webcam tab
 			var oldTabChange = controlViewModel.onTabChange;
 			controlViewModel.onTabChange = function(previous, current) {

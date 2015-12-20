@@ -1,65 +1,37 @@
-.tabbable > .nav-tabs li,
-#navbar .nav > li {
-	overflow: hidden;
-	position: relative;
-
-	width: 18%;
-	max-width: 100px;
-
-	> a {
-		height: 70px;
-		background: transparent;
-		position: relative;
-		z-index: 2;
-		padding: 0;
-		white-space: nowrap;
-		text-align: right;
-		color: @main-color;
-
-		&:after {
-			.font-icon-reset(FontAwesome);
-			color: @main-color-text;
-
-			text-align: center;
-			font-size: 32px;
-			line-height: 70px;
-
-			display: block;
-			height: 100%;
-			width: 100%;
-			position: absolute;
-			left: 0;
-			top: 0;
-
-			@media(max-width: 320px) {
-				font-size: 10vw !important;
-			}
-		}
-	}
-
-}
-#navbar .nav > li {
-	width: 100%;
-	float: right;
-}
 #tabs {
-	&.items-5 {
-		.nav,
-		&.nav {
-			li {
-				width: 16%;
-			}
+	#temp_link {
+		a:after {
+			content: "\f0e4";
 		}
 	}
-}
-#navbar {
-	&.items-5 {
-		.navbar-inner > .container > .nav-collapse > .nav {
-			width: 16%;
+	#control_link {
+		a:after {
+			content: "\f11b";
 		}
 	}
-}
-#tabs {
+	#gcode_link {
+		a:after {
+			content: "\f248";
+		}
+	}
+	#term_link {
+		a:after {
+			content: "\f120";
+		}
+	}
+	#webcam_link {
+		a:after {
+			content: "\f030";
+			font-size: 29px;
+			line-height: 73px;
+		}
+	}
+	#print_link {
+		a:after {
+			content: "\f233";
+			line-height: 74px;
+		}
+	}
 
 	// Pevent FOUT! (not dutch error!)
 	&:first-child {

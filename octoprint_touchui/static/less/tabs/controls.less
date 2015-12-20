@@ -50,7 +50,7 @@
 			display: block;
 			overflow: hidden;
 			float: none;
-			margin: 10px -20px 0;
+			margin: 0 -20px;
 
 			button {
 				color: contrast(@main-background);
@@ -80,7 +80,7 @@
 	}
 
 	#control-jog-extrusion {
-		padding: 45px 0 20px 15px;
+		padding: @main-gutter 0 (@main-gutter / 2) (@main-gutter / 2);
 		width: 50%;
 
 		h1 {
@@ -100,18 +100,18 @@
 		}
 
 		@media (max-width: 450px) {
-			margin-bottom: 45px;
+			margin-bottom: @main-gutter;
 		}
 	}
 
 	#control-jog-feedrate {
+		padding: @main-gutter (@main-gutter / 2) (@main-gutter / 2) 0;
 		position: relative;
 		float: left;
 		width: 50%;
-		padding: 45px 15px 20px 0;
 
 		@media (max-width: 450px) {
-			margin-top: 45px;
+			margin-top: @main-gutter;
 		}
 
 		.slider-container {
@@ -153,7 +153,7 @@
 			label {
 				position: absolute;
 				margin: 10px 0 10px 10px;
-				color: @dark-color;
+				color: @input-text-color;
 				z-index: 2;
 			}
 		}
@@ -293,112 +293,6 @@
 		}
 	}
 
-/*	#jog_distance {
-		position: absolute;
-		top: -4px;
-		overflow: hidden;
-		left: 34%;
-		width: 24%;
-		max-width: 150px;
-		height: 0;
-		padding: 45px 0 0;
-
-		@media (max-width: 450px) {
-			left: 40%;
-
-			button {
-				font-size: 7vw !important;
-			}
-			&:after, &:before {
-				font-size: 7vw !important;
-			}
-			&:before {
-				right: 2px !important;
-			}
-		}
-
-		&.open {
-			height: auto;
-			background-color: @light-color;
-			z-index: 1000;
-
-			&:after {
-				top: -5000px;
-			}
-
-			&:before {
-				color: @dark-color;
-				content: "\f0d8";
-			}
-
-			button {
-				color: @dark-color;
-			}
-		}
-
-		&:after {
-			content: "_____";
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			z-index: 2;
-			height: 100%;
-			cursor: pointer;
-			color: contrast(@main-background);
-			font-size: 22px;
-			line-height: 62px;
-			text-align: center;
-			text-indent: -10px;
-		}
-
-		&:before {
-			font-family: FontAwesome !important;
-			content: "\f0d7";
-			padding-left: 9px;
-			font-size: 24px;
-			display: inline-block;
-			position: absolute;
-			right: 10px;
-			top: 13px;
-			color: contrast(@main-background);
-		}
-
-		button {
-			height: 50px;
-			width: 100%;
-			display: block;
-			background: transparent;
-			color: contrast(@main-background);
-			margin: 0;
-			border: 0 none !important;
-			.box-shadow(none) !important;
-
-			&.active {
-				top: 0px;
-				position: absolute;
-				text-indent: -10px;
-			}
-		}
-	}
-	.distance {
-		float: none;
-		clear: both;
-		margin: 0;
-
-		.btn-group {
-			width: 50%;
-			display: block;
-
-			button {
-				width: 25%;
-				padding: 13px;
-				border: 1px solid !important;
-				font-size: 27px !important;
-			}
-		}
-
-	}*/
 	.distance {
 		.btn-group {
 			width: 100%;

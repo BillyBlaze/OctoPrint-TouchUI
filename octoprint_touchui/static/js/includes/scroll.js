@@ -37,14 +37,14 @@
 				var width = $(window).width();
 
 				// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
-				$("#temperature-graph").height($("#temperature-graph").outerHeight());
+				$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
 				$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
 				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
 
 				$(window).on("resize", function() {
 
 					if(width !== $(window).width()) {
-						$("#temperature-graph").css("height", "").height($("#temperature-graph").outerHeight());
+						$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
 						$("#terminal-scroll").css("height", "").height($("#terminal-scroll").outerHeight());
 						$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
 						width = $(window).width();

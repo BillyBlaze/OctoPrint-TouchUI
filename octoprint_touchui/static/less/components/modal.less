@@ -1,5 +1,5 @@
 .modal-backdrop {
-	background: @dark-color !important;
+	background: @modal-backdrop !important;
 }
 
 .emulateTouch {
@@ -41,7 +41,7 @@
 		-webkit-overflow-scrolling: auto;
 
 		background: @modal-background;
-		color: contrast(@modal-background);
+		color: @modal-text;
 
 		-webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
 		-moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
@@ -102,7 +102,7 @@
 		.modal {
 
 			&-body {
-				padding: 20px 25px;
+				padding: (@modal-gutter - 10px) @modal-gutter;
 				margin-bottom: 60px;
 				min-height: auto !important;
 				max-height: none !important;
@@ -128,7 +128,7 @@
 					&.active,
 					&.disabled {
 						> a {
-							color: contrast(@modal-background);
+							color: @modal-text;
 						}
 					}
 				}
@@ -143,11 +143,12 @@
 				bottom: 0;
 				left: 0;
 				width: 100%;
-				padding-right: 30px;
+				padding-right: @modal-gutter;
+				padding-left: @modal-gutter;
 				z-index: 2;
 			}
 			&-header {
-				padding: 20px 25px;
+				padding: 20px @modal-gutter;
 				border-bottom-color: @modal-border;
 
 				#settings_dialog_label {
@@ -156,7 +157,7 @@
 				}
 
 				.close {
-					color: contrast(@modal-background);
+					color: @modal-text;
 					font-size: 42px;
 					padding: 13px;
 					margin-top: -10px;
@@ -175,7 +176,7 @@
 
 					&:before {
 						content: "/";
-						color: contrast(@modal-background, @light-darker-darker-color, white);
+						color: mix(@modal-background, contrast(@modal-background), 70%);
 						margin-right: 10px;
 					}
 					&:after {
