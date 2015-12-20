@@ -24,7 +24,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		self.colors_customPath = ""
 		self.colors_useLocalFile = False
 
-		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
+		self.activeCustomFile = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
 		self.colors_mainColor = "#00B0FF"
 		self.colors_termColor = "#0F0"
 		self.colors_bgColor = "#000"
@@ -48,8 +48,6 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		self.toggle_custom_less()
 
 	def get_assets(self):
-		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
-
 		return dict(
 			js=[
 				"js/libs/iscroll.js",
@@ -76,7 +74,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		)
 
 	def get_template_configs(self):
-		self.activeCustomCSS = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
+		self.activeCustomFile = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
 
 		files = [
 			dict(type="generic", template="touchui_modal.jinja2", custom_bindings=True),
@@ -89,7 +87,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				dict(type="generic", template="touchui_auto_load.jinja2", custom_bindings=True)
 			)
 
-		if self.activeCustomCSS is True and self._settings.get(["useCustomization"]) is True:
+		if self.activeCustomFile is True and self._settings.get(["useCustomization"]) is True:
 			files.append(
 				dict(type="generic", template="touchui_load_less.jinja2", custom_bindings=True)
 			)
@@ -140,7 +138,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		customCSS = open(os.path.dirname(__file__) + self.customCSSPath, 'w+')
 		customCSS.write('@import "touchui.bundled.less"' + ";\n" + variableLESS)
 		customCSS.close()
-		self.activeCustomCSS = True
+		self.activeCustomFile = os.path.isfile(os.path.dirname(__file__) + self.customCSSPath)
 
 	def remove_custom_less(self):
 		if os.path.isfile(os.path.dirname(__file__) + self.customCSSPath):
