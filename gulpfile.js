@@ -22,7 +22,7 @@ gulp.task("combine", function() {
 			matchPattern: "*.less"
 		}))
 		.pipe(strip())
-		.pipe(rename("touchui.generated.less"))
+		.pipe(rename("touchui.bundled.less"))
 		.pipe(trimlines())
 		.pipe(gulp.dest('octoprint_touchui/static/less/_generated/'));
 });

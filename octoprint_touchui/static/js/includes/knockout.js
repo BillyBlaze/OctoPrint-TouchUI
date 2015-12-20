@@ -26,6 +26,7 @@
 				});
 			}
 
+			// Repaint graph after resize (.e.g orientation changed)
 			$(window).on("resize", function() {
 				viewModels[8].updatePlot();
 			});
@@ -88,15 +89,20 @@
 
 			// Refresh LESS file after saving settings
 			settingsViewModel.sending.subscribe(function(isSending) {
-				var $less = $("#touchui-custom-less");
-				if($less.length === 0) {
-					$('<link href="/plugin/touchui/static/less/_generated/touchui.custom.less" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("head");
-					less.sheets[0] = document.getElementById('touchui-custom-less');
-				}
 				if(!isSending) {
-					$("#touchui-custom-less").attr("href", "/plugin/touchui/static/less/_generated/touchui.custom.less?v=" + new Date().getTime());
-					$("#touchui-custom-less").next('style').remove();
-					less.refresh();
+					var $less = $("#touchui-custom-less");
+					if(touchViewModel.settings.useCustomization()) {
+						if($less.length === 0) {
+							$('<link href="/plugin/touchui/static/less/_generated/touchui.custom.less" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("head");
+							less.sheets[0] = document.getElementById('touchui-custom-less');
+						}
+
+						$less.attr("href", "/plugin/touchui/static/less/_generated/touchui.custom.less?v=" + new Date().getTime());
+						$less.next('style').remove();
+						less.refresh();
+					} else {
+						$("#reloadui_overlay").fadeIn(600);
+					}
 				}
 			});
 
