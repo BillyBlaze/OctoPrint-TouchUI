@@ -27,7 +27,6 @@
 			}
 
 			$(window).on("resize", function() {
-				console.log(viewModels, viewModels[8]);
 				viewModels[8].updatePlot();
 			});
 

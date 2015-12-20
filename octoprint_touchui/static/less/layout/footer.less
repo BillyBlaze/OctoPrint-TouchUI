@@ -4,10 +4,12 @@
 	left: 0;
 	bottom: 0;
 	width: 100%;
-	padding: 0 40px 0;
+	padding: 0 @main-gutter 0;
 	.box-sizing(border-box);
 
 	ul {
+		color: mix(@main-background, contrast(@main-background), 50%);
+
 		@media (max-width: 400px) {
 			&.pull-left {
 				li {
@@ -43,7 +45,7 @@
 				padding: 0;
 
 				&:hover {
-					color: contrast(@main-background, @dark-color, @light-color);
+					color: mix(@main-background, contrast(@main-background), 20%);
 					text-decoration: none;
 				}
 			}
