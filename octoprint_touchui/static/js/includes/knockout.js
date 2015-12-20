@@ -90,19 +90,51 @@
 			// Refresh LESS file after saving settings
 			settingsViewModel.sending.subscribe(function(isSending) {
 				if(!isSending) {
-					var $less = $("#touchui-custom-less");
-					if(touchViewModel.settings.useCustomization()) {
-						if($less.length === 0) {
-							$('<link href="/plugin/touchui/static/less/_generated/touchui.custom.less" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("head");
-							less.sheets[0] = document.getElementById('touchui-custom-less');
-						}
+					$.ajax("/plugin/touchui/check", {
+						method: "GET",
+						cache: false
+					}).done(function(response) {
+						if( response.error !== "false") {
+							new PNotify({
+								title: 'TouchUI: Saving failed',
+								text: response.error,
+								icon: 'glyphicon glyphicon-question-sign',
+								type: 'error',
+								hide: false
+							});
+						} else {
+							var $less = $("#touchui-custom-less"),
+								$css = $("#touchui-css-only");
 
-						$less.attr("href", "/plugin/touchui/static/less/_generated/touchui.custom.less?v=" + new Date().getTime());
-						$less.next('style').remove();
-						less.refresh();
-					} else {
-						$("#reloadui_overlay").fadeIn(600);
-					}
+							if(touchViewModel.settings.useCustomization()) {
+
+								if($less.length === 0) {
+									$('<link href="/plugin/touchui/static/less/_generated/touchui.custom.less" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("body");
+									less.sheets[0] = document.getElementById('touchui-custom-less');
+								}
+
+								$less.attr("href", "/plugin/touchui/static/less/_generated/touchui.custom.less?v=" + new Date().getTime());
+								$('style:not(#touch_updates_css)').remove();
+								$css.remove();
+								less.refresh();
+
+							} else {
+
+								if($css.length === 0) {
+									loadcss = document.createElement('link');
+									loadcss.setAttribute("rel", "stylesheet");
+									loadcss.setAttribute("type", "text/css");
+									loadcss.setAttribute("href", "/plugin/touchui/static/css/touchui.css");
+									loadcss.setAttribute("id", "touchui-css-only");
+									document.getElementsByTagName("head")[0].appendChild(loadcss);
+								}
+
+								$('style:not(#touch_updates_css)').remove();
+								$less.remove();
+
+							}
+						}
+					});
 				}
 			});
 
