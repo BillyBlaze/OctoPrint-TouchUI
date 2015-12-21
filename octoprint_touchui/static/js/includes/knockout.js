@@ -91,10 +91,9 @@
 			settingsViewModel.sending.subscribe(function(isSending) {
 				if(!isSending) {
 					$.ajax("/plugin/touchui/check", {
-						method: "GET",
-						cache: false
+						method: "GET"
 					}).done(function(response) {
-						if( response.error !== "false") {
+						if( response.error !== false) {
 							new PNotify({
 								title: 'TouchUI: Saving failed',
 								text: response.error,
