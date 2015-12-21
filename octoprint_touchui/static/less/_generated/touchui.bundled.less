@@ -18,7 +18,7 @@
 
 @main-gutter: 30px;
 @modal-gutter: 30px;
-@terminal-gutter: 20px;
+@terminal-gutter: 10px;
 
 
 @table-row-background: mix(@main-background, contrast(@main-background), 80%);
@@ -3903,7 +3903,7 @@ float: none;
 margin: 0 -20px;
 
 button {
-color: @main-color;
+color: contrast(@main-background);
 background: transparent;
 
 font-size: 36px;
@@ -4065,9 +4065,9 @@ display: none;
 }
 
 button {
-color: @main-color;
-background: transparent;
 font-size: 36px;
+color: contrast(@main-background);
+background: transparent;
 padding: 0 !important;
 margin: 0;
 font-weight: normal;
@@ -4090,7 +4090,7 @@ height: 16vw;
 
 &:before,
 &:after {
-color: @main-color;
+color: contrast(@main-background);
 font-family: FontAwesome;
 .text-shadow(0 0 0 transparent);
 display: block;
@@ -4124,7 +4124,7 @@ content: "\f011";
 
 &:after {
 content: "\f057";
-color: contrast(@main-background) !important;
+color: @main-color !important;
 font-size: 8vw;
 position: absolute;
 top: -2vw;
