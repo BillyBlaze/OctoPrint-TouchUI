@@ -18,6 +18,29 @@
 		}
 	}
 
+	.track {
+		.close {
+			width: 25px;
+			height: 25px;
+			background: @main-color;
+			border: 1px solid @main-color-darker;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			border-radius: 50%;
+			opacity: 1;
+
+			&:after {
+				.font-icon-reset();
+				content: "\f00d";
+				color: @main-color-text;
+				text-align: center;
+				display: block;
+				line-height: 25px;
+			}
+		}
+	}
+
 }
 
 /* Modal TouchUI (not settings) */
