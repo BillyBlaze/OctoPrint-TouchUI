@@ -95,7 +95,7 @@
 					}).done(function(response) {
 						if( response.error !== false) {
 							new PNotify({
-								title: 'TouchUI: Saving failed',
+								title: 'TouchUI: Whoops, something went wrong...',
 								text: response.error,
 								icon: 'glyphicon glyphicon-question-sign',
 								type: 'error',
