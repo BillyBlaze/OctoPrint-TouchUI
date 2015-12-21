@@ -18,6 +18,7 @@
 
 @main-gutter: 30px;
 @modal-gutter: 30px;
+@terminal-gutter: 20px;
 
 
 @table-row-background: mix(@main-background, contrast(@main-background), 80%);
@@ -2715,7 +2716,7 @@ color: contrast(@default-btn-color);
 padding: 6px 15px;
 
 &:disabled {
-opacity: .3;
+opacity: .4;
 }
 &:active {
 background: @default-btn-color;
@@ -3517,6 +3518,7 @@ z-index: 2;
 margin-bottom: 26px;
 border: 0 none;
 margin: 0;
+padding: 10px @terminal-gutter @terminal-gutter;
 height: auto;
 min-height: 0;
 max-height: none;
@@ -3901,7 +3903,7 @@ float: none;
 margin: 0 -20px;
 
 button {
-color: contrast(@main-background);
+color: @main-color;
 background: transparent;
 
 font-size: 36px;
@@ -4063,9 +4065,9 @@ display: none;
 }
 
 button {
-font-size: 36px;
-color: contrast(@main-background);
+color: @main-color;
 background: transparent;
+font-size: 36px;
 padding: 0 !important;
 margin: 0;
 font-weight: normal;
@@ -4088,7 +4090,7 @@ height: 16vw;
 
 &:before,
 &:after {
-color: contrast(@main-background);
+color: @main-color;
 font-family: FontAwesome;
 .text-shadow(0 0 0 transparent);
 display: block;
@@ -4122,7 +4124,7 @@ content: "\f011";
 
 &:after {
 content: "\f057";
-color: red !important;
+color: contrast(@main-background) !important;
 font-size: 8vw;
 position: absolute;
 top: -2vw;
