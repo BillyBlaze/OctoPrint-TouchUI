@@ -12,13 +12,6 @@
 			padding: 12px 0;
 			height: 50px;
 			overflow: hidden;
-			background-color: contrast(@main-background);
-			color: @main-background;
-
-			&-primary {
-				color: @main-color-text;
-				background: @main-color;
-			}
 		}
 		i {
 			font-size: 28px;
@@ -27,6 +20,16 @@
 		}
 		.icon-print:before {
 			content: "\f051";
+		}
+		#job_cancel,
+		#job_pause {
+			background: @btn-background;
+			color: @btn-text;
+
+			&:active {
+				background: darken(@btn-background, 10%);
+				color: @btn-text;
+			}
 		}
 		#job_pause {
 			top: 40px;
@@ -181,10 +184,6 @@
 							background: @swipe-list-background-open-color;
 							color: contrast(@swipe-list-background-open-color);
 						}
-
-						.btn {
-							color: contrast(@swipe-list-background-open-color) !important;
-						}
 					}
 
 					&:after {
@@ -203,7 +202,7 @@
 						color: contrast(@swipe-list-background-color);
 					}
 
-					div, div span {
+					> div, div span {
 						color: inherit;
 					}
 
@@ -257,12 +256,6 @@
 
 					}
 				}
-			}
-		}
-		.btn {
-			&-primary {
-				background: @main-color;
-				color: @main-color-text;
 			}
 		}
 	}

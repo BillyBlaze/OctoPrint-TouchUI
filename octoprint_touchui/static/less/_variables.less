@@ -41,13 +41,20 @@
 @modal-text: @dark-color;
 
 /* Buttons */
-@default-btn-color: @light-dark-color;
-@danger-color: #D40000;
-@danger-active-color: #9E0000;
+@btn-background: @light-dark-color;
+@btn-text: contrast(@light-dark-color, @dark-color, @light-color);
+
+@btn-main-background: @main-color;
+@btn-main-text: @main-color-text;
+
+@btn-danger-background: #D40000;
+@btn-danger-text: contrast(@btn-danger-background, @dark-color, @light-color);
 
 /* Dropdown + indication */
 @online-color: #9AFD00;
 @offline-color: red;
+@dropdown-color: @main-color;
+@dropdown-color-text: @main-color-text;
 @dropdown-divider-color: @main-color-dark;
 
 /* Termional */

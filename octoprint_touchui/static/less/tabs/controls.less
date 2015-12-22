@@ -11,20 +11,13 @@
 		.box-sizing(border-box);
 
 		h1 {
-			color: contrast(@main-background);
-			margin: -10px 0 5px;
-			font-size: 27px;
-			text-align: center;
+			display: none;
 		}
 
 		&#control-jog-xy {
 			float: left;
 			margin: 0;
 			position: relative;
-
-			h1 {
-				display: none;
-			}
 		}
 
 		&#control-jog-z {
@@ -34,10 +27,6 @@
 
 			@media (max-width: 450px) {
 				right: 31.5%;
-			}
-
-			h1 {
-				display: none;
 			}
 		}
 
@@ -53,8 +42,12 @@
 			margin: 0 -20px;
 
 			button {
-				color: contrast(@main-background);
+				color: contrast(@main-background, @dark-color, @light-color);
 				background: transparent;
+
+				&:active {
+					color: @btn-main-background;
+				}
 
 				font-size: 36px;
 				display: inline;
@@ -218,12 +211,17 @@
 
 		button {
 			font-size: 36px;
-			color: contrast(@main-background);
-			background: transparent;
 			padding: 0 !important;
 			margin: 0;
 			font-weight: normal;
 			overflow: hidden;
+
+			color: contrast(@main-background, @dark-color, @light-color);
+			background: transparent;
+
+			&:active {
+				color: @btn-main-background;
+			}
 
 			width: 16vw;
 			height: 16vw;
@@ -301,10 +299,11 @@
 			margin: 0;
 
 			button {
+				background: mix(@btn-main-background, @main-background, 60%);
+				color: @btn-main-text;
+
 				width: 25% !important;
-				background: mix(@main-color-darker, @main-background, 70%);
 				border-right: 1px solid @main-background;
-				color: @main-color-text;
 				padding: 0 !important;
 
 				&:last-child {
@@ -312,8 +311,8 @@
 				}
 
 				&.active {
-					background: @main-color;
-					color: @main-color-text;
+					background: @btn-main-background;
+					color: @btn-main-text;
 				}
 			}
 		}

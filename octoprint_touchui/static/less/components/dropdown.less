@@ -4,7 +4,7 @@
 		overflow: visible !important;
 
 		.dropdown-menu {
-			background-color: @main-color !important;
+			background-color: @dropdown-color !important;
 
 			a {
 				text-indent: 0 !important;
@@ -17,11 +17,11 @@
 
 		a {
 			display: block;
-			color: @main-color-text;
+			color: @dropdown-color-text;
 
 			&:hover {
-				color: @main-color-text;
-				background: @main-color;
+				color: @dropdown-color-text;
+				background: @dropdown-color;
 			}
 		}
 	}
@@ -34,8 +34,8 @@
 }
 
 .dropdown-menu {
-	background: @main-color;
-	color: @main-color-text;
+	background: @dropdown-color;
+	color: @dropdown-color-text;
 	border: 1px solid @dropdown-divider-color !important;
 	.border-radius(0);
 	.transform(translateZ(0));
@@ -49,12 +49,12 @@
 		padding: 8px 15px;
 
 		&:hover {
-			color: @main-color-text;
-			background: @main-color;
+			color: @dropdown-color-text;
+			background: @dropdown-color;
 		}
 	}
 	a, i {
-		color: @main-color-text !important;
+		color: @dropdown-color-text !important;
 		font-size: 15px !important;
 		width: 100%;
 		.box-sizing(border-box);
@@ -68,7 +68,7 @@
 	&:before {
 		content: "";
 		border: 10px solid transparent;
-		border-bottom-color: @main-color;
+		border-bottom-color: @dropdown-color;
 		position: absolute;
 		top: -18px;
 		right: 27px;

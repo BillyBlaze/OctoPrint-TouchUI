@@ -95,38 +95,34 @@
 		}
 
 		button, .btn {
-			background: @main-color;
-			color: @main-color-text;
+			transition: background-color 0.2s ease, color 0.2s ease;
+			background: @btn-main-background;
+			color: @btn-main-text;
 
 			&:active {
-				background: @main-color-dark;
-				color: @main-color-dark-text;
+				background: darken(@btn-main-background, 10%);
+				color: @btn-main-text;
 			}
 
 			&:focus {
 				outline: 0 none;
 			}
+
+			&.disabled, &[disabled] {
+				pointer-events: none;
+			}
 		}
 
 		.touch-focus {
-			background-color: @main-color-darker !important;
-			color: @main-color-text !important;
+			background: @btn-main-background !important;
+			color: @btn-main-text !important;
 
 			&[type="file"] {
 				color: transparent !important;
 			}
 
 			&:before, &:after, span, i {
-				color: @main-color-text !important;
-			}
-		}
-
-		button,
-		.btn {
-			transition: background-color 0.2s ease, color 0.2s ease;
-
-			&.disabled, &[disabled] {
-				pointer-events: none;
+				color: @btn-main-text !important;
 			}
 		}
 

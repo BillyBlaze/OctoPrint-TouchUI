@@ -1,37 +1,40 @@
 button,
 .btn {
-	background: @default-btn-color;
-	color: contrast(@default-btn-color);
+	border-color: darken(@btn-background, 15%);
+	background: @btn-background;
+	color: @btn-text;
 	padding: 6px 15px;
 
 	&:disabled {
 		opacity: .4;
 	}
 	&:active {
-		background: @default-btn-color;
-		color: contrast(@default-btn-color);
+		background: darken(@btn-background, 10%);
+		color: @btn-text;
 	}
 	&:focus {
 		outline: 0 none;
 	}
 
 	&-primary {
-		background: @main-color;
-		color: @main-color-text;
+		border-color: darken(@btn-main-background, 15%);
+		background: @btn-main-background;
+		color: @btn-main-text;
 
 		&:active {
-			background: @main-color-dark;
-			color: @main-color-dark-text;
+			background: darken(@btn-main-background, 10%);
+			color: @btn-main-text;
 		}
 	}
 
 	&-danger {
-		background: @danger-color;
-		color: contrast(@danger-color);
+		border-color: darken(@btn-danger-background, 15%);
+		background: @btn-danger-background;
+		color: @btn-danger-text;
 
 		&:active {
-			background: @danger-active-color;
-			color: contrast(@danger-active-color);
+			background: darken(@btn-danger-background, 10%);
+			color: @btn-danger-text;
 		}
 	}
 }
