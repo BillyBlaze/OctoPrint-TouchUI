@@ -16,48 +16,55 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.StartupPlugin):
 
 	def __init__(self):
-		self.customLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.custom.less"
+		self._customLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.custom.less"
+		self._templateLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.template.less"
 		self.error = False
 
 	def on_after_startup(self):
-		self.toggle_custom_less()
+		self._toggle_custom_less()
 
 	def on_settings_save(self, data):
 		self.error = False
 		octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
 
 		try:
-			self.toggle_custom_less()
+			self._toggle_custom_less()
 		except Exception as e:
 			self._logger.exception("Exception while generating LESS file: {message}".format(message=str(e)))
 			self.error = e
 
-	def toggle_custom_less(self):
+	def _toggle_custom_less(self):
 		if self._settings.get(["useCustomization"]):
-			self.save_custom_less()
+			self._save_custom_less()
 		else:
-			self.remove_custom_less()
+			self._remove_custom_less()
 
-	def save_custom_less(self):
+	def _save_custom_less(self):
 		if self._settings.get(["colors", "useLocalFile"]) is False:
-			variableLESS =  "@main-color:" + self._settings.get(["colors", "mainColor"]) + ";\n@terminal-color:" + self._settings.get(["colors", "termColor"]) + ";\n@text-color:" + self._settings.get(["colors", "textColor"]) + ";\n@main-background:" + self._settings.get(["colors", "bgColor"]) + ";"
+			with open(self._templateLessPath, "r") as contentFile:
+				variableLESS = contentFile.read().format(
+					mainColor=self._settings.get(["colors", "mainColor"]),
+					termColor=self._settings.get(["colors", "termColor"]),
+					textColor=self._settings.get(["colors", "textColor"]),
+					bgColor=self._settings.get(["colors", "bgColor"])
+				)
 		else:
-			with open(self._settings.get(["colors", "customPath"]), 'r') as content_file:
-				variableLESS = content_file.read()
+			with open(self._settings.get(["colors", "customPath"]), 'r') as contentFile:
+				variableLESS = contentFile.read()
 
-		with open(self.customLessPath, 'w+') as customCSS:
-			customCSS.write('@import "touchui.bundled.less"' + ";\n" + variableLESS)
+		with open(self._customLessPath, "w+") as customCSS:
+			customCSS.write('@import "touchui.bundled.less";\n{less}'.format(less=variableLESS))
 
-	def remove_custom_less(self):
-		if os.path.isfile(self.customLessPath):
-			os.unlink(self.customLessPath)
+	def _remove_custom_less(self):
+		if os.path.isfile(self._customLessPath):
+			os.unlink(self._customLessPath)
 
 	@octoprint.plugin.BlueprintPlugin.route("/check", methods=["GET"])
-	def checkSave(self):
+	def checkErrors(self):
 		if self.error is False:
 			return jsonify(error=False)
 		else:
-			return jsonify(error="{message}".format(message=str(self.error)))
+			return jsonify(error=str(self.error))
 
 	def get_assets(self):
 		return dict(
@@ -98,7 +105,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				dict(type="generic", template="touchui_auto_load.jinja2", custom_bindings=False)
 			)
 
-		if os.path.isfile(self.customLessPath) and self._settings.get(["useCustomization"]):
+		if os.path.isfile(self._customLessPath) and self._settings.get(["useCustomization"]):
 			files.append(
 				dict(type="generic", template="touchui_load_less.jinja2", custom_bindings=False)
 			)
