@@ -39,7 +39,7 @@
 					line-height: 1;
 					border-bottom: 5px solid;
 					bottom: -3px;
-					.border-radius(2px);
+					.border-radius(2px, 2px, 2px, 2px);
 				}
 			}
 
@@ -347,7 +347,7 @@
 		}
 	}
 
-	@media (orientation:portrait) {
+	@media all and (orientation: portrait) {
 		#control-jog-general {
 			width: 75vw;
 			margin: 0 auto;
