@@ -200,8 +200,11 @@
 							}
 						}
 
-						.dropdown-menu {
+						> .dropdown-menu {
+							min-width: 230px;
+						}
 
+						.dropdown-menu {
 							.dropdown-menu {
 								position: static;
 								z-index: 0;
@@ -215,16 +218,12 @@
 								}
 							}
 
-							&:after,
 							&:before {
 								right: 6vw;
-								top: -10px;
+								top: -20px;
 								border-left-width: 10px;
 								border-right-width: 10px;
 								border-bottom-width: 10px;
-							}
-
-							&:after {
 								border-bottom-color: @dropdown-color !important;
 							}
 

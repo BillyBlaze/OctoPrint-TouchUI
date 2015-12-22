@@ -28,11 +28,15 @@
 	color: @dropdown-color-text;
 	border: 1px solid @dropdown-divider-color !important;
 
-	margin-top: 15px;
+	margin-top: 10px;
 	padding: (@dropdown-gutter / 3) 0;
 
 	@media (max-width: 300px) {
 		width: 90vw;
+	}
+
+	&:after {
+		display: none;
 	}
 
 	li {
@@ -41,23 +45,25 @@
 		}
 
 		a {
+			color: @dropdown-color-text !important;
+			font-size: 15px !important;
+			width: 100%;
+			.box-sizing(border-box);
+
 			padding: 0 @dropdown-gutter;
 			line-height: 40px;
 
-			&:hover {
+			i {
+				color: inherit;
+			}
+
+			&:hover, &:focus {
 				color: @dropdown-color-text;
 				background: @dropdown-color;
 			}
 			&:active {
 				background: darken(@dropdown-color, 15%);
 			}
-		}
-
-		a, i {
-			color: @dropdown-color-text !important;
-			font-size: 15px !important;
-			width: 100%;
-			.box-sizing(border-box);
 		}
 	}
 

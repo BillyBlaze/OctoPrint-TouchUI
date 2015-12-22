@@ -184,10 +184,15 @@
 							background: @swipe-list-background-open-color;
 							color: contrast(@swipe-list-background-open-color);
 						}
+						div.action-buttons {
+							.btn {
+								color: contrast(@swipe-list-background-open-color);
+							}
+						}
 					}
 
 					&:after {
-						transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
+						transition: left 0.4s ease, background 0.7s ease;
 
 						content: "";
 						display: block;
