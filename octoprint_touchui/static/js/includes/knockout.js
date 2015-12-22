@@ -167,9 +167,8 @@
 				ko.applyBindings(controlViewModel, $("#webcam")[0]);
 			}
 			if($("#control-jog-feedrate").length > 0) {
-				if(!ko.dataFor($("#control-jog-feedrate")[0])) {
-					ko.applyBindings(controlViewModel, $("#control-jog-feedrate")[0]);
-				}
+				ko.cleanNode($("#control-jog-feedrate")[0]);
+				ko.applyBindings(controlViewModel, $("#control-jog-feedrate")[0]);
 			}
 			if($("#navbar_login").length > 0) {
 				ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);
