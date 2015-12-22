@@ -9,7 +9,7 @@
 
 				display: {
 					'accept' :  "Save",
-					'bksp'   :  "\u2190",
+					'bksp'   :  " ",
 					'default': 'ABC',
 					'meta1'  : '.?123',
 					'meta2'  : '#+='
@@ -18,35 +18,35 @@
 				layout: 'custom',
 				customLayout: {
 					'default': [
-						'q w e r t y u i o p {bksp}',
+						'q w e r t y u i o p',
 						'a s d f g h j k l',
-						'{s} z x c v b n m , . {s}',
-						'{left} {right} {meta1} {space} {c} {accept}'
+						'{bksp} {s} z x c v b n m',
+						'{accept} {c} {left} {right} {meta1} {space}'
 					],
 					'shift': [
-						'Q W E R T Y U I O P {bksp}',
+						'Q W E R T Y U I O P',
 						'A S D F G H J K L',
-						'{s} Z X C V B N M ! ? {s}',
-						'{left} {right} {meta1} {space} {c} {accept}'
+						'{bksp} {s} Z X C V B N M',
+						'{accept} {c} {left} {right} {meta1} {space}'
 					],
 					'meta1': [
-						'1 2 3 4 5 6 7 8 9 0 {bksp}',
+						'1 2 3 4 5 6 7 8 9 0',
 						'- / : ; ( ) \u20ac & @',
-						'{meta2} . , ? ! \' " {meta2}',
-						'{left} {right} {default} {space} {c} {accept}'
+						'{bksp} {meta2} . , ? ! \' "',
+						'{accept} {c} {left} {right} {default} {space}'
 					],
 					'meta2': [
-						'[ ] { } # % ^ * + = {bksp}',
+						'[ ] { } # % ^ * + =',
 						'_ \\ | ~ < > $ \u00a3 \u00a5',
-						'{meta1} . , ? ! \' " {meta1}',
-						'{left} {right} {default} {space} {c} {accept}'
+						'{bksp} {meta1} . , ? ! \' "',
+						'{accept} {c} {left} {right} {default} {space}'
 					]
 				}
 
 			},
 			terminal: {
 				display: {
-					'bksp'   :  "\u2190",
+					'bksp'   :  " ",
 					'accept' : 'Save',
 					'default': 'ABC',
 					'meta1'  : '.?123',
@@ -56,29 +56,29 @@
 				layout: 'custom',
 				customLayout: {
 					'default': [
-						'Q W E R T Y U I O P {bksp}',
+						'Q W E R T Y U I O P',
 						'A S D F G H J K L',
-						'{s} Z X C V B N M ! ? {s}',
-						'{left} {right} {meta1} {space} {c} {accept}'
+						'{bksp} {s} Z X C V B N M',
+						'{accept} {c} {left} {right} {meta1} {space}'
 					],
 					'meta1': [
-						'1 2 3 4 5 6 7 8 9 0 {bksp}',
+						'1 2 3 4 5 6 7 8 9 0',
 						'- / : ; ( ) \u20ac & @',
-						'{meta2} . , ? ! \' " {meta2}',
-						'{left} {right} {default} {space} {c} {accept}'
+						'{bksp} {meta2} . , ? ! \' "',
+						'{accept} {c} {left} {right} {default} {space}'
 					],
 					'meta2': [
-						'[ ] { } # % ^ * + = {bksp}',
+						'[ ] { } # % ^ * + =',
 						'_ \\ | ~ < > $ \u00a3 \u00a5',
-						'{meta1} . , ? ! \' " {meta1}',
-						'{left} {right} {default} {space} {c} {accept}'
+						'{bksp} {meta1} . , ? ! \' "',
+						'{accept} {c} {left} {right} {default} {space}'
 					]
 				}
 
 			},
 			number: {
 				display: {
-					'bksp'   :  "\u2190",
+					'bksp'   :  " ",
 					'a'      :  "Save",
 					'c'      :  "Cancel"
 				},
@@ -86,8 +86,8 @@
 				layout: 'custom',
 				customLayout: {
 					'default' : [
-						'1 2 3 4 5 6 7 8 9 0 {bksp}',
-						'- , . {left} {right} {a} {c}'
+						'{bksp} 1 2 3 4 5 6 7 ',
+						'{accept} {c} {left} {right} 8 9 0 - , . '
 					]
 				},
 			}
@@ -138,6 +138,10 @@
 					$elm.keyboard($.extend(self.keyboard.config.terminal, obj));
 				} else {
 					$elm.keyboard($.extend(self.keyboard.config.default, obj));
+				}
+
+				if(!self.isTouch) {
+					self.scroll.currentActive.scrollToElement($elm[0], 200);
 				}
 
 			});

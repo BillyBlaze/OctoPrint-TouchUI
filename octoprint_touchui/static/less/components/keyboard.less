@@ -1,25 +1,203 @@
 .ui-keyboard-button {
-	background: @btn-main-background;
-	color: @btn-main-text;
+	background: transparent;
+	color: @keyboard-color;
 
-	&:active {
-		background: darken(@btn-main-background, 15%);
-	}
-
+	height: 17vh !important;
 	min-width: 0 !important;
-	height: 13vh !important;
-	min-width: 8vw !important;
 	margin: 1px !important;
 	padding: 0 !important;
 	border: 0 none;
-	font-size: 3vw;
-	line-height: 3vw !important;
+	font-size: 22px;
+	max-height: 43px;
+	max-width: 80px;
+	min-height: 33px;
+	width: 8vw;
+
+	&:active, &.touch-focus {
+		color: @main-color-text;
+		background: @main-color;
+		.border-radius(5px, 5px, 5px, 5px);
+		position: relative;
+		margin-top: -32px !important;
+		padding-bottom: 40px !important;
+		max-height: 75px;
+	}
 }
+
+.ui-keyboard-right,
+.ui-keyboard-left {
+	position: absolute;
+	top: 4px;
+	right: 40px;
+	color: @input-text-color;
+	width: 30px;
+
+	&:active, &.touch-focus {
+		position: absolute;
+		background: transparent;
+		margin-top: 0 !important;
+		padding-bottom: 0 !important;
+		max-height: 43px;
+
+		span {
+			color: @main-color;
+		}
+	}
+}
+.ui-keyboard-right {
+	right: 10px;
+}
+
+
+
+.ui-keyboard-shift {
+	span {
+		display: none !important;
+	}
+	&:after {
+		.font-icon-reset();
+		content: "\f062";
+		font-size: 25px;
+		max-height: 43px;
+	}
+}
+
+
+.ui-keyboard-cancel,
+.ui-keyboard-accept {
+	float: right;
+	.border-radius(50%,50%,50%,50%);
+	background: @keyboard-accept;
+
+	margin-top: 2px !important;
+	width: 35px;
+	height: 35px !important;
+
+	line-height: 20px !important;
+	text-align: center;
+
+	span {
+		display: none !important;
+	}
+
+	&:after {
+		.font-icon-reset();
+		content: "\f00c";
+		color: @keyboard-background;
+	}
+}
+.ui-keyboard-cancel {
+	background: @btn-danger-background;
+	margin-right: 10px !important;
+
+	@media (max-width: 300px) {
+		margin-right: 5px !important;
+	}
+
+	&:after {
+		content: "\f149";
+	}
+}
+
+
+.ui-keyboard-shift,
+.ui-keyboard-default,
+.ui-keyboard-meta1,
+.ui-keyboard-meta2 {
+	float: left;
+	min-width: auto !important;
+	width: auto;
+	opacity: .7;
+	font-size: 17px;
+	padding: 0 10px !important;
+}
+
+
+
+
 .ui-keyboard-space {
-	width: 40vw !important;
+	width: 33vw !important;
+	max-width: none;
+
+	&:after {
+		.border-radius(5px, 5px, 5px, 5px);
+		content: "";
+		display: inline-block;
+		height: 20px;
+		width: 100%;
+		background: mix(@keyboard-background, contrast(@keyboard-background), 70%);
+	}
+	&:active, &.touch-focus {
+		background: transparent;
+		margin-top: 0 !important;
+		padding-bottom: 0 !important;
+		max-height: 43px;
+
+		&:after {
+		background: mix(@keyboard-background, contrast(@keyboard-background), 40%);
+		}
+	}
 }
+
+
+.ui-keyboard-bksp {
+	float: right;
+	margin-right: 10px;
+	min-width: 40px !important;
+	max-width: 40px;
+
+	span {
+		position: relative;
+		margin-right: -17px !important;
+		line-height: 40px;
+
+		&:after {
+			.font-icon-reset();
+			content: "\f00d";
+
+			background: contrast(@keyboard-background);
+			color: @keyboard-background;
+			font-size: 19px;
+			width: 24px;
+			display: block;
+			line-height: 26px;
+			height: 26px;
+			overflow: hidden;
+			text-indent: -3px;
+		}
+		&:before {
+			content: "";
+			background: transparent;
+			border: 13px solid transparent;
+			border-right-color: contrast(@keyboard-background);
+			position: absolute;
+			left: -26px;
+			top: 0;
+		}
+	}
+
+	&:active, &.touch-focus {
+		background: transparent;
+		margin-top: 0 !important;
+		padding-bottom: 0 !important;
+		max-height: 43px;
+
+		span {
+			&:after {
+				color: contrast(@keyboard-remove);
+				background: @keyboard-remove;
+			}
+			&:before {
+				border-right-color: @keyboard-remove;
+			}
+		}
+	}
+
+}
+
+
 .ui-keyboard {
-	background: @dark-light-color;
+	background: @keyboard-background;
 	top: auto !important;
 	bottom: 0;
 	width: 100%;
@@ -75,6 +253,16 @@
 	overflow: hidden;
 	padding: 4px;
 	.box-sizing(border-box);
+
+	input, textarea {
+		margin: 0;
+		padding-right: 60px;
+	}
+	textarea {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		min-height: 50px;
+	}
 }
 .ui-keyboard-preview {
 	text-align: left;
@@ -92,11 +280,11 @@
 	text-align: left;
 }
 .ui-keyboard-placeholder {
-	color: @light-darker-dark-color;
+	color: @keyboard-color;
 }
 .ui-keyboard-nokeyboard {
-	color: @light-darker-dark-color;
-	border-color: @light-darker-dark-color;
+	color: @keyboard-color;
+	border-color: @keyboard-background;
 }
 .ui-keyboard-spacer {
 	display: inline-block;
