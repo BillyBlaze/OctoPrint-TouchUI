@@ -25,6 +25,24 @@
 			right: 26.5%;
 			top: 0;
 
+			.icon-arrow-up,
+			.icon-arrow-down {
+				position: relative;
+				&:after {
+					content: "";
+					position: absolute;
+					left: 0px;
+					letter-spacing: 0;
+					width: 100%;
+					text-align: center;
+					height: auto;
+					line-height: 1;
+					border-bottom: 5px solid;
+					bottom: -3px;
+					.border-radius(2px);
+				}
+			}
+
 			@media (max-width: 450px) {
 				right: 31.5%;
 			}
@@ -326,6 +344,66 @@
 
 		input {
 			display: block !important;
+		}
+	}
+
+	@media (orientation:portrait) {
+		#control-jog-general {
+			width: 75vw;
+			margin: 0 auto;
+			right: auto;
+			top: 85vw;
+			float: none;
+			left: 50%;
+			margin-left: -37.5vw;
+
+			> div > button {
+				float: left;
+			}
+
+			@media (max-width: 650px) {
+				top: 87vw;
+			}
+			@media (max-width: 500px) {
+				top: 89vw;
+			}
+			@media (max-width: 400px) {
+				top: 91vw;
+			}
+		}
+
+		> .jog-panel:first-child,
+		#control-jog-general {
+
+			#control-jog-xy {
+				margin: 0 auto;
+				width: 75vw;
+				float: none;
+			}
+
+			#control-jog-z {
+				position: static;
+				width: 75vw;
+				margin: 15px auto 25vw;
+				right: auto;
+				top: auto;
+				float: none;
+				overflow: hidden;
+
+				> div {
+					float: left;
+				}
+			}
+
+			button {
+				width: 25vw;
+				height: 20vw;
+				font-size: 15vw !important;
+
+				&:before {
+					line-height: 20vw;
+				}
+			}
 		}
 	}
 

@@ -38,6 +38,10 @@
 		white-space: nowrap;
 		text-align: right;
 
+		&:active {
+			background: darken(@main-color, 15%);
+		}
+
 		&:after {
 			.font-icon-reset();
 			color: @main-color-text;

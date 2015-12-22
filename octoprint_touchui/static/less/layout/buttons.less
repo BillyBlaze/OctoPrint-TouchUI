@@ -1,6 +1,6 @@
 button,
 .btn {
-	border-color: darken(@btn-background, 15%);
+	border-color: darken(@btn-background, 10%);
 	background: @btn-background;
 	color: @btn-text;
 	padding: 6px 15px;
@@ -9,15 +9,13 @@ button,
 		opacity: .4;
 	}
 	&:active {
+		outline: 0 none;
 		background: darken(@btn-background, 10%);
 		color: @btn-text;
 	}
-	&:focus {
-		outline: 0 none;
-	}
 
 	&-primary {
-		border-color: darken(@btn-main-background, 15%);
+		border-color: darken(@btn-main-background, 10%);
 		background: @btn-main-background;
 		color: @btn-main-text;
 
@@ -28,7 +26,7 @@ button,
 	}
 
 	&-danger {
-		border-color: darken(@btn-danger-background, 15%);
+		border-color: darken(@btn-danger-background, 10%);
 		background: @btn-danger-background;
 		color: @btn-danger-text;
 

@@ -5,17 +5,16 @@
 		-webkit-overflow-scrolling: auto;
 	}
 
+	::-webkit-scrollbar {
+		width: 2px;
+		height: 2px;
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: @main-color;
+	}
+
 	body {
-
-		::-webkit-scrollbar {
-			width: 2px;
-			height: 2px;
-			background: transparent;
-		}
-		::-webkit-scrollbar-thumb {
-			background: @main-color;
-		}
-
 		.modal-scrollable {
 			position: fixed !important;
 		}

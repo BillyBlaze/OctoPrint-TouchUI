@@ -47,7 +47,7 @@
 											background: transparent;
 
 											&:after {
-												content: "\f0d8";
+												content: "\f0d8" !important;
 											}
 										}
 									}
@@ -77,12 +77,14 @@
 								&#timelapse_link2 {
 									a:before {
 										content: "\f03e";
+										font-size: 18px;
 									}
 								}
 
 								&#gcode_link2 {
 									a:before {
 										content: "\f248";
+										font-size: 17px;
 									}
 								}
 
@@ -111,7 +113,8 @@
 											content: "\f0d7";
 											position: absolute;
 											right: 20px;
-											margin: 5px;
+											margin: 0;
+											line-height: 40px;
 										}
 										&:before {
 											content: "\f023";
@@ -138,12 +141,13 @@
 
 										&.active {
 											&:after {
-												content: "\f0d8";
+												content: "\f0d8" !important;
 											}
 										}
 
 										&:before {
 											content: "\f085";
+											font-size: 19px;
 										}
 										i {
 											display: none;
@@ -174,7 +178,6 @@
 									width: 100% !important;
 									max-width: 100% !important;
 									height: auto !important;
-									padding: 10px 20px !important;
 									float: none;
 
 									.icon-wrench{
@@ -188,7 +191,7 @@
 										margin: 0 15px 0 0;
 										font-size: 20px;
 										position: relative;
-										width: 30px;
+										width: 20px;
 										top: 2px;
 										text-align: center;
 									}
@@ -243,7 +246,7 @@
 						#login_dropdown_loggedout {
 							border-top: 1px solid @dropdown-divider-color;
 							margin-top: 0;
-							padding: 10px 25px 15px 25px !important;
+							padding: 5px @dropdown-gutter @dropdown-gutter !important;
 
 							> * {
 								.box-sizing(border-box);

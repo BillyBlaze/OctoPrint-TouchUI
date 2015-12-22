@@ -1,7 +1,3 @@
-.modal-backdrop {
-	background: @modal-backdrop !important;
-}
-
 .emulateTouch {
 	.modal-scrollable {
 		.modal {
@@ -18,6 +14,10 @@
 	position: fixed;
 	width: 100%;
 	overflow: hidden;
+}
+
+.modal-backdrop {
+	background: @modal-backdrop !important;
 }
 
 .modal-scrollable {
@@ -162,7 +162,7 @@
 					padding: 13px;
 					margin-top: -10px;
 					background: transparent;
-					opacity:0.6;
+					opacity: .6;
 
 					&:hover {
 						opacity:1;

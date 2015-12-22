@@ -1,12 +1,17 @@
 .ui-keyboard-button {
+	background: @btn-main-background;
+	color: @btn-main-text;
+
+	&:active {
+		background: darken(@btn-main-background, 15%);
+	}
+
 	min-width: 0 !important;
 	height: 13vh !important;
 	min-width: 8vw !important;
 	margin: 1px !important;
 	padding: 0 !important;
-	background-color: @main-color;
 	border: 0 none;
-	color: @main-color-text;
 	font-size: 3vw;
 	line-height: 3vw !important;
 }
