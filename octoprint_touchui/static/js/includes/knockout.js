@@ -96,6 +96,21 @@
 				}
 			});
 
+			// Check if we can show whats new in this version
+			$.ajax("/plugin/touchui/check", {
+				method: "GET"
+			}).done(function(response) {
+				if(response.whatsNew !== false) {
+					new PNotify({
+						title: 'TouchUI: What\'s new?',
+						text: response.whatsNew,
+						icon: 'glyphicon glyphicon-question-sign',
+						type: 'info',
+						hide: false
+					});
+				}
+			});
+
 			// Refresh LESS file after saving settings
 			settingsViewModel.sending.subscribe(function(isSending) {
 				if(!isSending) {

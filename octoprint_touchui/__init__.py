@@ -16,6 +16,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.StartupPlugin):
 
 	def __init__(self):
+		self._whatsNewPath = os.path.dirname(__file__) + "/WHATSNEW.md"
 		self._customLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.custom.less"
 		self._templateLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.template.less"
 		self.error = False
@@ -61,10 +62,17 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	@octoprint.plugin.BlueprintPlugin.route("/check", methods=["GET"])
 	def checkErrors(self):
-		if self.error is False:
-			return jsonify(error=False)
+		if os.path.isfile(self._whatsNewPath):
+			with open(self._whatsNewPath, 'r') as contentFile:
+				whatsNew = contentFile.read()
+			os.unlink(self._whatsNewPath)
 		else:
-			return jsonify(error=str(self.error))
+			whatsNew = False
+
+		if self.error is False:
+			return jsonify(error=False, whatsNew=whatsNew)
+		else:
+			return jsonify(error=str(self.error), whatsNew=whatsNew)
 
 	def get_assets(self):
 		return dict(
