@@ -3651,7 +3651,7 @@ margin-left: -@main-gutter;
 margin-right: -@main-gutter;
 overflow: hidden;
 
-.row-fluid:first-child {
+> div:first-child {
 .box-sizing(border-box);
 overflow: hidden;
 
@@ -3723,7 +3723,7 @@ padding: 0 15px 0 5px;
 }
 
 
-.row-fluid:last-child {
+> div:last-child {
 .box-sizing(border-box);
 
 table {
@@ -5010,7 +5010,8 @@ padding-right: 60px;
 textarea {
 padding-top: 10px;
 padding-bottom: 10px;
-min-height: 50px;
+height: 20vh;
+min-height: 70px;
 }
 }
 .ui-keyboard-preview {
