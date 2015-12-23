@@ -48,4 +48,8 @@ if len(additional_setup_parameters):
 	setup_parameters = dict_merge(setup_parameters, additional_setup_parameters)
 
 setup(**setup_parameters)
+
+if os.path.isfile(os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md"):
+	os.unlink(os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md")
+
 shutil.copy(os.path.dirname(__file__)+"/WHATSNEW.md", os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md")
