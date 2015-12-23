@@ -97,11 +97,7 @@
 
 		init: function() {
 			var self = this;
-
-			// Toggle dropdown
-			$(document).on("click", "#jog_distance", function(e) {
-				$("#jog_distance").toggleClass("open");
-			});
+			return;
 
 			// Add virtual keyboard
 			var obj = {

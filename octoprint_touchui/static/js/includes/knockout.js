@@ -184,9 +184,11 @@
 					}
 
 					// Refresh scroll view when login state changed
-					setTimeout(function() {
-						self.scroll.currentActive.refresh();
-					}, 0);
+					if( !self.isTouch ) {
+						setTimeout(function() {
+							self.scroll.currentActive.refresh();
+						}, 0);
+					}
 				});
 			}
 			if($("#navbar_systemmenu").length > 0) {

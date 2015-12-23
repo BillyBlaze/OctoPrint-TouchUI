@@ -7,7 +7,8 @@
 			// Destroy bootstrap control sliders
 			$('#control .slider').each(function(ind, elm) {
 				var $elm = $(elm),
-					$next = $(elm).next();
+					$next = $(elm).next(),
+					text = $next.text().split(":")[0].replace(" ", "");
 
 				$elm.addClass("hidden");
 
@@ -16,33 +17,9 @@
 				$elm.appendTo(div);
 				$next.appendTo(div);
 
-				var inp = $('<input type="number">').attr("data-bind", "enable: isOperational() && loginState.isUser()").appendTo(div).on("change", function(e) {
-					var slider = $(elm).children("input").data('slider'),
-						val = parseFloat($(e.delegateTarget).val());
+				var inp = $('<input type="number">').attr("data-bind", "enable: isOperational() && loginState.isUser(), value: " + ((text == "Flowrate") ? "flowRate" : "feedRate")).appendTo(div);
 
-					if(isNaN(val) || slider === undefined) {
-						return;
-					}
-
-					if(val > slider.max) {
-						val = slider.max;
-					}
-					if(val < slider.min) {
-						val = slider.min;
-					}
-
-					$(e.delegateTarget).attr("max", slider.max).attr("min", slider.min).val(val);
-
-					slider.element
-						.data('value', val)
-						.prop('value', val)
-						.trigger({
-							type: 'slide',
-							value: val
-						});
-				}).attr("id", "ui-inp-"+ind).val($(elm).children("input").data('slider').getValue());
-
-				$('<label for="ui-inp-'+ind+'"></label>').appendTo(div).text($next.text().split(":")[0].replace(" ", "") + ":");
+				$('<label for="ui-inp-'+ind+'"></label>').appendTo(div).text(text + ":");
 			});
 		}
 	};
