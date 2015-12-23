@@ -100,7 +100,7 @@
 			$.ajax("/plugin/touchui/check", {
 				method: "GET"
 			}).done(function(response) {
-				if(response.whatsNew !== false) {
+				if(response.whatsNew !== false && response.whatsNew.trim() != "") {
 					new PNotify({
 						title: 'TouchUI: What\'s new?',
 						text: response.whatsNew,
