@@ -1,5 +1,6 @@
 * Customization of TouchUI colors
 * Redesign of the virtual keyboard
+* Portrait mode for the controls tab
 * Responsive improvements + visual feedback
 * Lot's of visual improvements
 
