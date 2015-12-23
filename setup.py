@@ -16,6 +16,8 @@ plugin_ignored_packages = []
 additional_setup_parameters = {}
 
 from setuptools import setup
+import shutil
+import os
 
 try:
 	import octoprint_setuptools
@@ -46,3 +48,4 @@ if len(additional_setup_parameters):
 	setup_parameters = dict_merge(setup_parameters, additional_setup_parameters)
 
 setup(**setup_parameters)
+shutil.copy(os.path.dirname(__file__)+"/WHATSNEW.md", os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md")

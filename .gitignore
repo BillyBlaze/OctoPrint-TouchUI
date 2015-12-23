@@ -8,4 +8,4 @@ dist
 .DS_Store
 *.zip
 node_modules
-WHATSNEW.md
+octoprint_touchui/WHATSNEW.md

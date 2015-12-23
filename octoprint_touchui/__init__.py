@@ -61,7 +61,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			os.unlink(self._customLessPath)
 
 	@octoprint.plugin.BlueprintPlugin.route("/check", methods=["GET"])
-	def checkErrors(self):
+	def check(self):
 		if os.path.isfile(self._whatsNewPath):
 			with open(self._whatsNewPath, 'r') as contentFile:
 				whatsNew = contentFile.read()
