@@ -27,7 +27,9 @@
 								text: 'Disable ScreenSquish',
 								addClass: 'btn-primary',
 								click: function(notice) {
-									pluginManagerViewModel.togglePlugin(ScreenSquish);
+									if(!ScreenSquish.pending_disable) {
+										pluginManagerViewModel.togglePlugin(ScreenSquish);
+									}
 									notice.remove();
 								}
 							}]

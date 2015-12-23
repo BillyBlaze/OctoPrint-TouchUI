@@ -2480,9 +2480,6 @@ margin: 0;
 overflow: hidden;
 position: relative;
 
-width: 18%;
-max-width: 100px;
-
 > a {
 background: transparent;
 color: @main-color;
@@ -2522,6 +2519,11 @@ font-size: 10vw !important;
 }
 }
 #navbar {
+.navbar-inner > .container > .nav-collapse > .nav {
+width: 18%;
+max-width: 100px;
+}
+
 &.items-5 {
 .navbar-inner > .container > .nav-collapse > .nav {
 width: 16.5%;
@@ -2533,6 +2535,14 @@ float: right;
 }
 }
 #tabs {
+.nav,
+&.nav {
+li {
+width: 18%;
+max-width: 100px;
+}
+}
+
 &.items-5 {
 .nav,
 &.nav {
