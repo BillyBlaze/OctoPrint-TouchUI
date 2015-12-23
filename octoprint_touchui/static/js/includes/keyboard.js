@@ -97,7 +97,6 @@
 
 		init: function() {
 			var self = this;
-			return;
 
 			// Add virtual keyboard
 			var obj = {
@@ -105,39 +104,34 @@
 				beforeClose: self.keyboard.onClose
 			};
 
-			// First check without delegation (trigger first)
-			$("input, textarea").on("mousedown", function(e) {
-				if(!self.keyboard.isActive) {
-					var $elm = $(e.target);
-
-					if($elm.data("keyboard")) {
-						$elm.data("keyboard").destroy();
-					}
-
-					e.stopPropagation();
-				}
-			});
-
-			// First check with delegation (trigger later)
 			var notThis = ['[type="file"]','[type="checkbox"]','[type="radio"]'];
 			$(document).on("mousedown", 'input:not('+notThis+'), textarea', function(e) {
 				var $elm = $(e.target);
 
-				// $elm already has a keyboard
-				if($elm.data("keyboard")) {
-					return;
-				}
+				if(!self.keyboard.isActive) {
 
-				if($elm.attr("type") === "number") {
-					$elm.keyboard($.extend(self.keyboard.config.number, obj));
-				} else if($elm.attr("id") === "terminal-command") {
-					$elm.keyboard($.extend(self.keyboard.config.terminal, obj));
+					if($elm.data("keyboard")) {
+						$elm.data("keyboard").close().destroy();
+					}
+
 				} else {
-					$elm.keyboard($.extend(self.keyboard.config.default, obj));
-				}
 
-				if(!self.isTouch) {
-					self.scroll.currentActive.scrollToElement($elm[0], 200);
+					// $elm already has a keyboard
+					if($elm.data("keyboard")) {
+						return;
+					}
+
+					if($elm.attr("type") === "number") {
+						$elm.keyboard($.extend(self.keyboard.config.number, obj));
+					} else if($elm.attr("id") === "terminal-command") {
+						$elm.keyboard($.extend(self.keyboard.config.terminal, obj));
+					} else {
+						$elm.keyboard($.extend(self.keyboard.config.default, obj));
+					}
+
+					if(!self.isTouch) {
+						self.scroll.currentActive.scrollToElement($elm[0], 200);
+					}
 				}
 
 			});

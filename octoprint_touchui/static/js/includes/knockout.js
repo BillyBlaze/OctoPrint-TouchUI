@@ -72,6 +72,15 @@
 			$('.gcode_files').slimScroll({destroy: true});
 			$('.slimScrollDiv').slimScroll({destroy: true});
 
+			// Remove active keyboard when disabled
+			touchViewModel.isKeyboardActive.subscribe(function(isActive) {
+				if( !isActive ) {
+					$(".ui-keyboard-input").each(function(ind, elm) {
+						$(elm).data("keyboard").destroy();
+					});
+				}
+			});
+
 			// Remove drag files into website feature
 			$(document).off("dragover");
 

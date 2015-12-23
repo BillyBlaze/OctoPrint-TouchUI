@@ -46,9 +46,11 @@
 								$('[href="'+href+'"]').click();
 								settingsLabel.text($('[href="'+href+'"]').text());
 
-								setTimeout(function() {
-									self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
-								}, 0);
+								if( !self.isTouch ) {
+									setTimeout(function() {
+										self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
+									}, 0);
+								}
 							}
 
 						});
