@@ -1,6 +1,6 @@
-* Color customization of TouchUI
+* Customization of TouchUI colors
 * Redesign of the virtual keyboard
-* Repsponsive improvements + visual feedback
+* Responsive improvements + visual feedback
 * Lot's of visual improvements
-* Bugfix: Graph alignment + more visual problem on 1.2.8
-* Bugfix: Flowrate + feedrate sending double commands on 1.2.8
+
+<a href="https://github.com/BillyBlaze/OctoPrint-TouchUI/releases/tag/0.3.0" class="btn btn-primary">Read entire release notes</a>
