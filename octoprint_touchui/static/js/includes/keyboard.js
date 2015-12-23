@@ -121,7 +121,7 @@
 						// Force iScroll to stop following the mouse (bug)
 						self.scroll.currentActive._end(e);
 						setTimeout(function() {
-							self.scroll.currentActive.scrollToElement($elm[0], 200);
+							self.scroll.currentActive.scrollToElement($elm[0], 200, 0, -30);
 						}, 0);
 
 					}
