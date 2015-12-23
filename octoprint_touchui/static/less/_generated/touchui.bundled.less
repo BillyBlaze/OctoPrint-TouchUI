@@ -3185,12 +3185,12 @@ content: "\f051";
 }
 #job_cancel,
 #job_pause {
-background: @btn-background;
-color: @btn-text;
+background: @text-color;
+color: contrast(@text-color);
 
 &:active {
-background: darken(@btn-background, 10%);
-color: @btn-text;
+background: fade(@text-color, 70%);
+color: contrast(@text-color);
 }
 }
 #job_pause {
