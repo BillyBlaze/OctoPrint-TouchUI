@@ -1,38 +1,26 @@
 # OctoPrint-TouchUI 0.3.0
-This plugin will transform the OctoPrint layout into a Mobile/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible. It will mimick pointer events as touch, so you can hook up those touchscreens. It also supports a virtual keyboard.
+This plugin will transform the OctoPrint layout into a Mobile/TFT friendly layout. With larger buttons and a responsive layout down to the smallest resolution possible. It will mimic pointer events as touch, so you can hook up those touchscreens. It also supports a virtual keyboard.
 
-All these settings are set clientside, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year. You can find the `TouchUI settings` in a dedicated modal. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.
-
-From v0.2.0 the interface will automatically start while loading OctoPrint. This will only start if the browser is smaller then 980 pixels in width or if you're browsing with a touch device. You can turn this off in the `Settings` modal under `TouchUI`.
+All these settings are set client-side, so we won't interfere with other clients. All settings are stored in a delicious cookie for up to a year. You can find the `TouchUI settings` in a dedicated modal. Remember they're stored on your device, so if you login with your desktop computer you won't get the touch interface.
 
 ![TouchUI Interface](https://billyblaze.github.io/OctoPrint-TouchUI/images/touchui.gif)
 
 ## Setup
-
 Install via the bundled [Plugin Manager](https://github.com/foosel/OctoPrint/wiki/Plugin:-Plugin-Manager)
 or manually using this URL:
 
     https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
 
-#### Additional step for the RaspberryPi
-##### Automaticly boot into fullscreen mode with iceweasel:
-1. [Make sure you boot to Desktop](https://www.raspberrypi.org/documentation/configuration/raspi-config.md)
-2. [Autostart OctoPrint](https://github.com/foosel/OctoPrint/wiki/Setup-on-a-Raspberry-Pi-running-Raspbian)
-3. run ``sudo apt-get install iceweasel``
-4. run ``sudo nano /etc/xdg/lxsession/LXDE-pi/autostart``
-5. Insert ````@iceweasel "http://localhost:5000/#touch"```` to the list
-6. Now press ``Ctrl+X``, then ``Y`` and ``enter`` to save the changes
-7. Open ``Iceweavel ``
-8. Type in about:config in the address field and hit enter. Now find the ``browser.sessionstore.resume_from_crash`` line and double click to change it to false.
-9. Go into fullscreen mode
-10. Reboot and iceweavel should connect directly and in fullscreen
+- **Touchscreens**  
+Read more about [setting up a touchscreen](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Setup#raspberrypi--touchscreen) on our Wiki.
 
 ## Configuration
-In v0.2.0 the TouchUI interface will automatically load based on resolution and device.
+The interface will automatically start when your browser is smaller then 980 pixels in width or if you're browsing with a touch device. You can turn this manually on and off in the ``TouchUI settings`` modal. Alternatively you can force TouchUI to load by adding ``#touch`` on the end of your URL.
 
-You can still activate it manually by adding `#touch` at the end of your octoprint url. Such as `http://myprinter.local/#touch`.
+Read more [configuration options](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Configuration) on our Wiki.
 
-Alternative you can toggle the touch interface within the `TouchUI Settings` modal.
+- **Customization**  
+You can change 4 main colors of the interface with the power of LESS. If you would like to change more colors, then you're free to add your own LESS file. [Read more about this and the variables](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Customize:-Use-your-own-file) on our wiki.
 
 ## Supported browsers
 1. Iceweasel

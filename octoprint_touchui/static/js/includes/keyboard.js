@@ -116,6 +116,16 @@
 
 				} else {
 
+					if(!self.isTouch) {
+
+						// Force iScroll to stop following the mouse (bug)
+						self.scroll.currentActive._end(e);
+						setTimeout(function() {
+							self.scroll.currentActive.scrollToElement($elm[0], 200);
+						}, 0);
+
+					}
+
 					// $elm already has a keyboard
 					if($elm.data("keyboard")) {
 						return;
@@ -127,10 +137,6 @@
 						$elm.keyboard($.extend(self.keyboard.config.terminal, obj));
 					} else {
 						$elm.keyboard($.extend(self.keyboard.config.default, obj));
-					}
-
-					if(!self.isTouch) {
-						self.scroll.currentActive.scrollToElement($elm[0], 200);
 					}
 				}
 
