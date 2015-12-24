@@ -6,9 +6,6 @@ import octoprint.settings
 import octoprint.util
 import os
 
-from flask import jsonify
-import flask
-
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.AssetPlugin,
 					octoprint.plugin.TemplatePlugin,
@@ -38,25 +35,22 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		return data
 
 	def on_after_startup(self):
-		try:
-			self._toggle_custom_less()
-		except Exception as e:
-			self._logger.exception("Exception while generating LESS file: {message}".format(message=str(e)))
-			self.error = e
+		self._toggle_custom_less()
 
 	def on_settings_save(self, data):
 		octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
+		self._toggle_custom_less()
+
+	def _toggle_custom_less(self):
 		try:
-			self._toggle_custom_less()
+			if self._settings.get(["useCustomization"]):
+				self._save_custom_less()
+			else:
+				self._remove_custom_less()
+
 		except Exception as e:
 			self._logger.exception("Exception while generating LESS file: {message}".format(message=str(e)))
 			self.error = e
-
-	def _toggle_custom_less(self):
-		if self._settings.get(["useCustomization"]):
-			self._save_custom_less()
-		else:
-			self._remove_custom_less()
 
 	def _save_custom_less(self):
 		if self._settings.get(["colors", "useLocalFile"]) is False:

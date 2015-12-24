@@ -4543,6 +4543,29 @@ min-height: 100%;
 height: auto !important;
 }
 
+&.shake {
+-webkit-animation-name: inherit;
+-moz-animation-name: inherit;
+-o-animation-name: inherit;
+animation-name: inherit;
+
+> div {
+-webkit-animation-duration: 1s;
+-moz-animation-duration: 1s;
+-o-animation-duration: 1s;
+animation-duration: 1s;
+-webkit-animation-fill-mode: both;
+-moz-animation-fill-mode: both;
+-o-animation-fill-mode: both;
+animation-fill-mode: both;
+
+-webkit-animation-name: shake;
+-moz-animation-name: shake;
+-o-animation-name: shake;
+animation-name: shake;
+}
+}
+
 .accordion-group {
 border: 0 none !important;
 
