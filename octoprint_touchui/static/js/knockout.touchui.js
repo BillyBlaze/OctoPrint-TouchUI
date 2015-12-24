@@ -5,20 +5,33 @@ $(function() {
 	function touchUIViewModel(viewModels) {
 		var self = this;
 
-		TouchUI.koLoading(self, viewModels);
-
 		self.isUIActive = TouchUI.isActive;
 		self.isKeyboardActive = ko.observable(TouchUI.isKeyboardActive);
 		self.isHidebarActive = ko.observable(TouchUI.isHidebarActive);
 		self.isFullscreen = ko.observable(TouchUI.isFullscreen);
 		self.touchuiModal = $('#touchui_settings_dialog');
-		self.settings = {};
+		self.settings = {
+			error: ko.observable(false),
+			whatsNew: ko.observable(false)
+		};
+
+		TouchUI.koLoading(self, viewModels);
 
 		self.onStartupComplete = function() {
 			TouchUI.koReady(self, viewModels);
 		}
-		self.onBeforeBinding = function () {
-			self.settings = viewModels[2].settings.plugins.touchui;
+
+		self.onBeforeBinding = function() {
+			_.each(viewModels[2].settings.plugins.touchui, function(newSetting, key) {
+				if(ko.isObservable(self.settings[key])) {
+					newSetting.subscribe(function(val) {
+						self.settings[key](val);
+					});
+					newSetting.valueHasMutated();
+				} else {
+					self.settings[key] = newSetting;
+				}
+			});
 		}
 
 		self.show = function() {

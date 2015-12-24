@@ -36,7 +36,7 @@
 			},
 			koLoading: function(touchViewModel, viewModels) {
 				if(self.isActive) {
-					self.knockout.beforeLoad.call(self, viewModels);
+					self.knockout.beforeLoad.call(self, touchViewModel, viewModels);
 				}
 			},
 			koReady: function(touchViewModel, viewModels) {

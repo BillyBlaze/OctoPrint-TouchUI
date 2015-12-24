@@ -16,8 +16,6 @@ plugin_ignored_packages = []
 additional_setup_parameters = {}
 
 from setuptools import setup
-import shutil
-import os
 
 try:
 	import octoprint_setuptools
@@ -49,7 +47,19 @@ if len(additional_setup_parameters):
 
 setup(**setup_parameters)
 
-if os.path.isfile(os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md"):
-	os.unlink(os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md")
+try:
+	import os
+	fileOut = "./octoprint_touchui/WHATSNEW.md"
+	fileIn = "./WHATSNEW.md"
 
-shutil.copy(os.path.dirname(__file__)+"/WHATSNEW.md", os.path.dirname(__file__)+"/octoprint_touchui/WHATSNEW.md")
+	if os.path.isfile(fileOut):
+		os.unlink(fileOut)
+
+	with open(fileIn, 'r') as contentFile:
+		whatsNew = contentFile.read()
+
+	with open(fileOut, "w+") as writeFile:
+		writeFile.write('{WHATSNEW}'.format(WHATSNEW=whatsNew))
+
+except Exception as e:
+	print("\nCopying the WHATSNEW.md failed, however it shouldn't matter, just read the release notes on github if you like.\nThe error: {message}".format(message=str(e)))

@@ -2,7 +2,7 @@
 
 	$.fn.TouchUI.knockout = {
 
-		beforeLoad: function(viewModels) {
+		beforeLoad: function(touchViewModel, viewModels) {
 			var self = this,
 				terminalViewModel = viewModels[0],
 				connectionViewModel = viewModels[1],
@@ -25,6 +25,74 @@
 					}, 300);
 				});
 			}
+
+			// Check if we can show whats new in this version
+			touchViewModel.settings.whatsNew.subscribe(function(whatsNew) {
+				if(whatsNew !== false && whatsNew.trim() != "") {
+					new PNotify({
+						title: 'TouchUI: What\'s new?',
+						text: whatsNew,
+						icon: 'glyphicon glyphicon-question-sign',
+						type: 'info',
+						hide: false
+					});
+				}
+			});
+
+			// Display any backend errors
+			touchViewModel.settings.error.subscribe(function(hasError) {
+				if(hasError !== false && hasError.trim() != "") {
+
+					// If Settings Modal is open, then block the hide of the modal once
+					if(settingsViewModel.settingsDialog.is(":visible")) {
+						var tmp = settingsViewModel.settingsDialog.modal;
+						settingsViewModel.settingsDialog.modal = function() {
+							settingsViewModel.settingsDialog.modal = tmp;
+						};
+					}
+
+					new PNotify({
+						title: 'TouchUI: Whoops, something went wrong...',
+						text: hasError,
+						icon: 'glyphicon glyphicon-question-sign',
+						type: 'error',
+						hide: false
+					});
+				}
+			});
+
+			var afterSettingsSave = ko.computed(function() {
+				return !settingsViewModel.receiving() && !settingsViewModel.sending() && settingsViewModel.settingsDialog && settingsViewModel.settingsDialog.is(":visible");
+			});
+			afterSettingsSave.subscribe(function(settingsSaved) {
+				if(settingsSaved && !touchViewModel.settings.error()) {
+					var $less = $("#touchui-custom-less"),
+						$css = $("#touchui-css-only");
+
+					if(touchViewModel.settings.hasLESS()) {
+
+						if($less.length === 0) {
+							$('<link href="' + $("#data-touchui").attr("data-less") + '" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("body");
+							less.sheets[0] = document.getElementById('touchui-custom-less');
+						}
+
+						$less.attr("href", $("#data-touchui").attr("data-less") + "?v=" + new Date().getTime());
+						$('style:not(#touch_updates_css)').remove();
+						$css.remove();
+						less.refresh();
+
+					} else {
+
+						if($css.length === 0) {
+							$('<link rel="stylesheet" type="text/css" media="screen" id="touchui-css-only">').appendTo("head").attr("href", $("#data-touchui").attr("data-css"));
+						}
+
+						$('style:not(#touch_updates_css)').remove();
+						$less.remove();
+
+					}
+				}
+			});
 
 			// Repaint graph after resize (.e.g orientation changed)
 			$(window).on("resize", function() {
@@ -93,71 +161,6 @@
 				} else {
 					printLink.removeClass("offline").addClass("online");
 					$("#conn_link2").removeClass("offline").addClass("online");
-				}
-			});
-
-			// Check if we can show whats new in this version
-			$.ajax("/plugin/touchui/check", {
-				method: "GET"
-			}).done(function(response) {
-				if(response.whatsNew !== false && response.whatsNew.trim() != "") {
-					new PNotify({
-						title: 'TouchUI: What\'s new?',
-						text: response.whatsNew,
-						icon: 'glyphicon glyphicon-question-sign',
-						type: 'info',
-						hide: false
-					});
-				}
-			});
-
-			// Refresh LESS file after saving settings
-			settingsViewModel.sending.subscribe(function(isSending) {
-				if(!isSending) {
-					$.ajax("/plugin/touchui/check", {
-						method: "GET"
-					}).done(function(response) {
-						if( response.error !== false) {
-							new PNotify({
-								title: 'TouchUI: Whoops, something went wrong...',
-								text: response.error,
-								icon: 'glyphicon glyphicon-question-sign',
-								type: 'error',
-								hide: false
-							});
-						} else {
-							var $less = $("#touchui-custom-less"),
-								$css = $("#touchui-css-only");
-
-							if(touchViewModel.settings.useCustomization()) {
-
-								if($less.length === 0) {
-									$('<link href="/plugin/touchui/static/less/_generated/touchui.custom.less" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("body");
-									less.sheets[0] = document.getElementById('touchui-custom-less');
-								}
-
-								$less.attr("href", "/plugin/touchui/static/less/_generated/touchui.custom.less?v=" + new Date().getTime());
-								$('style:not(#touch_updates_css)').remove();
-								$css.remove();
-								less.refresh();
-
-							} else {
-
-								if($css.length === 0) {
-									loadcss = document.createElement('link');
-									loadcss.setAttribute("rel", "stylesheet");
-									loadcss.setAttribute("type", "text/css");
-									loadcss.setAttribute("href", "/plugin/touchui/static/css/touchui.css");
-									loadcss.setAttribute("id", "touchui-css-only");
-									document.getElementsByTagName("head")[0].appendChild(loadcss);
-								}
-
-								$('style:not(#touch_updates_css)').remove();
-								$less.remove();
-
-							}
-						}
-					});
 				}
 			});
 
