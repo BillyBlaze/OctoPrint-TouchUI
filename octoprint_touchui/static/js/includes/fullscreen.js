@@ -18,14 +18,14 @@
 							text: 'Yes',
 							addClass: 'btn-primary',
 							click: function(notice) {
-								$(document).fullScreen(true);
 								notice.remove();
+								$(document).fullScreen(true);
 							}
 						}, {
 							text: 'No',
 							click: function(notice) {
-								$(document).trigger("fullscreenchange");
 								notice.remove();
+								$(document).trigger("fullscreenchange");
 							}
 						}]
 					},
