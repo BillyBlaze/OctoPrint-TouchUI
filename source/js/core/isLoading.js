@@ -31,11 +31,11 @@ TouchUI.prototype.core.isLoading = function() {
 		// Create fullscreen cookie if not existing and trigger pNotification
 		if(this.DOM.cookies.get("fullscreen") === undefined) {
 			this.DOM.cookies.set("fullscreen", "false");
-			this.fullscreen.ask.call(this);
+			this.components.fullscreen.ask.call(this);
 		} else {
 			//Cookie say user wants fullscreen, ask it!
 			if(this.DOM.cookies.get("fullscreen") === "true") {
-				this.fullscreen.ask.call(this);
+				this.components.fullscreen.ask.call(this);
 			}
 		}
 
