@@ -1,5 +1,5 @@
 TouchUI.prototype.core.isLoading = function() {
-console.log(this);
+
 	if( this.core.checkAutoLoad.call(this) ) {
 		$("html").attr("id", this.id);
 
