@@ -81,8 +81,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 	def get_assets(self):
 		return dict(
 			js=[
-				"js/libraries.touchui.js",
-				"js/bundled.touchui.js"
+				"js/touchui.libraries.js",
+				"js/touchui.bundled.js"
 			]
 		)
 

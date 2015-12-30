@@ -606,7 +606,7 @@ TouchUI.prototype.core.checkAutoLoad = function() {
 }
 
 TouchUI.prototype.core.isLoading = function() {
-
+console.log(this);
 	if( this.core.checkAutoLoad.call(this) ) {
 		$("html").attr("id", this.id);
 
@@ -820,7 +820,6 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 				$css = $("#touchui-css-only");
 
 			touchViewModel.settingsUpdated(false);
-
 			if(touchViewModel.settings.hasLESS()) {
 
 				if($less.length === 0) {
@@ -975,6 +974,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		self.animate.hide.call(self, "navbar");
 	});
 
+	// Force knockout to read the change
 	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
 		if(isTriggered !== false) {
 			$(this).find("input").trigger("change", [hex, rgb, false]);

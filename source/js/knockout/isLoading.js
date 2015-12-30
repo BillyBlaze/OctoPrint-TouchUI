@@ -66,7 +66,6 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 				$css = $("#touchui-css-only");
 
 			touchViewModel.settingsUpdated(false);
-
 			if(touchViewModel.settings.hasLESS()) {
 
 				if($less.length === 0) {

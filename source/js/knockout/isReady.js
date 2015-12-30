@@ -96,6 +96,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		self.animate.hide.call(self, "navbar");
 	});
 
+	// Force knockout to read the change
 	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
 		if(isTriggered !== false) {
 			$(this).find("input").trigger("change", [hex, rgb, false]);
