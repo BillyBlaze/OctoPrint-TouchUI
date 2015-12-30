@@ -82,7 +82,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		return dict(
 			js=[
 				"js/touchui.libraries.js",
-				"js/touchui.bundled.js"
+				"js/touchui.bundled.js",
+				"js/touchui.knockout.js"
 			]
 		)
 

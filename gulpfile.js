@@ -7,9 +7,9 @@ var trimlines = require('gulp-trimlines');
 var removeEmptyLines = require('gulp-remove-empty-lines');
 var concat = require('gulp-concat');
 
-gulp.task('default', ['lessc', 'concatLess', 'concatJs', 'concatJsLibs']);
-gulp.task('less', ['lessc', 'concatLess']);
-gulp.task('js', ['concatJs', 'concatJsLibs']);
+gulp.task('default', ['lessc', 'concat-less', 'concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
+gulp.task('less', ['lessc', 'concat-less']);
+gulp.task('js', ['concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
 
 gulp.task('lessc', function () {
 	return gulp.src('source/less/touchui.less')
@@ -17,7 +17,7 @@ gulp.task('lessc', function () {
 		.pipe(gulp.dest('octoprint_touchui/static/css'));
 });
 
-gulp.task("concatLess", function() {
+gulp.task("concat-less", function() {
 	return gulp.src('source/less/touchui.less')
 		.pipe(cssimport({
 			extensions: ["less"],
@@ -29,7 +29,7 @@ gulp.task("concatLess", function() {
 		.pipe(gulp.dest('octoprint_touchui/static/less/'));
 });
 
-gulp.task('concatJsLibs', function () {
+gulp.task('concat-libs-js', function () {
 	return gulp.src([
 			'source/vendors/keyboard/dist/js/jquery.keyboard.min.js',
 			'source/vendors/jquery-fullscreen/jquery.fullscreen-min.js',
@@ -40,14 +40,22 @@ gulp.task('concatJsLibs', function () {
 		.pipe(gulp.dest('octoprint_touchui/static/js/'));
 });
 
-gulp.task('concatJs', function () {
+gulp.task('concat-app-js', function () {
 	return gulp.src([
+			'!source/js/knockout.js',
 			'source/js/main.js',
 			'source/js/**/*.js',
-			'source/js/**/**/*.js',
-			'source/js/knockout.js'
+			'source/js/**/**/*.js'
 		])
 		.pipe(concat('touchui.bundled.js'))
+		.pipe(gulp.dest('octoprint_touchui/static/js/'));
+});
+
+gulp.task('concat-knockout-js', function () {
+	return gulp.src([
+			'source/js/knockout.js'
+		])
+		.pipe(rename("touchui.knockout.js"))
 		.pipe(gulp.dest('octoprint_touchui/static/js/'));
 });
 
