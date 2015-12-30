@@ -13,8 +13,8 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def __init__(self):
 		self._whatsNewPath = os.path.dirname(__file__) + "/WHATSNEW.md"
-		self._customLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.custom.less"
-		self._templateLessPath = os.path.dirname(__file__) + "/static/less/_generated/touchui.template.less"
+		self._customLessPath = os.path.dirname(__file__) + "/static/less/touchui.custom.less"
+		self._templateLessPath = os.path.dirname(__file__) + "/templates/less/touchui.template.less"
 		self.error = False
 
 	def on_settings_load(self):
@@ -49,7 +49,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 				self._remove_custom_less()
 
 		except Exception as e:
-			self._logger.exception("Exception while generating LESS file: {message}".format(message=str(e)))
+			self._logger.warn("Exception while generating LESS file: {message}".format(message=str(e)))
 			self.error = e
 
 	def _save_custom_less(self):
@@ -74,33 +74,15 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 	def get_template_vars(self):
 		return dict(
-			lessPath="/plugin/touchui/static/less/_generated/touchui.custom.less",
+			lessPath="/plugin/touchui/static/less/touchui.custom.less",
 			cssPath="/plugin/touchui/static/css/touchui.css"
 		)
 
 	def get_assets(self):
 		return dict(
 			js=[
-				"js/libs/iscroll.js",
-				"js/libs/jquery.keyboard.js",
-				"js/libs/jquery.fullscreen.js",
-
-				"js/includes/version.js",
-				"js/includes/files.js",
-				"js/includes/keyboard.js",
-				"js/includes/scroll.js",
-				"js/includes/slider.js",
-				"js/includes/modal.js",
-				"js/includes/DOM.js",
-				"js/includes/animate.js",
-				"js/includes/terminal.js",
-				"js/includes/knockout.js",
-				"js/includes/overwrite.js",
-				"js/includes/fullscreen.js",
-				"js/includes/plugins.js",
-
-				"js/jquery.touchui.js",
-				"js/knockout.touchui.js"
+				"js/libraries.touchui.js",
+				"js/bundled.touchui.js"
 			]
 		)
 

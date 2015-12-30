@@ -1,0 +1,26 @@
+{
+  "name": "OctoPrint-TouchUI",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Paul de Vries <pablo@blacktower.nl>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/BillyBlaze/OctoPrint-TouchUI",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "source/vendors/",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "iscroll": "~5.1.3",
+    "tinycolorpicker": "~0.9.5",
+    "jquery-fullscreen": "~1.1.4",
+    "keyboard": "~1.25.11"
+  }
+}
