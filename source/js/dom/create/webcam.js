@@ -7,7 +7,7 @@ TouchUI.prototype.DOM.create.webcam = {
 	},
 
 	container: {
-		cloneTo: "#timelapse",
+		cloneTo: ".tab-content",
 
 		webcam: {
 			$container: $("#webcam_container"),
@@ -18,14 +18,14 @@ TouchUI.prototype.DOM.create.webcam = {
 	init: function( tabbar ) {
 		var self = this;
 
-		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').insertAfter(this.container.cloneTo);
+		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
 		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertBefore(this.menu.webcam.cloneTo);
 
 		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
 		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
 
-		$('<!-- /ko -->').insertBefore(this.container.$elm);
 		$('<!-- ko allowBindings: false -->').insertBefore(this.container.$elm);
+		$('<!-- /ko -->').insertAfter(this.container.$elm);
 
 		$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
 
