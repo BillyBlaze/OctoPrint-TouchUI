@@ -60,5 +60,19 @@ gulp.task('concat-knockout-js', function () {
 });
 
 gulp.task('watch', function () {
-	gulp.watch(['source/less/touchui.less', 'source/less/**/*.less'], ['lessc', 'concatLess']);
+	gulp.watch(
+		[
+			'source/less/touchui.less',
+			'source/less/**/*.less',
+			'source/js/**/*.js',
+			'source/js/*.js'
+		],
+		[
+			'lessc',
+			'concat-less',
+			'concat-app-js',
+			'concat-libs-js',
+			'concat-knockout-js'
+		]
+	);
 });
