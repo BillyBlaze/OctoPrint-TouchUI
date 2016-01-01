@@ -20,6 +20,36 @@
 	}
 }
 
+.dropdown-submenu {
+	> a {
+		&:after {
+			.font-icon-reset();
+			content: "\f0d7";
+			float: none;
+			position: absolute;
+			top: 13px;
+			margin: 0;
+			right: 30px;
+			border: 0 none !important;
+		}
+	}
+	&:hover {
+		>.dropdown-menu {
+			display: none;
+		}
+	}
+	&.open {
+		.dropdown-menu {
+			display: block !important;
+		}
+		> a {
+			&:after {
+				content: "\f0d8" !important;
+			}
+		}
+	}
+}
+
 .dropdown-menu {
 	.border-radius(0);
 	.transform(translateZ(0));
@@ -75,6 +105,10 @@
 		float: none;
 		border: 0 none !important;
 		padding: 0;
+
+		&:before {
+			display: none;
+		}
 
 		@media (max-width: 300px) {
 			width: auto;

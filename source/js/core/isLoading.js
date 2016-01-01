@@ -56,5 +56,6 @@ TouchUI.prototype.core.isLoading = function() {
 		this.DOM.move.navbar.init.call( this );
 		this.DOM.move.afterTabAndNav.call( this );
 		this.DOM.move.overlays.init.call( this );
+		this.components.dropdown.call( this );
 	}
 }
