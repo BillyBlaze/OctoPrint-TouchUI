@@ -19,13 +19,13 @@ TouchUI.prototype.scroll.modal = {
 
 			// Force iScroll to get the correct scrollHeight
 			setTimeout(function() {
-				if(curModal.indicators) {
+				if(curModal) {
 					curModal.refresh();
 				}
 			}, 0);
 			// And Refresh again after animation
 			setTimeout(function() {
-				if(curModal.indicators) {
+				if(curModal) {
 					curModal.refresh();
 				}
 			}, 800);
@@ -40,7 +40,7 @@ TouchUI.prototype.scroll.modal = {
 			curModal.on("scrollCancel", scrollEnd);
 
 			// Refresh the scrollHeight and scroll back to top with these actions:
-			$document.on("click.touchui", '[data-toggle="tab"], .pagination ul li a', function(e) {
+			$document.on("click.scrollHeightTouchUI", '[data-toggle="tab"], .pagination ul li a', function(e) {
 				curModal._end(e);
 
 				setTimeout(function() {
@@ -51,8 +51,7 @@ TouchUI.prototype.scroll.modal = {
 
 			// Kill it with fire!
 			$modalElm.one("destroy", function() {
-				$document.off("click.touchui");
-				curModal.destroy();
+				$document.off("click.scrollHeightTouchUI");
 				self.scroll.modal.stack.pop();
 
 				if(self.scroll.modal.stack.length > 0) {
@@ -61,9 +60,11 @@ TouchUI.prototype.scroll.modal = {
 					self.scroll.currentActive = self.scroll.iScrolls.body;
 				}
 
+				curModal.destroy();
 				curModal.off("scrollStart", scrollStart);
 				curModal.off("scrollEnd", scrollEnd);
 				curModal.off("scrollCancel", scrollEnd);
+				curModal = undefined;
 			});
 
 		});
