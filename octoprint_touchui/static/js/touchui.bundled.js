@@ -50,6 +50,18 @@ var TouchUI = function() {
 				self.knockout.isReady.call(self, touchViewModel, viewModels);
 				self.plugins.init.call(self, touchViewModel, viewModels);
 			}
+		},
+		onTabChange: function() {
+			if(self.isActive) {
+				if( !self.isTouch ) {
+					setTimeout(function() {
+						if(self.scroll.iScrolls.body) {
+							self.scroll.iScrolls.body.refresh();
+							self.animate.hide.call(self, "navbar");
+						}
+					}, 0);
+				}
+			}
 		}
 	};
 };
@@ -129,21 +141,12 @@ TouchUI.prototype.animate.hide = function(what) {
 				}
 
 				setTimeout(function() {
-					// scroll.refresh();
 					if(Math.abs(scroll.maxScrollY) > 0) {
 						scroll.scrollTo(0, -navbarHeight, 160);
 					}
 				}, 0);
 
 			}
-		} else {
-
-			if(!this.isTouch) {
-				setTimeout(function() {
-					self.scroll.iScrolls.body.refresh();
-				}, 0);
-			}
-
 		}
 	}
 
@@ -318,6 +321,7 @@ TouchUI.prototype.components.keyboard = {
 
 				// $elm already has a keyboard
 				if($elm.data("keyboard")) {
+					$elm.data('keyboard').reveal();
 					return;
 				}
 
@@ -628,24 +632,6 @@ TouchUI.prototype.core.version = {
 
 }
 
-TouchUI.prototype.DOM.init = function() {
-
-	this.DOM.move.connection.init( this.DOM.create.tabbar );
-	this.DOM.move.controls.init();
-
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init( this.DOM.create.tabbar );
-	}
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	$("#tabs li a").on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-}
-
 TouchUI.prototype.DOM.cookies = {
 
 	get: function(key) {
@@ -678,6 +664,24 @@ TouchUI.prototype.DOM.cookies = {
 		return !value;
 
 	}
+
+}
+
+TouchUI.prototype.DOM.init = function() {
+
+	this.DOM.move.connection.init( this.DOM.create.tabbar );
+	this.DOM.move.controls.init();
+
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init( this.DOM.create.tabbar );
+	}
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	$("#tabs li a").on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
 
 }
 
@@ -740,6 +744,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		}
 	});
 
+	// Reload CSS or LESS after saving our settings
 	var afterSettingsSave = ko.computed(function() {
 		return !settingsViewModel.receiving() && !settingsViewModel.sending() && touchViewModel.settingsUpdated();
 	});
@@ -778,30 +783,6 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	$(window).on("resize", function() {
 		viewModels[8].updatePlot();
 	});
-
-	// Prevent the onTabChange function from hiding the webcam on the new webcam tab
-	var oldTabChange = controlViewModel.onTabChange;
-	controlViewModel.onTabChange = function(previous, current) {
-
-		//Pretend we are #control, and not control on control
-		current = (current === "#control") ? "#control_without_webcam" : current;
-		current = (current === "#webcam") ? "#control" : current;
-
-		previous = (previous === "#control") ? "#control_without_webcam" : previous;
-		previous = (previous === "#webcam") ? "#control" : previous;
-
-		if( !self.isTouch ) {
-			setTimeout(function() {
-				try {
-					self.scroll.iScrolls.body.refresh();
-				} catch(err) {
-					// Do nothing
-				};
-			}, 100);
-		}
-
-		oldTabChange.call(this, previous, current);
-	};
 
 }
 
@@ -866,10 +847,14 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	if($("#webcam").length > 0) {
 		ko.applyBindings(controlViewModel, $("#webcam")[0]);
 	}
+
+	// (Re-)Apply bindings to the new controls div
 	if($("#control-jog-feedrate").length > 0) {
 		ko.cleanNode($("#control-jog-feedrate")[0]);
 		ko.applyBindings(controlViewModel, $("#control-jog-feedrate")[0]);
 	}
+
+	// (Re-)Apply bindings to the new navigation div
 	if($("#navbar_login").length > 0) {
 		ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);
 
@@ -892,16 +877,11 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		});
 	}
 
+	// (Re-)Apply bindings to the new system commands div
 	if($("#navbar_systemmenu").length > 0) {
 		ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
 		ko.applyBindings(navigationViewModel, $("#divider_systemmenu")[0]);
 	}
-
-	// Hide topbar and/or refresh the scrollheight if clicking an item
-	// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
-	$(document).on("click", '#tabs [data-toggle="tab"]', function() {
-		self.animate.hide.call(self, "navbar");
-	});
 
 	// Force knockout to read the change
 	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
@@ -910,10 +890,39 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		}
 	});
 
-}
+	// Force the webcam tab to load the webcam feed that original is located on the controls tab
+	$('#tabs a[data-toggle="tab"]').each(function(ind, elm) {
 
-TouchUI.prototype.plugins.init = function(touchViewModel, viewModels) {
-	this.plugins.screenSquish(viewModels[3], viewModels[7]);
+		// Get the currently attached events to the toggle
+		var events = $.extend([], jQuery._data(elm, "events").show),
+			$elm = $(elm);
+
+		// Remove all previous set events and call them after manipulating a few things
+		$elm.off("show").on("show", function(e) {
+			var scope = this,
+				current = e.target.hash,
+				previous = e.relatedTarget.hash;
+
+			current = (current === "#control") ? "#control_without_webcam" : current;
+			current = (current === "#webcam") ? "#control" : current;
+
+			previous = (previous === "#control") ? "#control_without_webcam" : previous;
+			previous = (previous === "#webcam") ? "#control" : previous;
+
+			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
+			$.each(events, function(key, event) {
+				event.handler.call(scope, {
+					target: {
+						hash: current
+					},
+					relatedTarget: {
+						hash: previous
+					}
+				});
+			});
+		})
+	});
+
 }
 
 TouchUI.prototype.plugins.navbarTemp = function() {
@@ -922,21 +931,21 @@ TouchUI.prototype.plugins.navbarTemp = function() {
 	if( $("#navbar_plugin_navbartemp").length > 0 ) {
 		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
 		$('<li class="divider"></li>').insertBefore(navBarTmp);
-		$("<!-- ko allowBindings: false -->").insertBefore(navBarTmp);
-		$("<!-- /ko -->").insertAfter(navBarTmp);
 	}
 
 }
 
 TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, pluginManagerViewModel) {
+	var shown = false;
 
-	softwareUpdateViewModel.versions.items.subscribe(function(changes) {
+	pluginManagerViewModel.plugins.items.subscribe(function() {
 
 		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
 			return (elm.key === "ScreenSquish");
 		}, true) || false;
 
-		if(ScreenSquish && ScreenSquish.enabled) {
+		if(!shown && ScreenSquish && ScreenSquish.enabled) {
+			shown = true;
 			new PNotify({
 				title: 'TouchUI: ScreenSquish is running',
 				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
@@ -949,9 +958,9 @@ TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, plugi
 						text: 'Disable ScreenSquish',
 						addClass: 'btn-primary',
 						click: function(notice) {
-							if(!ScreenSquish.pending_disable) {
+							//if(!ScreenSquish.pending_disable) {
 								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							}
+							//}
 							notice.remove();
 						}
 					}]
@@ -963,63 +972,8 @@ TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, plugi
 
 };
 
-TouchUI.prototype.scroll.beforeLoad = function() {
-
-	// Manipulate DOM for iScroll before knockout binding kicks in
-	if (!this.isTouch) {
-		$('<div id="scroll"></div>').insertBefore('.page-container');
-		$('.page-container').appendTo("#scroll");
-	}
-
-	// Create iScroll container for terminal anyway, we got styling on that
-	var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
-	$("#terminal-output").appendTo(cont);
-
-}
-
-TouchUI.prototype.scroll.init = function() {
-	var self = this;
-
-	if ( this.isTouch ) {
-		var width = $(window).width();
-
-		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
-		$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
-		$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
-		$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
-
-		$(window).on("resize", function() {
-
-			if(width !== $(window).width()) {
-				$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
-				$("#terminal-scroll").css("height", "").height($("#terminal-scroll").outerHeight());
-				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
-				width = $(window).width();
-			}
-
-
-		});
-
-	} else {
-
-		// Set overflow hidden for best performance
-		$("html").addClass("emulateTouch");
-
-		self.scroll.terminal.init.call(self);
-		self.scroll.body.init.call(self);
-		self.scroll.modal.init.call(self);
-
-		// Refresh body on dropdown click
-		$(document).on("click", ".container .pagination ul li a", function() {
-			setTimeout(function() {
-				self.scroll.currentActive.refresh();
-			}, 0);
-		});
-
-	}
-
-	self.scroll.dropdown.init.call(self);
-
+TouchUI.prototype.plugins.init = function(touchViewModel, viewModels) {
+	this.plugins.screenSquish(viewModels[3], viewModels[7]);
 }
 
 TouchUI.prototype.scroll.blockEvents = {
@@ -1186,13 +1140,13 @@ TouchUI.prototype.scroll.modal = {
 
 			// Force iScroll to get the correct scrollHeight
 			setTimeout(function() {
-				if(curModal.indicators) {
+				if(curModal) {
 					curModal.refresh();
 				}
 			}, 0);
 			// And Refresh again after animation
 			setTimeout(function() {
-				if(curModal.indicators) {
+				if(curModal) {
 					curModal.refresh();
 				}
 			}, 800);
@@ -1207,7 +1161,7 @@ TouchUI.prototype.scroll.modal = {
 			curModal.on("scrollCancel", scrollEnd);
 
 			// Refresh the scrollHeight and scroll back to top with these actions:
-			$document.on("click.touchui", '[data-toggle="tab"], .pagination ul li a', function(e) {
+			$document.on("click.scrollHeightTouchUI", '[data-toggle="tab"], .pagination ul li a', function(e) {
 				curModal._end(e);
 
 				setTimeout(function() {
@@ -1218,8 +1172,7 @@ TouchUI.prototype.scroll.modal = {
 
 			// Kill it with fire!
 			$modalElm.one("destroy", function() {
-				$document.off("click.touchui");
-				curModal.destroy();
+				$document.off("click.scrollHeightTouchUI");
 				self.scroll.modal.stack.pop();
 
 				if(self.scroll.modal.stack.length > 0) {
@@ -1228,9 +1181,11 @@ TouchUI.prototype.scroll.modal = {
 					self.scroll.currentActive = self.scroll.iScrolls.body;
 				}
 
+				curModal.destroy();
 				curModal.off("scrollStart", scrollStart);
 				curModal.off("scrollEnd", scrollEnd);
 				curModal.off("scrollCancel", scrollEnd);
+				curModal = undefined;
 			});
 
 		});
@@ -1354,6 +1309,65 @@ TouchUI.prototype.scroll.terminal = {
 	}
 }
 
+TouchUI.prototype.scroll.beforeLoad = function() {
+
+	// Manipulate DOM for iScroll before knockout binding kicks in
+	if (!this.isTouch) {
+		$('<div id="scroll"></div>').insertBefore('.page-container');
+		$('.page-container').appendTo("#scroll");
+	}
+
+	// Create iScroll container for terminal anyway, we got styling on that
+	var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
+	$("#terminal-output").appendTo(cont);
+
+}
+
+TouchUI.prototype.scroll.init = function() {
+	var self = this;
+
+	if ( this.isTouch ) {
+		var width = $(window).width();
+
+		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
+		$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
+		$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
+		$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
+
+		$(window).on("resize", function() {
+
+			if(width !== $(window).width()) {
+				$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
+				$("#terminal-scroll").css("height", "").height($("#terminal-scroll").outerHeight());
+				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
+				width = $(window).width();
+			}
+
+
+		});
+
+	} else {
+
+		// Set overflow hidden for best performance
+		$("html").addClass("emulateTouch");
+
+		self.scroll.terminal.init.call(self);
+		self.scroll.body.init.call(self);
+		self.scroll.modal.init.call(self);
+
+		// Refresh body on dropdown click
+		$(document).on("click", ".container .pagination ul li a", function() {
+			setTimeout(function() {
+				self.scroll.currentActive.refresh();
+			}, 0);
+		});
+
+	}
+
+	self.scroll.dropdown.init.call(self);
+
+}
+
 TouchUI.prototype.DOM.create.dropdown = {
 
 	menuItem: {
@@ -1419,7 +1433,7 @@ TouchUI.prototype.DOM.create.webcam = {
 	},
 
 	container: {
-		cloneTo: "#timelapse",
+		cloneTo: ".tab-content",
 
 		webcam: {
 			$container: $("#webcam_container"),
@@ -1430,14 +1444,14 @@ TouchUI.prototype.DOM.create.webcam = {
 	init: function( tabbar ) {
 		var self = this;
 
-		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').insertAfter(this.container.cloneTo);
+		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
 		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertBefore(this.menu.webcam.cloneTo);
 
 		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
 		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
 
-		$('<!-- /ko -->').insertBefore(this.container.$elm);
 		$('<!-- ko allowBindings: false -->').insertBefore(this.container.$elm);
+		$('<!-- /ko -->').insertAfter(this.container.$elm);
 
 		$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
 

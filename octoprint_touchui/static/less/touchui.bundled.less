@@ -95,12 +95,7 @@
 @light-darker-dark-color: darken(@light-color, 50%);
 @light-darker-darker-color: darken(@light-color, 55%);
 
-/*---------------------------------------------------
-LESS Elements 0.9 + text-shadow + text-adjust
----------------------------------------------------
-A set of useful LESS mixins
-More info at: http:
----------------------------------------------------*/
+
 .gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
 background: @color;
 background: -webkit-gradient(linear, left bottom, left top, color-stop(0, @start), color-stop(1, @stop));
@@ -344,8 +339,8 @@ align-self: @align;
 
 
 /*!
-*  Font Awesome 4.4.0 by @davegandy - http:
-*  License - http:
+*  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
+*  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
 */
 
 @font-face {
@@ -2407,7 +2402,7 @@ position: relative;
 clear: both;
 display: inline-block;
 .track {
-background: url("@{touchui-base-path}img/text-color.png") no-repeat center center;
+background: url("@{touchui-base-path}img/colorpicker.png") no-repeat center center;
 height: 150px;
 width: 150px;
 padding: 10px;
@@ -2755,8 +2750,6 @@ pointer-events: none;
 
 
 
-
-
 .add-on {
 background: @addon-background;
 color: @addon-text-color;
@@ -3047,38 +3040,6 @@ top: 2px;
 text-align: center;
 }
 
-}
-}
-}
-
-.dropdown-menu {
-.dropdown-menu {
-position: static;
-z-index: 0;
-margin: 0;
-float: none;
-border: 0 none !important;
-padding: 0;
-
-@media (max-width: 300px) {
-width: auto;
-}
-}
-
-&:before {
-right: 6vw;
-top: -20px;
-border-left-width: 10px;
-border-right-width: 10px;
-border-bottom-width: 10px;
-border-bottom-color: @dropdown-color !important;
-}
-
-.btn {
-background: darken(@btn-main-background, 5%);
-
-&:active {
-background: darken(@btn-main-background, 15%);
 }
 }
 }
@@ -5416,6 +5377,36 @@ background: @dropdown-color;
 &:active {
 background: darken(@dropdown-color, 15%);
 }
+}
+}
+
+.dropdown-menu {
+position: static;
+z-index: 0;
+margin: 0;
+float: none;
+border: 0 none !important;
+padding: 0;
+
+@media (max-width: 300px) {
+width: auto;
+}
+}
+
+&:before {
+right: 6vw;
+top: -20px;
+border-left-width: 10px;
+border-right-width: 10px;
+border-bottom-width: 10px;
+border-bottom-color: @dropdown-color !important;
+}
+
+.btn {
+background: darken(@btn-main-background, 5%);
+
+&:active {
+background: darken(@btn-main-background, 15%);
 }
 }
 
