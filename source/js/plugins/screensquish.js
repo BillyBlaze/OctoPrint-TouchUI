@@ -1,12 +1,14 @@
 TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, pluginManagerViewModel) {
+	var shown = false;
 
-	softwareUpdateViewModel.versions.items.subscribe(function(changes) {
+	pluginManagerViewModel.plugins.items.subscribe(function() {
 
 		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
 			return (elm.key === "ScreenSquish");
 		}, true) || false;
 
-		if(ScreenSquish && ScreenSquish.enabled) {
+		if(!shown && ScreenSquish && ScreenSquish.enabled) {
+			shown = true;
 			new PNotify({
 				title: 'TouchUI: ScreenSquish is running',
 				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
@@ -19,9 +21,9 @@ TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, plugi
 						text: 'Disable ScreenSquish',
 						addClass: 'btn-primary',
 						click: function(notice) {
-							if(!ScreenSquish.pending_disable) {
+							//if(!ScreenSquish.pending_disable) {
 								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							}
+							//}
 							notice.remove();
 						}
 					}]
