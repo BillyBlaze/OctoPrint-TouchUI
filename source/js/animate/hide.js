@@ -28,21 +28,12 @@ TouchUI.prototype.animate.hide = function(what) {
 				}
 
 				setTimeout(function() {
-					// scroll.refresh();
 					if(Math.abs(scroll.maxScrollY) > 0) {
 						scroll.scrollTo(0, -navbarHeight, 160);
 					}
 				}, 0);
 
 			}
-		} else {
-
-			if(!this.isTouch) {
-				setTimeout(function() {
-					self.scroll.iScrolls.body.refresh();
-				}, 0);
-			}
-
 		}
 	}
 
