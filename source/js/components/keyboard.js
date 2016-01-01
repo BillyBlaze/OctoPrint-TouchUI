@@ -126,6 +126,7 @@ TouchUI.prototype.components.keyboard = {
 
 				// $elm already has a keyboard
 				if($elm.data("keyboard")) {
+					$elm.data('keyboard').reveal();
 					return;
 				}
 
