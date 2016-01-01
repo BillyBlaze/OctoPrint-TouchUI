@@ -50,6 +50,18 @@ var TouchUI = function() {
 				self.knockout.isReady.call(self, touchViewModel, viewModels);
 				self.plugins.init.call(self, touchViewModel, viewModels);
 			}
+		},
+		onTabChange: function() {
+			if(self.isActive) {
+				if( !self.isTouch ) {
+					setTimeout(function() {
+						if(self.scroll.iScrolls.body) {
+							self.scroll.iScrolls.body.refresh();
+							self.animate.hide.call(self, "navbar");
+						}
+					}, 0);
+				}
+			}
 		}
 	};
 };

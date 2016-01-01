@@ -59,10 +59,14 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	if($("#webcam").length > 0) {
 		ko.applyBindings(controlViewModel, $("#webcam")[0]);
 	}
+
+	// (Re-)Apply bindings to the new controls div
 	if($("#control-jog-feedrate").length > 0) {
 		ko.cleanNode($("#control-jog-feedrate")[0]);
 		ko.applyBindings(controlViewModel, $("#control-jog-feedrate")[0]);
 	}
+
+	// (Re-)Apply bindings to the new navigation div
 	if($("#navbar_login").length > 0) {
 		ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);
 
@@ -85,22 +89,50 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		});
 	}
 
+	// (Re-)Apply bindings to the new system commands div
 	if($("#navbar_systemmenu").length > 0) {
 		ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
 		ko.applyBindings(navigationViewModel, $("#divider_systemmenu")[0]);
 	}
-
-	// Hide topbar and/or refresh the scrollheight if clicking an item
-	// Notice: Use delegation in order to trigger the event after the tab content has changed, other click events fire before content change.
-	$(document).on("click", '#tabs [data-toggle="tab"]', function() {
-		self.animate.hide.call(self, "navbar");
-	});
 
 	// Force knockout to read the change
 	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
 		if(isTriggered !== false) {
 			$(this).find("input").trigger("change", [hex, rgb, false]);
 		}
+	});
+
+	// Force the webcam tab to load the webcam feed that original is located on the controls tab
+	$('#tabs a[data-toggle="tab"]').each(function(ind, elm) {
+
+		// Get the currently attached events to the toggle
+		var events = $.extend([], jQuery._data(elm, "events").show),
+			$elm = $(elm);
+
+		// Remove all previous set events and call them after manipulating a few things
+		$elm.off("show").on("show", function(e) {
+			var scope = this,
+				current = e.target.hash,
+				previous = e.relatedTarget.hash;
+
+			current = (current === "#control") ? "#control_without_webcam" : current;
+			current = (current === "#webcam") ? "#control" : current;
+
+			previous = (previous === "#control") ? "#control_without_webcam" : previous;
+			previous = (previous === "#webcam") ? "#control" : previous;
+
+			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
+			$.each(events, function(key, event) {
+				event.handler.call(scope, {
+					target: {
+						hash: current
+					},
+					relatedTarget: {
+						hash: previous
+					}
+				});
+			});
+		})
 	});
 
 }

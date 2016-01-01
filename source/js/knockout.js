@@ -58,8 +58,11 @@ $(function() {
 		}
 
 		self.onEventSettingsUpdated = function() {
-			console.log("onEventSettingsUpdated");
 			self.settingsUpdated(true);
+		}
+
+		self.onTabChange = function() {
+			Touch.onTabChange();
 		}
 
 	}
