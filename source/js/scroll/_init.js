@@ -31,7 +31,7 @@ TouchUI.prototype.scroll.init = function() {
 		self.scroll.modal.init.call(self);
 
 		// Refresh body on dropdown click
-		$(document).on("click", ".container .pagination ul li a", function() {
+		$(document).on("click", ".pagination ul li a", function() {
 			setTimeout(function() {
 				self.scroll.currentActive.refresh();
 			}, 0);
