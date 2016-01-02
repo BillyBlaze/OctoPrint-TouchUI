@@ -20,10 +20,11 @@ TouchUI.prototype.core.bridge = function() {
 
 		domReady: function() {
 			if(self.isActive()) {
-				self.components.touchList.init.call(self);
-				self.components.modal.init.call(self);
-				self.components.keyboard.init.call(self);
 				self.components.dropdown.init.call(self);
+				self.components.fullscreen.init.call(self);
+				self.components.keyboard.init.call(self);
+				self.components.modal.init.call(self);
+				self.components.touchList.init.call(self);
 
 				self.scroll.init.call(self);
 			}

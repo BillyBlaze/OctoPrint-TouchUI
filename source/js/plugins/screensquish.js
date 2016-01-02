@@ -1,4 +1,4 @@
-TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, pluginManagerViewModel) {
+TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 	var shown = false;
 
 	pluginManagerViewModel.plugins.items.subscribe(function() {
@@ -21,9 +21,9 @@ TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, plugi
 						text: 'Disable ScreenSquish',
 						addClass: 'btn-primary',
 						click: function(notice) {
-							//if(!ScreenSquish.pending_disable) {
+							if(!ScreenSquish.pending_disable) {
 								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							//}
+							}
 							notice.remove();
 						}
 					}]

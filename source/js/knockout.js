@@ -1,4 +1,15 @@
 $(function() {
+	var TOUCHUI_VIEWMODELS = [
+		"terminalViewModel",
+		"connectionViewModel",
+		"settingsViewModel",
+		"softwareUpdateViewModel",
+		"controlViewModel",
+		"gcodeFilesViewModel",
+		"navigationViewModel",
+		"pluginManagerViewModel",
+		"temperatureViewModel"
+	];
 	var Touch = new TouchUI();
 	Touch.domLoading();
 
@@ -7,7 +18,12 @@ $(function() {
 	});
 
 	function touchUIViewModel(viewModels) {
-		var self = this;
+		var self = this
+			allViewModels = {};
+
+		_.each(viewModels, function(obj, key) {
+			allViewModels[TOUCHUI_VIEWMODELS[key]] = obj;
+		});
 
 		self.isActive = Touch.isActive;
 		self.isKeyboardActive = Touch.isKeyboardActive;
@@ -22,7 +38,7 @@ $(function() {
 		};
 
 		self.onStartupComplete = function() {
-			Touch.koReady(self, viewModels);
+			Touch.koReady(self, allViewModels);
 		}
 
 		self.onBeforeBinding = function() {
@@ -56,7 +72,7 @@ $(function() {
 
 	OCTOPRINT_VIEWMODELS.push([
 		touchUIViewModel,
-		["terminalViewModel", "connectionViewModel", "settingsViewModel", "softwareUpdateViewModel", "controlViewModel", "gcodeFilesViewModel", "navigationViewModel", "pluginManagerViewModel", "temperatureViewModel"],
+		TOUCHUI_VIEWMODELS,
 		["#touchui_settings_dialog", "#settings_plugin_touchui", "#navbar_plugin_touchui"]
 	]);
 });
