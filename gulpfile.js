@@ -43,7 +43,7 @@ gulp.task('concat-libs-js', function () {
 gulp.task('concat-app-js', function () {
 	return gulp.src([
 			'!source/js/knockout.js',
-			'source/js/main.js',
+			'source/js/constructor.js',
 			'source/js/**/*.js',
 			'source/js/**/**/*.js'
 		])
