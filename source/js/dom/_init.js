@@ -10,7 +10,8 @@ TouchUI.prototype.DOM.init = function() {
 	// Add class with how many tab-items
 	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
 
-	$("#tabs li a").on("click", function() {
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
 		$("#all_touchui_settings").removeClass("item_active");
 	});
 
