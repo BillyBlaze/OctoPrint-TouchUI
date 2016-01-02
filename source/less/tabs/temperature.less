@@ -118,6 +118,7 @@
 						&:before {
 							border: 10px solid transparent;
 							border-top-color: @main-color;
+							border-bottom-color: transparent !important;
 							position: absolute;
 							top: auto;
 							bottom: -18px;
@@ -169,6 +170,10 @@
 								button:first-child {
 									width: 80%;
 								}
+							}
+
+							.btn.dropdown-toggle {
+								border-left: 1px solid @table-row-background;
 							}
 						}
 						.add-on {
