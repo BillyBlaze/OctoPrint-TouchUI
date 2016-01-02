@@ -7,14 +7,14 @@
 		<form>
 			<div class="btn-box">
 				<button class="btn btn-primary" data-bind="click: toggleTouchUI">{{ _('Toggle TouchUI') }}</button>
-				<span class="label" data-bind="text: isUIActive == true ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isUIActive ? 'label-success' : 'label-danger'"></span>
+				<span class="label" data-bind="text: isActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box">
-				<button class="btn btn-primary" data-bind="click: toggleKeyboard, disable: !isUIActive">{{ _('Toggle Virtual Keyboard') }}</button>
+				<button class="btn btn-primary" data-bind="click: toggleKeyboard, disable: !isActive">{{ _('Toggle Virtual Keyboard') }}</button>
 				<span class="label" data-bind="text: isKeyboardActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isKeyboardActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box">
-				<button class="btn btn-primary" data-bind="click: toggleHidebar, disable: !isUIActive">{{ _('Toggle hide navigation bar') }}</button>
+				<button class="btn btn-primary" data-bind="click: toggleHidebar, disable: !isActive">{{ _('Toggle hide navigation bar') }}</button>
 				<span class="label" data-bind="text: isHidebarActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isHidebarActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box">
