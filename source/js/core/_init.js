@@ -41,23 +41,11 @@ TouchUI.prototype.core.init = function() {
 			}
 		}
 
-		// Get state of cookies
+		// Get state of cookies and store them in KO
 		this.components.keyboard.isActive(this.DOM.cookies.get("keyboardActive") === "true");
 		this.animate.isHidebarActive(this.DOM.cookies.get("hideNavbarActive") === "true");
 		this.isFullscreen(this.DOM.cookies.get("fullscreen") === "true");
 
-		// Create new tab with printer status and make it active
-		this.DOM.create.printer.init( this.DOM.create.tabbar );
-		this.DOM.create.printer.menu.$elm.find('a').trigger("click");
-
-		// Create a new persistent dropdown
-		this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-		// Move all other items from tabbar into dropdown
-		this.DOM.move.tabbar.init.call( this );
-		this.DOM.move.navbar.init.call( this );
-		this.DOM.move.afterTabAndNav.call( this );
-		this.DOM.move.overlays.init.call( this );
 	}
 
 }
