@@ -2656,6 +2656,13 @@ height: auto;
 min-height: 100%;
 position: relative;
 
+
+
+
+
+
+
+
 .octoprint-container {
 margin: 0;
 
@@ -2738,17 +2745,6 @@ outline: 0 none;
 pointer-events: none;
 }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 .add-on {
 background: @addon-background;
@@ -3819,6 +3815,7 @@ right: 0;
 &:before {
 border: 10px solid transparent;
 border-top-color: @main-color;
+border-bottom-color: transparent !important;
 position: absolute;
 top: auto;
 bottom: -18px;
@@ -3870,6 +3867,10 @@ width: auto;
 button:first-child {
 width: 80%;
 }
+}
+
+.btn.dropdown-toggle {
+border-left: 1px solid @table-row-background;
 }
 }
 .add-on {
