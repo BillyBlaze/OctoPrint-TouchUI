@@ -170,6 +170,15 @@ TouchUI.prototype.components.dropdown = {
 }
 
 TouchUI.prototype.components.fullscreen = {
+	init: function() {
+
+		// Bind fullscreenChange to knockout
+		$(document).bind("fullscreenchange", function() {
+			self.isFullscreen($(document).fullScreen() !== false);
+			self.DOM.cookies.set("fullscreen", self.isFullscreen());
+		});
+
+	},
 	ask: function() {
 		var self = this;
 
@@ -547,10 +556,11 @@ TouchUI.prototype.core.bridge = function() {
 
 		domReady: function() {
 			if(self.isActive()) {
-				self.components.touchList.init.call(self);
-				self.components.modal.init.call(self);
-				self.components.keyboard.init.call(self);
 				self.components.dropdown.init.call(self);
+				self.components.fullscreen.init.call(self);
+				self.components.keyboard.init.call(self);
+				self.components.modal.init.call(self);
+				self.components.touchList.init.call(self);
 
 				self.scroll.init.call(self);
 			}
@@ -826,18 +836,11 @@ TouchUI.prototype.DOM.init = function() {
 }
 
 TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
-	var self = this,
-		terminalViewModel = viewModels[0],
-		connectionViewModel = viewModels[1],
-		settingsViewModel = viewModels[2],
-		softwareUpdateViewModel = viewModels[3],
-		controlViewModel = viewModels[4],
-		gcodeFilesViewModel = viewModels[5],
-		navigationViewModel = viewModels[6];
+	var self = this;
 
 	// Repaint graph after resize (.e.g orientation changed)
 	$(window).on("resize", function() {
-		viewModels[8].updatePlot();
+		viewModels.temperatureViewModel.updatePlot();
 	});
 
 	// Remove slimScroll from files list
@@ -857,7 +860,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	$(document).off("dragover");
 
 	// Watch the operational binder for visual online/offline
-	var subscription = connectionViewModel.isOperational.subscribe(function(newOperationalState) {
+	var subscription = viewModels.connectionViewModel.isOperational.subscribe(function(newOperationalState) {
 		var printLink = $("#all_touchui_settings");
 		if( !newOperationalState ) {
 			printLink.addClass("offline").removeClass("online");
@@ -870,39 +873,33 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// Redo scroll-to-end interface
 	$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
-		terminalViewModel.scrollToEnd();
+		viewModels.terminalViewModel.scrollToEnd();
 		return false;
 	});
 
 	// Overwrite terminal knockout functions (i.e. scroll to end)
-	this.scroll.overwrite.call(this, terminalViewModel);
+	this.scroll.overwrite.call(this, viewModels.terminalViewModel);
 
 	// Setup version tracking in terminal
-	this.core.version.init.call(this, softwareUpdateViewModel);
-
-	// Bind fullscreenChange to knockout
-	$(document).bind("fullscreenchange", function() {
-		self.isFullscreen($(document).fullScreen() !== false);
-		self.DOM.cookies.set("fullscreen", self.isFullscreen());
-	});
+	this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
 	// (Re-)Apply bindings to the new webcam div
 	if($("#webcam").length > 0) {
-		ko.applyBindings(controlViewModel, $("#webcam")[0]);
+		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 	}
 
 	// (Re-)Apply bindings to the new controls div
 	if($("#control-jog-feedrate").length > 0) {
 		ko.cleanNode($("#control-jog-feedrate")[0]);
-		ko.applyBindings(controlViewModel, $("#control-jog-feedrate")[0]);
+		ko.applyBindings(viewModels.controlViewModel, $("#control-jog-feedrate")[0]);
 	}
 
 	// (Re-)Apply bindings to the new navigation div
 	if($("#navbar_login").length > 0) {
-		ko.applyBindings(navigationViewModel, $("#navbar_login")[0]);
+		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 
 		// Force the dropdown to appear open when logedIn
-		navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
+		viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
 			if( loggedIn ) {
 				$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
 				$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
@@ -922,8 +919,8 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// (Re-)Apply bindings to the new system commands div
 	if($("#navbar_systemmenu").length > 0) {
-		ko.applyBindings(navigationViewModel, $("#navbar_systemmenu")[0]);
-		ko.applyBindings(navigationViewModel, $("#divider_systemmenu")[0]);
+		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
+		ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
 	}
 
 	// Force knockout to read the change
@@ -934,7 +931,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	});
 
 	if( !self.isTouch ) {
-		gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
+		viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 			setTimeout(function() {
 				try {
 					self.scroll.iScrolls.body.refresh();
@@ -963,10 +960,10 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		if(hasError !== false && hasError.trim() != "") {
 
 			// If Settings Modal is open, then block the hide of the modal once
-			if(settingsViewModel.settingsDialog.is(":visible")) {
-				var tmp = settingsViewModel.settingsDialog.modal;
-				settingsViewModel.settingsDialog.modal = function() {
-					settingsViewModel.settingsDialog.modal = tmp;
+			if(viewModels.settingsViewModel.settingsDialog.is(":visible")) {
+				var tmp = viewModels.settingsViewModel.settingsDialog.modal;
+				viewModels.settingsViewModel.settingsDialog.modal = function() {
+					viewModels.settingsViewModel.settingsDialog.modal = tmp;
 				};
 			}
 
@@ -982,7 +979,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// Reload CSS or LESS after saving our settings
 	var afterSettingsSave = ko.computed(function() {
-		return !settingsViewModel.receiving() && !settingsViewModel.sending() && touchViewModel.settingsUpdated();
+		return !viewModels.settingsViewModel.receiving() && !viewModels.settingsViewModel.sending() && touchViewModel.settingsUpdated();
 	});
 	afterSettingsSave.subscribe(function(settingsSaved) {
 		if(settingsSaved && !touchViewModel.settings.error()) {
@@ -1027,7 +1024,7 @@ TouchUI.prototype.plugins.navbarTemp = function() {
 
 }
 
-TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, pluginManagerViewModel) {
+TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 	var shown = false;
 
 	pluginManagerViewModel.plugins.items.subscribe(function() {
@@ -1050,9 +1047,9 @@ TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, plugi
 						text: 'Disable ScreenSquish',
 						addClass: 'btn-primary',
 						click: function(notice) {
-							//if(!ScreenSquish.pending_disable) {
+							if(!ScreenSquish.pending_disable) {
 								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							//}
+							}
 							notice.remove();
 						}
 					}]
@@ -1065,7 +1062,7 @@ TouchUI.prototype.plugins.screenSquish = function(softwareUpdateViewModel, plugi
 };
 
 TouchUI.prototype.plugins.init = function(touchViewModel, viewModels) {
-	this.plugins.screenSquish(viewModels[3], viewModels[7]);
+	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
 TouchUI.prototype.scroll.blockEvents = {

@@ -1,4 +1,13 @@
 TouchUI.prototype.components.fullscreen = {
+	init: function() {
+
+		// Bind fullscreenChange to knockout
+		$(document).bind("fullscreenchange", function() {
+			self.isFullscreen($(document).fullScreen() !== false);
+			self.DOM.cookies.set("fullscreen", self.isFullscreen());
+		});
+
+	},
 	ask: function() {
 		var self = this;
 
