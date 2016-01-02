@@ -18,7 +18,7 @@ $(function() {
 	});
 
 	function touchUIViewModel(viewModels) {
-		var self = this
+		var self = this,
 			allViewModels = {};
 
 		_.each(viewModels, function(obj, key) {
