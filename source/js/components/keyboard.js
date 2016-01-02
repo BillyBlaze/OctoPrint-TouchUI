@@ -1,6 +1,6 @@
 TouchUI.prototype.components.keyboard = {
 
-	isActive: false,
+	isActive: ko.observable(false),
 	config: {
 
 		default: {
@@ -106,7 +106,7 @@ TouchUI.prototype.components.keyboard = {
 		$(document).on("mousedown", 'input:not('+notThis+'), textarea', function(e) {
 			var $elm = $(e.target);
 
-			if(!self.components.keyboard.isActive) {
+			if(!self.components.keyboard.isActive()) {
 
 				if($elm.data("keyboard")) {
 					$elm.data("keyboard").close().destroy();

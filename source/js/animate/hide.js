@@ -3,7 +3,7 @@ TouchUI.prototype.animate.hide = function(what) {
 
 	//Lets hide the navbar by scroll
 	if( what === "navbar" ) {
-		if( this.animate.isHidebarActive ) {
+		if( this.animate.isHidebarActive() ) {
 			var navbar = $("#navbar"),
 				navbarHeight = parseFloat(navbar.height());
 

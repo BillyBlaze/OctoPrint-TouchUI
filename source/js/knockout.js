@@ -2,13 +2,17 @@ $(function() {
 	var Touch = new TouchUI();
 	Touch.domLoading();
 
+	$(window).ready(function() {
+		Touch.domReady(self);
+	});
+
 	function touchUIViewModel(viewModels) {
 		var self = this;
 
-		self.isUIActive = Touch.isActive;
-		self.isKeyboardActive = ko.observable(Touch.isKeyboardActive);
-		self.isHidebarActive = ko.observable(Touch.isHidebarActive);
-		self.isFullscreen = ko.observable(Touch.isFullscreen);
+		self.isActive = Touch.isActive;
+		self.isKeyboardActive = Touch.isKeyboardActive;
+		self.isHidebarActive = Touch.isHidebarActive;
+		self.isFullscreen = Touch.isFullscreen;
 
 		self.settingsUpdated = ko.observable(false);
 		self.touchuiModal = $('#touchui_settings_dialog');
@@ -16,8 +20,6 @@ $(function() {
 			error: ko.observable(false),
 			whatsNew: ko.observable(false)
 		};
-
-		Touch.koLoading(self, viewModels);
 
 		self.onStartupComplete = function() {
 			Touch.koReady(self, viewModels);
@@ -36,33 +38,18 @@ $(function() {
 			});
 		}
 
+		self.toggleTouchUI = Touch.toggleTouch;
+		self.toggleKeyboard = Touch.toggleKeyboard;
+		self.toggleHidebar = Touch.toggleHidebar;
+		self.toggleFullscreen = Touch.toggleFullscreen;
+		self.onTabChange = Touch.onTabChange;
+
 		self.show = function() {
 			self.touchuiModal.modal("show");
 		}
 
-		self.toggleTouchUI = function() {
-			Touch.toggleTouch();
-		}
-		self.toggleKeyboard = function() {
-			if(self.isUIActive) {
-				self.isKeyboardActive(Touch.toggleKeyboard());
-			}
-		}
-		self.toggleHidebar = function() {
-			if(self.isUIActive) {
-				self.isHidebarActive(Touch.toggleHidebar());
-			}
-		}
-		self.toggleFullscreen = function() {
-			Touch.toggleFullscreen();
-		}
-
 		self.onEventSettingsUpdated = function() {
 			self.settingsUpdated(true);
-		}
-
-		self.onTabChange = function() {
-			Touch.onTabChange();
 		}
 
 	}
