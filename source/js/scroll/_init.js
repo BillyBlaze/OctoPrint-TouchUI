@@ -39,6 +39,4 @@ TouchUI.prototype.scroll.init = function() {
 
 	}
 
-	self.scroll.dropdown.init.call(self);
-
 }
