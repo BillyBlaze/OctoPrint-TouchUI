@@ -28,3 +28,6 @@ You can change 4 main colors of the interface with the power of LESS. If you wou
 1. Firefox 40+
 1. Safari Mobile
 1. Chrome Mobile
+
+## Special thanks
+- Thanks to [SauceLabs](https://saucelabs.com) for providing free crossbrowser testing.
