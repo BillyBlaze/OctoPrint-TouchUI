@@ -1,5 +1,6 @@
 TouchUI.prototype.components.fullscreen = {
 	init: function() {
+		var self = this;
 
 		// Bind fullscreenChange to knockout
 		$(document).bind("fullscreenchange", function() {

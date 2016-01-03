@@ -4,14 +4,20 @@ TouchUI.prototype.components.slider = {
 
 		// Destroy bootstrap control sliders
 		$('#control .slider').each(function(ind, elm) {
-			var $elm = $(elm),
-				$next = $(elm).next(),
-				obj = JSON.parse('{'+$elm.find("input").attr("data-bind").replace(/'/g, "").replace(/([a-zA-Z]+)/g,'"$1"')+"}"),
-				text = $next.text().split(":")[0].replace(" ", ""),
-				valKey = obj.slider.value;
+			var $elm = $(elm);
+			var $next = $(elm).next();
+			var text = $next.text().split(":")[0].replace(" ", "");
+			var sliderObj = ko.jsonExpressionRewriting.parseObjectLiteral($elm.find("input").attr("data-bind"));
+			var obj = ko.jsonExpressionRewriting.parseObjectLiteral(sliderObj[0].value);
+			var slider = {};
 
-			delete obj.slider.value;
-			delete obj.slider.tooltip;
+			_.each(obj, function(elm, ind) {
+				slider[elm.key.trim()] = elm.value.trim();
+			});
+
+			var valKey = slider.value;
+			delete slider.value;
+			delete slider.tooltip;
 
 			$elm.addClass("hidden");
 
@@ -22,7 +28,7 @@ TouchUI.prototype.components.slider = {
 
 			$('<input type="number" id="ui-inp-'+ind+'">')
 				.attr("data-bind", "enable: isOperational() && loginState.isUser(), value: " + valKey)
-				.attr(obj.slider)
+				.attr(slider)
 				.appendTo(div);
 
 			$('<label for="ui-inp-'+ind+'"></label>')
