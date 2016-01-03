@@ -819,77 +819,6 @@ TouchUI.prototype.core.init = function() {
 
 }
 
-TouchUI.prototype.DOM.cookies = {
-
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-		}
-		return undefined;
-	},
-
-	set: function(key, value) {
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
-	},
-
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
-
-		if(value === true) {
-			this.set(key, "false");
-		} else {
-			this.set(key, "true");
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.init = function() {
-
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init( this.DOM.create.tabbar );
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
-
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call( this );
-	this.DOM.move.navbar.init.call( this );
-	this.DOM.move.afterTabAndNav.call( this );
-	this.DOM.move.overlays.init.call( this );
-
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init( this.DOM.create.tabbar );
-
-	// Manipulate controls div
-	this.DOM.move.controls.init();
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init( this.DOM.create.tabbar );
-	}
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-}
-
 TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	var self = this;
 
@@ -915,15 +844,14 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	$(document).off("dragover");
 
 	// Hide the dropdown after login
-	// var subscription = viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
-	// 	if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
-	// 		$(document).trigger("click");
-	// 		console.log("triggered click");
-	// 	}
-	// });
+	viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
+		if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
+			$(document).trigger("click");
+		}
+	});
 
 	// Watch the operational binder for visual online/offline
-	var subscription = viewModels.connectionViewModel.isOperational.subscribe(function(newOperationalState) {
+	viewModels.connectionViewModel.isOperational.subscribe(function(newOperationalState) {
 		var printLink = $("#all_touchui_settings");
 		if( !newOperationalState ) {
 			printLink.addClass("offline").removeClass("online");
@@ -1073,6 +1001,77 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 			}
 		}
+	});
+
+}
+
+TouchUI.prototype.DOM.cookies = {
+
+	get: function(key) {
+		var name = "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+		}
+		return undefined;
+	},
+
+	set: function(key, value) {
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+	},
+
+	toggleBoolean: function(key) {
+		var value = $.parseJSON(this.get(key) || "false");
+
+		if(value === true) {
+			this.set(key, "false");
+		} else {
+			this.set(key, "true");
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with printer status and make it active
+	this.DOM.create.printer.init( this.DOM.create.tabbar );
+	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.tabbar.init.call( this );
+	this.DOM.move.navbar.init.call( this );
+	this.DOM.move.afterTabAndNav.call( this );
+	this.DOM.move.overlays.init.call( this );
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init( this.DOM.create.tabbar );
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init( this.DOM.create.tabbar );
+	}
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
 	});
 
 }

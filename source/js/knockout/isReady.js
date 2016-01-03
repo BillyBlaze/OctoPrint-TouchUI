@@ -23,15 +23,14 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	$(document).off("dragover");
 
 	// Hide the dropdown after login
-	// var subscription = viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
-	// 	if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
-	// 		$(document).trigger("click");
-	// 		console.log("triggered click");
-	// 	}
-	// });
+	viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
+		if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
+			$(document).trigger("click");
+		}
+	});
 
 	// Watch the operational binder for visual online/offline
-	var subscription = viewModels.connectionViewModel.isOperational.subscribe(function(newOperationalState) {
+	viewModels.connectionViewModel.isOperational.subscribe(function(newOperationalState) {
 		var printLink = $("#all_touchui_settings");
 		if( !newOperationalState ) {
 			printLink.addClass("offline").removeClass("online");
