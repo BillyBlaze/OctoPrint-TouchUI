@@ -2477,6 +2477,11 @@ overflow: hidden;
 .show-dropdown {
 overflow: hidden;
 }
+
+.page-container {
+height: auto;
+min-height: 100%;
+}
 }
 }
 &.touch {
@@ -2506,9 +2511,11 @@ position: fixed !important;
 
 body {
 width: 100%;
-height: 100%;
+height: auto;
+min-height: 100%;
 background: @main-background;
 color: @text-color;
+position: relative;
 
 * {
 font-family: 'Source Code Pro', monospace;
@@ -2652,9 +2659,6 @@ left: -5000px;
 
 .page-container {
 width: 100%;
-height: auto;
-min-height: 100%;
-position: relative;
 
 
 
