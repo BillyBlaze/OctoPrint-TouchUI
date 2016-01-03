@@ -771,77 +771,6 @@ TouchUI.prototype.core.init = function() {
 
 }
 
-TouchUI.prototype.DOM.cookies = {
-
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-		}
-		return undefined;
-	},
-
-	set: function(key, value) {
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
-	},
-
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
-
-		if(value === true) {
-			this.set(key, "false");
-		} else {
-			this.set(key, "true");
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.init = function() {
-
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init( this.DOM.create.tabbar );
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
-
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call( this );
-	this.DOM.move.navbar.init.call( this );
-	this.DOM.move.afterTabAndNav.call( this );
-	this.DOM.move.overlays.init.call( this );
-
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init( this.DOM.create.tabbar );
-
-	// Manipulate controls div
-	this.DOM.move.controls.init();
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init( this.DOM.create.tabbar );
-	}
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-}
-
 TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	var self = this;
 
@@ -1017,6 +946,77 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 			}
 		}
+	});
+
+}
+
+TouchUI.prototype.DOM.cookies = {
+
+	get: function(key) {
+		var name = "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+		}
+		return undefined;
+	},
+
+	set: function(key, value) {
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+	},
+
+	toggleBoolean: function(key) {
+		var value = $.parseJSON(this.get(key) || "false");
+
+		if(value === true) {
+			this.set(key, "false");
+		} else {
+			this.set(key, "true");
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with printer status and make it active
+	this.DOM.create.printer.init( this.DOM.create.tabbar );
+	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.tabbar.init.call( this );
+	this.DOM.move.navbar.init.call( this );
+	this.DOM.move.afterTabAndNav.call( this );
+	this.DOM.move.overlays.init.call( this );
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init( this.DOM.create.tabbar );
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init( this.DOM.create.tabbar );
+	}
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
 	});
 
 }
@@ -1454,71 +1454,6 @@ TouchUI.prototype.DOM.create.webcam = {
 
 }
 
-TouchUI.prototype.DOM.overwrite.modal = function() {
-
-	if( !this.isTouch ) {
-		//We need a reliable event for catching new modals for attaching a scrolling bar
-		$.fn.modalBup = $.fn.modal;
-		$.fn.modal = function(option, args) {
-			// Update any other modifications made by others (i.e. OctoPrint itself)
-			$.fn.modalBup.defaults = $.fn.modal.defaults;
-
-			// Create modal, store into variable so we can trigger an event first before return
-			var tmp = $(this).modalBup(option, args);
-			$(this).trigger("modal.touchui", this);
-
-			return tmp;
-		};
-		$.fn.modal.prototype = { constructor: $.fn.modal };
-		$.fn.modal.Constructor = $.fn.modal;
-		$.fn.modal.defaults = $.fn.modalBup.defaults;
-	}
-
-}
-
-TouchUI.prototype.DOM.overwrite.tabbar = function() {
-
-	// Force the webcam tab to load the webcam feed that original is located on the controls tab
-	$('#tabs [data-toggle=tab]').each(function(ind, elm) {
-
-		// Get the currently attached events to the toggle
-		var events = $.extend([], jQuery._data(elm, "events").show),
-			$elm = $(elm);
-
-		// Remove all previous set events and call them after manipulating a few things
-		$elm.off("show").on("show", function(e) {
-			var scope = this,
-				current = e.target.hash,
-				previous = e.relatedTarget.hash;
-
-			current = (current === "#control") ? "#control_without_webcam" : current;
-			current = (current === "#webcam") ? "#control" : current;
-
-			previous = (previous === "#control") ? "#control_without_webcam" : previous;
-			previous = (previous === "#webcam") ? "#control" : previous;
-
-			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
-			$.each(events, function(key, event) {
-				event.handler.call(scope, {
-					target: {
-						hash: current
-					},
-					relatedTarget: {
-						hash: previous
-					}
-				});
-			});
-		})
-	});
-
-}
-
-TouchUI.prototype.DOM.overwrite.tabdrop = function() {
-	$.fn.tabdrop = function() {};
-	$.fn.tabdrop.prototype = { constructor: $.fn.tabdrop };
-	$.fn.tabdrop.Constructor = $.fn.tabdrop;
-}
-
 TouchUI.prototype.DOM.move.afterTabAndNav = function() {
 
 	this.DOM.create.dropdown.container.children().each(function(ind, elm) {
@@ -1657,4 +1592,69 @@ TouchUI.prototype.DOM.move.tabbar = {
 		}.bind(this));
 
 	}
+}
+
+TouchUI.prototype.DOM.overwrite.modal = function() {
+
+	if( !this.isTouch ) {
+		//We need a reliable event for catching new modals for attaching a scrolling bar
+		$.fn.modalBup = $.fn.modal;
+		$.fn.modal = function(option, args) {
+			// Update any other modifications made by others (i.e. OctoPrint itself)
+			$.fn.modalBup.defaults = $.fn.modal.defaults;
+
+			// Create modal, store into variable so we can trigger an event first before return
+			var tmp = $(this).modalBup(option, args);
+			$(this).trigger("modal.touchui", this);
+
+			return tmp;
+		};
+		$.fn.modal.prototype = { constructor: $.fn.modal };
+		$.fn.modal.Constructor = $.fn.modal;
+		$.fn.modal.defaults = $.fn.modalBup.defaults;
+	}
+
+}
+
+TouchUI.prototype.DOM.overwrite.tabbar = function() {
+
+	// Force the webcam tab to load the webcam feed that original is located on the controls tab
+	$('#tabs [data-toggle=tab]').each(function(ind, elm) {
+
+		// Get the currently attached events to the toggle
+		var events = $.extend([], jQuery._data(elm, "events").show),
+			$elm = $(elm);
+
+		// Remove all previous set events and call them after manipulating a few things
+		$elm.off("show").on("show", function(e) {
+			var scope = this,
+				current = e.target.hash,
+				previous = e.relatedTarget.hash;
+
+			current = (current === "#control") ? "#control_without_webcam" : current;
+			current = (current === "#webcam") ? "#control" : current;
+
+			previous = (previous === "#control") ? "#control_without_webcam" : previous;
+			previous = (previous === "#webcam") ? "#control" : previous;
+
+			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
+			$.each(events, function(key, event) {
+				event.handler.call(scope, {
+					target: {
+						hash: current
+					},
+					relatedTarget: {
+						hash: previous
+					}
+				});
+			});
+		})
+	});
+
+}
+
+TouchUI.prototype.DOM.overwrite.tabdrop = function() {
+	$.fn.tabdrop = function() {};
+	$.fn.tabdrop.prototype = { constructor: $.fn.tabdrop };
+	$.fn.tabdrop.Constructor = $.fn.tabdrop;
 }
