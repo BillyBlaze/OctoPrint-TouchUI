@@ -23,7 +23,6 @@ TouchUI.prototype.components.dropdown = {
 				// Toggle the targeted dropdown
 				$dropdownContainer.toggleClass("open");
 
-
 				// Refresh current scroll and add a min-height so we can reach the dropdown if needed
 				self.components.dropdown.containerMinHeight.call(self, $dropdownContainer, $dropdownToggle);
 
@@ -41,10 +40,11 @@ TouchUI.prototype.components.dropdown = {
 						$target = $(eve.target);
 
 					if (
-						!moved && //If scrolling did not move
+						!moved && // If scrolling did not move
+						$target.parents(".ui-pnotify").length === 0 && // if not a click within notifiaction
 						(
-							!$target.parents().is($dropdownContainer) || //Ignore made clicks within the dropdown container
-							$target.is('a:not([data-toggle]), .btn:not([data-toggle])') //Unless it's a link but not a [data-toggle]
+							!$target.parents().is($dropdownContainer) || // if clicks are not made within the dropdown container
+							$target.is('a:not([data-toggle])') // Unless it's a link but not a [data-toggle]
 						)
 					) {
 						$(document).off(eve);
