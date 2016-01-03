@@ -8,7 +8,7 @@ TouchUI.prototype.components.dropdown = {
 	// Rewrite opening of dropdowns
 	toggle: function() {
 		var self = this,
-			namespace = ".touchui.dropdown-toggle";
+			namespace = ".touchui.dropdown";
 
 		$(document)
 			.off('.dropdown')
@@ -23,6 +23,7 @@ TouchUI.prototype.components.dropdown = {
 				// Toggle the targeted dropdown
 				$dropdownContainer.toggleClass("open");
 
+
 				// Refresh current scroll and add a min-height so we can reach the dropdown if needed
 				self.components.dropdown.containerMinHeight.call(self, $dropdownContainer, $dropdownToggle);
 
@@ -34,19 +35,19 @@ TouchUI.prototype.components.dropdown = {
 				// Remove all other active dropdowns
 				$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
 
-				$(document).off("click"+namespace).on("click"+namespace, function(event) {
+				$(document).off("click"+namespace).on("click"+namespace, function(eve) {
 					// Check if we scrolled (touch devices wont trigger this click event after scrolling so assume we didn't move)
 					var moved = ( !self.isTouch ) ? self.scroll.currentActive.moved : false,
-						$target = $(event.target);
+						$target = $(eve.target);
 
 					if (
 						!moved && //If scrolling did not move
 						(
 							!$target.parents().is($dropdownContainer) || //Ignore made clicks within the dropdown container
-							$target.is('a:not([data-toggle])') //Unless it's a link but not a [data-toggle]
+							$target.is('a:not([data-toggle]), .btn:not([data-toggle])') //Unless it's a link but not a [data-toggle]
 						)
 					) {
-						$(document).off(event);
+						$(document).off(eve);
 						$dropdownContainer.removeClass('open');
 
 						if ( !self.isTouch ) {
