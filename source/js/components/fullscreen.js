@@ -12,7 +12,13 @@ TouchUI.prototype.components.fullscreen = {
 	ask: function() {
 		var self = this;
 
-		if(['iPad', 'iPhone', 'iPod'].indexOf(navigator.platform) === -1) {
+		if(
+			document.webkitCancelFullScreen ||
+			document.msCancelFullScreen ||
+			document.oCancelFullScreen ||
+			document.mozCancelFullScreen ||
+			document.cancelFullScreen
+		) {
 			new PNotify({
 				title: 'Fullscreen',
 				text: 'Would you like to go fullscreen?',
