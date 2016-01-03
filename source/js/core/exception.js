@@ -12,20 +12,24 @@ TouchUI.prototype.core.exception = function() {
 			return;
 		}
 
-		var text = '<p>Please help improving this plugin by <a href="https://github.com/BillyBlaze/OctoPrint-TouchUI/issues/new">submiting</a> the following error together with the OctoPrint version and browser you\'re using: </p><ul><li>';
+		var text = '<p>Please help improving this plugin by <a href="https://github.com/BillyBlaze/OctoPrint-TouchUI/issues/new?body={BODY}">submiting</a> the following error together with the OctoPrint version and browser you\'re using: </p><ul><li>',
+			err = '',
+			body = '';
+
 		if(arguments.length > 4) {
-			text += "<strong>" + arguments[4].message + "</strong><br>";
-			text += "<small>" + arguments[4].stack + "</small>";
+			err += "<strong>" + arguments[4].message + "</strong><br>";
+			err += "<small>" + arguments[4].stack + "</small>";
 		} else {
-			text += "<strong>" + arguments[0] + "</strong><br>";
-			text += "<small>" + arguments[1] + " @ " + arguments[2] + "</small>";
+			err += "<strong>" + arguments[0] + "</strong><br>";
+			err += "<small>" + arguments[1] + " @ " + arguments[2] + "</small>";
 		}
 
-		text += "</li></ul>";
+		text += err + "</li></ul>";
+		body = encodeURIComponent("\n\n\n------- \n````\n" + err.replace(/(<br>)/g, "\n").replace(/(<([^>]+)>)/g, "") + "\n````");
 
 		new PNotify({
 			title: 'TouchUI: Javascript error...',
-			text:  text,
+			text:  text.replace("{BODY}", body),
 			icon: 'glyphicon glyphicon-question-sign',
 			type: 'error',
 			hide: false,
