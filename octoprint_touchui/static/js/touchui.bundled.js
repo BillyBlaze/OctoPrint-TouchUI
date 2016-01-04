@@ -597,7 +597,7 @@ TouchUI.prototype.core.bridge = function() {
 			}
 		},
 
-		domReady: function(touchViewModel, viewModels) {
+		domReady: function() {
 			if(self.isActive()) {
 				self.components.dropdown.init.call(self);
 				self.components.fullscreen.init.call(self);
@@ -903,6 +903,7 @@ TouchUI.prototype.DOM.init = function() {
 TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	var self = this;
 
+	// Update scroll area if new items arrived
 	if( !self.isTouch ) {
 		viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 			setTimeout(function() {

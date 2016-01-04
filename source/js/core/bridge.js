@@ -18,7 +18,7 @@ TouchUI.prototype.core.bridge = function() {
 			}
 		},
 
-		domReady: function(touchViewModel, viewModels) {
+		domReady: function() {
 			if(self.isActive()) {
 				self.components.dropdown.init.call(self);
 				self.components.fullscreen.init.call(self);
