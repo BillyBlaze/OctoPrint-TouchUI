@@ -17,8 +17,8 @@ TouchUI.prototype = {
 	visibleClass: "visible_touch",
 
 	constructor: TouchUI,
+	touchuiModal: $('#touchui_settings_dialog'),
 
-	/* Placeholders */
 	core: {},
 	components: {},
 	knockout: {},
@@ -597,7 +597,7 @@ TouchUI.prototype.core.bridge = function() {
 			}
 		},
 
-		domReady: function() {
+		domReady: function(touchViewModel, viewModels) {
 			if(self.isActive()) {
 				self.components.dropdown.init.call(self);
 				self.components.fullscreen.init.call(self);
@@ -606,6 +606,12 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.touchList.init.call(self);
 
 				self.scroll.init.call(self);
+			}
+		},
+
+		koLoading: function(touchViewModel, viewModels) {
+			if(self.isActive()) {
+				self.knockout.isLoading.call(self, touchViewModel, viewModels);
 			}
 		},
 
@@ -643,6 +649,10 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleFullscreen: function() {
 			$(document).toggleFullScreen();
+		},
+
+		show: function() {
+			self.touchuiModal.modal("show");
 		},
 
 		onTabChange: function() {
@@ -819,36 +829,87 @@ TouchUI.prototype.core.init = function() {
 
 }
 
-TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
+TouchUI.prototype.DOM.cookies = {
+
+	get: function(key) {
+		var name = "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+		}
+		return undefined;
+	},
+
+	set: function(key, value) {
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+	},
+
+	toggleBoolean: function(key) {
+		var value = $.parseJSON(this.get(key) || "false");
+
+		if(value === true) {
+			this.set(key, "false");
+		} else {
+			this.set(key, "true");
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with printer status and make it active
+	this.DOM.create.printer.init( this.DOM.create.tabbar );
+	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.tabbar.init.call( this );
+	this.DOM.move.navbar.init.call( this );
+	this.DOM.move.afterTabAndNav.call( this );
+	this.DOM.move.overlays.init.call( this );
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init( this.DOM.create.tabbar );
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init( this.DOM.create.tabbar );
+	}
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
+
+}
+
+TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	var self = this;
 
-	// Repaint graph after resize (.e.g orientation changed)
-	$(window).on("resize", function() {
-		viewModels.temperatureViewModel.updatePlot();
-	});
-
-	// Remove slimScroll from files list
-	$('.gcode_files').slimScroll({destroy: true});
-	$('.slimScrollDiv').slimScroll({destroy: true});
-
-	// Remove active keyboard when disabled
-	touchViewModel.isKeyboardActive.subscribe(function(isActive) {
-		if( !isActive ) {
-			$(".ui-keyboard-input").each(function(ind, elm) {
-				$(elm).data("keyboard").destroy();
-			});
-		}
-	});
-
-	// Remove drag files into website feature
-	$(document).off("dragover");
-
-	// Hide the dropdown after login
-	viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
-		if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
-			$(document).trigger("click");
-		}
-	});
+	if( !self.isTouch ) {
+		viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
+			setTimeout(function() {
+				self.scroll.iScrolls.body.refresh();
+			}, 300);
+		});
+	}
 
 	// Watch the operational binder for visual online/offline
 	viewModels.connectionViewModel.isOperational.subscribe(function(newOperationalState) {
@@ -861,77 +922,6 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 			$("#conn_link2").removeClass("offline").addClass("online");
 		}
 	});
-
-	// Redo scroll-to-end interface
-	$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
-		viewModels.terminalViewModel.scrollToEnd();
-		return false;
-	});
-
-	// Overwrite terminal knockout functions (i.e. scroll to end)
-	this.scroll.overwrite.call(this, viewModels.terminalViewModel);
-
-	// Setup version tracking in terminal
-	this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
-
-	// (Re-)Apply bindings to the new webcam div
-	if($("#webcam").length > 0) {
-		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
-	}
-
-	// (Re-)Apply bindings to the new controls div
-	if($("#control-jog-feedrate").length > 0) {
-		ko.cleanNode($("#control-jog-feedrate")[0]);
-		ko.applyBindings(viewModels.controlViewModel, $("#control-jog-feedrate")[0]);
-	}
-
-	// (Re-)Apply bindings to the new navigation div
-	if($("#navbar_login").length > 0) {
-		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
-
-		// Force the dropdown to appear open when logedIn
-		viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
-			if( loggedIn ) {
-				$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
-				$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
-			} else {
-				$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
-				$('#login_dropdown_loggedin').removeClass('visible_touch');
-			}
-
-			// Refresh scroll view when login state changed
-			if( !self.isTouch ) {
-				setTimeout(function() {
-					self.scroll.currentActive.refresh();
-				}, 0);
-			}
-		});
-	}
-
-	// (Re-)Apply bindings to the new system commands div
-	if($("#navbar_systemmenu").length > 0) {
-		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
-		ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
-	}
-
-	// Force knockout to read the change
-	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
-		if(isTriggered !== false) {
-			$(this).find("input").trigger("change", [hex, rgb, false]);
-		}
-	});
-
-	if( !self.isTouch ) {
-		viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
-			setTimeout(function() {
-				try {
-					self.scroll.iScrolls.body.refresh();
-				} catch(err) {
-					// Do nothing
-				};
-			}, 300);
-		});
-	}
 
 	// Check if we can show whats new in this version
 	touchViewModel.settings.whatsNew.subscribe(function(whatsNew) {
@@ -1005,73 +995,94 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 }
 
-TouchUI.prototype.DOM.cookies = {
+TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
+	var self = this;
 
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+	// Repaint graph after resize (.e.g orientation changed)
+	$(window).on("resize", function() {
+		viewModels.temperatureViewModel.updatePlot();
+	});
+
+	// Remove slimScroll from files list
+	$('.gcode_files').slimScroll({destroy: true});
+	$('.slimScrollDiv').slimScroll({destroy: true});
+
+	// Remove active keyboard when disabled
+	touchViewModel.isKeyboardActive.subscribe(function(isActive) {
+		if( !isActive ) {
+			$(".ui-keyboard-input").each(function(ind, elm) {
+				$(elm).data("keyboard").destroy();
+			});
 		}
-		return undefined;
-	},
+	});
 
-	set: function(key, value) {
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
-	},
+	// Remove drag files into website feature
+	$(document).off("dragover");
 
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
-
-		if(value === true) {
-			this.set(key, "false");
-		} else {
-			this.set(key, "true");
+	// Hide the dropdown after login
+	viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
+		if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
+			$(document).trigger("click");
 		}
+	});
 
-		return !value;
+	// Redo scroll-to-end interface
+	$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
+		viewModels.terminalViewModel.scrollToEnd();
+		return false;
+	});
 
+	// Overwrite terminal knockout functions (i.e. scroll to end)
+	this.scroll.overwrite.call(this, viewModels.terminalViewModel);
+
+	// Setup version tracking in terminal
+	this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
+
+	// (Re-)Apply bindings to the new webcam div
+	if($("#webcam").length > 0) {
+		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 	}
 
-}
-
-TouchUI.prototype.DOM.init = function() {
-
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init( this.DOM.create.tabbar );
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
-
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call( this );
-	this.DOM.move.navbar.init.call( this );
-	this.DOM.move.afterTabAndNav.call( this );
-	this.DOM.move.overlays.init.call( this );
-
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init( this.DOM.create.tabbar );
-
-	// Manipulate controls div
-	this.DOM.move.controls.init();
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init( this.DOM.create.tabbar );
+	// (Re-)Apply bindings to the new controls div
+	if($("#control-jog-feedrate").length > 0) {
+		ko.cleanNode($("#control-jog-feedrate")[0]);
+		ko.applyBindings(viewModels.controlViewModel, $("#control-jog-feedrate")[0]);
 	}
 
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+	// (Re-)Apply bindings to the new navigation div
+	if($("#navbar_login").length > 0) {
+		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
+		// Force the dropdown to appear open when logedIn
+		viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
+			if( loggedIn ) {
+				$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
+				$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
+			} else {
+				$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
+				$('#login_dropdown_loggedin').removeClass('visible_touch');
+			}
+
+			// Refresh scroll view when login state changed
+			if( !self.isTouch ) {
+				setTimeout(function() {
+					self.scroll.currentActive.refresh();
+				}, 0);
+			}
+		});
+	}
+
+	// (Re-)Apply bindings to the new system commands div
+	if($("#navbar_systemmenu").length > 0) {
+		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
+		ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
+	}
+
+	// Force knockout to read the change
+	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
+		if(isTriggered !== false) {
+			$(this).find("input").trigger("change", [hex, rgb, false]);
+		}
 	});
 
 }
