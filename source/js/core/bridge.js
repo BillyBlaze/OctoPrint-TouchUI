@@ -18,7 +18,7 @@ TouchUI.prototype.core.bridge = function() {
 			}
 		},
 
-		domReady: function() {
+		domReady: function(touchViewModel, viewModels) {
 			if(self.isActive()) {
 				self.components.dropdown.init.call(self);
 				self.components.fullscreen.init.call(self);
@@ -27,6 +27,12 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.touchList.init.call(self);
 
 				self.scroll.init.call(self);
+			}
+		},
+
+		koLoading: function(touchViewModel, viewModels) {
+			if(self.isActive()) {
+				self.knockout.isLoading.call(self, touchViewModel, viewModels);
 			}
 		},
 
@@ -64,6 +70,10 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleFullscreen: function() {
 			$(document).toggleFullScreen();
+		},
+
+		show: function() {
+			self.touchuiModal.modal("show");
 		},
 
 		onTabChange: function() {

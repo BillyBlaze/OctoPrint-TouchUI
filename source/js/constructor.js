@@ -17,8 +17,8 @@ TouchUI.prototype = {
 	visibleClass: "visible_touch",
 
 	constructor: TouchUI,
+	touchuiModal: $('#touchui_settings_dialog'),
 
-	/* Placeholders */
 	core: {},
 	components: {},
 	knockout: {},
