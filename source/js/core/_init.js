@@ -9,7 +9,6 @@ TouchUI.prototype.core.init = function() {
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
 		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
 		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
-		$('<span></span>').prependTo("#terminal-output");
 
 		this.isActive(true);
 

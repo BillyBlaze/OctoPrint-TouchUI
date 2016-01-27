@@ -588,7 +588,6 @@ TouchUI.prototype.core.init = function() {
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
 		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
 		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
-		$('<span></span>').prependTo("#terminal-output");
 
 		this.isActive(true);
 
@@ -1679,7 +1678,11 @@ TouchUI.prototype.DOM.move.terminal = {
 
 	init: function() {
 
-		// Create iScroll container for terminal anyway, we got styling on that
+		// Add version number placeholder
+		$('<span></span>').prependTo("#terminal-output");
+		$('<span></span>').prependTo("#terminal-output-lowfi");
+
+		// Create iScroll container for terminal
 		var container = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
 		var inner = $('<div id="terminal-scroll-inner"></div>').appendTo(container);
 		$("#terminal-output").appendTo(inner);
