@@ -35,6 +35,13 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		return false;
 	});
 
+	// Resize height of low-fi terminal to enable scrolling
+	if($("#terminal-output-lowfi").prop("scrollHeight")) {
+		viewModels.terminalViewModel.plainLogOutput.subscribe(function() {
+			$("#terminal-output-lowfi").height($("#terminal-output-lowfi").prop("scrollHeight"));
+		});
+	}
+
 	// Overwrite terminal knockout functions (i.e. scroll to end)
 	this.scroll.overwrite.call(this, viewModels.terminalViewModel);
 

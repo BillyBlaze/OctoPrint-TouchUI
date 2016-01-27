@@ -6,8 +6,4 @@ TouchUI.prototype.scroll.beforeLoad = function() {
 		$('.page-container').appendTo("#scroll");
 	}
 
-	// Create iScroll container for terminal anyway, we got styling on that
-	var cont = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
-	$("#terminal-output").appendTo(cont);
-
 }

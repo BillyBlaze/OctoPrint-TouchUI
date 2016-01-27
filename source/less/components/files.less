@@ -2,3 +2,251 @@
 #temp .row-fluid {
 	touch-action: pan-y;
 }
+
+#files_wrapper {
+
+	.accordion-heading {
+		display: block;
+		pointer-events: none;
+		margin: 40px -@main-gutter 0;
+		padding: 5px @main-gutter;
+		height: 40px;
+
+		background-color: @main-color;
+		color: @main-color-text;
+
+		> a, > a i {
+			color: @main-color-text;
+			font-size: 23px;
+			padding-right: 0;
+			padding-left: 0;
+		}
+		> div {
+			pointer-events: all;
+
+			&.settings-trigger {
+				position: relative;
+				margin-right: -10px;
+			}
+
+			> a {
+				background: transparent;
+
+				@media (max-width: 350px) {
+					padding: 9px 4px;
+				}
+
+				&:after {
+					.font-icon-reset(FontAwesome);
+					font-size: 25px;
+					color: @main-color-text;
+					content: "\f0b0";
+				}
+			}
+		}
+
+		.icon-wrench,
+		.icon-refresh,
+		.icon-sd-black-14 {
+			display: none !important;
+		}
+
+		.sd-trigger {
+			.dropdown-toggle {
+				&:after {
+					content: "\f0ea";
+				}
+			}
+		}
+
+		.refresh-trigger {
+			a {
+				&:after {
+					content: "\f021";
+				}
+			}
+		}
+	}
+
+	#files {
+		#gcode_upload_progress + div .muted {
+			display: none;
+		}
+
+		.form-search {
+			display: none;
+		}
+
+		.slimScrollDiv {
+			margin: 0 -@main-gutter 10px;
+			height: auto !important;
+			clear: both;
+		}
+
+		.text-right.muted {
+			text-align: center;
+		}
+
+		.upload-buttons,
+		.folder-button {
+			.btn {
+				padding: 12px;
+				font-size: 22px;
+				display: block;
+				width: 100%;
+				margin-left: 0;
+
+				&:last-child {
+					border-left: 1px solid @main-background;
+				}
+
+				@media (min-width: 510px) {
+					width: 50%;
+					display:inline-block;
+					.border-radius(0, 5px, 5px, 0);
+
+					&:first-child {
+						.border-radius(5px, 0, 0, 5px);
+					}
+				}
+			}
+		}
+		.folder-button {
+			margin-top: 10px;
+
+			.btn {
+				border: 0 none;
+				width: 100%;
+			}
+		}
+
+		.gcode_files {
+			height: auto !important;
+			margin: 0 -0 10px;
+			padding: 0;
+
+			.entry {
+				background-color: @swipe-list-background-color;
+				color: contrast(@swipe-list-background-color);
+				border-top: 1px solid @main-background;
+
+				padding: 15px (@main-gutter + 110px) 15px @main-gutter;
+				margin: 0;
+				position: relative;
+				left: 0;
+				clear: both;
+				cursor: w-resize;
+
+				transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
+
+				&.open {
+					left: -(@main-gutter + 40px);
+					background: @swipe-list-background-open-color;
+					color: contrast(@swipe-list-background-open-color);
+
+					&.large {
+						left: -(@main-gutter + 150px);
+					}
+
+					&:hover,
+					&:after {
+						background: @swipe-list-background-open-color;
+						color: contrast(@swipe-list-background-open-color);
+					}
+					div.action-buttons {
+						.btn {
+							color: contrast(@swipe-list-background-open-color);
+						}
+					}
+				}
+
+				&:after {
+					transition: left 0.4s ease, background 0.7s ease;
+
+					content: "";
+					display: block;
+					top: 0;
+					height: 100%;
+					width: (@main-gutter + 200px);
+					right: -(@main-gutter + 200px);
+					position: absolute;
+					transition: background 0.7s ease;
+
+					background: @swipe-list-background-color;
+					color: contrast(@swipe-list-background-color);
+				}
+
+				div,
+				div span {
+					color: inherit;
+				}
+
+				div:not(.title) {
+					color: fade(contrast(@swipe-list-background-color), 70%);
+				}
+
+				&.back, &.folder {
+					cursor: pointer;
+
+					.title {
+						color: contrast(@swipe-list-background-color);
+					}
+				}
+
+				.additionalInfo {
+					padding: 0;
+				}
+
+				div.action-buttons {
+					position: static;
+					right: auto;
+					bottom: auto;
+					display: inline;
+
+					i {
+						font-size: 32px;
+						line-height: 40px;
+					}
+
+					.btn.disabled, .btn[disabled] {
+						.opacity(0.2);
+					}
+
+					.btn {
+						padding: 10px 15px;
+						position: absolute;
+						left: 100%;
+						top: 14px;
+						.border-radius(0);
+						background: transparent !important;
+						z-index: 5;
+						border: 0 none;
+						.box-shadow(0 0 0 transparent);
+						.text-shadow(0 0 0 transparent);
+
+						color: contrast(@swipe-list-background-color);
+						transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
+
+						&:first-child {
+							right: (@main-gutter + 40px);
+							left: auto;
+						}
+						&:last-child {
+							left: auto;
+							right: (@main-gutter - 15px);
+						}
+						&.toggleAdditionalData + :nth-child(2) {
+							margin-left: 55px;
+							margin-top: 2px;
+						}
+						&:nth-child(4) {
+							margin-left: 110px;
+							margin-top: 2px;
+						}
+					}
+
+				}
+			}
+		}
+	}
+}

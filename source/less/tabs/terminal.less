@@ -86,9 +86,12 @@
 			}
 		}
 	}
-	#termin-filterpanel {
+
+	#terminal-filterpanel,
+	#termin-filterpanel {//TODO remove #termin in future; backwards compatibility with <1.3.0
 		width: 100%;
 	}
+
 	#terminal-scroll {
 		border: 1px solid @terminal-color;
 		overflow: hidden;
@@ -99,19 +102,23 @@
 		background: @terminal-background;
 		z-index: 2;
 	}
-	#terminal-output {
+
+	#terminal-output,
+	#terminal-output-lowfi {
+		height: auto;
+		min-height: 0;
+		max-height: none;
 		.box-sizing(border-box);
 		margin-bottom: 26px;
 		border: 0 none;
 		margin: 0;
 		padding: 10px @terminal-gutter @terminal-gutter;
-		height: auto;
-		min-height: 0;
-		max-height: none;
 		overflow: hidden;
 		color: @terminal-text-color;
 		background-color: transparent;
+	}
 
+	#terminal-output {
 		&:before {
 			font-family: "touchui";
 			content: "\e601\e605\e604\e603\e602\e600";

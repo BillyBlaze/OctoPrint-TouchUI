@@ -7,7 +7,7 @@ TouchUI.prototype.components.touchList = {
 			start = 0,
 			namespace = ".files.touchui";
 
-		$(document).on("mousedown touchstart", "#files .entry, #temp .row-fluid", function(e) {
+		$(document).on("mousedown touchstart", "#files .entry:not(.folder, .back), #temp .row-fluid", function(e) {
 			try {
 				touch = e.currentTarget;
 				start = e.pageX || e.originalEvent.targetTouches[0].pageX;

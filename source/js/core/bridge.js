@@ -13,8 +13,6 @@ TouchUI.prototype.core.bridge = function() {
 			if(self.isActive()) {
 				self.scroll.beforeLoad.call(self);
 				self.DOM.init.call(self);
-				self.DOM.overwrite.tabdrop.call(self);
-				self.DOM.overwrite.modal.call(self);
 			}
 		},
 
