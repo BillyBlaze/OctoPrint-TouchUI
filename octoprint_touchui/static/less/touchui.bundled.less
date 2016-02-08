@@ -3707,6 +3707,10 @@ left: -61vw !important;
 }
 }
 
+@button-width: 16vw;
+@button-width-large: 120px;
+@button-width-small: 14vw;
+
 #control {
 margin: 0 auto;
 max-width: 700px;
@@ -3727,12 +3731,27 @@ display: none;
 float: left;
 margin: 0;
 position: relative;
+
+width: @button-width * 3;
+
+@media (min-width: 700px) {
+width: @button-width-large * 3;
+}
+@media (max-width: 450px) {
+width: @button-width-small * 3;
+}
 }
 
 &#control-jog-z {
 position: absolute;
-right: 26.5%;
+right: auto;
+left: 56%;
 top: 0;
+z-index: 1;
+
+@media (max-width: 450px) {
+left: 52%;
+}
 
 .icon-arrow-up,
 .icon-arrow-down {
@@ -3741,19 +3760,15 @@ position: relative;
 content: "";
 position: absolute;
 left: 0px;
+bottom: 4px;
 letter-spacing: 0;
 width: 100%;
 text-align: center;
 height: auto;
 line-height: 1;
 border-bottom: 5px solid;
-bottom: -3px;
 .border-radius(2px, 2px, 2px, 2px);
 }
-}
-
-@media (max-width: 450px) {
-right: 31.5%;
 }
 }
 
@@ -3777,22 +3792,22 @@ color: @btn-main-background;
 }
 
 font-size: 36px;
-display: inline;
+display: inline-block;
 padding: 0 !important;
 margin: 0;
 font-weight: normal;
 
-width: 16vw;
+width: @button-width;
 height: 16vw;
 font-size: 11vw;
 
 @media (min-width: 700px) {
 font-size: 80px !important;
-width: 120px;
+width: @button-width-large;
 height: 120px;
 }
 @media (max-width: 450px) {
-width: 14vw;
+width: @button-width-small;
 height: 16vw;
 }
 }
@@ -3928,6 +3943,18 @@ padding: 0;
 position: absolute;
 top: 0;
 right: 0;
+width: 16vw;
+
+@media (min-width: 700px) {
+width: 120px;
+}
+@media (max-width: 450px) {
+width: 14vw;
+}
+
+> div {
+display: inline-block;
+}
 
 h1 {
 display: none;
@@ -3947,18 +3974,18 @@ background: transparent;
 color: @btn-main-background;
 }
 
-width: 16vw;
+width: @button-width;
 height: 16vw;
 font-size: 11vw;
 line-height: 200vw;
 
 @media (min-width: 700px) {
 font-size: 80px !important;
-width: 120px;
+width: @button-width-large;
 height: 120px;
 }
 @media (max-width: 450px) {
-width: 14vw;
+width: @button-width-small;
 height: 16vw;
 }
 

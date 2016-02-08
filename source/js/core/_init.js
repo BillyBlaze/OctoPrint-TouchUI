@@ -1,10 +1,6 @@
 TouchUI.prototype.core.init = function() {
 
 	if( this.core.checkAutoLoad.call(this) ) {
-		this.core.exception(); //enable errors
-
-		// If KWEB3, don't let the diver tell us it's has a Touch API
-		this.isTouch = (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ? false : this.isTouch;
 
 		$("html").attr("id", this.id);
 
@@ -47,6 +43,9 @@ TouchUI.prototype.core.init = function() {
 		this.components.keyboard.isActive(this.DOM.cookies.get("keyboardActive") === "true");
 		this.animate.isHidebarActive(this.DOM.cookies.get("hideNavbarActive") === "true");
 		this.isFullscreen(this.DOM.cookies.get("fullscreen") === "true");
+
+		// If KWEB3, don't let the diver tell us it's has a Touch API
+		this.isTouch = (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ? false : this.isTouch;
 
 	}
 
