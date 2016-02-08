@@ -582,6 +582,9 @@ TouchUI.prototype.core.init = function() {
 	if( this.core.checkAutoLoad.call(this) ) {
 		this.core.exception(); //enable errors
 
+		// If KWEB3, don't let the diver tell us it's has a Touch API
+		this.isTouch = (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ? false : this.isTouch;
+
 		$("html").attr("id", this.id);
 
 		// Force mobile browser to set the window size to their format
@@ -1680,7 +1683,6 @@ TouchUI.prototype.DOM.move.terminal = {
 
 		// Add version number placeholder
 		$('<span></span>').prependTo("#terminal-output");
-		$('<span></span>').prependTo("#terminal-output-lowfi");
 
 		// Create iScroll container for terminal
 		var container = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
