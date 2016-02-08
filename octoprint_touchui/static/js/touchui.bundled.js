@@ -485,39 +485,43 @@ TouchUI.prototype.components.slider = {
 
 	init: function() {
 
-		// Destroy bootstrap control sliders
-		$('#control .slider').each(function(ind, elm) {
-			var $elm = $(elm);
-			var $next = $(elm).next();
-			var text = $next.text().split(":")[0].replace(" ", "");
-			var sliderObj = ko.jsonExpressionRewriting.parseObjectLiteral($elm.find("input").attr("data-bind"));
-			var obj = ko.jsonExpressionRewriting.parseObjectLiteral(sliderObj[0].value);
-			var slider = {};
+		ko.bindingHandlers.slider = {
+			init: function (element, valueAccessor) {
+				var $element = $(element);
 
-			_.each(obj, function(elm, ind) {
-				slider[elm.key.trim()] = elm.value.trim();
-			});
+				// Set value on input field
+				$element.val(valueAccessor().value());
 
-			var valKey = slider.value;
-			delete slider.value;
-			delete slider.tooltip;
+				// Create container
+				var div = $('<div class="slider-container"></div>').insertBefore(element);
 
-			$elm.addClass("hidden");
+				// Wait untill next DOM bindings are executed
+				setTimeout(function() {
+					var $button = $(element).next('button');
 
-			var div = $('<div class="slider-container"></div>').insertAfter($elm);
+					$button.appendTo(div);
+					$element.appendTo(div);
 
-			$elm.appendTo(div);
-			$next.appendTo(div);
+					var lbl = $('<label for="ui-inp-" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
+					lbl.appendTo('.octoprint-container')
+					$element.attr("style", "padding-left:" + (lbl.width() + 15) + "px");
+					lbl.appendTo(div);
 
-			$('<input type="number" id="ui-inp-'+ind+'">')
-				.attr("data-bind", "enable: isOperational() && loginState.isUser(), value: " + valKey)
-				.attr(slider)
-				.appendTo(div);
+				}, 60);
 
-			$('<label for="ui-inp-'+ind+'"></label>')
-				.appendTo(div)
-				.text(text + ":");
-		});
+				$element.on("change", function(e) {
+					valueAccessor().value($element.val());
+				}).attr({
+					max: valueAccessor().max,
+					min: valueAccessor().min,
+					step: valueAccessor().step,
+				});
+
+			},
+			update: function (element, valueAccessor) {
+				$(element).val(valueAccessor().value());
+			}
+		};
 
 	}
 
@@ -655,6 +659,7 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.keyboard.init.call(self);
 				self.components.modal.init.call(self);
 				self.components.touchList.init.call(self);
+				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
 			}
@@ -668,7 +673,6 @@ TouchUI.prototype.core.bridge = function() {
 
 		koReady: function(touchViewModel, viewModels) {
 			if(self.isActive()) {
-				self.components.slider.init.call(self);
 				self.DOM.overwrite.tabbar.call(self);
 
 				self.settings = touchViewModel.settings || {};
@@ -1057,12 +1061,6 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	// (Re-)Apply bindings to the new webcam div
 	if($("#webcam").length > 0) {
 		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
-	}
-
-	// (Re-)Apply bindings to the new controls div
-	if($("#control-jog-feedrate").length > 0) {
-		ko.cleanNode($("#control-jog-feedrate")[0]);
-		ko.applyBindings(viewModels.controlViewModel, $("#control-jog-feedrate")[0]);
 	}
 
 	// (Re-)Apply bindings to the new navigation div

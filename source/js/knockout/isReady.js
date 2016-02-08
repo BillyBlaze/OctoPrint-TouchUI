@@ -53,12 +53,6 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 	}
 
-	// (Re-)Apply bindings to the new controls div
-	if($("#control-jog-feedrate").length > 0) {
-		ko.cleanNode($("#control-jog-feedrate")[0]);
-		ko.applyBindings(viewModels.controlViewModel, $("#control-jog-feedrate")[0]);
-	}
-
 	// (Re-)Apply bindings to the new navigation div
 	if($("#navbar_login").length > 0) {
 		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);

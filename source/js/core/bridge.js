@@ -23,6 +23,7 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.keyboard.init.call(self);
 				self.components.modal.init.call(self);
 				self.components.touchList.init.call(self);
+				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
 			}
@@ -36,7 +37,6 @@ TouchUI.prototype.core.bridge = function() {
 
 		koReady: function(touchViewModel, viewModels) {
 			if(self.isActive()) {
-				self.components.slider.init.call(self);
 				self.DOM.overwrite.tabbar.call(self);
 
 				self.settings = touchViewModel.settings || {};

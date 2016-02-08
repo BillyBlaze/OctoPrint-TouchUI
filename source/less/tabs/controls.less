@@ -141,54 +141,64 @@
 		@media (max-width: 450px) {
 			margin-top: @main-gutter;
 		}
+	}
 
+	.custom_section {
 		.slider-container {
+			min-width: 200px;
+		}
+	}
+
+	.slider-container {
+		position: relative;
+		overflow: hidden;
+
+		button {
+			.box-sizing(border-box);
+			float: right;
+			width: 25% !important;
 			position: relative;
+			padding: 0;
+			margin: 0;
+			direction: rtl;
+			white-space: nowrap;
 			overflow: hidden;
+			text-indent: -700px;
+			border-left: 1px solid @main-background;
 
-			button {
-				float: right;
-				width: 25% !important;
-				position: relative;
-				padding: 0;
-				margin: 0;
-				direction: rtl;
-				white-space: nowrap;
-				overflow: hidden;
-				text-indent: -700px;
-				border-left: 1px solid @main-background;
-
-				&:after {
-					.font-icon-reset();
-					content: "\f00c";
-					width: 100%;
-					position: absolute;
-					right: 0;
-					text-indent: 0;
-					font-size: 21px;
-					line-height: 19px;
-				}
-			}
-
-			input {
-				float: left;
-				text-align: left;
-				width: 75% !important;
-				padding-left: 90px !important;
-				padding-right: 0 !important;
-			}
-
-			label {
+			&:after {
+				.font-icon-reset();
+				content: "\f00c";
+				width: 100%;
 				position: absolute;
-				margin: 10px 0 10px 10px;
-				color: @input-text-color;
-				z-index: 2;
+				right: 0;
+				text-indent: 0;
+				font-size: 21px;
+				line-height: 19px;
 			}
+		}
+
+		input {
+			.box-sizing(border-box);
+			float: left;
+			text-align: left;
+			width: 75% !important;
+			padding-left: 90px;
+			padding-right: 0 !important;
+		}
+
+		label {
+			position: absolute;
+			margin: 10px 0 10px 10px;
+			color: @input-text-color;
+			z-index: 2;
+			left: 0;
 		}
 	}
 
 	#control-jog-extrusion,
-	#control-jog-feedrate {
+	#control-jog-feedrate,
+	.custom_section {
 		.btn-group.control-box {
 			height: auto;
 			margin: 0 0 20px;
