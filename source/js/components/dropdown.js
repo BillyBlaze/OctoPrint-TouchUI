@@ -34,6 +34,10 @@ TouchUI.prototype.components.dropdown = {
 				// Remove all other active dropdowns
 				$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
 
+				if ( !self.isTouch ) {
+					self.scroll.iScrolls.terminal.disable();
+				}
+
 				$(document).off("click"+namespace).on("click"+namespace, function(eve) {
 					// Check if we scrolled (touch devices wont trigger this click event after scrolling so assume we didn't move)
 					var moved = ( !self.isTouch ) ? self.scroll.currentActive.moved : false,
@@ -53,6 +57,7 @@ TouchUI.prototype.components.dropdown = {
 						if ( !self.isTouch ) {
 							$('.octoprint-container').css("min-height", 0);
 							self.scroll.currentActive.refresh();
+							self.scroll.iScrolls.terminal.enable();
 						}
 					}
 				});

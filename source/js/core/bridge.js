@@ -31,9 +31,7 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		koLoading: function(touchViewModel, viewModels) {
-			if(self.isActive()) {
-				self.knockout.isLoading.call(self, touchViewModel, viewModels);
-			}
+			self.knockout.isLoading.call(self, touchViewModel, viewModels);
 		},
 
 		koReady: function(touchViewModel, viewModels) {
