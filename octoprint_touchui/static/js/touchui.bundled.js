@@ -138,7 +138,7 @@ TouchUI.prototype.components.dropdown = {
 						$target.parents(".ui-pnotify").length === 0 && // if not a click within notifiaction
 						(
 							!$target.parents().is($dropdownContainer) || // if clicks are not made within the dropdown container
-							$target.is('a:not([data-toggle])') // Unless it's a link but not a [data-toggle]
+							$target.is('a:not([data-toggle="dropdown"])') // Unless it's a link but not a [data-toggle]
 						)
 					) {
 						$(document).off(eve);
