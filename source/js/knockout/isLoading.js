@@ -1,6 +1,8 @@
 TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	var self = this;
 
+	self.components.touchscreen.isLoading.call(self, viewModels);
+
 	// Update scroll area if new items arrived
 	if( !self.isTouch ) {
 		viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {

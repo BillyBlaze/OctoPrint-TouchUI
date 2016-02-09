@@ -11,6 +11,7 @@ TouchUI.prototype = {
 	isFullscreen: ko.observable(false),
 
 	isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
+	isTouchscreen: ko.observable(false),
 	canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
 
 	hiddenClass: "hidden_touch",
@@ -581,6 +582,33 @@ TouchUI.prototype.components.touchList = {
 
 }
 
+TouchUI.prototype.components.touchscreen = {
+
+	init: function() {
+		$("html").addClass("isTouchscreenUI");
+		this.isTouch = false;
+		this.isTouchscreen(true);
+
+		// Improve performace
+		this.scroll.defaults.iScroll.scrollbars = false;
+		this.scroll.defaults.iScroll.interactiveScrollbars = false;
+		// this.scroll.defaults.iScroll.useTransition = false;
+		// this.scroll.defaults.iScroll.useTransform = false;
+		this.scroll.defaults.iScroll.HWCompositing = false;
+	},
+
+	isLoading: function(viewModels) {
+
+		if(this.isTouchscreen()) {
+			if(viewModels.terminalViewModel.plainLogLines) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
+				 viewModels.terminalViewModel.enableFancyFunctionality(false);
+			}
+		}
+
+	}
+
+}
+
 TouchUI.prototype.core.init = function() {
 
 	if( this.core.checkAutoLoad.call(this) ) {
@@ -622,13 +650,18 @@ TouchUI.prototype.core.init = function() {
 			}
 		}
 
+
+		if( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
+			this.DOM.cookies.get("touchscreenActive") === "true"
+		) {
+			this.components.touchscreen.init.call(this);
+		}
+
 		// Get state of cookies and store them in KO
 		this.components.keyboard.isActive(this.DOM.cookies.get("keyboardActive") === "true");
 		this.animate.isHidebarActive(this.DOM.cookies.get("hideNavbarActive") === "true");
 		this.isFullscreen(this.DOM.cookies.get("fullscreen") === "true");
-
-		// If KWEB3, don't let the diver tell us it's has a Touch API
-		this.isTouch = (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ? false : this.isTouch;
 
 	}
 
@@ -644,6 +677,7 @@ TouchUI.prototype.core.bridge = function() {
 		isKeyboardActive: this.components.keyboard.isActive,
 		isHidebarActive: this.animate.isHidebarActive,
 		isFullscreen: this.isFullscreen,
+		isTouchscreen: this.isTouchscreen,
 
 		domLoading: function() {
 			if(self.isActive()) {
@@ -704,6 +738,13 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleFullscreen: function() {
 			$(document).toggleFullScreen();
+		},
+
+		toggleTouchscreen: function() {
+			if(self.isActive()) {
+				self.isTouchscreen(self.DOM.cookies.toggleBoolean("touchscreenActive"));
+				document.location.reload();
+			}
 		},
 
 		show: function() {
@@ -915,6 +956,8 @@ TouchUI.prototype.DOM.cookies = {
 TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	var self = this;
 
+	self.components.touchscreen.isLoading.call(self, viewModels);
+
 	// Update scroll area if new items arrived
 	if( !self.isTouch ) {
 		viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
@@ -1031,6 +1074,9 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// Remove drag files into website feature
 	$(document).off("dragover");
+	if(viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
+	}
 
 	// Hide the dropdown after login
 	viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {

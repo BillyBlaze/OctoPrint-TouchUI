@@ -30,6 +30,7 @@
 			self.isKeyboardActive = Touch.isKeyboardActive;
 			self.isHidebarActive = Touch.isHidebarActive;
 			self.isFullscreen = Touch.isFullscreen;
+			self.isTouchscreen = Touch.isTouchscreen;
 
 			self.settingsUpdated = ko.observable(false);
 			self.settings = {
@@ -58,6 +59,7 @@
 			self.toggleKeyboard = Touch.toggleKeyboard;
 			self.toggleHidebar = Touch.toggleHidebar;
 			self.toggleFullscreen = Touch.toggleFullscreen;
+			self.toggleTouchscreen = Touch.toggleTouchscreen;
 			self.onTabChange = Touch.onTabChange;
 			self.show = Touch.show;
 

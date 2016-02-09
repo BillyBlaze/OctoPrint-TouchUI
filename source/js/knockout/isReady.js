@@ -21,6 +21,9 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// Remove drag files into website feature
 	$(document).off("dragover");
+	if(viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
+	}
 
 	// Hide the dropdown after login
 	viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {

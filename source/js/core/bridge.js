@@ -8,6 +8,7 @@ TouchUI.prototype.core.bridge = function() {
 		isKeyboardActive: this.components.keyboard.isActive,
 		isHidebarActive: this.animate.isHidebarActive,
 		isFullscreen: this.isFullscreen,
+		isTouchscreen: this.isTouchscreen,
 
 		domLoading: function() {
 			if(self.isActive()) {
@@ -68,6 +69,13 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleFullscreen: function() {
 			$(document).toggleFullScreen();
+		},
+
+		toggleTouchscreen: function() {
+			if(self.isActive()) {
+				self.isTouchscreen(self.DOM.cookies.toggleBoolean("touchscreenActive"));
+				document.location.reload();
+			}
 		},
 
 		show: function() {

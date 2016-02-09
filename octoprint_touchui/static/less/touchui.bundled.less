@@ -2495,6 +2495,18 @@ position: fixed !important;
 
 }
 
+&.isTouchscreenUI {
+
+.modal-backdrop {
+background: transparent !important;
+}
+
+.modal.fade {
+opacity: 1 !important;
+}
+
+}
+
 
 body {
 width: 100%;
@@ -4628,19 +4640,21 @@ position: absolute;
 background: @modal-background;
 color: @modal-text;
 
--webkit-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
--moz-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
--o-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
-transition: opacity 0.3s linear, top 0.3s ease-out, left 0.3s ease-out, margin-top 0.3s ease-out !important;
+-webkit-transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
+-moz-transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
+-o-transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
+transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
 
 
 top: 0 !important;
 bottom: auto !important;
 height: auto !important;
-left: -100% !important;
+left: 0 !important;
 width: 95% !important;
 margin: 0 !important;
 min-height: 100%;
+margin-left: -110% !important;
+
 .box-sizing(border-box);
 
 
@@ -4696,7 +4710,7 @@ display: none !important;
 
 &.in {
 top: 0 !important;
-left: 0% !important;
+margin-left: 0% !important;
 }
 
 &.show-dropdown {

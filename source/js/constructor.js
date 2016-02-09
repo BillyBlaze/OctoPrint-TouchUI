@@ -11,6 +11,7 @@ TouchUI.prototype = {
 	isFullscreen: ko.observable(false),
 
 	isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
+	isTouchscreen: ko.observable(false),
 	canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
 
 	hiddenClass: "hidden_touch",
