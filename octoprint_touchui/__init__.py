@@ -6,6 +6,8 @@ import octoprint.settings
 import octoprint.util
 import os
 
+from octoprint.server import admin_permission
+
 class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.AssetPlugin,
 					octoprint.plugin.TemplatePlugin,
@@ -23,14 +25,15 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		data["whatsNew"] = False
 		data["error"] = False
 
-		if os.path.isfile(self._whatsNewPath):
-			with open(self._whatsNewPath, 'r') as contentFile:
-				data["whatsNew"] = contentFile.read()
-			os.unlink(self._whatsNewPath)
+		if admin_permission.can():
+			if os.path.isfile(self._whatsNewPath):
+				with open(self._whatsNewPath, 'r') as contentFile:
+					data["whatsNew"] = contentFile.read()
+				os.unlink(self._whatsNewPath)
 
-		if self.error is not False:
-			data["error"] = str(self.error)
-			self.error = False
+			if self.error is not False:
+				data["error"] = str(self.error)
+				self.error = False
 
 		return data
 
