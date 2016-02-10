@@ -962,6 +962,16 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	if(self.isActive()) {
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
+		// Disable the connection button for a short period after clicking on it
+		$("#printer_connect").on("click", function(e) {
+			var printer = $(e.target);
+			printer.prop('disabled', true);
+
+			setTimeout(function() {
+				printer.prop('disabled', false);
+			}, 600);
+		});
+
 		// Update scroll area if new items arrived
 		if( !self.isTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
@@ -1491,11 +1501,13 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 		// Overwrite orginal helper, add one step and call the orginal function
 		var showReloadOverlay = $.fn.show;
 		$.fn.show = function(e,r,i) {
-			showReloadOverlay.call(this,e,r,i);
-
 			if($(this).hasClass("iscroll")) {
-				self.scroll.overlay.refresh.call(self);
+				setTimeout(function() {
+					self.scroll.overlay.refresh.call(self);
+				}, 0);
 			}
+
+			return showReloadOverlay.call(this,e,r,i);
 		}
 
 	} else {

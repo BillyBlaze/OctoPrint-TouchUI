@@ -38,11 +38,13 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 		// Overwrite orginal helper, add one step and call the orginal function
 		var showReloadOverlay = $.fn.show;
 		$.fn.show = function(e,r,i) {
-			showReloadOverlay.call(this,e,r,i);
-
 			if($(this).hasClass("iscroll")) {
-				self.scroll.overlay.refresh.call(self);
+				setTimeout(function() {
+					self.scroll.overlay.refresh.call(self);
+				}, 0);
 			}
+
+			return showReloadOverlay.call(this,e,r,i);
 		}
 
 	} else {

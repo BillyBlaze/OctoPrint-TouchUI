@@ -4,6 +4,16 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	if(self.isActive()) {
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
+		// Disable the connection button for a short period after clicking on it
+		$("#printer_connect").on("click", function(e) {
+			var printer = $(e.target);
+			printer.prop('disabled', true);
+
+			setTimeout(function() {
+				printer.prop('disabled', false);
+			}, 600);
+		});
+
 		// Update scroll area if new items arrived
 		if( !self.isTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
