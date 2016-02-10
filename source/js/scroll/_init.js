@@ -29,6 +29,7 @@ TouchUI.prototype.scroll.init = function() {
 		self.scroll.terminal.init.call(self);
 		self.scroll.body.init.call(self);
 		self.scroll.modal.init.call(self);
+		self.scroll.overlay.init.call(self);
 
 		$(document).on("slideCompleted", function() {
 			self.scroll.currentActive.refresh();

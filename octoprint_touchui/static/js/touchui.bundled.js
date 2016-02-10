@@ -597,15 +597,15 @@ TouchUI.prototype.components.touchscreen = {
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
 		this.scroll.defaults.iScroll.interactiveScrollbars = false;
-		// this.scroll.defaults.iScroll.useTransition = false;
+		this.scroll.defaults.iScroll.useTransition = false;
 		// this.scroll.defaults.iScroll.useTransform = false;
-		this.scroll.defaults.iScroll.HWCompositing = false;
+		// this.scroll.defaults.iScroll.HWCompositing = false;
 	},
 
 	isLoading: function(viewModels) {
 
 		if(this.isTouchscreen()) {
-			if(viewModels.terminalViewModel.plainLogLines) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
+			if(viewModels.terminalViewModel.enableFancyFunctionality) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
 				 viewModels.terminalViewModel.enableFancyFunctionality(false);
 			}
 		}
@@ -1244,6 +1244,7 @@ TouchUI.prototype.scroll.init = function() {
 		self.scroll.terminal.init.call(self);
 		self.scroll.body.init.call(self);
 		self.scroll.modal.init.call(self);
+		self.scroll.overlay.init.call(self);
 
 		$(document).on("slideCompleted", function() {
 			self.scroll.currentActive.refresh();
@@ -1416,6 +1417,40 @@ TouchUI.prototype.scroll.modal = {
 	}
 }
 
+TouchUI.prototype.scroll.overlay = {
+
+	mainItems: ['#offline_overlay', '#reloadui_overlay'],
+	init: function() {
+		var self = this;
+
+		self.scroll.iScrolls.overlay = [];
+
+		$items = $(this.scroll.overlay.mainItems);
+		$items.each(function(ind, elm) {
+			var child = $(elm).children("#" + $(elm).attr("id") + "_wrapper");
+			var div = $('<div></div>').prependTo(elm);
+			child.appendTo(div);
+
+			$(elm).addClass("iscroll");
+
+			self.scroll.iScrolls.overlay[ind] = new IScroll(elm, self.scroll.defaults.iScroll);
+		});
+
+	},
+
+	refresh: function() {
+		var self = this;
+
+		setTimeout(function() {
+			$.each(self.scroll.iScrolls.overlay, function(ind) {
+				self.scroll.iScrolls.overlay[ind].refresh();
+			});
+		}, 0);
+
+	}
+
+}
+
 TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 	var self = this;
 
@@ -1442,8 +1477,8 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 		// Overwrite orginal helper, add one step and call the orginal function
 		var showOfflineOverlay = window.showOfflineOverlay;
 		window.showOfflineOverlay = function(title, message, reconnectCallback) {
-			self.scroll.iScrolls.body.scrollTo(0, 0, 500);
 			showOfflineOverlay.call(this, title, message, reconnectCallback);
+			self.scroll.overlay.refresh.call(self);
 		};
 
 		// Overwrite orginal helper, add one step and call the orginal function
@@ -1453,10 +1488,15 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 			showConfirmationDialog.call(this, message, onacknowledge);
 		};
 
-		// Well this is easier, isn't it :D
-		$("#reloadui_overlay").on("show", function() {
-			self.scroll.iScrolls.body.scrollTo(0, 0, 500);
-		});
+		// Overwrite orginal helper, add one step and call the orginal function
+		var showReloadOverlay = $.fn.show;
+		$.fn.show = function(e,r,i) {
+			showReloadOverlay.call(this,e,r,i);
+
+			if($(this).hasClass("iscroll")) {
+				self.scroll.overlay.refresh.call(self);
+			}
+		}
 
 	} else {
 

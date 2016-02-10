@@ -24,8 +24,8 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 		// Overwrite orginal helper, add one step and call the orginal function
 		var showOfflineOverlay = window.showOfflineOverlay;
 		window.showOfflineOverlay = function(title, message, reconnectCallback) {
-			self.scroll.iScrolls.body.scrollTo(0, 0, 500);
 			showOfflineOverlay.call(this, title, message, reconnectCallback);
+			self.scroll.overlay.refresh.call(self);
 		};
 
 		// Overwrite orginal helper, add one step and call the orginal function
@@ -35,10 +35,15 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 			showConfirmationDialog.call(this, message, onacknowledge);
 		};
 
-		// Well this is easier, isn't it :D
-		$("#reloadui_overlay").on("show", function() {
-			self.scroll.iScrolls.body.scrollTo(0, 0, 500);
-		});
+		// Overwrite orginal helper, add one step and call the orginal function
+		var showReloadOverlay = $.fn.show;
+		$.fn.show = function(e,r,i) {
+			showReloadOverlay.call(this,e,r,i);
+
+			if($(this).hasClass("iscroll")) {
+				self.scroll.overlay.refresh.call(self);
+			}
+		}
 
 	} else {
 

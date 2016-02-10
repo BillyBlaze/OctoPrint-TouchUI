@@ -1,3 +1,6 @@
+#drop_overlay {
+	display: none;
+}
 #offline_overlay, #reloadui_overlay {
 	position: fixed;
 	top:0;
@@ -30,4 +33,38 @@
 			}
 		}
 	}
+
+	&.iscroll {
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		overflow: hidden;
+		position: absolute;
+
+		> div:first-child {
+			position: absolute;
+			z-index: 1;
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			width: 100%;
+
+			.transform(translateZ(0));
+			.user-select(none);
+			.text-adjust(none);
+
+			> div {
+				position: relative;
+				top: auto;
+				left: auto;
+				right: auto;
+				bottom: auto;
+			}
+		}
+
+		.iScrollIndicator {
+			background: @main-iScroll-color !important;
+			border: 0 none !important;
+		}
+	}
+
 }
