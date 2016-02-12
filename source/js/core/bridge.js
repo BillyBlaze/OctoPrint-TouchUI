@@ -9,6 +9,7 @@ TouchUI.prototype.core.bridge = function() {
 		isHidebarActive: this.animate.isHidebarActive,
 		isFullscreen: this.isFullscreen,
 		isTouchscreen: this.isTouchscreen,
+		isTouch: this.isTouch,
 
 		domLoading: function() {
 			if(self.isActive()) {

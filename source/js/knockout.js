@@ -31,6 +31,7 @@
 			self.isHidebarActive = Touch.isHidebarActive;
 			self.isFullscreen = Touch.isFullscreen;
 			self.isTouchscreen = Touch.isTouchscreen;
+			self.isTouch = Touch.isTouch;
 
 			self.settingsUpdated = ko.observable(false);
 			self.settings = {
