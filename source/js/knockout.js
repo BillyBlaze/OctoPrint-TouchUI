@@ -13,7 +13,8 @@
 			"gcodeFilesViewModel",
 			"navigationViewModel",
 			"pluginManagerViewModel",
-			"temperatureViewModel"
+			"temperatureViewModel",
+			"loginStateViewModel"
 		];
 
 		Touch.domReady(self);
@@ -44,7 +45,14 @@
 
 			self.onBeforeBinding = function() {
 				_.each(allViewModels.settingsViewModel.settings.plugins.touchui, function(newSetting, key) {
-					self.settings[key] = newSetting;
+					if(ko.isObservable(self.settings[key])) {
+						newSetting.subscribe(function(val) {
+							self.settings[key](val);
+						});
+						newSetting.valueHasMutated();
+					} else {
+						self.settings[key] = newSetting;
+					}
 				});
 			}
 

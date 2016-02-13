@@ -24,9 +24,9 @@ gulp.task("concat-less", function() {
 			extensions: ["less"],
 			matchPattern: "*.less"
 		}))
-		// .pipe(strip())
+		.pipe(strip())
 		.pipe(rename("touchui.bundled.less"))
-		// .pipe(trimlines())
+		.pipe(trimlines())
 		.pipe(gulp.dest('octoprint_touchui/static/less/'));
 });
 

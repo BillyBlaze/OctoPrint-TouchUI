@@ -14,7 +14,7 @@ TouchUI.prototype.core.less = {
 						self.core.less.render.call(self, viewModel, '@import "/plugin/touchui/static/less/touchui.bundled.less";\n' + response);
 					})
 					.error(function(error) {
-						self.core.less.error.call(self, error.responseText);
+						self.core.less.error.call(self, error);
 					});
 
 			} else {
@@ -31,41 +31,54 @@ TouchUI.prototype.core.less = {
 	},
 
 	render: function(viewModel, data) {
-		var self = this;
+		var self = this,
+			callback = function(error, result) {
 
-		window.less.render(data, {
-			compress: true
-		}, function(error, result) {
+				if (error) {
+					self.core.less.error.call(self, error);
+				} else {
 
-			if (error) {
-				self.core.less.error.call(self, error.responseText);
-			} else {
+					$.post("/plugin/touchui/saveCSS", {
+							css: result.css
+						})
+						.done(function() {
+							if(!viewModel.settings.hasCustom()) {
+								viewModel.settings.hasCustom(true);
+							} else {
+								viewModel.settings.hasCustom.valueHasMutated();
+							}
+						})
+						.error(function(error) {
+							self.core.less.error.call(self, error);
+						});
 
-				$.post("/plugin/touchui/saveCSS", {
-						css: result.css
-					})
-					.done(function() {
-						if(!viewModel.settings.hasCustom()) {
-							viewModel.settings.hasCustom(true);
-						} else {
-							viewModel.settings.hasCustom.valueHasMutated();
-						}
-					})
-					.error(function(error) {
-						self.core.less.error.call(self, error.responseText);
-					});
+				}
+			};
 
-			}
-		});
+		if(window.less.render) {
+			window.less.render(data, {
+				compress: true
+			}, callback);
+		} else {
+			window.less.Parser({}).parse(data, function(error, result) {
+				if(result) {
+					result = {
+						css: result.toCSS({
+							compress: true
+						})
+					}
+				}
+				callback.call(this, error, result);
+			});
+		}
 	},
 
-	error: function(hasError) {
-
-		if(hasError && hasError.trim()) {
-
+	error: function(error) {
+		var content = error.responseText;
+		if(content && content.trim() && error.status !== 401) {
 			new PNotify({
 				title: 'TouchUI: Whoops, something went wrong...',
-				text: hasError,
+				text: content,
 				icon: 'glyphicon glyphicon-question-sign',
 				type: 'error',
 				hide: false

@@ -50,7 +50,10 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	});
 
 	// Check if we need to update the CSS
-	touchViewModel.settings.requireNewCSS.subscribe(function(requireNewCSS) {
+	var requireNewCSS = ko.computed(function() {
+		return touchViewModel.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
+	});
+	requireNewCSS.subscribe(function(requireNewCSS) {
 		if(requireNewCSS) {
 			setTimeout(function() {
 				self.core.less.save.call(self, touchViewModel);
