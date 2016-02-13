@@ -63,9 +63,6 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			self._remove_custom_css()
 
 	def on_settings_save(self, data):
-		del data["whatsNew"]
-		del data["requireNewCSS"]
-		del data["hasCustom"]
 		octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
 
 		if self._settings.get(["useCustomization"]) is False:

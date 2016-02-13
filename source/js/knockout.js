@@ -43,15 +43,8 @@
 			}
 
 			self.onBeforeBinding = function() {
-				_.each(viewModels[2].settings.plugins.touchui, function(newSetting, key) {
-					if(ko.isObservable(self.settings[key])) {
-						newSetting.subscribe(function(val) {
-							self.settings[key](val);
-						});
-						newSetting.valueHasMutated();
-					} else {
-						self.settings[key] = newSetting;
-					}
+				_.each(allViewModels.settingsViewModel.settings.plugins.touchui, function(newSetting, key) {
+					self.settings[key] = newSetting;
 				});
 			}
 
