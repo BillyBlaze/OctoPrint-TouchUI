@@ -49,7 +49,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		}
 	});
 
-	// Check if we need to update the CSS
+	// Check if we need to update an old LESS file with a new LESS one
 	var requireNewCSS = ko.computed(function() {
 		return touchViewModel.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
 	});
