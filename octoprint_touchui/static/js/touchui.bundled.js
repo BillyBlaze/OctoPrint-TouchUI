@@ -755,6 +755,10 @@ TouchUI.prototype.core.bridge = function() {
 			self.touchuiModal.modal("show");
 		},
 
+		saveLESS: function(touchViewModel) {
+			self.core.less.save.call(self, touchViewModel);
+		},
+
 		onTabChange: function() {
 			if(self.isActive()) {
 				if( !self.isTouch ) {
@@ -842,6 +846,84 @@ TouchUI.prototype.core.exception = function() {
 		});
 
 	}
+}
+
+TouchUI.prototype.core.less = {
+
+	save: function(viewModel) {
+		var variables = "",
+			self = this;
+
+		if(viewModel.settings.useCustomization()) {
+			if(viewModel.settings.colors.useLocalFile()) {
+
+				$.post("/plugin/touchui/getCSS", {
+						path: viewModel.settings.colors.customPath()
+					})
+					.done(function(response) {
+						self.core.less.render.call(self, viewModel, '@import "/plugin/touchui/static/less/touchui.bundled.less";\n' + response);
+					})
+					.error(function(error) {
+						self.core.less.error.call(self, error.responseText);
+					});
+
+			} else {
+
+				self.core.less.render.call(self, viewModel, '@import "/plugin/touchui/static/less/touchui.bundled.less";\n' +
+					'@main-color: '+ viewModel.settings.colors.mainColor() +';' +
+					'@terminal-color: '+ viewModel.settings.colors.termColor() +';' +
+					'@text-color: '+ viewModel.settings.colors.textColor() +';' +
+					'@main-background: '+ viewModel.settings.colors.bgColor() +';'
+				);
+
+			}
+		}
+	},
+
+	render: function(viewModel, data) {
+		var self = this;
+
+		window.less.render(data, {
+			compress: true
+		}, function(error, result) {
+
+			if (error) {
+				self.core.less.error.call(self, error.responseText);
+			} else {
+
+				$.post("/plugin/touchui/saveCSS", {
+						css: result.css
+					})
+					.done(function() {
+						if(!viewModel.settings.hasCustom()) {
+							viewModel.settings.hasCustom(true);
+						} else {
+							viewModel.settings.hasCustom.valueHasMutated();
+						}
+					})
+					.error(function(error) {
+						self.core.less.error.call(self, error.responseText);
+					});
+
+			}
+		});
+	},
+
+	error: function(hasError) {
+
+		if(hasError && hasError.trim()) {
+
+			new PNotify({
+				title: 'TouchUI: Whoops, something went wrong...',
+				text: hasError,
+				icon: 'glyphicon glyphicon-question-sign',
+				type: 'error',
+				hide: false
+			});
+		}
+
+	}
+
 }
 
 TouchUI.prototype.core.version = {
@@ -993,41 +1075,6 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 				$("#conn_link2").removeClass("offline").addClass("online");
 			}
 		});
-
-		// Reload CSS or LESS after saving our settings
-		var afterSettingsSave = ko.computed(function() {
-			return !viewModels.settingsViewModel.receiving() && !viewModels.settingsViewModel.sending() && touchViewModel.settingsUpdated();
-		});
-		afterSettingsSave.subscribe(function(settingsSaved) {
-			if(settingsSaved && !touchViewModel.settings.error()) {
-				var $less = $("#touchui-custom-less"),
-					$css = $("#touchui-css-only");
-
-				touchViewModel.settingsUpdated(false);
-				if(touchViewModel.settings.hasLESS()) {
-
-					if($less.length === 0) {
-						$('<link href="' + $("#data-touchui").attr("data-less") + '" rel="stylesheet/less" type="text/css" media="screen" id="touchui-custom-less">').appendTo("body");
-						less.sheets[0] = document.getElementById('touchui-custom-less');
-					}
-
-					$less.attr("href", $("#data-touchui").attr("data-less") + "?v=" + new Date().getTime());
-					$('style:not(#touch_updates_css)').remove();
-					$css.remove();
-					less.refresh();
-
-				} else {
-
-					if($css.length === 0) {
-						$('<link rel="stylesheet" type="text/css" media="screen" id="touchui-css-only">').appendTo("head").attr("href", $("#data-touchui").attr("data-css"));
-					}
-
-					$('style:not(#touch_updates_css)').remove();
-					$less.remove();
-
-				}
-			}
-		});
 	}
 
 	// Check if we can show whats new in this version
@@ -1043,25 +1090,12 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		}
 	});
 
-	// Display any backend errors
-	touchViewModel.settings.error.subscribe(function(hasError) {
-		if(hasError !== false && hasError.trim() != "") {
-
-			// If Settings Modal is open, then block the hide of the modal once
-			if(viewModels.settingsViewModel.settingsDialog.is(":visible")) {
-				var tmp = viewModels.settingsViewModel.settingsDialog.modal;
-				viewModels.settingsViewModel.settingsDialog.modal = function() {
-					viewModels.settingsViewModel.settingsDialog.modal = tmp;
-				};
-			}
-
-			new PNotify({
-				title: 'TouchUI: Whoops, something went wrong...',
-				text: hasError,
-				icon: 'glyphicon glyphicon-question-sign',
-				type: 'error',
-				hide: false
-			});
+	// Check if we need to update the CSS
+	touchViewModel.settings.requireNewCSS.subscribe(function(requireNewCSS) {
+		if(requireNewCSS) {
+			setTimeout(function() {
+				self.core.less.save.call(self, touchViewModel);
+			}, 100);
 		}
 	});
 
@@ -1121,13 +1155,15 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
 	// (Re-)Apply bindings to the new webcam div
-	if($("#webcam").length > 0) {
+	if($("#webcam").length) {
 		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 	}
 
 	// (Re-)Apply bindings to the new navigation div
-	if($("#navbar_login").length > 0) {
-		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
+	if($("#navbar_login").length) {
+		try {
+			ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
+		} catch(err) {}
 
 		// Force the dropdown to appear open when logedIn
 		viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
@@ -1149,7 +1185,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	}
 
 	// (Re-)Apply bindings to the new system commands div
-	if($("#navbar_systemmenu").length > 0) {
+	if($("#navbar_systemmenu").length) {
 		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
 		ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
 	}
@@ -1158,6 +1194,22 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
 		if(isTriggered !== false) {
 			$(this).find("input").trigger("change", [hex, rgb, false]);
+		}
+	});
+
+	// Reload CSS or LESS after saving our settings
+	touchViewModel.settings.hasCustom.subscribe(function(customCSS) {
+		if(customCSS !== "") {
+			var $css = $("#touchui-css");
+			var href = $css.attr("href");
+
+			if(customCSS) {
+				href = href.replace("touchui.css", "touchui.custom.css");
+			} else {
+				href = href.replace("touchui.custom.css", "touchui.css");
+			}
+
+			$css.attr("href", href + "?ts=" + new Date().getMilliseconds());
 		}
 	});
 

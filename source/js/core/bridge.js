@@ -81,6 +81,10 @@ TouchUI.prototype.core.bridge = function() {
 			self.touchuiModal.modal("show");
 		},
 
+		saveLESS: function(touchViewModel) {
+			self.core.less.save.call(self, touchViewModel);
+		},
+
 		onTabChange: function() {
 			if(self.isActive()) {
 				if( !self.isTouch ) {

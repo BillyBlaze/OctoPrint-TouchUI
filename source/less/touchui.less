@@ -13,23 +13,7 @@
 	height: 100%;
 	background: @main-background;
 
-	&.emulateTouch {
-		overflow: hidden;
-
-		body {
-			overflow: hidden;
-
-			.modal-scrollable,
-			.show-dropdown {
-				overflow: hidden;
-			}
-
-			.page-container {
-				height: auto;
-				min-height: 100%;
-			}
-		}
-	}
+	@import "components/emulate.touch.less";
 	@import "components/scrollbars.less";
 	@import "layout/touchscreen.less";
 

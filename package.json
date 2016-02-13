@@ -8,7 +8,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-cssimport": "^2.1.1",
     "gulp-less": "^3.0.3",

@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
+var del = require('del');
 var cssimport = require("gulp-cssimport");
 var rename = require("gulp-rename");
 var strip = require('gulp-strip-comments');
@@ -7,8 +8,8 @@ var trimlines = require('gulp-trimlines');
 var removeEmptyLines = require('gulp-remove-empty-lines');
 var concat = require('gulp-concat');
 
-gulp.task('default', ['lessc', 'concat-less', 'concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
-gulp.task('less', ['lessc', 'concat-less']);
+gulp.task('default', ['lessc', 'clean:hash', 'concat-less', 'concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
+gulp.task('less', ['lessc', 'clean:hash', 'concat-less']);
 gulp.task('js', ['concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
 
 gulp.task('lessc', function () {
@@ -23,10 +24,16 @@ gulp.task("concat-less", function() {
 			extensions: ["less"],
 			matchPattern: "*.less"
 		}))
-		.pipe(strip())
+		// .pipe(strip())
 		.pipe(rename("touchui.bundled.less"))
-		.pipe(trimlines())
+		// .pipe(trimlines())
 		.pipe(gulp.dest('octoprint_touchui/static/less/'));
+});
+
+gulp.task('clean:hash', function () {
+	return del([
+		'octoprint_touchui/static/css/hash.touchui',
+	]);
 });
 
 gulp.task('concat-libs-js', function () {
@@ -69,6 +76,7 @@ gulp.task('watch', function () {
 		],
 		[
 			'lessc',
+			'clean:hash',
 			'concat-less',
 			'concat-app-js',
 			'concat-libs-js',

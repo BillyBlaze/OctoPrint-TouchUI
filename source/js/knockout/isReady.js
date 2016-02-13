@@ -52,13 +52,15 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
 	// (Re-)Apply bindings to the new webcam div
-	if($("#webcam").length > 0) {
+	if($("#webcam").length) {
 		ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 	}
 
 	// (Re-)Apply bindings to the new navigation div
-	if($("#navbar_login").length > 0) {
-		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
+	if($("#navbar_login").length) {
+		try {
+			ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
+		} catch(err) {}
 
 		// Force the dropdown to appear open when logedIn
 		viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
@@ -80,7 +82,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	}
 
 	// (Re-)Apply bindings to the new system commands div
-	if($("#navbar_systemmenu").length > 0) {
+	if($("#navbar_systemmenu").length) {
 		ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
 		ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
 	}
@@ -89,6 +91,22 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 	$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
 		if(isTriggered !== false) {
 			$(this).find("input").trigger("change", [hex, rgb, false]);
+		}
+	});
+
+	// Reload CSS or LESS after saving our settings
+	touchViewModel.settings.hasCustom.subscribe(function(customCSS) {
+		if(customCSS !== "") {
+			var $css = $("#touchui-css");
+			var href = $css.attr("href");
+
+			if(customCSS) {
+				href = href.replace("touchui.css", "touchui.custom.css");
+			} else {
+				href = href.replace("touchui.custom.css", "touchui.css");
+			}
+
+			$css.attr("href", href + "?ts=" + new Date().getMilliseconds());
 		}
 	});
 

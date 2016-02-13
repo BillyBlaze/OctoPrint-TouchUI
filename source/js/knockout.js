@@ -33,9 +33,8 @@
 			self.isTouchscreen = Touch.isTouchscreen;
 			self.isTouch = Touch.isTouch;
 
-			self.settingsUpdated = ko.observable(false);
 			self.settings = {
-				error: ko.observable(false),
+				requireNewCSS: ko.observable(false),
 				whatsNew: ko.observable(false)
 			};
 
@@ -65,7 +64,7 @@
 			self.show = Touch.show;
 
 			self.onEventSettingsUpdated = function() {
-				self.settingsUpdated(true);
+				Touch.saveLESS.call(Touch, self);
 			}
 
 			Touch.koLoading(self, allViewModels);
