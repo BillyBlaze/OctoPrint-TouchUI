@@ -1,0 +1,3 @@
+octoprint_touchui/static/css/*.css binary
+octoprint_touchui/static/less/touchui.*.less binary
+octoprint_touchui/static/js/touchui.*.js binary
