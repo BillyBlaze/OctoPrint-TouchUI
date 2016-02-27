@@ -19,13 +19,11 @@
 
 		Touch.domReady(self);
 
-		function touchUIViewModel(viewModels) {
+		function TouchUIViewModel (viewModels) {
 			var self = this,
 				allViewModels = {};
 
-			_.each(viewModels, function(obj, key) {
-				allViewModels[TOUCHUI_REQUIRED_VIEWMODELS[key]] = obj;
-			});
+			allViewModels = _.object(TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
 
 			self.isActive = Touch.isActive;
 			self.isKeyboardActive = Touch.isKeyboardActive;
@@ -36,24 +34,16 @@
 
 			self.settings = {
 				requireNewCSS: ko.observable(false),
+				refresh: ko.observable(false),
 				whatsNew: ko.observable(false)
 			};
 
-			self.onStartupComplete = function() {
+			self.onStartupComplete = function () {
 				Touch.koReady(self, allViewModels);
 			}
 
 			self.onBeforeBinding = function() {
-				_.each(allViewModels.settingsViewModel.settings.plugins.touchui, function(newSetting, key) {
-					if(ko.isObservable(self.settings[key])) {
-						newSetting.subscribe(function(val) {
-							self.settings[key](val);
-						});
-						newSetting.valueHasMutated();
-					} else {
-						self.settings[key] = newSetting;
-					}
-				});
+				ko.mapping.fromJS(allViewModels.settingsViewModel.settings.plugins.touchui, {}, self.settings);
 			}
 
 			self.toggleTouchUI = Touch.toggleTouch;
@@ -64,7 +54,7 @@
 			self.onTabChange = Touch.onTabChange;
 			self.show = Touch.show;
 
-			self.onEventSettingsUpdated = function() {
+			self.onSettingsBeforeSave = function() {
 				Touch.saveLESS.call(Touch, self);
 			}
 
@@ -73,9 +63,10 @@
 		}
 
 		OCTOPRINT_VIEWMODELS.push([
-			touchUIViewModel,
+			TouchUIViewModel,
 			TOUCHUI_REQUIRED_VIEWMODELS,
-			["#touchui_settings_dialog", "#settings_plugin_touchui", "#navbar_plugin_touchui"]
+			["#touchui_settings_dialog", "#settings_plugin_touchui", "#navbar_plugin_touchui"],
+			TOUCHUI_REQUIRED_VIEWMODELS
 		]);
 	});
 

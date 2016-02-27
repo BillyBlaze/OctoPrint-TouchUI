@@ -863,18 +863,31 @@ TouchUI.prototype.core.exception = function() {
 
 TouchUI.prototype.core.less = {
 
+	options: {
+		template: {
+			importUrl:	"/plugin/touchui/static/less/touchui.bundled.less",
+			import:		'@import "{importUrl}"; \n',
+			variables:	"@main-color: {mainColor}; \n" +
+						"@terminal-color: {termColor}; \n" +
+						"@text-color: {textColor}; \n" +
+						"@main-background: {bgColor}; \n\n"
+		},
+		API: "/plugin/touchui/css"
+	},
+
 	save: function(viewModel) {
-		var variables = "",
-			self = this;
+		var variables = "";
+		var options = this.core.less.options;
+		var self = this;
 
 		if(viewModel.settings.useCustomization()) {
 			if(viewModel.settings.colors.useLocalFile()) {
 
-				$.post("/plugin/touchui/getCSS", {
+				$.get(options.API, {
 						path: viewModel.settings.colors.customPath()
 					})
 					.done(function(response) {
-						self.core.less.render.call(self, viewModel, '@import "/plugin/touchui/static/less/touchui.bundled.less";\n' + response);
+						self.core.less.render.call(self, viewModel, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
 					})
 					.error(function(error) {
 						self.core.less.error.call(self, error);
@@ -882,11 +895,12 @@ TouchUI.prototype.core.less = {
 
 			} else {
 
-				self.core.less.render.call(self, viewModel, '@import "/plugin/touchui/static/less/touchui.bundled.less";\n' +
-					'@main-color: '+ viewModel.settings.colors.mainColor() +';' +
-					'@terminal-color: '+ viewModel.settings.colors.termColor() +';' +
-					'@text-color: '+ viewModel.settings.colors.textColor() +';' +
-					'@main-background: '+ viewModel.settings.colors.bgColor() +';'
+				self.core.less.render.call(self, viewModel, "" +
+					options.template.import.replace("{importUrl}", options.template.importUrl) +
+					options.template.variables.replace("{mainColor}", viewModel.settings.colors.mainColor())
+						.replace("{termColor}", viewModel.settings.colors.termColor())
+						.replace("{textColor}", viewModel.settings.colors.textColor())
+						.replace("{bgColor}", viewModel.settings.colors.bgColor())
 				);
 
 			}
@@ -894,29 +908,22 @@ TouchUI.prototype.core.less = {
 	},
 
 	render: function(viewModel, data) {
-		var self = this,
-			callback = function(error, result) {
+		var self = this;
+		var callback = function(error, result) {
 
 				if (error) {
 					self.core.less.error.call(self, error);
 				} else {
 
-					$.post("/plugin/touchui/saveCSS", {
+					$.post(self.core.less.options.API, {
 							css: result.css
-						})
-						.done(function() {
-							if(!viewModel.settings.hasCustom()) {
-								viewModel.settings.hasCustom(true);
-							} else {
-								viewModel.settings.hasCustom.valueHasMutated();
-							}
 						})
 						.error(function(error) {
 							self.core.less.error.call(self, error);
 						});
 
 				}
-			};
+			}
 
 		if(window.less.render) {
 			window.less.render(data, {
@@ -1226,6 +1233,23 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		}
 	});
 
+	// Reuse for code below
+	var refreshUrl = function(href) {
+		return href.split("?")[0] + "?ts=" + new Date().getMilliseconds();
+	}
+
+	// Reload CSS if needed
+	touchViewModel.settings.refreshCSS.subscribe(function(hasRefresh) {
+		if (hasRefresh) {
+			// Wait 2 seconds, so we're not too early
+			setTimeout(function() {
+				var $css = $("#touchui-css");
+				$css.attr("href", refreshUrl($css.attr("href")));
+				touchViewModel.settings.refreshCSS(false);
+			}, 1200);
+		}
+	})
+
 	// Reload CSS or LESS after saving our settings
 	touchViewModel.settings.hasCustom.subscribe(function(customCSS) {
 		if(customCSS !== "") {
@@ -1238,7 +1262,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 				href = href.replace("touchui.custom.css", "touchui.css");
 			}
 
-			$css.attr("href", href + "?ts=" + new Date().getMilliseconds());
+			$css.attr("href", refreshUrl(href));
 		}
 	});
 

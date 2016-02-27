@@ -6,6 +6,7 @@ import octoprint.settings
 import octoprint.util
 import flask
 import hashlib
+import time
 import os
 
 from octoprint.server.util.flask import restricted_access
@@ -23,16 +24,15 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 		self._customLessPath = os.path.dirname(__file__) + "/static/less/touchui.bundled.less"
 		self._customHashPath = os.path.dirname(__file__) + "/static/css/hash.touchui"
 		self._requireNewCSS = False
+		self._refreshCSS = False
+		self._refreshTime = 0
 
 	def on_settings_load(self):
 		data = dict(octoprint.plugin.SettingsPlugin.on_settings_load(self))
 		data["hasCustom"] = os.path.isfile(self._customCssPath)
 		data["requireNewCSS"] = self._requireNewCSS
+		data["refreshCSS"] = self._refreshCSS
 		data["whatsNew"] = False
-
-		if self._settings.get(["useCustomization"]):
-			if os.path.isfile(self._customHashPath) is not True:
-				data["requireNewCSS"] = True
 
 		if admin_permission.can():
 			if os.path.isfile(self._whatsNewPath):
@@ -40,10 +40,31 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 					data["whatsNew"] = contentFile.read()
 				os.unlink(self._whatsNewPath)
 
+			if self._requireNewCSS is True:
+				self._requireNewCSS = False
+
+			if self._settings.get(["useCustomization"]):
+				if os.path.isfile(self._customHashPath) is not True:
+					data["requireNewCSS"] = True
+
+			if self._refreshCSS:
+				if self._refreshTime < time.time():
+					data["refreshCSS"] = False
+					self._refreshCSS = False
+					self._refreshTime = 0
+
 		return data
 
 	def on_after_startup(self):
-		# Check if old LESS file equals the new LESS file, if not push/grab new generated
+		self._check_customization()
+
+	def _check_customization(self):
+		# When generating LESS to CSS we also store the LESS contents into a md5 hash
+		# if the hash of the local LESS file doesn't match this saved hash, then that indicates
+		# that the LESS file has been update and that it requires a new compile.
+		#
+		# Therefor we going to put _requireNewCSS on TRUE, and we then let an admin compile the
+		# LESS to CSS and store it in local CSS file.
 		if self._settings.get(["useCustomization"]):
 			hashedNew = "1"
 			hashedOld = "2"
@@ -67,11 +88,15 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 		if self._settings.get(["useCustomization"]) is False:
 			self._remove_custom_css()
+		else:
+			self._refreshCSS = True
+			self._refreshTime = time.time() + 10
 
 	def increase_upload_bodysize(self, current_max_body_sizes, *args, **kwargs):
-		return [("POST", r"/saveCSS", 1 * 1024 * 1024)] # set a maximum body size of 1 MB for plugin archive uploads
+		# set a maximum body size of 1 MB for plugin archive uploads
+		return [("POST", r"/css", 1 * 1024 * 1024), ("GET", r"/css", 1 * 1024 * 1024)]
 
-	@octoprint.plugin.BlueprintPlugin.route("/saveCSS", methods=["POST"])
+	@octoprint.plugin.BlueprintPlugin.route("/css", methods=["POST"])
 	@restricted_access
 	@admin_permission.require(403)
 	def saveCSS(self):
@@ -87,7 +112,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 		return flask.make_response("Ok.", 200)
 
-	@octoprint.plugin.BlueprintPlugin.route("/getCSS", methods=["POST"])
+	@octoprint.plugin.BlueprintPlugin.route("/css", methods=["GET"])
 	@restricted_access
 	@admin_permission.require(403)
 	def getCSS(self):

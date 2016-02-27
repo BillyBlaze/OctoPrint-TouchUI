@@ -94,6 +94,23 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		}
 	});
 
+	// Reuse for code below
+	var refreshUrl = function(href) {
+		return href.split("?")[0] + "?ts=" + new Date().getMilliseconds();
+	}
+
+	// Reload CSS if needed
+	touchViewModel.settings.refreshCSS.subscribe(function(hasRefresh) {
+		if (hasRefresh) {
+			// Wait 2 seconds, so we're not too early
+			setTimeout(function() {
+				var $css = $("#touchui-css");
+				$css.attr("href", refreshUrl($css.attr("href")));
+				touchViewModel.settings.refreshCSS(false);
+			}, 1200);
+		}
+	})
+
 	// Reload CSS or LESS after saving our settings
 	touchViewModel.settings.hasCustom.subscribe(function(customCSS) {
 		if(customCSS !== "") {
@@ -106,7 +123,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 				href = href.replace("touchui.custom.css", "touchui.css");
 			}
 
-			$css.attr("href", href + "?ts=" + new Date().getMilliseconds());
+			$css.attr("href", refreshUrl(href));
 		}
 	});
 
