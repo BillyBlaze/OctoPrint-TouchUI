@@ -4337,6 +4337,7 @@ width: 100%;
 
 .hero-unit {
 background-color: @neutral-color;
+color: contrast(@neutral-color);
 padding: 20px;
 .border-radius(0);
 
@@ -4545,6 +4546,9 @@ div.action-buttons {
 color: contrast(@swipe-list-background-open-color);
 }
 }
+div:not(.title) {
+color: fade(contrast(@swipe-list-background-open-color), 70%);
+}
 }
 
 &:after {
@@ -4569,6 +4573,7 @@ color: inherit;
 }
 
 div:not(.title) {
+transition: color 0.7s ease;
 color: fade(contrast(@swipe-list-background-color), 70%);
 }
 

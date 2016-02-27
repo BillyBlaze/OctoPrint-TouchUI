@@ -438,7 +438,7 @@ TouchUI.prototype.components.modal = {
 			$(appendTo).text($(appendTo).text().trim());
 
 			// Create a label that is clickable
-			var settingsLabel = $("<span></span>")
+			var $settingsLabel = $("<span></span>")
 				.addClass("hidden")
 				.attr("id", newId)
 				.appendTo(appendTo)
@@ -464,12 +464,12 @@ TouchUI.prototype.components.modal = {
 							$(event.target).closest('[data-toggle="tab"]').length > 0 || //Check if we clicked on a tab-link
 							$(event.target).closest("#"+newId).length === 0 //Check if we clicked outside the dropdown
 						) {
-							var href = settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
+							var href = $settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
 							$(document).off(event).trigger("dropdown-closed.touchui"); // Trigger event for enabling scrolling
 
 							$('.show-dropdown').remove();
 							$('[href="'+href+'"]').click();
-							settingsLabel.text($('[href="'+href+'"]').text());
+							$settingsLabel.text($('[href="'+href+'"]').text());
 
 							if( !self.isTouch ) {
 								setTimeout(function() {
@@ -483,6 +483,19 @@ TouchUI.prototype.components.modal = {
 					// Trigger event for disabling scrolling
 					$(document).trigger("dropdown-open.touchui", elm[0]);
 				});
+
+			// reset the active text in dropdown on open
+			$(appendTo)
+				.closest(".modal")
+				.on("modal.touchui", function() {
+					var href = $(cloneId)
+						.find(".active")
+						.find('[data-toggle="tab"]')
+						.attr("href");
+
+					$settingsLabel.text($('[href="'+href+'"]').text());
+				});
+
 		}
 	}
 }
@@ -1103,7 +1116,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		}
 	});
 
-	// Check if we need to update the CSS
+	// Check if we need to update an old LESS file with a new LESS one
 	var requireNewCSS = ko.computed(function() {
 		return touchViewModel.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
 	});
@@ -1865,23 +1878,21 @@ TouchUI.prototype.DOM.move.terminal = {
 
 TouchUI.prototype.DOM.overwrite.modal = function() {
 
-	if( !this.isTouch ) {
-		//We need a reliable event for catching new modals for attaching a scrolling bar
-		$.fn.modalBup = $.fn.modal;
-		$.fn.modal = function(option, args) {
-			// Update any other modifications made by others (i.e. OctoPrint itself)
-			$.fn.modalBup.defaults = $.fn.modal.defaults;
+	//We need a reliable event for catching new modals for attaching a scrolling bar
+	$.fn.modalBup = $.fn.modal;
+	$.fn.modal = function(option, args) {
+		// Update any other modifications made by others (i.e. OctoPrint itself)
+		$.fn.modalBup.defaults = $.fn.modal.defaults;
 
-			// Create modal, store into variable so we can trigger an event first before return
-			var tmp = $(this).modalBup(option, args);
-			$(this).trigger("modal.touchui", this);
+		// Create modal, store into variable so we can trigger an event first before return
+		var tmp = $(this).modalBup(option, args);
+		$(this).trigger("modal.touchui", this);
 
-			return tmp;
-		};
-		$.fn.modal.prototype = { constructor: $.fn.modal };
-		$.fn.modal.Constructor = $.fn.modal;
-		$.fn.modal.defaults = $.fn.modalBup.defaults;
-	}
+		return tmp;
+	};
+	$.fn.modal.prototype = { constructor: $.fn.modal };
+	$.fn.modal.Constructor = $.fn.modal;
+	$.fn.modal.defaults = $.fn.modalBup.defaults;
 
 }
 

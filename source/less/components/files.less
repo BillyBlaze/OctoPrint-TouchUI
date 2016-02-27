@@ -158,6 +158,9 @@
 							color: contrast(@swipe-list-background-open-color);
 						}
 					}
+					div:not(.title) {
+						color: fade(contrast(@swipe-list-background-open-color), 70%);
+					}
 				}
 
 				&:after {
@@ -182,6 +185,7 @@
 				}
 
 				div:not(.title) {
+					transition: color 0.7s ease;
 					color: fade(contrast(@swipe-list-background-color), 70%);
 				}
 

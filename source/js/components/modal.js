@@ -17,7 +17,7 @@ TouchUI.prototype.components.modal = {
 			$(appendTo).text($(appendTo).text().trim());
 
 			// Create a label that is clickable
-			var settingsLabel = $("<span></span>")
+			var $settingsLabel = $("<span></span>")
 				.addClass("hidden")
 				.attr("id", newId)
 				.appendTo(appendTo)
@@ -43,12 +43,12 @@ TouchUI.prototype.components.modal = {
 							$(event.target).closest('[data-toggle="tab"]').length > 0 || //Check if we clicked on a tab-link
 							$(event.target).closest("#"+newId).length === 0 //Check if we clicked outside the dropdown
 						) {
-							var href = settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
+							var href = $settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
 							$(document).off(event).trigger("dropdown-closed.touchui"); // Trigger event for enabling scrolling
 
 							$('.show-dropdown').remove();
 							$('[href="'+href+'"]').click();
-							settingsLabel.text($('[href="'+href+'"]').text());
+							$settingsLabel.text($('[href="'+href+'"]').text());
 
 							if( !self.isTouch ) {
 								setTimeout(function() {
@@ -62,6 +62,19 @@ TouchUI.prototype.components.modal = {
 					// Trigger event for disabling scrolling
 					$(document).trigger("dropdown-open.touchui", elm[0]);
 				});
+
+			// reset the active text in dropdown on open
+			$(appendTo)
+				.closest(".modal")
+				.on("modal.touchui", function() {
+					var href = $(cloneId)
+						.find(".active")
+						.find('[data-toggle="tab"]')
+						.attr("href");
+
+					$settingsLabel.text($('[href="'+href+'"]').text());
+				});
+
 		}
 	}
 }
