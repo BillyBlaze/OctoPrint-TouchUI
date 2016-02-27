@@ -1,4 +1,4 @@
-TouchUI.prototype.core.checkAutoLoad = function() {
+TouchUI.prototype.core.boot = function() {
 
 	// This should always start TouchUI
 	if(
