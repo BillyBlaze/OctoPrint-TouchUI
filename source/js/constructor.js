@@ -9,6 +9,7 @@ TouchUI.prototype = {
 
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
+	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 
 	isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
 	isTouchscreen: ko.observable(false),

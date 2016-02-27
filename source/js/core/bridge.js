@@ -8,6 +8,7 @@ TouchUI.prototype.core.bridge = function() {
 		isKeyboardActive: this.components.keyboard.isActive,
 		isHidebarActive: this.animate.isHidebarActive,
 		isFullscreen: this.isFullscreen,
+		hasFullscreen: this.hasFullscreen,
 		isTouchscreen: this.isTouchscreen,
 		isTouch: this.isTouch,
 

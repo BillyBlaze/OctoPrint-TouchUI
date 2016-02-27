@@ -29,6 +29,7 @@
 			self.isKeyboardActive = Touch.isKeyboardActive;
 			self.isHidebarActive = Touch.isHidebarActive;
 			self.isFullscreen = Touch.isFullscreen;
+			self.hasFullscreen = Touch.hasFullscreen;
 			self.isTouchscreen = Touch.isTouchscreen;
 			self.isTouch = Touch.isTouch;
 

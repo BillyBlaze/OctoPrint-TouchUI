@@ -9,6 +9,7 @@ TouchUI.prototype = {
 
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
+	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 
 	isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
 	isTouchscreen: ko.observable(false),
@@ -212,19 +213,15 @@ TouchUI.prototype.components.fullscreen = {
 	ask: function() {
 		var self = this;
 
-		if(
-			document.webkitCancelFullScreen ||
-			document.msCancelFullScreen ||
-			document.oCancelFullScreen ||
-			document.mozCancelFullScreen ||
-			document.cancelFullScreen
-		) {
+		if(self.hasFullscreen()) {
+
 			new PNotify({
 				title: 'Fullscreen',
 				text: 'Would you like to go fullscreen?',
 				icon: 'glyphicon glyphicon-question-sign',
 				type: 'info',
 				hide: false,
+				addclass: 'askFullscreen',
 				confirm: {
 					confirm: true,
 					buttons: [{
@@ -606,6 +603,7 @@ TouchUI.prototype.components.touchscreen = {
 		$("html").addClass("isTouchscreenUI");
 		this.isTouch = false;
 		this.isTouchscreen(true);
+		this.hasFullscreen(false);
 
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
@@ -695,6 +693,7 @@ TouchUI.prototype.core.bridge = function() {
 		isKeyboardActive: this.components.keyboard.isActive,
 		isHidebarActive: this.animate.isHidebarActive,
 		isFullscreen: this.isFullscreen,
+		hasFullscreen: this.hasFullscreen,
 		isTouchscreen: this.isTouchscreen,
 		isTouch: this.isTouch,
 

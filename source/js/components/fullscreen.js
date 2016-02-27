@@ -12,19 +12,15 @@ TouchUI.prototype.components.fullscreen = {
 	ask: function() {
 		var self = this;
 
-		if(
-			document.webkitCancelFullScreen ||
-			document.msCancelFullScreen ||
-			document.oCancelFullScreen ||
-			document.mozCancelFullScreen ||
-			document.cancelFullScreen
-		) {
+		if(self.hasFullscreen()) {
+
 			new PNotify({
 				title: 'Fullscreen',
 				text: 'Would you like to go fullscreen?',
 				icon: 'glyphicon glyphicon-question-sign',
 				type: 'info',
 				hide: false,
+				addclass: 'askFullscreen',
 				confirm: {
 					confirm: true,
 					buttons: [{
