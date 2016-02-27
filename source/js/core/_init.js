@@ -3,9 +3,11 @@ TouchUI.prototype.core.init = function() {
 	// Migrate old cookies into localstorage
 	this.DOM.storage.migration.call(this);
 
-	if( this.core.checkAutoLoad.call(this) ) {
+	// Bootup TouchUI if Touch, Small resolution or storage say's so
+	if (this.core.boot.call(this)) {
 
-		$("html").attr("id", this.id);
+		// Enable TouchUI CSS
+		$("html").addClass(this.className);
 
 		// Force mobile browser to set the window size to their format
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
@@ -18,8 +20,8 @@ TouchUI.prototype.core.init = function() {
 		this.DOM.storage.set("active", true);
 
 		// Create keyboard cookie if not existing
-		if(this.DOM.storage.get("keyboardActive") === undefined) {
-			if(!this.isTouch) {
+		if (this.DOM.storage.get("keyboardActive") === undefined) {
+			if (!this.isTouch) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -27,12 +29,12 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Create hide navbar on click if not existing
-		if(this.DOM.storage.get("hideNavbarActive") === undefined) {
+		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
 			this.DOM.storage.set("hideNavbarActive", false);
 		}
 
 		// Create fullscreen cookie if not existing and trigger pNotification
-		if(this.DOM.storage.get("fullscreen") === undefined) {
+		if (this.DOM.storage.get("fullscreen") === undefined) {
 			this.DOM.storage.set("fullscreen", false);
 			this.components.fullscreen.ask.call(this);
 		} else {
@@ -42,8 +44,7 @@ TouchUI.prototype.core.init = function() {
 			}
 		}
 
-
-		if( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if ( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
 			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
 			this.DOM.storage.get("touchscreenActive")
 		) {

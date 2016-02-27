@@ -4,7 +4,7 @@ var TouchUI = function() {
 };
 
 TouchUI.prototype = {
-	id: "touch",
+	className: "touchui",
 	version: 0,
 
 	hasLocalStorage: ('localStorage' in window),

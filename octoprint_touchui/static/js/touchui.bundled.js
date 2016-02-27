@@ -4,7 +4,7 @@ var TouchUI = function() {
 };
 
 TouchUI.prototype = {
-	id: "touch",
+	className: "touchui",
 	version: 0,
 
 	hasLocalStorage: ('localStorage' in window),
@@ -635,9 +635,11 @@ TouchUI.prototype.core.init = function() {
 	// Migrate old cookies into localstorage
 	this.DOM.storage.migration.call(this);
 
-	if( this.core.checkAutoLoad.call(this) ) {
+	// Bootup TouchUI if Touch, Small resolution or storage say's so
+	if (this.core.boot.call(this)) {
 
-		$("html").attr("id", this.id);
+		// Enable TouchUI CSS
+		$("html").addClass(this.className);
 
 		// Force mobile browser to set the window size to their format
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
@@ -650,8 +652,8 @@ TouchUI.prototype.core.init = function() {
 		this.DOM.storage.set("active", true);
 
 		// Create keyboard cookie if not existing
-		if(this.DOM.storage.get("keyboardActive") === undefined) {
-			if(!this.isTouch) {
+		if (this.DOM.storage.get("keyboardActive") === undefined) {
+			if (!this.isTouch) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -659,12 +661,12 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Create hide navbar on click if not existing
-		if(this.DOM.storage.get("hideNavbarActive") === undefined) {
+		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
 			this.DOM.storage.set("hideNavbarActive", false);
 		}
 
 		// Create fullscreen cookie if not existing and trigger pNotification
-		if(this.DOM.storage.get("fullscreen") === undefined) {
+		if (this.DOM.storage.get("fullscreen") === undefined) {
 			this.DOM.storage.set("fullscreen", false);
 			this.components.fullscreen.ask.call(this);
 		} else {
@@ -674,8 +676,7 @@ TouchUI.prototype.core.init = function() {
 			}
 		}
 
-
-		if( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if ( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
 			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
 			this.DOM.storage.get("touchscreenActive")
 		) {
@@ -688,6 +689,36 @@ TouchUI.prototype.core.init = function() {
 		this.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}
+
+}
+
+TouchUI.prototype.core.boot = function() {
+
+	// This should always start TouchUI
+	if(
+		document.location.hash === "#touch" ||
+		document.location.href.indexOf("?touch") > 0 ||
+		this.DOM.storage.get("active") === "true"
+	) {
+
+		return true;
+
+	} else if(
+		this.canLoadAutomatically &&
+		this.DOM.storage.get("active") !== "false"
+	) {
+
+		if($(window).width() < 980) {
+			return true;
+		}
+
+		if(this.isTouch) {
+			return true;
+		}
+
+	}
+
+	return false;
 
 }
 
@@ -740,7 +771,7 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		toggleTouch: function() {
-			if(self.DOM.cookies.toggleBoolean("active")) {
+			if(self.DOM.storage.toggleBoolean("active")) {
 				document.location.hash = "#touch";
 			} else {
 				document.location.hash = "";
@@ -750,13 +781,13 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleKeyboard: function() {
 			if(self.isActive()) {
-				self.components.keyboard.isActive(self.DOM.cookies.toggleBoolean("keyboardActive"));
+				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
 			}
 		},
 
 		toggleHidebar: function() {
 			if(self.isActive()) {
-				self.animate.isHidebarActive(self.DOM.cookies.toggleBoolean("hideNavbarActive"));
+				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
 			}
 		},
 
@@ -766,7 +797,7 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleTouchscreen: function() {
 			if(self.isActive()) {
-				self.isTouchscreen(self.DOM.cookies.toggleBoolean("touchscreenActive"));
+				self.isTouchscreen(self.DOM.storage.toggleBoolean("touchscreenActive"));
 				document.location.reload();
 			}
 		},
@@ -794,36 +825,6 @@ TouchUI.prototype.core.bridge = function() {
 		}
 
 	};
-
-}
-
-TouchUI.prototype.core.checkAutoLoad = function() {
-
-	// This should always start TouchUI
-	if(
-		document.location.hash === "#touch" ||
-		document.location.href.indexOf("?touch") > 0 ||
-		this.DOM.storage.get("active") === "true"
-	) {
-
-		return true;
-
-	} else if(
-		this.canLoadAutomatically &&
-		this.DOM.storage.get("active") !== "false"
-	) {
-
-		if($(window).width() < 980) {
-			return true;
-		}
-
-		if(this.isTouch) {
-			return true;
-		}
-
-	}
-
-	return false;
 
 }
 
@@ -1041,17 +1042,17 @@ TouchUI.prototype.DOM.cookies = {
 TouchUI.prototype.DOM.localstorage = {
 	store: JSON.parse(window.localStorage.getItem('TouchUI')) || {},
 
-	get: function(key) {
+	get: function (key) {
 		return this.store[key];
 	},
 
-	set: function(key, value) {
+	set: function (key, value) {
 		this.store[key] = value;
 		window.localStorage.setItem('TouchUI', JSON.stringify(this.store))
 		return this.store[key];
 	},
 
-	toggleBoolean: function(key) {
+	toggleBoolean: function (key) {
 		var value = this.store[key] || false;
 
 		if(value === true) {
@@ -1076,7 +1077,7 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 
 			var name = "TouchUI.";
 			var ca = document.cookie.split(';');
-			for(var i=0; i<ca.length; i++) {
+			for (var i=0; i<ca.length; i++) {
 				var c = ca[i];
 				while (c.charAt(0)==' ') c = c.substring(1);
 				if (c.indexOf(name) == 0) {

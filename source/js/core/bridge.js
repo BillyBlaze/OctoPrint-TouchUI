@@ -47,7 +47,7 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		toggleTouch: function() {
-			if(self.DOM.cookies.toggleBoolean("active")) {
+			if(self.DOM.storage.toggleBoolean("active")) {
 				document.location.hash = "#touch";
 			} else {
 				document.location.hash = "";
@@ -57,13 +57,13 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleKeyboard: function() {
 			if(self.isActive()) {
-				self.components.keyboard.isActive(self.DOM.cookies.toggleBoolean("keyboardActive"));
+				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
 			}
 		},
 
 		toggleHidebar: function() {
 			if(self.isActive()) {
-				self.animate.isHidebarActive(self.DOM.cookies.toggleBoolean("hideNavbarActive"));
+				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
 			}
 		},
 
@@ -73,7 +73,7 @@ TouchUI.prototype.core.bridge = function() {
 
 		toggleTouchscreen: function() {
 			if(self.isActive()) {
-				self.isTouchscreen(self.DOM.cookies.toggleBoolean("touchscreenActive"));
+				self.isTouchscreen(self.DOM.storage.toggleBoolean("touchscreenActive"));
 				document.location.reload();
 			}
 		},
