@@ -4,7 +4,7 @@ var TouchUI = function() {
 };
 
 TouchUI.prototype = {
-	className: "touchui",
+	id: "touch",
 	version: 0,
 
 	hasLocalStorage: ('localStorage' in window),
@@ -638,8 +638,7 @@ TouchUI.prototype.core.init = function() {
 	// Bootup TouchUI if Touch, Small resolution or storage say's so
 	if (this.core.boot.call(this)) {
 
-		// Enable TouchUI CSS
-		$("html").addClass(this.className);
+		$("html").attr("id", this.id);
 
 		// Force mobile browser to set the window size to their format
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
