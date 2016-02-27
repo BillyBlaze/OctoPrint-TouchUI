@@ -1,5 +1,8 @@
 TouchUI.prototype.core.init = function() {
 
+	// Migrate old cookies into localstorage
+	this.DOM.storage.migration.call(this);
+
 	if( this.core.checkAutoLoad.call(this) ) {
 
 		$("html").attr("id", this.id);
@@ -12,29 +15,29 @@ TouchUI.prototype.core.init = function() {
 		this.isActive(true);
 
 		// Enforce active cookie
-		this.DOM.cookies.set("active", "true");
+		this.DOM.storage.set("active", true);
 
 		// Create keyboard cookie if not existing
-		if(this.DOM.cookies.get("keyboardActive") === undefined) {
+		if(this.DOM.storage.get("keyboardActive") === undefined) {
 			if(!this.isTouch) {
-				this.DOM.cookies.set("keyboardActive", "true");
+				this.DOM.storage.set("keyboardActive", true);
 			} else {
-				this.DOM.cookies.set("keyboardActive", "false");
+				this.DOM.storage.set("keyboardActive", false);
 			}
 		}
 
 		// Create hide navbar on click if not existing
-		if(this.DOM.cookies.get("hideNavbarActive") === undefined) {
-			this.DOM.cookies.set("hideNavbarActive", "false");
+		if(this.DOM.storage.get("hideNavbarActive") === undefined) {
+			this.DOM.storage.set("hideNavbarActive", false);
 		}
 
 		// Create fullscreen cookie if not existing and trigger pNotification
-		if(this.DOM.cookies.get("fullscreen") === undefined) {
-			this.DOM.cookies.set("fullscreen", "false");
+		if(this.DOM.storage.get("fullscreen") === undefined) {
+			this.DOM.storage.set("fullscreen", false);
 			this.components.fullscreen.ask.call(this);
 		} else {
 			//Cookie say user wants fullscreen, ask it!
-			if(this.DOM.cookies.get("fullscreen") === "true") {
+			if(this.DOM.storage.get("fullscreen")) {
 				this.components.fullscreen.ask.call(this);
 			}
 		}
@@ -42,15 +45,15 @@ TouchUI.prototype.core.init = function() {
 
 		if( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
 			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
-			this.DOM.cookies.get("touchscreenActive") === "true"
+			this.DOM.storage.get("touchscreenActive")
 		) {
 			this.components.touchscreen.init.call(this);
 		}
 
 		// Get state of cookies and store them in KO
-		this.components.keyboard.isActive(this.DOM.cookies.get("keyboardActive") === "true");
-		this.animate.isHidebarActive(this.DOM.cookies.get("hideNavbarActive") === "true");
-		this.isFullscreen(this.DOM.cookies.get("fullscreen") === "true");
+		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
+		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
+		this.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}
 

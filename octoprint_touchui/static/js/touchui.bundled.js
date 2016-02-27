@@ -7,6 +7,8 @@ TouchUI.prototype = {
 	id: "touch",
 	version: 0,
 
+	hasLocalStorage: ('localStorage' in window),
+
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
 	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
@@ -206,7 +208,7 @@ TouchUI.prototype.components.fullscreen = {
 		// Bind fullscreenChange to knockout
 		$(document).bind("fullscreenchange", function() {
 			self.isFullscreen($(document).fullScreen() !== false);
-			self.DOM.cookies.set("fullscreen", self.isFullscreen());
+			self.DOM.storage.set("fullscreen", self.isFullscreen());
 		});
 
 	},
@@ -599,11 +601,14 @@ TouchUI.prototype.components.touchList = {
 
 TouchUI.prototype.components.touchscreen = {
 
-	init: function() {
+	init: function () {
 		$("html").addClass("isTouchscreenUI");
 		this.isTouch = false;
 		this.isTouchscreen(true);
-		this.hasFullscreen(false);
+
+		if (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) {
+			this.hasFullscreen(false);
+		}
 
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
@@ -613,7 +618,7 @@ TouchUI.prototype.components.touchscreen = {
 		// this.scroll.defaults.iScroll.HWCompositing = false;
 	},
 
-	isLoading: function(viewModels) {
+	isLoading: function (viewModels) {
 
 		if(this.isTouchscreen()) {
 			if(viewModels.terminalViewModel.enableFancyFunctionality) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
@@ -627,6 +632,9 @@ TouchUI.prototype.components.touchscreen = {
 
 TouchUI.prototype.core.init = function() {
 
+	// Migrate old cookies into localstorage
+	this.DOM.storage.migration.call(this);
+
 	if( this.core.checkAutoLoad.call(this) ) {
 
 		$("html").attr("id", this.id);
@@ -639,29 +647,29 @@ TouchUI.prototype.core.init = function() {
 		this.isActive(true);
 
 		// Enforce active cookie
-		this.DOM.cookies.set("active", "true");
+		this.DOM.storage.set("active", true);
 
 		// Create keyboard cookie if not existing
-		if(this.DOM.cookies.get("keyboardActive") === undefined) {
+		if(this.DOM.storage.get("keyboardActive") === undefined) {
 			if(!this.isTouch) {
-				this.DOM.cookies.set("keyboardActive", "true");
+				this.DOM.storage.set("keyboardActive", true);
 			} else {
-				this.DOM.cookies.set("keyboardActive", "false");
+				this.DOM.storage.set("keyboardActive", false);
 			}
 		}
 
 		// Create hide navbar on click if not existing
-		if(this.DOM.cookies.get("hideNavbarActive") === undefined) {
-			this.DOM.cookies.set("hideNavbarActive", "false");
+		if(this.DOM.storage.get("hideNavbarActive") === undefined) {
+			this.DOM.storage.set("hideNavbarActive", false);
 		}
 
 		// Create fullscreen cookie if not existing and trigger pNotification
-		if(this.DOM.cookies.get("fullscreen") === undefined) {
-			this.DOM.cookies.set("fullscreen", "false");
+		if(this.DOM.storage.get("fullscreen") === undefined) {
+			this.DOM.storage.set("fullscreen", false);
 			this.components.fullscreen.ask.call(this);
 		} else {
 			//Cookie say user wants fullscreen, ask it!
-			if(this.DOM.cookies.get("fullscreen") === "true") {
+			if(this.DOM.storage.get("fullscreen")) {
 				this.components.fullscreen.ask.call(this);
 			}
 		}
@@ -669,15 +677,15 @@ TouchUI.prototype.core.init = function() {
 
 		if( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
 			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
-			this.DOM.cookies.get("touchscreenActive") === "true"
+			this.DOM.storage.get("touchscreenActive")
 		) {
 			this.components.touchscreen.init.call(this);
 		}
 
 		// Get state of cookies and store them in KO
-		this.components.keyboard.isActive(this.DOM.cookies.get("keyboardActive") === "true");
-		this.animate.isHidebarActive(this.DOM.cookies.get("hideNavbarActive") === "true");
-		this.isFullscreen(this.DOM.cookies.get("fullscreen") === "true");
+		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
+		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
+		this.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}
 
@@ -795,14 +803,14 @@ TouchUI.prototype.core.checkAutoLoad = function() {
 	if(
 		document.location.hash === "#touch" ||
 		document.location.href.indexOf("?touch") > 0 ||
-		this.DOM.cookies.get("active") === "true"
+		this.DOM.storage.get("active") === "true"
 	) {
 
 		return true;
 
 	} else if(
 		this.canLoadAutomatically &&
-		this.DOM.cookies.get("active") !== "false"
+		this.DOM.storage.get("active") !== "false"
 	) {
 
 		if($(window).width() < 980) {
@@ -817,47 +825,6 @@ TouchUI.prototype.core.checkAutoLoad = function() {
 
 	return false;
 
-}
-
-TouchUI.prototype.core.exception = function() {
-
-	var old = window.onerror || function() {};
-	window.onerror = function() {
-		old.call(this, arguments);
-
-		// Supress these errors
-		if(arguments[0].indexOf("CanvasRenderingContext2D") > -1) {//Failed to execute 'arc' on 'CanvasRenderingContext2D'
-			return;
-		}
-		if(arguments[0].indexOf("highlightFill") > -1) {//Cannot read property 'highlightFill'
-			return;
-		}
-
-		var text = '<p>Please help improving this plugin by <a href="https://github.com/BillyBlaze/OctoPrint-TouchUI/issues/new?body={BODY}">submiting</a> the following error together with the OctoPrint version and browser you\'re using: </p><ul><li>',
-			err = '',
-			body = '';
-
-		if(arguments.length > 4) {
-			err += "<strong>" + arguments[4].message + "</strong><br>";
-			err += "<small>" + arguments[4].stack + "</small>";
-		} else {
-			err += "<strong>" + arguments[0] + "</strong><br>";
-			err += "<small>" + arguments[1] + " @ " + arguments[2] + "</small>";
-		}
-
-		text += err + "</li></ul>";
-		body = encodeURIComponent("\n\n\n------- \n````\n" + err.replace(/(<br>)/g, "\n").replace(/(<([^>]+)>)/g, "") + "\n````");
-
-		new PNotify({
-			title: 'TouchUI: Javascript error...',
-			text:  text.replace("{BODY}", body),
-			icon: 'glyphicon glyphicon-question-sign',
-			type: 'error',
-			hide: false,
-			confirm: false
-		});
-
-	}
 }
 
 TouchUI.prototype.core.less = {
@@ -1044,7 +1011,7 @@ TouchUI.prototype.DOM.cookies = {
 		for(var i=0; i<ca.length; i++) {
 			var c = ca[i];
 			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
 		}
 		return undefined;
 	},
@@ -1067,6 +1034,64 @@ TouchUI.prototype.DOM.cookies = {
 
 		return !value;
 
+	}
+
+}
+
+TouchUI.prototype.DOM.localstorage = {
+	store: JSON.parse(window.localStorage.getItem('TouchUI')) || {},
+
+	get: function(key) {
+		return this.store[key];
+	},
+
+	set: function(key, value) {
+		this.store[key] = value;
+		window.localStorage.setItem('TouchUI', JSON.stringify(this.store))
+		return this.store[key];
+	},
+
+	toggleBoolean: function(key) {
+		var value = this.store[key] || false;
+
+		if(value === true) {
+			this.set(key, false);
+		} else {
+			this.set(key, true);
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.storage = (TouchUI.prototype.hasLocalStorage) ? TouchUI.prototype.DOM.localstorage : TouchUI.prototype.DOM.cookies;
+// TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.cookies) ? _.noop : function() {
+
+	if (this.hasLocalStorage) {
+		if (document.cookie.indexOf("TouchUI.") !== -1) {
+			console.info("TouchUI cookies migration.");
+
+			var name = "TouchUI.";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) {
+					var string = c.substring(name.length,c.length);
+					string = string.split("=");
+					var value = $.parseJSON(string[1]);
+
+					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
+					this.DOM.storage.set(string[0], value);
+
+					console.info("Removing cookie", string[0]);
+					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+				}
+			}
+		}
 	}
 
 }
