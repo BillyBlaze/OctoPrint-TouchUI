@@ -110,7 +110,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 					touchViewModel.settings.refreshCSS(false);
 				}, (hasRefresh === "fast") ? 0 : 1200);
 			}
-		})
+		});
 
 		// Reload CSS or LESS after saving our settings
 		touchViewModel.settings.hasCustom.subscribe(function(customCSS) {

@@ -17,6 +17,13 @@
 			"loginStateViewModel"
 		];
 
+		if(_.some(OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
+			TOUCHUI_REQUIRED_VIEWMODELS = TOUCHUI_REQUIRED_VIEWMODELS.concat([
+				"printerStateViewModel",
+				"gcodeViewModel"
+			]);
+		}
+
 		Touch.domReady(self);
 
 		function TouchUIViewModel (viewModels) {

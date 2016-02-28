@@ -34,6 +34,17 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 				$("#conn_link2").removeClass("offline").addClass("online");
 			}
 		});
+
+		// Disable GCodeViewer in touchscreen mode
+		if (viewModels.gcodeViewModel && viewModels.printerStateViewModel) {
+			if (touchViewModel.isTouchscreen()) {
+				console.info("TouchUI: Disabling GCodeViewer in touchscreen mode...");
+				viewModels.gcodeViewModel.enabled = false;
+				viewModels.gcodeViewModel.initialize = _.noop;
+				viewModels.gcodeViewModel._processData = _.noop;
+				$("#gcode_link2").hide();
+			}
+		}
 	}
 
 	// Check if we can show whats new in this version
