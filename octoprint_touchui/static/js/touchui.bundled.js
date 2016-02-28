@@ -1167,7 +1167,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		});
 
 		// Disable GCodeViewer in touchscreen mode
-		if (viewModels.gcodeViewModel && viewModels.printerStateViewModel) {
+		if (viewModels.gcodeViewModel) {
 			if (touchViewModel.isTouchscreen()) {
 				console.info("TouchUI: Disabling GCodeViewer in touchscreen mode...");
 				viewModels.gcodeViewModel.enabled = false;
