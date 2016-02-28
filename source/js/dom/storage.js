@@ -1,4 +1,19 @@
-TouchUI.prototype.DOM.storage = (TouchUI.prototype.hasLocalStorage) ? TouchUI.prototype.DOM.localstorage : TouchUI.prototype.DOM.cookies;
+// Try if we can set an item, KWEB3 disallow any use of localstorage,
+// but for some reason does tell us the localStorage API is avalaible.
+// So when we're getting the ExeeedStorage error, ignore and use cookies.
+if (TouchUI.prototype.hasLocalStorage) {
+	try {
+		window.localStorage.setItem("TouchUI-canWeHazStorage", true);
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
+		window.localStorage.removeItem("TouchUI-canWeHazStorage");
+	} catch(err) {
+		console.info("Failback to cookies.")
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+	}
+} else {
+	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+}
+
 // TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.cookies) ? _.noop : function() {
 
