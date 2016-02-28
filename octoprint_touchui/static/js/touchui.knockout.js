@@ -34,10 +34,8 @@
 			self.isTouch = Touch.isTouch;
 
 			self.settings = {
-				requireNewCSS: ko.observable(false),
-				refresh: ko.observable(false),
 				whatsNew: ko.observable(false)
-			};
+			}
 
 			self.onStartupComplete = function () {
 				Touch.koReady(self, allViewModels);

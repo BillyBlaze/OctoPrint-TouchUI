@@ -55,6 +55,11 @@ TouchUI.prototype.core.less = {
 					$.post(self.core.less.options.API, {
 							css: result.css
 						})
+						.done(function() {
+							if (viewModel.settings.requireNewCSS()) {
+								viewModel.settings.refreshCSS("fast");
+							}
+						})
 						.error(function(error) {
 							self.core.less.error.call(self, error);
 						});

@@ -13,14 +13,14 @@ TouchUI.prototype.core.bridge = function() {
 		isTouch: this.isTouch,
 
 		domLoading: function() {
-			if(self.isActive()) {
+			if (self.isActive()) {
 				self.scroll.beforeLoad.call(self);
 				self.DOM.init.call(self);
 			}
 		},
 
 		domReady: function() {
-			if(self.isActive()) {
+			if (self.isActive()) {
 				self.components.dropdown.init.call(self);
 				self.components.fullscreen.init.call(self);
 				self.components.keyboard.init.call(self);
@@ -37,17 +37,18 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		koReady: function(touchViewModel, viewModels) {
-			if(self.isActive()) {
+			if (self.isActive()) {
 				self.DOM.overwrite.tabbar.call(self);
-
-				self.settings = touchViewModel.settings || {};
-				self.knockout.isReady.call(self, touchViewModel, viewModels);
+			}
+			self.settings = touchViewModel.settings || {};
+			self.knockout.isReady.call(self, touchViewModel, viewModels);
+			if (self.isActive()) {
 				self.plugins.init.call(self, touchViewModel, viewModels);
 			}
 		},
 
 		toggleTouch: function() {
-			if(self.DOM.storage.toggleBoolean("active")) {
+			if (self.DOM.storage.toggleBoolean("active")) {
 				document.location.hash = "#touch";
 			} else {
 				document.location.hash = "";
@@ -56,13 +57,13 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		toggleKeyboard: function() {
-			if(self.isActive()) {
+			if (self.isActive()) {
 				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
 			}
 		},
 
 		toggleHidebar: function() {
-			if(self.isActive()) {
+			if (self.isActive()) {
 				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
 			}
 		},
@@ -72,7 +73,7 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		toggleTouchscreen: function() {
-			if(self.isActive()) {
+			if (self.isActive()) {
 				self.isTouchscreen(self.DOM.storage.toggleBoolean("touchscreenActive"));
 				document.location.reload();
 			}
@@ -87,15 +88,14 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		onTabChange: function() {
-			if(self.isActive()) {
-				if( !self.isTouch ) {
-					if(self.scroll.currentActive) {
-						self.animate.hide.call(self, "navbar");
+			if (self.isActive()) {
+				self.animate.hide.call(self, "navbar");
+
+				if(!self.isTouch && self.scroll.currentActive) {
+					self.scroll.currentActive.refresh();
+					setTimeout(function() {
 						self.scroll.currentActive.refresh();
-						setTimeout(function() {
-							self.scroll.currentActive.refresh();
-						}, 0);
-					}
+					}, 0);
 				}
 			}
 		}
