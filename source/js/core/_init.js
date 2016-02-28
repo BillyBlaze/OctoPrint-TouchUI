@@ -20,7 +20,7 @@ TouchUI.prototype.core.init = function() {
 
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.isTouch) {
+			if (!this.hasTouch) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);

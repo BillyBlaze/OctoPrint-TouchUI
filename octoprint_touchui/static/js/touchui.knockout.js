@@ -31,7 +31,7 @@
 			self.isFullscreen = Touch.isFullscreen;
 			self.hasFullscreen = Touch.hasFullscreen;
 			self.isTouchscreen = Touch.isTouchscreen;
-			self.isTouch = Touch.isTouch;
+			self.hasTouch = Touch.hasTouch;
 
 			self.settings = {
 				whatsNew: ko.observable(false)

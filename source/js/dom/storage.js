@@ -7,7 +7,7 @@ if (TouchUI.prototype.hasLocalStorage) {
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
 		window.localStorage.removeItem("TouchUI-canWeHazStorage");
 	} catch(err) {
-		console.info("Failback to cookies.")
+		console.info("Localstorage defined but failback to cookies due to errors.");
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 	}
 } else {
@@ -15,7 +15,7 @@ if (TouchUI.prototype.hasLocalStorage) {
 }
 
 // TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.cookies) ? _.noop : function() {
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
 
 	if (this.hasLocalStorage) {
 		if (document.cookie.indexOf("TouchUI.") !== -1) {
@@ -41,4 +41,4 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 		}
 	}
 
-}
+} : _.noop;

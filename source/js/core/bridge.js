@@ -10,7 +10,7 @@ TouchUI.prototype.core.bridge = function() {
 		isFullscreen: this.isFullscreen,
 		hasFullscreen: this.hasFullscreen,
 		isTouchscreen: this.isTouchscreen,
-		isTouch: this.isTouch,
+		hasTouch: this.hasTouch,
 
 		domLoading: function() {
 			if (self.isActive()) {
@@ -91,7 +91,7 @@ TouchUI.prototype.core.bridge = function() {
 			if (self.isActive()) {
 				self.animate.hide.call(self, "navbar");
 
-				if(!self.isTouch && self.scroll.currentActive) {
+				if(!self.hasTouch && self.scroll.currentActive) {
 					self.scroll.currentActive.refresh();
 					setTimeout(function() {
 						self.scroll.currentActive.refresh();

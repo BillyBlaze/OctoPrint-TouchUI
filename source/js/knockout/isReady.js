@@ -74,7 +74,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 				}
 
 				// Refresh scroll view when login state changed
-				if( !self.isTouch ) {
+				if( !self.hasTouch ) {
 					setTimeout(function() {
 						self.scroll.currentActive.refresh();
 					}, 0);

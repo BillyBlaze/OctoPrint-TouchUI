@@ -7,14 +7,14 @@ TouchUI.prototype = {
 	id: "touch",
 	version: 0,
 
-	hasLocalStorage: ('localStorage' in window),
-
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
-	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
-
-	isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
 	isTouchscreen: ko.observable(false),
+
+	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
+	hasLocalStorage: ('localStorage' in window),
+	hasTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
+
 	canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
 
 	hiddenClass: "hidden_touch",

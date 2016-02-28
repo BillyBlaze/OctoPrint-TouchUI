@@ -7,7 +7,7 @@ TouchUI.prototype.animate.hide = function(what) {
 			var navbar = $("#navbar"),
 				navbarHeight = parseFloat(navbar.height());
 
-			if( this.isTouch ) {
+			if( this.hasTouch ) {
 				// Hide navigation bar on mobile
 				window.scrollTo(0,1);
 

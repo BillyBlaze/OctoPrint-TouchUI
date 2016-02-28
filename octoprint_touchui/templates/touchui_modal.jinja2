@@ -21,7 +21,7 @@
 				<button class="btn btn-primary" data-bind="click: toggleFullscreen">{{ _('Toggle fullscreen') }}</button>
 				<span class="label" data-bind="text: isFullscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isFullscreen() ? 'label-success' : 'label-danger'"></span>
 			</div>
-			<div class="btn-box" data-bind="visible: !isTouch">
+			<div class="btn-box" data-bind="visible: !hasTouch">
 				<button class="btn btn-primary" data-bind="click: toggleTouchscreen">{{ _('Toggle touchscreen mode') }}</button>
 				<span class="label" data-bind="text: isTouchscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isTouchscreen() ? 'label-success' : 'label-danger'"></span>
 			</div>

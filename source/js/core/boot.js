@@ -4,21 +4,21 @@ TouchUI.prototype.core.boot = function() {
 	if(
 		document.location.hash === "#touch" ||
 		document.location.href.indexOf("?touch") > 0 ||
-		this.DOM.storage.get("active") === "true"
+		this.DOM.storage.get("active")
 	) {
 
 		return true;
 
 	} else if(
 		this.canLoadAutomatically &&
-		this.DOM.storage.get("active") !== "false"
+		this.DOM.storage.get("active") !== false
 	) {
 
 		if($(window).width() < 980) {
 			return true;
 		}
 
-		if(this.isTouch) {
+		if(this.hasTouch) {
 			return true;
 		}
 

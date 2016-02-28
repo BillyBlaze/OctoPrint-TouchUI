@@ -1,7 +1,7 @@
 TouchUI.prototype.scroll.init = function() {
 	var self = this;
 
-	if ( this.isTouch ) {
+	if ( this.hasTouch ) {
 		var width = $(window).width();
 
 		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)

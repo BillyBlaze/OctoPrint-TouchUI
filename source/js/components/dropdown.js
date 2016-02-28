@@ -34,13 +34,13 @@ TouchUI.prototype.components.dropdown = {
 				// Remove all other active dropdowns
 				$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
 
-				if ( !self.isTouch ) {
+				if ( !self.hasTouch ) {
 					self.scroll.iScrolls.terminal.disable();
 				}
 
 				$(document).off("click"+namespace).on("click"+namespace, function(eve) {
 					// Check if we scrolled (touch devices wont trigger this click event after scrolling so assume we didn't move)
-					var moved = ( !self.isTouch ) ? self.scroll.currentActive.moved : false,
+					var moved = ( !self.hasTouch ) ? self.scroll.currentActive.moved : false,
 						$target = $(eve.target);
 
 					if (
@@ -54,7 +54,7 @@ TouchUI.prototype.components.dropdown = {
 						$(document).off(eve);
 						$dropdownContainer.removeClass('open');
 
-						if ( !self.isTouch ) {
+						if ( !self.hasTouch ) {
 							$('.octoprint-container').css("min-height", 0);
 							self.scroll.currentActive.refresh();
 							self.scroll.iScrolls.terminal.enable();
@@ -76,7 +76,7 @@ TouchUI.prototype.components.dropdown = {
 		var self = this;
 
 		// Touch devices can reach the dropdown by CSS, only if we're using iScroll
-		if ( !self.isTouch ) {
+		if ( !self.hasTouch ) {
 			// Get active container
 			var $container = ($dropdownContainer.parents('.modal').length === 0 ) ? $('.octoprint-container') : $dropdownContainer.parents('.modal .modal-body');
 

@@ -7,14 +7,14 @@ TouchUI.prototype = {
 	id: "touch",
 	version: 0,
 
-	hasLocalStorage: ('localStorage' in window),
-
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
-	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
-
-	isTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
 	isTouchscreen: ko.observable(false),
+
+	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
+	hasLocalStorage: ('localStorage' in window),
+	hasTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
+
 	canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
 
 	hiddenClass: "hidden_touch",
@@ -63,7 +63,7 @@ TouchUI.prototype.animate.hide = function(what) {
 			var navbar = $("#navbar"),
 				navbarHeight = parseFloat(navbar.height());
 
-			if( this.isTouch ) {
+			if( this.hasTouch ) {
 				// Hide navigation bar on mobile
 				window.scrollTo(0,1);
 
@@ -131,13 +131,13 @@ TouchUI.prototype.components.dropdown = {
 				// Remove all other active dropdowns
 				$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
 
-				if ( !self.isTouch ) {
+				if ( !self.hasTouch ) {
 					self.scroll.iScrolls.terminal.disable();
 				}
 
 				$(document).off("click"+namespace).on("click"+namespace, function(eve) {
 					// Check if we scrolled (touch devices wont trigger this click event after scrolling so assume we didn't move)
-					var moved = ( !self.isTouch ) ? self.scroll.currentActive.moved : false,
+					var moved = ( !self.hasTouch ) ? self.scroll.currentActive.moved : false,
 						$target = $(eve.target);
 
 					if (
@@ -151,7 +151,7 @@ TouchUI.prototype.components.dropdown = {
 						$(document).off(eve);
 						$dropdownContainer.removeClass('open');
 
-						if ( !self.isTouch ) {
+						if ( !self.hasTouch ) {
 							$('.octoprint-container').css("min-height", 0);
 							self.scroll.currentActive.refresh();
 							self.scroll.iScrolls.terminal.enable();
@@ -173,7 +173,7 @@ TouchUI.prototype.components.dropdown = {
 		var self = this;
 
 		// Touch devices can reach the dropdown by CSS, only if we're using iScroll
-		if ( !self.isTouch ) {
+		if ( !self.hasTouch ) {
 			// Get active container
 			var $container = ($dropdownContainer.parents('.modal').length === 0 ) ? $('.octoprint-container') : $dropdownContainer.parents('.modal .modal-body');
 
@@ -370,7 +370,7 @@ TouchUI.prototype.components.keyboard = {
 
 			} else {
 
-				if(!self.isTouch) {
+				if(!self.hasTouch) {
 
 					// Force iScroll to stop following the mouse (bug)
 					self.scroll.currentActive._end(e);
@@ -470,7 +470,7 @@ TouchUI.prototype.components.modal = {
 							$('[href="'+href+'"]').click();
 							$settingsLabel.text($('[href="'+href+'"]').text());
 
-							if( !self.isTouch ) {
+							if( !self.hasTouch ) {
 								setTimeout(function() {
 									self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
 								}, 0);
@@ -603,7 +603,7 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		this.isTouch = false;
+		this.hasTouch = false;
 		this.isTouchscreen(true);
 
 		if (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) {
@@ -652,7 +652,7 @@ TouchUI.prototype.core.init = function() {
 
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.isTouch) {
+			if (!this.hasTouch) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -697,21 +697,21 @@ TouchUI.prototype.core.boot = function() {
 	if(
 		document.location.hash === "#touch" ||
 		document.location.href.indexOf("?touch") > 0 ||
-		this.DOM.storage.get("active") === "true"
+		this.DOM.storage.get("active")
 	) {
 
 		return true;
 
 	} else if(
 		this.canLoadAutomatically &&
-		this.DOM.storage.get("active") !== "false"
+		this.DOM.storage.get("active") !== false
 	) {
 
 		if($(window).width() < 980) {
 			return true;
 		}
 
-		if(this.isTouch) {
+		if(this.hasTouch) {
 			return true;
 		}
 
@@ -733,7 +733,7 @@ TouchUI.prototype.core.bridge = function() {
 		isFullscreen: this.isFullscreen,
 		hasFullscreen: this.hasFullscreen,
 		isTouchscreen: this.isTouchscreen,
-		isTouch: this.isTouch,
+		hasTouch: this.hasTouch,
 
 		domLoading: function() {
 			if (self.isActive()) {
@@ -814,7 +814,7 @@ TouchUI.prototype.core.bridge = function() {
 			if (self.isActive()) {
 				self.animate.hide.call(self, "navbar");
 
-				if(!self.isTouch && self.scroll.currentActive) {
+				if(!self.hasTouch && self.scroll.currentActive) {
 					self.scroll.currentActive.refresh();
 					setTimeout(function() {
 						self.scroll.currentActive.refresh();
@@ -1080,7 +1080,7 @@ if (TouchUI.prototype.hasLocalStorage) {
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
 		window.localStorage.removeItem("TouchUI-canWeHazStorage");
 	} catch(err) {
-		console.info("Failback to cookies.")
+		console.info("Localstorage defined but failback to cookies due to errors.");
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 	}
 } else {
@@ -1088,7 +1088,7 @@ if (TouchUI.prototype.hasLocalStorage) {
 }
 
 // TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.cookies) ? _.noop : function() {
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
 
 	if (this.hasLocalStorage) {
 		if (document.cookie.indexOf("TouchUI.") !== -1) {
@@ -1114,7 +1114,7 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 		}
 	}
 
-}
+} : _.noop;
 
 TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	var self = this;
@@ -1133,7 +1133,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		});
 
 		// Update scroll area if new items arrived
-		if( !self.isTouch ) {
+		if( !self.hasTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 				setTimeout(function() {
 					self.scroll.iScrolls.body.refresh();
@@ -1245,7 +1245,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 				}
 
 				// Refresh scroll view when login state changed
-				if( !self.isTouch ) {
+				if( !self.hasTouch ) {
 					setTimeout(function() {
 						self.scroll.currentActive.refresh();
 					}, 0);
@@ -1368,7 +1368,7 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 TouchUI.prototype.scroll.beforeLoad = function() {
 
 	// Manipulate DOM for iScroll before knockout binding kicks in
-	if (!this.isTouch) {
+	if (!this.hasTouch) {
 		$('<div id="scroll"></div>').insertBefore('.page-container');
 		$('.page-container').appendTo("#scroll");
 	}
@@ -1378,7 +1378,7 @@ TouchUI.prototype.scroll.beforeLoad = function() {
 TouchUI.prototype.scroll.init = function() {
 	var self = this;
 
-	if ( this.isTouch ) {
+	if ( this.hasTouch ) {
 		var width = $(window).width();
 
 		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
@@ -1616,7 +1616,7 @@ TouchUI.prototype.scroll.overlay = {
 TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 	var self = this;
 
-	if ( !this.isTouch ) {
+	if ( !this.hasTouch ) {
 
 		// Enforce no scroll jumping
 		$("#scroll").on("scroll", function() {
