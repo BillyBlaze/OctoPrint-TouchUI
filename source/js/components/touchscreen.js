@@ -5,7 +5,7 @@ TouchUI.prototype.components.touchscreen = {
 		this.hasTouch = false;
 		this.isTouchscreen(true);
 
-		if (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) {
+		if (this.isEpiphanyOrKweb) {
 			this.hasFullscreen(false);
 		}
 

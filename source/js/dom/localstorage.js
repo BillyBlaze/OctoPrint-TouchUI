@@ -1,5 +1,5 @@
 TouchUI.prototype.DOM.localstorage = {
-	store: JSON.parse(window.localStorage.getItem('TouchUI')) || {},
+	store: JSON.parse(localStorage["TouchUI"] || "{}"),
 
 	get: function (key) {
 		return this.store[key];
@@ -7,7 +7,7 @@ TouchUI.prototype.DOM.localstorage = {
 
 	set: function (key, value) {
 		this.store[key] = value;
-		window.localStorage.setItem('TouchUI', JSON.stringify(this.store))
+		localStorage["TouchUI"] = JSON.stringify(this.store);
 		return this.store[key];
 	},
 

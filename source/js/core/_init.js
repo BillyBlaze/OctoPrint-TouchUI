@@ -43,10 +43,8 @@ TouchUI.prototype.core.init = function() {
 			}
 		}
 
-		if ( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
-			this.DOM.storage.get("touchscreenActive")
-		) {
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if (this.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 

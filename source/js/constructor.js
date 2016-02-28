@@ -10,6 +10,7 @@ TouchUI.prototype = {
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
 	isTouchscreen: ko.observable(false),
+	isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
 
 	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 	hasLocalStorage: ('localStorage' in window),

@@ -1,12 +1,27 @@
-// Try if we can set an item, KWEB3 disallow any use of localstorage,
-// but for some reason does tell us the localStorage API is avalaible.
-// So when we're getting the ExeeedStorage error, ignore and use cookies.
+// Since I messed up by releasing start_kweb3.xinit without disabling private
+// mode, we now need to check if we can store anything at all in localstorage
+// the missing -P will prevent any localstorage
 if (TouchUI.prototype.hasLocalStorage) {
 	try {
-		window.localStorage.setItem("TouchUI-canWeHazStorage", true);
+		localStorage["TouchUIcanWeHazStorage"] = "true";
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
-		window.localStorage.removeItem("TouchUI-canWeHazStorage");
+		delete localStorage["TouchUIcanWeHazStorage"];
 	} catch(err) {
+
+		// TODO: remove this is future
+		if(TouchUI.prototype.isEpiphanyOrKweb) {
+			$(function() {
+				new PNotify({
+					type: 'error',
+					title: "Private Mode detection:",
+					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
+						"and add the parameter 'P' after the dash. \n\n" + 
+						"For more information see the v0.3.3 release notes.",
+					hide: false
+				});
+			});
+		}
+
 		console.info("Localstorage defined but failback to cookies due to errors.");
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 	}
@@ -14,7 +29,6 @@ if (TouchUI.prototype.hasLocalStorage) {
 	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 }
 
-// TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
 
 	if (this.hasLocalStorage) {

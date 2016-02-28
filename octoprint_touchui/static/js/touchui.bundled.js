@@ -10,6 +10,7 @@ TouchUI.prototype = {
 	isActive: ko.observable(false),
 	isFullscreen: ko.observable(false),
 	isTouchscreen: ko.observable(false),
+	isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
 
 	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 	hasLocalStorage: ('localStorage' in window),
@@ -606,7 +607,7 @@ TouchUI.prototype.components.touchscreen = {
 		this.hasTouch = false;
 		this.isTouchscreen(true);
 
-		if (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) {
+		if (this.isEpiphanyOrKweb) {
 			this.hasFullscreen(false);
 		}
 
@@ -675,10 +676,8 @@ TouchUI.prototype.core.init = function() {
 			}
 		}
 
-		if ( // Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-			(window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1) ||
-			this.DOM.storage.get("touchscreenActive")
-		) {
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if (this.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 
@@ -1044,7 +1043,7 @@ TouchUI.prototype.DOM.cookies = {
 }
 
 TouchUI.prototype.DOM.localstorage = {
-	store: JSON.parse(window.localStorage.getItem('TouchUI')) || {},
+	store: JSON.parse(localStorage["TouchUI"] || "{}"),
 
 	get: function (key) {
 		return this.store[key];
@@ -1052,7 +1051,7 @@ TouchUI.prototype.DOM.localstorage = {
 
 	set: function (key, value) {
 		this.store[key] = value;
-		window.localStorage.setItem('TouchUI', JSON.stringify(this.store))
+		localStorage["TouchUI"] = JSON.stringify(this.store);
 		return this.store[key];
 	},
 
@@ -1071,15 +1070,29 @@ TouchUI.prototype.DOM.localstorage = {
 
 }
 
-// Try if we can set an item, KWEB3 disallow any use of localstorage,
-// but for some reason does tell us the localStorage API is avalaible.
-// So when we're getting the ExeeedStorage error, ignore and use cookies.
+// Since I messed up by releasing start_kweb3.xinit without disabling private
+// mode, we now need to check if we can store anything at all in localstorage
+// the missing -P will prevent any localstorage
 if (TouchUI.prototype.hasLocalStorage) {
 	try {
-		window.localStorage.setItem("TouchUI-canWeHazStorage", true);
+		localStorage["TouchUIcanWeHazStorage"] = "true";
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
-		window.localStorage.removeItem("TouchUI-canWeHazStorage");
+		delete localStorage["TouchUIcanWeHazStorage"];
 	} catch(err) {
+
+		// TODO: remove this is future
+		if(TouchUI.prototype.isEpiphanyOrKweb) {
+			$(function() {
+				new PNotify({
+					type: 'error',
+					title: "Private Mode detection:",
+					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
+						"and add parameter 'P' after the dash. \n\nFor more information see the v0.3.3 release notes.",
+					hide: false
+				});
+			});
+		}
+
 		console.info("Localstorage defined but failback to cookies due to errors.");
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 	}
@@ -1087,7 +1100,6 @@ if (TouchUI.prototype.hasLocalStorage) {
 	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 }
 
-// TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
 TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
 
 	if (this.hasLocalStorage) {
