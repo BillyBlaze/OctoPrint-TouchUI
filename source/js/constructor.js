@@ -1,5 +1,6 @@
 var TouchUI = function() {
 	this.core.init.call(this);
+	this.knockout.viewModel.call(this);
 	this.knockout.bindings.call(this);
 	return this.core.bridge.call(this);
 };

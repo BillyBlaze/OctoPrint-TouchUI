@@ -1,5 +1,6 @@
 var TouchUI = function() {
 	this.core.init.call(this);
+	this.knockout.viewModel.call(this);
 	this.knockout.bindings.call(this);
 	return this.core.bridge.call(this);
 };
@@ -727,9 +728,9 @@ TouchUI.prototype.core.boot = function() {
 
 TouchUI.prototype.core.bridge = function() {
 	var self = this;
-	var allViewModels = {};
 
 	this.core.bridge = {
+		allViewModels: {},
 
 		domLoading: function() {
 			if (self.isActive()) {
@@ -752,41 +753,9 @@ TouchUI.prototype.core.bridge = function() {
 		},
 
 		koStartup: function TouchUIViewModel(viewModels) {
-			allViewModels = _.object(TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
-			self.knockout.isLoading.call(self, allViewModels);
+			self.core.bridge.allViewModels = _.object(TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
+			self.knockout.isLoading.call(self, self.core.bridge.allViewModels);
 			return self;
-		}
-	}
-
-	// Subscribe to OctoPrint events
-	self.onStartupComplete = function () {
-		if (self.isActive()) {
-			self.DOM.overwrite.tabbar.call(self);
-		}
-		self.knockout.isReady.call(self, allViewModels);
-		if (self.isActive()) {
-			self.plugins.init.call(self, allViewModels);
-		}
-	}
-
-	self.onBeforeBinding = function() {
-		ko.mapping.fromJS(allViewModels.settingsViewModel.settings.plugins.touchui, {}, self.settings);
-	}
-
-	self.onSettingsBeforeSave = function() {
-		self.core.less.save.call(self);
-	}
-
-	self.onTabChange = function() {
-		if (self.isActive()) {
-			self.animate.hide.call(self, "navbar");
-
-			if(!self.settings.hasTouch && self.scroll.currentActive) {
-				self.scroll.currentActive.refresh();
-				setTimeout(function() {
-					self.scroll.currentActive.refresh();
-				}, 0);
-			}
 		}
 	}
 
@@ -1347,6 +1316,43 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}, 100);
 		}
 	});
+
+}
+
+TouchUI.prototype.knockout.viewModel = function() {
+	var self = this;
+
+	// Subscribe to OctoPrint events
+	self.onStartupComplete = function () {
+		if (self.isActive()) {
+			self.DOM.overwrite.tabbar.call(self);
+		}
+		self.knockout.isReady.call(self, self.core.bridge.allViewModels);
+		if (self.isActive()) {
+			self.plugins.init.call(self, self.core.bridge.allViewModels);
+		}
+	}
+
+	self.onBeforeBinding = function() {
+		ko.mapping.fromJS(self.core.bridge.allViewModels.settingsViewModel.settings.plugins.touchui, {}, self.settings);
+	}
+
+	self.onSettingsBeforeSave = function() {
+		self.core.less.save.call(self);
+	}
+
+	self.onTabChange = function() {
+		if (self.isActive()) {
+			self.animate.hide.call(self, "navbar");
+
+			if(!self.settings.hasTouch && self.scroll.currentActive) {
+				self.scroll.currentActive.refresh();
+				setTimeout(function() {
+					self.scroll.currentActive.refresh();
+				}, 0);
+			}
+		}
+	}
 
 }
 
