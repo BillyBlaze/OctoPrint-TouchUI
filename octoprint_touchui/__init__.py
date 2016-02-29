@@ -169,7 +169,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			js=[
 				"js/touchui.libraries.js",
 				"js/touchui.bundled.js",
-				"js/touchui.knockout.js"
+				"js/touchui.bootstrap.js"
 			]
 		)
 

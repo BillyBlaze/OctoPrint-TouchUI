@@ -3,14 +3,16 @@ var less = require('gulp-less');
 var del = require('del');
 var cssimport = require("gulp-cssimport");
 var rename = require("gulp-rename");
+var uglify = require("gulp-uglify");
+var gulpif = require("gulp-if");
 var strip = require('gulp-strip-comments');
 var trimlines = require('gulp-trimlines');
 var removeEmptyLines = require('gulp-remove-empty-lines');
 var concat = require('gulp-concat');
 
-gulp.task('default', ['lessc', 'clean:hash', 'concat-less', 'concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
-gulp.task('less', ['lessc', 'clean:hash', 'concat-less']);
-gulp.task('js', ['concat-app-js', 'concat-libs-js', 'concat-knockout-js']);
+gulp.task('default', ['lessc', 'clean:hash', 'less:concat', 'js:concat:app', 'js:concat:libs', 'js:concat:bootstrap']);
+gulp.task('less', ['lessc', 'clean:hash', 'less:concat']);
+gulp.task('js', ['js:concat:app', 'js:concat:libs', 'js:concat:bootstrap']);
 
 gulp.task('lessc', function () {
 	return gulp.src('source/less/touchui.less')
@@ -18,7 +20,7 @@ gulp.task('lessc', function () {
 		.pipe(gulp.dest('octoprint_touchui/static/css'));
 });
 
-gulp.task("concat-less", function() {
+gulp.task("less:concat", function() {
 	return gulp.src('source/less/touchui.less')
 		.pipe(cssimport({
 			extensions: ["less"],
@@ -36,33 +38,36 @@ gulp.task('clean:hash', function () {
 	]);
 });
 
-gulp.task('concat-libs-js', function () {
+gulp.task('js:concat:libs', function () {
 	return gulp.src([
 			'source/vendors/keyboard/dist/js/jquery.keyboard.min.js',
 			'source/vendors/jquery-fullscreen/jquery.fullscreen-min.js',
 			'source/vendors/iscroll/build/iscroll.js',
 			'source/vendors/tinycolorpicker/lib/jquery.tinycolorpicker.min.js'
 		])
+		.pipe(gulpif("**/iscroll.js", uglify()))
 		.pipe(concat('touchui.libraries.js'))
 		.pipe(gulp.dest('octoprint_touchui/static/js/'));
 });
 
-gulp.task('concat-app-js', function () {
+gulp.task('js:concat:app', function () {
 	return gulp.src([
-			'!source/js/knockout.js',
+			'!source/js/bootstrap.js',
 			'source/js/constructor.js',
 			'source/js/**/*.js',
 			'source/js/**/**/*.js'
 		])
 		.pipe(concat('touchui.bundled.js'))
+		.pipe(uglify())
 		.pipe(gulp.dest('octoprint_touchui/static/js/'));
 });
 
-gulp.task('concat-knockout-js', function () {
+gulp.task('js:concat:bootstrap', function () {
 	return gulp.src([
-			'source/js/knockout.js'
+			'source/js/bootstrap.js'
 		])
-		.pipe(rename("touchui.knockout.js"))
+		.pipe(rename("touchui.bootstrap.js"))
+		.pipe(uglify())
 		.pipe(gulp.dest('octoprint_touchui/static/js/'));
 });
 
@@ -77,10 +82,10 @@ gulp.task('watch', function () {
 		[
 			'lessc',
 			'clean:hash',
-			'concat-less',
-			'concat-app-js',
-			'concat-libs-js',
-			'concat-knockout-js'
+			'less:concat',
+			'js:concat:app',
+			'js:concat:libs',
+			'js:concat:bootstrap'
 		]
 	);
 });

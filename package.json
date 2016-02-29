@@ -12,11 +12,13 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-cssimport": "^2.1.1",
+    "gulp-if": "^2.0.0",
     "gulp-less": "^3.0.3",
     "gulp-remove-empty-lines": "0.0.2",
     "gulp-rename": "^1.2.2",
     "gulp-strip-comments": "^1.1.1",
-    "gulp-trimlines": "^1.0.0"
+    "gulp-trimlines": "^1.0.0",
+    "gulp-uglify": "^1.5.3"
   },
   "optionalDependencies": {},
   "engines": {
