@@ -1,7 +1,7 @@
 // Since I messed up by releasing start_kweb3.xinit without disabling private
 // mode, we now need to check if we can store anything at all in localstorage
 // the missing -P will prevent any localstorage
-if (TouchUI.prototype.hasLocalStorage) {
+if (TouchUI.prototype.settings.hasLocalStorage) {
 	try {
 		localStorage["TouchUIcanWeHazStorage"] = "true";
 		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
@@ -9,13 +9,13 @@ if (TouchUI.prototype.hasLocalStorage) {
 	} catch(err) {
 
 		// TODO: remove this is future
-		if(TouchUI.prototype.isEpiphanyOrKweb) {
+		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
 			$(function() {
 				new PNotify({
 					type: 'error',
 					title: "Private Mode detection:",
 					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
-						"and add the parameter 'P' after the dash. \n\n" + 
+						"and add the parameter 'P' after the dash. \n\n" +
 						"For more information see the v0.3.3 release notes.",
 					hide: false
 				});
@@ -31,7 +31,7 @@ if (TouchUI.prototype.hasLocalStorage) {
 
 TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
 
-	if (this.hasLocalStorage) {
+	if (this.settings.hasLocalStorage) {
 		if (document.cookie.indexOf("TouchUI.") !== -1) {
 			console.info("TouchUI cookies migration.");
 
