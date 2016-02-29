@@ -4,6 +4,7 @@ var del = require('del');
 var cssimport = require("gulp-cssimport");
 var rename = require("gulp-rename");
 var uglify = require("gulp-uglify");
+var through = require("through2");
 var gulpif = require("gulp-if");
 var strip = require('gulp-strip-comments');
 var trimlines = require('gulp-trimlines');
@@ -29,6 +30,14 @@ gulp.task("less:concat", function() {
 		.pipe(strip())
 		.pipe(rename("touchui.bundled.less"))
 		.pipe(trimlines())
+		.pipe(through.obj(function(file, enc, cb) {
+			var contents = file.contents.toString();
+			contents = contents.replace(/\n\s*\n/g, '\n');
+
+			file.contents = new Buffer(contents);
+
+			cb(null, file);
+		}))
 		.pipe(gulp.dest('octoprint_touchui/static/less/'));
 });
 
@@ -58,7 +67,7 @@ gulp.task('js:concat:app', function () {
 			'source/js/**/**/*.js'
 		])
 		.pipe(concat('touchui.bundled.js'))
-		.pipe(uglify())
+		//.pipe(uglify())
 		.pipe(gulp.dest('octoprint_touchui/static/js/'));
 });
 

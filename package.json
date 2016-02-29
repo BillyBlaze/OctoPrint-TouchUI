@@ -18,7 +18,8 @@
     "gulp-rename": "^1.2.2",
     "gulp-strip-comments": "^1.1.1",
     "gulp-trimlines": "^1.0.0",
-    "gulp-uglify": "^1.5.3"
+    "gulp-uglify": "^1.5.3",
+    "through2": "^2.0.1"
   },
   "optionalDependencies": {},
   "engines": {
