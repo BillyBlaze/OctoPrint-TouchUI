@@ -1,16 +1,8 @@
 TouchUI.prototype.core.bridge = function() {
 	var self = this;
+	var allViewModels = {};
 
-	return {
-		_instance: this,
-
-		isActive: this.isActive,
-		isKeyboardActive: this.components.keyboard.isActive,
-		isHidebarActive: this.animate.isHidebarActive,
-		isFullscreen: this.isFullscreen,
-		hasFullscreen: this.hasFullscreen,
-		isTouchscreen: this.isTouchscreen,
-		hasTouch: this.hasTouch,
+	this.core.bridge = {
 
 		domLoading: function() {
 			if (self.isActive()) {
@@ -32,74 +24,44 @@ TouchUI.prototype.core.bridge = function() {
 			}
 		},
 
-		koLoading: function(touchViewModel, viewModels) {
-			self.knockout.isLoading.call(self, touchViewModel, viewModels);
-		},
+		koStartup: function TouchUIViewModel(viewModels) {
+			allViewModels = _.object(TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
+			self.knockout.isLoading.call(self, allViewModels);
+			return self;
+		}
+	}
 
-		koReady: function(touchViewModel, viewModels) {
-			if (self.isActive()) {
-				self.DOM.overwrite.tabbar.call(self);
-			}
-			self.settings = touchViewModel.settings || {};
-			self.knockout.isReady.call(self, touchViewModel, viewModels);
-			if (self.isActive()) {
-				self.plugins.init.call(self, touchViewModel, viewModels);
-			}
-		},
+	// Subscribe to OctoPrint events
+	self.onStartupComplete = function () {
+		if (self.isActive()) {
+			self.DOM.overwrite.tabbar.call(self);
+		}
+		self.knockout.isReady.call(self, allViewModels);
+		if (self.isActive()) {
+			self.plugins.init.call(self, allViewModels);
+		}
+	}
 
-		toggleTouch: function() {
-			if (self.DOM.storage.toggleBoolean("active")) {
-				document.location.hash = "#touch";
-			} else {
-				document.location.hash = "";
-			}
-			document.location.reload();
-		},
+	self.onBeforeBinding = function() {
+		ko.mapping.fromJS(allViewModels.settingsViewModel.settings.plugins.touchui, {}, self.settings);
+	}
 
-		toggleKeyboard: function() {
-			if (self.isActive()) {
-				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
-			}
-		},
+	self.onSettingsBeforeSave = function() {
+		self.core.less.save.call(self);
+	}
 
-		toggleHidebar: function() {
-			if (self.isActive()) {
-				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
-			}
-		},
+	self.onTabChange = function() {
+		if (self.isActive()) {
+			self.animate.hide.call(self, "navbar");
 
-		toggleFullscreen: function() {
-			$(document).toggleFullScreen();
-		},
-
-		toggleTouchscreen: function() {
-			if (self.isActive()) {
-				self.isTouchscreen(self.DOM.storage.toggleBoolean("touchscreenActive"));
-				document.location.reload();
-			}
-		},
-
-		show: function() {
-			self.touchuiModal.modal("show");
-		},
-
-		saveLESS: function(touchViewModel) {
-			self.core.less.save.call(self, touchViewModel);
-		},
-
-		onTabChange: function() {
-			if (self.isActive()) {
-				self.animate.hide.call(self, "navbar");
-
-				if(!self.hasTouch && self.scroll.currentActive) {
+			if(!self.settings.hasTouch && self.scroll.currentActive) {
+				self.scroll.currentActive.refresh();
+				setTimeout(function() {
 					self.scroll.currentActive.refresh();
-					setTimeout(function() {
-						self.scroll.currentActive.refresh();
-					}, 0);
-				}
+				}, 0);
 			}
 		}
+	}
 
-	};
-
+	return this.core.bridge;
 }

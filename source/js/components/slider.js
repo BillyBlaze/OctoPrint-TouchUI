@@ -15,11 +15,14 @@ TouchUI.prototype.components.slider = {
 				// Wait untill next DOM bindings are executed
 				setTimeout(function() {
 					var $button = $(element).next('button');
+					var id = _.uniqueId("ui-inp");
 
 					$button.appendTo(div);
 					$element.appendTo(div);
 
-					var lbl = $('<label for="ui-inp-" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
+					$(div).find('input').attr("id", id);
+
+					var lbl = $('<label for="' + id + '" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
 					lbl.appendTo('.octoprint-container')
 					$element.attr("style", "padding-left:" + (lbl.width() + 15) + "px");
 					lbl.appendTo(div);

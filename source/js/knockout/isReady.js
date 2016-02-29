@@ -1,4 +1,4 @@
-TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
+TouchUI.prototype.knockout.isReady = function (viewModels) {
 	var self = this;
 
 	if(self.isActive()) {
@@ -12,7 +12,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		$('.slimScrollDiv').slimScroll({destroy: true});
 
 		// Remove active keyboard when disabled
-		touchViewModel.isKeyboardActive.subscribe(function(isActive) {
+		self.components.keyboard.isActive.subscribe(function(isActive) {
 			if( !isActive ) {
 				$(".ui-keyboard-input").each(function(ind, elm) {
 					$(elm).data("keyboard").destroy();
@@ -74,7 +74,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 				}
 
 				// Refresh scroll view when login state changed
-				if( !self.hasTouch ) {
+				if( !self.settings.hasTouch ) {
 					setTimeout(function() {
 						self.scroll.currentActive.refresh();
 					}, 0);
@@ -101,19 +101,19 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		}
 
 		// Reload CSS if needed
-		touchViewModel.settings.refreshCSS.subscribe(function(hasRefresh) {
+		self.settings.refreshCSS.subscribe(function(hasRefresh) {
 			if (hasRefresh || hasRefresh === "fast") {
 				// Wait 2 seconds, so we're not too early
 				setTimeout(function() {
 					var $css = $("#touchui-css");
 					$css.attr("href", refreshUrl($css.attr("href")));
-					touchViewModel.settings.refreshCSS(false);
+					self.settings.refreshCSS(false);
 				}, (hasRefresh === "fast") ? 0 : 1200);
 			}
 		});
 
 		// Reload CSS or LESS after saving our settings
-		touchViewModel.settings.hasCustom.subscribe(function(customCSS) {
+		self.settings.hasCustom.subscribe(function(customCSS) {
 			if(customCSS !== "") {
 				var $css = $("#touchui-css");
 				var href = $css.attr("href");
@@ -131,12 +131,12 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// Check if we need to update an old LESS file with a new LESS one
 	var requireNewCSS = ko.computed(function() {
-		return touchViewModel.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
+		return self.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
 	});
 	requireNewCSS.subscribe(function(requireNewCSS) {
 		if(requireNewCSS) {
 			setTimeout(function() {
-				self.core.less.save.call(self, touchViewModel);
+				self.core.less.save.call(self, self);
 			}, 100);
 		}
 	});

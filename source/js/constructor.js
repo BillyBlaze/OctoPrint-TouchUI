@@ -1,28 +1,30 @@
 var TouchUI = function() {
 	this.core.init.call(this);
+	this.knockout.bindings.call(this);
 	return this.core.bridge.call(this);
 };
 
 TouchUI.prototype = {
-	id: "touch",
-	version: 0,
-
-	isActive: ko.observable(false),
-	isFullscreen: ko.observable(false),
-	isTouchscreen: ko.observable(false),
-	isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
-
-	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
-	hasLocalStorage: ('localStorage' in window),
-	hasTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
-
-	canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
-
-	hiddenClass: "hidden_touch",
-	visibleClass: "visible_touch",
-
 	constructor: TouchUI,
-	touchuiModal: $('#touchui_settings_dialog'),
+	isActive: ko.observable(false),
+
+	settings: {
+		id: "touch",
+		version: 0,
+
+		isFullscreen: ko.observable(false),
+		isTouchscreen: ko.observable(false),
+		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
+
+		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
+		hasLocalStorage: ('localStorage' in window),
+		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
+
+		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
+		touchuiModal: $('#touchui_settings_dialog'),
+
+		whatsNew: ko.observable(false)
+	},
 
 	core: {},
 	components: {},

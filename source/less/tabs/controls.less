@@ -151,7 +151,12 @@
 
 	.slider-container {
 		position: relative;
-		overflow: hidden;
+
+		&:after {
+			content: "";
+			display: block;
+			clear: both
+		}
 
 		button {
 			.box-sizing(border-box);

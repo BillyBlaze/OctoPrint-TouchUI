@@ -1,28 +1,30 @@
 var TouchUI = function() {
 	this.core.init.call(this);
+	this.knockout.bindings.call(this);
 	return this.core.bridge.call(this);
 };
 
 TouchUI.prototype = {
-	id: "touch",
-	version: 0,
-
-	isActive: ko.observable(false),
-	isFullscreen: ko.observable(false),
-	isTouchscreen: ko.observable(false),
-	isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
-
-	hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
-	hasLocalStorage: ('localStorage' in window),
-	hasTouch: (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)),
-
-	canLoadAutomatically: $("#loadsomethingsomethingdarkside").length > 0,
-
-	hiddenClass: "hidden_touch",
-	visibleClass: "visible_touch",
-
 	constructor: TouchUI,
-	touchuiModal: $('#touchui_settings_dialog'),
+	isActive: ko.observable(false),
+
+	settings: {
+		id: "touch",
+		version: 0,
+
+		isFullscreen: ko.observable(false),
+		isTouchscreen: ko.observable(false),
+		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
+
+		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
+		hasLocalStorage: ('localStorage' in window),
+		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
+
+		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
+		touchuiModal: $('#touchui_settings_dialog'),
+
+		whatsNew: ko.observable(false)
+	},
 
 	core: {},
 	components: {},
@@ -64,7 +66,7 @@ TouchUI.prototype.animate.hide = function(what) {
 			var navbar = $("#navbar"),
 				navbarHeight = parseFloat(navbar.height());
 
-			if( this.hasTouch ) {
+			if( this.settings.hasTouch ) {
 				// Hide navigation bar on mobile
 				window.scrollTo(0,1);
 
@@ -105,15 +107,15 @@ TouchUI.prototype.components.dropdown = {
 
 	// Rewrite opening of dropdowns
 	toggle: function() {
-		var self = this,
-			namespace = ".touchui.dropdown";
+		var self = this;
+		var namespace = ".touchui.dropdown";
 
 		$(document)
 			.off('.dropdown')
 			.on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
 			.on('click.dropdown.data-api', '[data-toggle=dropdown]', function(e) {
-				var $dropdownToggle = $(e.currentTarget),
-					$dropdownContainer = $dropdownToggle.parent();
+				var $dropdownToggle = $(e.currentTarget);
+				var $dropdownContainer = $dropdownToggle.parent();
 
 				// Stop the hashtag from propagating
 				e.preventDefault();
@@ -132,13 +134,13 @@ TouchUI.prototype.components.dropdown = {
 				// Remove all other active dropdowns
 				$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
 
-				if ( !self.hasTouch ) {
+				if ( !self.settings.hasTouch ) {
 					self.scroll.iScrolls.terminal.disable();
 				}
 
 				$(document).off("click"+namespace).on("click"+namespace, function(eve) {
 					// Check if we scrolled (touch devices wont trigger this click event after scrolling so assume we didn't move)
-					var moved = ( !self.hasTouch ) ? self.scroll.currentActive.moved : false,
+					var moved = ( !self.settings.hasTouch ) ? self.scroll.currentActive.moved : false,
 						$target = $(eve.target);
 
 					if (
@@ -152,7 +154,7 @@ TouchUI.prototype.components.dropdown = {
 						$(document).off(eve);
 						$dropdownContainer.removeClass('open');
 
-						if ( !self.hasTouch ) {
+						if ( !self.settings.hasTouch ) {
 							$('.octoprint-container').css("min-height", 0);
 							self.scroll.currentActive.refresh();
 							self.scroll.iScrolls.terminal.enable();
@@ -174,7 +176,7 @@ TouchUI.prototype.components.dropdown = {
 		var self = this;
 
 		// Touch devices can reach the dropdown by CSS, only if we're using iScroll
-		if ( !self.hasTouch ) {
+		if ( !self.settings.hasTouch ) {
 			// Get active container
 			var $container = ($dropdownContainer.parents('.modal').length === 0 ) ? $('.octoprint-container') : $dropdownContainer.parents('.modal .modal-body');
 
@@ -208,15 +210,15 @@ TouchUI.prototype.components.fullscreen = {
 
 		// Bind fullscreenChange to knockout
 		$(document).bind("fullscreenchange", function() {
-			self.isFullscreen($(document).fullScreen() !== false);
-			self.DOM.storage.set("fullscreen", self.isFullscreen());
+			self.settings.isFullscreen($(document).fullScreen() !== false);
+			self.DOM.storage.set("fullscreen", self.settings.isFullscreen());
 		});
 
 	},
 	ask: function() {
 		var self = this;
 
-		if(self.hasFullscreen()) {
+		if(self.settings.hasFullscreen()) {
 
 			new PNotify({
 				title: 'Fullscreen',
@@ -371,7 +373,7 @@ TouchUI.prototype.components.keyboard = {
 
 			} else {
 
-				if(!self.hasTouch) {
+				if(!self.settings.hasTouch) {
 
 					// Force iScroll to stop following the mouse (bug)
 					self.scroll.currentActive._end(e);
@@ -471,7 +473,7 @@ TouchUI.prototype.components.modal = {
 							$('[href="'+href+'"]').click();
 							$settingsLabel.text($('[href="'+href+'"]').text());
 
-							if( !self.hasTouch ) {
+							if( !self.settings.hasTouch ) {
 								setTimeout(function() {
 									self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
 								}, 0);
@@ -517,11 +519,14 @@ TouchUI.prototype.components.slider = {
 				// Wait untill next DOM bindings are executed
 				setTimeout(function() {
 					var $button = $(element).next('button');
+					var id = _.uniqueId("ui-inp");
 
 					$button.appendTo(div);
 					$element.appendTo(div);
 
-					var lbl = $('<label for="ui-inp-" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
+					$(div).find('input').attr("id", id);
+
+					var lbl = $('<label for="' + id + '" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
 					lbl.appendTo('.octoprint-container')
 					$element.attr("style", "padding-left:" + (lbl.width() + 15) + "px");
 					lbl.appendTo(div);
@@ -550,10 +555,10 @@ TouchUI.prototype.components.touchList = {
 	init: function() {
 
 		/* Add touch friendly files list */
-		var self = this,
-			touch = false,
-			start = 0,
-			namespace = ".files.touchui";
+		var self = this;
+		var touch = false;
+		var start = 0;
+		var namespace = ".files.touchui";
 
 		$(document).on("mousedown touchstart", "#files .entry:not(.folder, .back), #temp .row-fluid", function(e) {
 			try {
@@ -604,11 +609,11 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		this.hasTouch = false;
-		this.isTouchscreen(true);
+		this.settings.hasTouch = false;
+		this.settings.isTouchscreen(true);
 
-		if (this.isEpiphanyOrKweb) {
-			this.hasFullscreen(false);
+		if (this.settings.isEpiphanyOrKweb) {
+			this.settings.hasFullscreen(false);
 		}
 
 		// Improve performace
@@ -621,7 +626,7 @@ TouchUI.prototype.components.touchscreen = {
 
 	isLoading: function (viewModels) {
 
-		if(this.isTouchscreen()) {
+		if(this.settings.isTouchscreen()) {
 			if(viewModels.terminalViewModel.enableFancyFunctionality) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
 				 viewModels.terminalViewModel.enableFancyFunctionality(false);
 			}
@@ -639,7 +644,7 @@ TouchUI.prototype.core.init = function() {
 	// Bootup TouchUI if Touch, Small resolution or storage say's so
 	if (this.core.boot.call(this)) {
 
-		$("html").attr("id", this.id);
+		$("html").attr("id", this.settings.id);
 
 		// Force mobile browser to set the window size to their format
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
@@ -653,7 +658,7 @@ TouchUI.prototype.core.init = function() {
 
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.hasTouch) {
+			if (!this.settings.hasTouch) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -677,14 +682,14 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 
 		// Get state of cookies and store them in KO
 		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
 		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
-		this.isFullscreen(this.DOM.storage.get("fullscreen"));
+		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}
 
@@ -702,7 +707,7 @@ TouchUI.prototype.core.boot = function() {
 		return true;
 
 	} else if(
-		this.canLoadAutomatically &&
+		this.settings.canLoadAutomatically &&
 		this.DOM.storage.get("active") !== false
 	) {
 
@@ -710,7 +715,7 @@ TouchUI.prototype.core.boot = function() {
 			return true;
 		}
 
-		if(this.hasTouch) {
+		if(this.settings.hasTouch) {
 			return true;
 		}
 
@@ -722,17 +727,9 @@ TouchUI.prototype.core.boot = function() {
 
 TouchUI.prototype.core.bridge = function() {
 	var self = this;
+	var allViewModels = {};
 
-	return {
-		_instance: this,
-
-		isActive: this.isActive,
-		isKeyboardActive: this.components.keyboard.isActive,
-		isHidebarActive: this.animate.isHidebarActive,
-		isFullscreen: this.isFullscreen,
-		hasFullscreen: this.hasFullscreen,
-		isTouchscreen: this.isTouchscreen,
-		hasTouch: this.hasTouch,
+	this.core.bridge = {
 
 		domLoading: function() {
 			if (self.isActive()) {
@@ -754,76 +751,46 @@ TouchUI.prototype.core.bridge = function() {
 			}
 		},
 
-		koLoading: function(touchViewModel, viewModels) {
-			self.knockout.isLoading.call(self, touchViewModel, viewModels);
-		},
+		koStartup: function TouchUIViewModel(viewModels) {
+			allViewModels = _.object(TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
+			self.knockout.isLoading.call(self, allViewModels);
+			return self;
+		}
+	}
 
-		koReady: function(touchViewModel, viewModels) {
-			if (self.isActive()) {
-				self.DOM.overwrite.tabbar.call(self);
-			}
-			self.settings = touchViewModel.settings || {};
-			self.knockout.isReady.call(self, touchViewModel, viewModels);
-			if (self.isActive()) {
-				self.plugins.init.call(self, touchViewModel, viewModels);
-			}
-		},
+	// Subscribe to OctoPrint events
+	self.onStartupComplete = function () {
+		if (self.isActive()) {
+			self.DOM.overwrite.tabbar.call(self);
+		}
+		self.knockout.isReady.call(self, allViewModels);
+		if (self.isActive()) {
+			self.plugins.init.call(self, allViewModels);
+		}
+	}
 
-		toggleTouch: function() {
-			if (self.DOM.storage.toggleBoolean("active")) {
-				document.location.hash = "#touch";
-			} else {
-				document.location.hash = "";
-			}
-			document.location.reload();
-		},
+	self.onBeforeBinding = function() {
+		ko.mapping.fromJS(allViewModels.settingsViewModel.settings.plugins.touchui, {}, self.settings);
+	}
 
-		toggleKeyboard: function() {
-			if (self.isActive()) {
-				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
-			}
-		},
+	self.onSettingsBeforeSave = function() {
+		self.core.less.save.call(self);
+	}
 
-		toggleHidebar: function() {
-			if (self.isActive()) {
-				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
-			}
-		},
+	self.onTabChange = function() {
+		if (self.isActive()) {
+			self.animate.hide.call(self, "navbar");
 
-		toggleFullscreen: function() {
-			$(document).toggleFullScreen();
-		},
-
-		toggleTouchscreen: function() {
-			if (self.isActive()) {
-				self.isTouchscreen(self.DOM.storage.toggleBoolean("touchscreenActive"));
-				document.location.reload();
-			}
-		},
-
-		show: function() {
-			self.touchuiModal.modal("show");
-		},
-
-		saveLESS: function(touchViewModel) {
-			self.core.less.save.call(self, touchViewModel);
-		},
-
-		onTabChange: function() {
-			if (self.isActive()) {
-				self.animate.hide.call(self, "navbar");
-
-				if(!self.hasTouch && self.scroll.currentActive) {
+			if(!self.settings.hasTouch && self.scroll.currentActive) {
+				self.scroll.currentActive.refresh();
+				setTimeout(function() {
 					self.scroll.currentActive.refresh();
-					setTimeout(function() {
-						self.scroll.currentActive.refresh();
-					}, 0);
-				}
+				}, 0);
 			}
 		}
+	}
 
-	};
-
+	return this.core.bridge;
 }
 
 TouchUI.prototype.core.less = {
@@ -840,19 +807,19 @@ TouchUI.prototype.core.less = {
 		API: "/plugin/touchui/css"
 	},
 
-	save: function(viewModel) {
+	save: function() {
 		var variables = "";
 		var options = this.core.less.options;
 		var self = this;
 
-		if(viewModel.settings.useCustomization()) {
-			if(viewModel.settings.colors.useLocalFile()) {
+		if(self.settings.useCustomization()) {
+			if(self.settings.colors.useLocalFile()) {
 
 				$.get(options.API, {
-						path: viewModel.settings.colors.customPath()
+						path: self.settings.colors.customPath()
 					})
 					.done(function(response) {
-						self.core.less.render.call(self, viewModel, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
+						self.core.less.render.call(self, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
 					})
 					.error(function(error) {
 						self.core.less.error.call(self, error);
@@ -860,19 +827,19 @@ TouchUI.prototype.core.less = {
 
 			} else {
 
-				self.core.less.render.call(self, viewModel, "" +
+				self.core.less.render.call(self, "" +
 					options.template.import.replace("{importUrl}", options.template.importUrl) +
-					options.template.variables.replace("{mainColor}", viewModel.settings.colors.mainColor())
-						.replace("{termColor}", viewModel.settings.colors.termColor())
-						.replace("{textColor}", viewModel.settings.colors.textColor())
-						.replace("{bgColor}", viewModel.settings.colors.bgColor())
+					options.template.variables.replace("{mainColor}", self.settings.colors.mainColor())
+						.replace("{termColor}", self.settings.colors.termColor())
+						.replace("{textColor}", self.settings.colors.textColor())
+						.replace("{bgColor}", self.settings.colors.bgColor())
 				);
 
 			}
 		}
 	},
 
-	render: function(viewModel, data) {
+	render: function(data) {
 		var self = this;
 		var callback = function(error, result) {
 
@@ -884,8 +851,8 @@ TouchUI.prototype.core.less = {
 							css: result.css
 						})
 						.done(function() {
-							if (viewModel.settings.requireNewCSS()) {
-								viewModel.settings.refreshCSS("fast");
+							if (self.settings.requireNewCSS()) {
+								self.settings.refreshCSS("fast");
 							}
 						})
 						.error(function(error) {
@@ -1129,7 +1096,52 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 
 } : _.noop;
 
-TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
+TouchUI.prototype.knockout.bindings = function() {
+	var self = this;
+
+	this.bindings = {
+
+		toggleTouch: function() {
+			if (self.DOM.storage.toggleBoolean("active")) {
+				document.location.hash = "#touch";
+			} else {
+				document.location.hash = "";
+			}
+			document.location.reload();
+		},
+
+		toggleKeyboard: function() {
+			if (self.isActive()) {
+				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
+			}
+		},
+
+		toggleHidebar: function() {
+			if (self.isActive()) {
+				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
+			}
+		},
+
+		toggleFullscreen: function() {
+			$(document).toggleFullScreen();
+		},
+
+		toggleTouchscreen: function() {
+			if (self.isActive()) {
+				self.settings.isTouchscreen(self.DOM.storage.toggleBoolean("touchscreenActive"));
+				document.location.reload();
+			}
+		},
+
+		show: function() {
+			self.settings.touchuiModal.modal("show");
+		}
+
+	}
+
+}
+
+TouchUI.prototype.knockout.isLoading = function (viewModels) {
 	var self = this;
 
 	if(self.isActive()) {
@@ -1146,7 +1158,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		});
 
 		// Update scroll area if new items arrived
-		if( !self.hasTouch ) {
+		if( !self.settings.hasTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 				setTimeout(function() {
 					self.scroll.iScrolls.body.refresh();
@@ -1168,7 +1180,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 
 		// Disable GCodeViewer in touchscreen mode
 		if (viewModels.gcodeViewModel) {
-			if (touchViewModel.isTouchscreen()) {
+			if (self.settings.isTouchscreen()) {
 				console.info("TouchUI: Disabling GCodeViewer in touchscreen mode...");
 				viewModels.gcodeViewModel.enabled = false;
 				viewModels.gcodeViewModel.initialize = _.noop;
@@ -1179,7 +1191,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	}
 
 	// Check if we can show whats new in this version
-	touchViewModel.settings.whatsNew.subscribe(function(whatsNew) {
+	self.settings.whatsNew.subscribe(function(whatsNew) {
 		if(whatsNew !== false && whatsNew.trim() != "") {
 			new PNotify({
 				title: 'TouchUI: What\'s new?',
@@ -1193,7 +1205,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 
 }
 
-TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
+TouchUI.prototype.knockout.isReady = function (viewModels) {
 	var self = this;
 
 	if(self.isActive()) {
@@ -1207,7 +1219,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		$('.slimScrollDiv').slimScroll({destroy: true});
 
 		// Remove active keyboard when disabled
-		touchViewModel.isKeyboardActive.subscribe(function(isActive) {
+		self.components.keyboard.isActive.subscribe(function(isActive) {
 			if( !isActive ) {
 				$(".ui-keyboard-input").each(function(ind, elm) {
 					$(elm).data("keyboard").destroy();
@@ -1269,7 +1281,7 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 				}
 
 				// Refresh scroll view when login state changed
-				if( !self.hasTouch ) {
+				if( !self.settings.hasTouch ) {
 					setTimeout(function() {
 						self.scroll.currentActive.refresh();
 					}, 0);
@@ -1296,19 +1308,19 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 		}
 
 		// Reload CSS if needed
-		touchViewModel.settings.refreshCSS.subscribe(function(hasRefresh) {
+		self.settings.refreshCSS.subscribe(function(hasRefresh) {
 			if (hasRefresh || hasRefresh === "fast") {
 				// Wait 2 seconds, so we're not too early
 				setTimeout(function() {
 					var $css = $("#touchui-css");
 					$css.attr("href", refreshUrl($css.attr("href")));
-					touchViewModel.settings.refreshCSS(false);
+					self.settings.refreshCSS(false);
 				}, (hasRefresh === "fast") ? 0 : 1200);
 			}
 		});
 
 		// Reload CSS or LESS after saving our settings
-		touchViewModel.settings.hasCustom.subscribe(function(customCSS) {
+		self.settings.hasCustom.subscribe(function(customCSS) {
 			if(customCSS !== "") {
 				var $css = $("#touchui-css");
 				var href = $css.attr("href");
@@ -1326,19 +1338,19 @@ TouchUI.prototype.knockout.isReady = function(touchViewModel, viewModels) {
 
 	// Check if we need to update an old LESS file with a new LESS one
 	var requireNewCSS = ko.computed(function() {
-		return touchViewModel.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
+		return self.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
 	});
 	requireNewCSS.subscribe(function(requireNewCSS) {
 		if(requireNewCSS) {
 			setTimeout(function() {
-				self.core.less.save.call(self, touchViewModel);
+				self.core.less.save.call(self, self);
 			}, 100);
 		}
 	});
 
 }
 
-TouchUI.prototype.plugins.init = function(touchViewModel, viewModels) {
+TouchUI.prototype.plugins.init = function (viewModels) {
 	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
@@ -1392,7 +1404,7 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 TouchUI.prototype.scroll.beforeLoad = function() {
 
 	// Manipulate DOM for iScroll before knockout binding kicks in
-	if (!this.hasTouch) {
+	if (!this.settings.hasTouch) {
 		$('<div id="scroll"></div>').insertBefore('.page-container');
 		$('.page-container').appendTo("#scroll");
 	}
@@ -1402,7 +1414,7 @@ TouchUI.prototype.scroll.beforeLoad = function() {
 TouchUI.prototype.scroll.init = function() {
 	var self = this;
 
-	if ( this.hasTouch ) {
+	if ( this.settings.hasTouch ) {
 		var width = $(window).width();
 
 		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
@@ -1464,9 +1476,9 @@ TouchUI.prototype.scroll.blockEvents = {
 TouchUI.prototype.scroll.body = {
 
 	init: function() {
-		var self = this,
-			scrollStart = false,
-			$noPointer = $('.page-container');
+		var self = this;
+		var scrollStart = false;
+		var $noPointer = $('.page-container');
 
 		// Create main body scroll
 		self.scroll.iScrolls.body = new IScroll("#scroll", self.scroll.defaults.iScroll);
@@ -1640,7 +1652,7 @@ TouchUI.prototype.scroll.overlay = {
 TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 	var self = this;
 
-	if ( !this.hasTouch ) {
+	if ( !this.settings.hasTouch ) {
 
 		// Enforce no scroll jumping
 		$("#scroll").on("scroll", function() {

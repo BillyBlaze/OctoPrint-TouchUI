@@ -50,7 +50,7 @@ TouchUI.prototype.components.modal = {
 							$('[href="'+href+'"]').click();
 							$settingsLabel.text($('[href="'+href+'"]').text());
 
-							if( !self.hasTouch ) {
+							if( !self.settings.hasTouch ) {
 								setTimeout(function() {
 									self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
 								}, 0);

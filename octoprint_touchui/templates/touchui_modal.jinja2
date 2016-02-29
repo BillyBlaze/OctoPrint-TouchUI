@@ -6,24 +6,24 @@
 	<div class="modal-body">
 		<form>
 			<div class="btn-box">
-				<button class="btn btn-primary" data-bind="click: toggleTouchUI">{{ _('Toggle TouchUI') }}</button>
+				<button class="btn btn-primary" data-bind="click: bindings.toggleTouch">{{ _('Toggle TouchUI') }}</button>
 				<span class="label" data-bind="text: isActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box">
-				<button class="btn btn-primary" data-bind="click: toggleKeyboard, disable: !isActive">{{ _('Toggle Virtual Keyboard') }}</button>
-				<span class="label" data-bind="text: isKeyboardActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isKeyboardActive() ? 'label-success' : 'label-danger'"></span>
+				<button class="btn btn-primary" data-bind="click: bindings.toggleKeyboard, disable: !isActive()">{{ _('Toggle Virtual Keyboard') }}</button>
+				<span class="label" data-bind="text: components.keyboard.isActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: components.keyboard.isActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box">
-				<button class="btn btn-primary" data-bind="click: toggleHidebar, disable: !isActive">{{ _('Toggle hide navigation bar') }}</button>
-				<span class="label" data-bind="text: isHidebarActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isHidebarActive() ? 'label-success' : 'label-danger'"></span>
+				<button class="btn btn-primary" data-bind="click: bindings.toggleHidebar, disable: !isActive()">{{ _('Toggle hide navigation bar') }}</button>
+				<span class="label" data-bind="text: animate.isHidebarActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: animate.isHidebarActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
-			<div class="btn-box" data-bind="visible: hasFullscreen">
-				<button class="btn btn-primary" data-bind="click: toggleFullscreen">{{ _('Toggle fullscreen') }}</button>
-				<span class="label" data-bind="text: isFullscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isFullscreen() ? 'label-success' : 'label-danger'"></span>
+			<div class="btn-box" data-bind="visible: settings.hasFullscreen">
+				<button class="btn btn-primary" data-bind="click: bindings.toggleFullscreen">{{ _('Toggle fullscreen') }}</button>
+				<span class="label" data-bind="text: settings.isFullscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: settings.isFullscreen() ? 'label-success' : 'label-danger'"></span>
 			</div>
-			<div class="btn-box" data-bind="visible: !hasTouch">
-				<button class="btn btn-primary" data-bind="click: toggleTouchscreen">{{ _('Toggle touchscreen mode') }}</button>
-				<span class="label" data-bind="text: isTouchscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: isTouchscreen() ? 'label-success' : 'label-danger'"></span>
+			<div class="btn-box" data-bind="visible: !settings.hasTouch">
+				<button class="btn btn-primary" data-bind="click: bindings.toggleTouchscreen, disable: !isActive()">{{ _('Toggle touchscreen mode') }}</button>
+				<span class="label" data-bind="text: settings.isTouchscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: settings.isTouchscreen() ? 'label-success' : 'label-danger'"></span>
 			</div>
 		</form>
 

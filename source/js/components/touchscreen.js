@@ -2,11 +2,11 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		this.hasTouch = false;
-		this.isTouchscreen(true);
+		this.settings.hasTouch = false;
+		this.settings.isTouchscreen(true);
 
-		if (this.isEpiphanyOrKweb) {
-			this.hasFullscreen(false);
+		if (this.settings.isEpiphanyOrKweb) {
+			this.settings.hasFullscreen(false);
 		}
 
 		// Improve performace
@@ -19,7 +19,7 @@ TouchUI.prototype.components.touchscreen = {
 
 	isLoading: function (viewModels) {
 
-		if(this.isTouchscreen()) {
+		if(this.settings.isTouchscreen()) {
 			if(viewModels.terminalViewModel.enableFancyFunctionality) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
 				 viewModels.terminalViewModel.enableFancyFunctionality(false);
 			}

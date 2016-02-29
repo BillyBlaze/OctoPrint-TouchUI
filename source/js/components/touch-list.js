@@ -2,10 +2,10 @@ TouchUI.prototype.components.touchList = {
 	init: function() {
 
 		/* Add touch friendly files list */
-		var self = this,
-			touch = false,
-			start = 0,
-			namespace = ".files.touchui";
+		var self = this;
+		var touch = false;
+		var start = 0;
+		var namespace = ".files.touchui";
 
 		$(document).on("mousedown touchstart", "#files .entry:not(.folder, .back), #temp .row-fluid", function(e) {
 			try {

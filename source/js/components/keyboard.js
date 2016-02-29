@@ -114,7 +114,7 @@ TouchUI.prototype.components.keyboard = {
 
 			} else {
 
-				if(!self.hasTouch) {
+				if(!self.settings.hasTouch) {
 
 					// Force iScroll to stop following the mouse (bug)
 					self.scroll.currentActive._end(e);

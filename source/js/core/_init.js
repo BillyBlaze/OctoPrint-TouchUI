@@ -6,7 +6,7 @@ TouchUI.prototype.core.init = function() {
 	// Bootup TouchUI if Touch, Small resolution or storage say's so
 	if (this.core.boot.call(this)) {
 
-		$("html").attr("id", this.id);
+		$("html").attr("id", this.settings.id);
 
 		// Force mobile browser to set the window size to their format
 		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
@@ -20,7 +20,7 @@ TouchUI.prototype.core.init = function() {
 
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.hasTouch) {
+			if (!this.settings.hasTouch) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -44,14 +44,14 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 
 		// Get state of cookies and store them in KO
 		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
 		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
-		this.isFullscreen(this.DOM.storage.get("fullscreen"));
+		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}
 

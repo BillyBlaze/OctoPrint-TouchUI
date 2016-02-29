@@ -10,7 +10,7 @@ TouchUI.prototype.core.boot = function() {
 		return true;
 
 	} else if(
-		this.canLoadAutomatically &&
+		this.settings.canLoadAutomatically &&
 		this.DOM.storage.get("active") !== false
 	) {
 
@@ -18,7 +18,7 @@ TouchUI.prototype.core.boot = function() {
 			return true;
 		}
 
-		if(this.hasTouch) {
+		if(this.settings.hasTouch) {
 			return true;
 		}
 

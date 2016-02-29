@@ -1,7 +1,7 @@
 TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 	var self = this;
 
-	if ( !this.hasTouch ) {
+	if ( !this.settings.hasTouch ) {
 
 		// Enforce no scroll jumping
 		$("#scroll").on("scroll", function() {

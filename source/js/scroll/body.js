@@ -1,9 +1,9 @@
 TouchUI.prototype.scroll.body = {
 
 	init: function() {
-		var self = this,
-			scrollStart = false,
-			$noPointer = $('.page-container');
+		var self = this;
+		var scrollStart = false;
+		var $noPointer = $('.page-container');
 
 		// Create main body scroll
 		self.scroll.iScrolls.body = new IScroll("#scroll", self.scroll.defaults.iScroll);

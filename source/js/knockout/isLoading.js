@@ -1,4 +1,4 @@
-TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
+TouchUI.prototype.knockout.isLoading = function (viewModels) {
 	var self = this;
 
 	if(self.isActive()) {
@@ -15,7 +15,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 		});
 
 		// Update scroll area if new items arrived
-		if( !self.hasTouch ) {
+		if( !self.settings.hasTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 				setTimeout(function() {
 					self.scroll.iScrolls.body.refresh();
@@ -37,7 +37,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 
 		// Disable GCodeViewer in touchscreen mode
 		if (viewModels.gcodeViewModel) {
-			if (touchViewModel.isTouchscreen()) {
+			if (self.settings.isTouchscreen()) {
 				console.info("TouchUI: Disabling GCodeViewer in touchscreen mode...");
 				viewModels.gcodeViewModel.enabled = false;
 				viewModels.gcodeViewModel.initialize = _.noop;
@@ -48,7 +48,7 @@ TouchUI.prototype.knockout.isLoading = function(touchViewModel, viewModels) {
 	}
 
 	// Check if we can show whats new in this version
-	touchViewModel.settings.whatsNew.subscribe(function(whatsNew) {
+	self.settings.whatsNew.subscribe(function(whatsNew) {
 		if(whatsNew !== false && whatsNew.trim() != "") {
 			new PNotify({
 				title: 'TouchUI: What\'s new?',

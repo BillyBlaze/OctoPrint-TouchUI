@@ -12,19 +12,19 @@ TouchUI.prototype.core.less = {
 		API: "/plugin/touchui/css"
 	},
 
-	save: function(viewModel) {
+	save: function() {
 		var variables = "";
 		var options = this.core.less.options;
 		var self = this;
 
-		if(viewModel.settings.useCustomization()) {
-			if(viewModel.settings.colors.useLocalFile()) {
+		if(self.settings.useCustomization()) {
+			if(self.settings.colors.useLocalFile()) {
 
 				$.get(options.API, {
-						path: viewModel.settings.colors.customPath()
+						path: self.settings.colors.customPath()
 					})
 					.done(function(response) {
-						self.core.less.render.call(self, viewModel, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
+						self.core.less.render.call(self, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
 					})
 					.error(function(error) {
 						self.core.less.error.call(self, error);
@@ -32,19 +32,19 @@ TouchUI.prototype.core.less = {
 
 			} else {
 
-				self.core.less.render.call(self, viewModel, "" +
+				self.core.less.render.call(self, "" +
 					options.template.import.replace("{importUrl}", options.template.importUrl) +
-					options.template.variables.replace("{mainColor}", viewModel.settings.colors.mainColor())
-						.replace("{termColor}", viewModel.settings.colors.termColor())
-						.replace("{textColor}", viewModel.settings.colors.textColor())
-						.replace("{bgColor}", viewModel.settings.colors.bgColor())
+					options.template.variables.replace("{mainColor}", self.settings.colors.mainColor())
+						.replace("{termColor}", self.settings.colors.termColor())
+						.replace("{textColor}", self.settings.colors.textColor())
+						.replace("{bgColor}", self.settings.colors.bgColor())
 				);
 
 			}
 		}
 	},
 
-	render: function(viewModel, data) {
+	render: function(data) {
 		var self = this;
 		var callback = function(error, result) {
 
@@ -56,8 +56,8 @@ TouchUI.prototype.core.less = {
 							css: result.css
 						})
 						.done(function() {
-							if (viewModel.settings.requireNewCSS()) {
-								viewModel.settings.refreshCSS("fast");
+							if (self.settings.requireNewCSS()) {
+								self.settings.refreshCSS("fast");
 							}
 						})
 						.error(function(error) {

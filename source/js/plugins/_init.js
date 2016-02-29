@@ -1,3 +1,3 @@
-TouchUI.prototype.plugins.init = function(touchViewModel, viewModels) {
+TouchUI.prototype.plugins.init = function (viewModels) {
 	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }

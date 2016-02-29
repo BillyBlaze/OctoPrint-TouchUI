@@ -4,15 +4,15 @@ TouchUI.prototype.components.fullscreen = {
 
 		// Bind fullscreenChange to knockout
 		$(document).bind("fullscreenchange", function() {
-			self.isFullscreen($(document).fullScreen() !== false);
-			self.DOM.storage.set("fullscreen", self.isFullscreen());
+			self.settings.isFullscreen($(document).fullScreen() !== false);
+			self.DOM.storage.set("fullscreen", self.settings.isFullscreen());
 		});
 
 	},
 	ask: function() {
 		var self = this;
 
-		if(self.hasFullscreen()) {
+		if(self.settings.hasFullscreen()) {
 
 			new PNotify({
 				title: 'Fullscreen',
