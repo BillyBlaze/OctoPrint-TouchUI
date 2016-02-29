@@ -32,6 +32,11 @@ TouchUI.prototype.core.init = function() {
 			this.DOM.storage.set("hideNavbarActive", false);
 		}
 
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+			this.components.touchscreen.init.call(this);
+		}
+
 		// Create fullscreen cookie if not existing and trigger pNotification
 		if (this.DOM.storage.get("fullscreen") === undefined) {
 			this.DOM.storage.set("fullscreen", false);
@@ -41,11 +46,6 @@ TouchUI.prototype.core.init = function() {
 			if(this.DOM.storage.get("fullscreen")) {
 				this.components.fullscreen.ask.call(this);
 			}
-		}
-
-		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
-			this.components.touchscreen.init.call(this);
 		}
 
 		// Get state of cookies and store them in KO
