@@ -628,8 +628,18 @@ TouchUI.prototype.components.touchscreen = {
 	isLoading: function (viewModels) {
 
 		if(this.settings.isTouchscreen()) {
+			// Disable fancy functionality
 			if(viewModels.terminalViewModel.enableFancyFunctionality) { //TODO: check if 1.2.9 to not throw errors in 1.2.8<
 				 viewModels.terminalViewModel.enableFancyFunctionality(false);
+			}
+
+			// Disable GCodeViewer in touchscreen mode
+			if (viewModels.gcodeViewModel) {
+				console.info("TouchUI: Disabling GCodeViewer in touchscreen mode...");
+				viewModels.gcodeViewModel.enabled = false;
+				viewModels.gcodeViewModel.initialize = _.noop;
+				viewModels.gcodeViewModel._processData = _.noop;
+				$("#gcode_link2").hide();
 			}
 		}
 
@@ -671,6 +681,11 @@ TouchUI.prototype.core.init = function() {
 			this.DOM.storage.set("hideNavbarActive", false);
 		}
 
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+			this.components.touchscreen.init.call(this);
+		}
+
 		// Create fullscreen cookie if not existing and trigger pNotification
 		if (this.DOM.storage.get("fullscreen") === undefined) {
 			this.DOM.storage.set("fullscreen", false);
@@ -680,11 +695,6 @@ TouchUI.prototype.core.init = function() {
 			if(this.DOM.storage.get("fullscreen")) {
 				this.components.fullscreen.ask.call(this);
 			}
-		}
-
-		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
-			this.components.touchscreen.init.call(this);
 		}
 
 		// Get state of cookies and store them in KO
@@ -1116,8 +1126,8 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 	if(self.isActive()) {
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
-		// Disable the connection button for a short period after clicking on it
-		$("#printer_connect").on("click", function(e) {
+		// Prevent user from double clicking in a short period on buttons
+		$(document).on("click", "button:not(.box, .distance)", function(e) {
 			var printer = $(e.target);
 			printer.prop('disabled', true);
 
@@ -1146,17 +1156,6 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 				$("#conn_link2").removeClass("offline").addClass("online");
 			}
 		});
-
-		// Disable GCodeViewer in touchscreen mode
-		if (viewModels.gcodeViewModel) {
-			if (self.settings.isTouchscreen()) {
-				console.info("TouchUI: Disabling GCodeViewer in touchscreen mode...");
-				viewModels.gcodeViewModel.enabled = false;
-				viewModels.gcodeViewModel.initialize = _.noop;
-				viewModels.gcodeViewModel._processData = _.noop;
-				$("#gcode_link2").hide();
-			}
-		}
 	}
 
 	// Check if we can show whats new in this version
@@ -1869,7 +1868,9 @@ TouchUI.prototype.DOM.move.connection = {
 		this.$container.find(".modal-header h3").text(text);
 
 		// Create a link in the dropdown
-		this.$menuItem = tabbar.createItem("conn_link2", this.containerId, "modal", text).prependTo(this.cloneTo);
+		this.$menuItem = tabbar.createItem("conn_link2", this.containerId, "modal", text)
+			.attr("data-bind", "visible: loginState.isAdmin")
+			.prependTo(this.cloneTo);
 	}
 }
 

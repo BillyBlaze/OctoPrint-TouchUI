@@ -22,6 +22,8 @@ TouchUI.prototype.DOM.move.connection = {
 		this.$container.find(".modal-header h3").text(text);
 
 		// Create a link in the dropdown
-		this.$menuItem = tabbar.createItem("conn_link2", this.containerId, "modal", text).prependTo(this.cloneTo);
+		this.$menuItem = tabbar.createItem("conn_link2", this.containerId, "modal", text)
+			.attr("data-bind", "visible: loginState.isAdmin")
+			.prependTo(this.cloneTo);
 	}
 }
