@@ -1,0 +1,182 @@
+#files {
+
+	.accordion {
+		&-inner {
+			padding: 0;
+		}
+	}
+
+	.slimScrollBar, .slimScrollRail {
+		display: none !important;
+	}
+
+	.dropdown-menu {
+		left: auto !important;
+		right: -10px !important;
+	}
+
+	.text-right.muted {
+		margin-top: @main-gutter;
+	}
+	.text-right.muted + div {
+		display: none;
+	}
+
+}
+
+#fab {
+	display: flex;
+
+	position: fixed;
+	bottom: @main-gutter;
+	right: @main-gutter;
+	width: 4rem;
+	height: 4rem;
+	z-index: 10;
+	overflow: hidden;
+
+	align-content: flex-start;
+	justify-content: flex-end;
+	align-items: center;
+
+	opacity: 0;
+	transform: translate3d(100px, 0, 0);
+
+	transition: all .3s ease-out;
+	will-change: opacity, transform;
+
+	&.show {
+		overflow: visible;
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+
+	> a {
+		flex: 0 0 auto;
+
+		color: @main-color-text;
+		background-color: @main-color;
+
+		width: 100%;
+		height: 100%;
+		line-height: 4rem;
+		padding: 0;
+		border-radius: 50%;
+		transition: .3s;
+		cursor: pointer;
+		vertical-align: middle;
+		text-align: center;
+		position: relative;
+		z-index: 2;
+
+		&:before {
+			font-family: "Material Icons";
+			font-size: 2.4rem;
+			line-height: 4rem;
+			color: inherit;
+			content: @material-icons-attach-file;
+			z-index: 1;
+			position: relative;
+		}
+
+		&:hover {
+			text-decoration: none;
+		}
+
+		#gcode_upload_progress {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+			border-radius: 50%;
+			z-index: 0;
+			background: transparent;
+
+			.bar {
+				background: @main-color-darker;
+				color: transparent;
+			}
+		}
+
+	}
+
+	.fab-inner {
+		display: flex;
+		flex: 0 0 auto;
+		width: 0;
+
+		flex-direction: row-reverse;
+		order: -1;
+
+		.btn {
+			flex: 0 0 auto;
+			width: 3rem;
+			height: 3rem;
+			margin: 15px 15px 0 0;
+			padding: 0;
+			border-radius: 50%;
+			text-align: center;
+			pointer-events: none;
+
+			position: relative;
+			z-index: 1;
+
+			opacity: 0;
+			transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(3rem);
+			transform-origin: right center;
+
+			will-change: opacity, transform;
+
+			&:nth-child(1) {
+				transition: .25s;
+			}
+			&:nth-child(2) {
+				transition: .3s;
+				transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(11rem);
+			}
+			&:nth-child(3) {
+				transition: .35s;
+				transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(22rem);
+			}
+			&:nth-child(4) {
+				transition: .45s;
+				transform: scaleY(0.4) scaleX(0.4) translateY(0px) translateX(33rem);
+			}
+
+			&.refresh-trigger a,
+			i.icon-upload-alt {
+				&:before {
+					font-family: "Material Icons";
+					font-size: 1.7rem;
+					line-height: 3rem;
+					color: inherit;
+					content: @material-icons-sd-storage;
+				}
+			}
+
+			&:first-child {
+				i.icon-upload-alt {
+					&:before {
+						content: @material-icons-file-upload;
+					}
+				}
+			}
+
+			&.refresh-trigger a:before {
+				color: @main-color-text;
+				content: @material-icons-refresh;
+			}
+
+			span {
+				display: none;
+			}
+		}
+	}
+
+	&.active .btn {
+		pointer-events: all;
+		visibility: visible;
+		opacity: 1;
+		transform: scaleY(1) scaleX(1) translateY(0) translateX(0) !important;
+	}
+}

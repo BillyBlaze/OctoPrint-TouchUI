@@ -1,60 +1,13 @@
 #tabs {
-	#temp_link {
-		a:after {
-			content: "\f0e4";
-		}
-	}
-	#control_link {
-		a:after {
-			content: "\f11b";
-		}
-	}
-	#gcode_link {
-		a:after {
-			content: "\f248";
-		}
-	}
-	#term_link {
-		a:after {
-			content: "\f120";
-		}
-	}
-	#webcam_link {
-		a:after {
-			content: "\f030";
-			font-size: 29px;
-			line-height: 73px;
-		}
-	}
-	#print_link {
-		a:after {
-			content: "\f233";
-			line-height: 74px;
-		}
-	}
+	li {
+		transform: scale(1);
 
-	// Pevent FOUT! (not dutch error!)
-	&:first-child {
-		&:before {
-			font-family: "touchui";
-			content: "";
-			position: absolute;
-			top: -5000px;
-		}
-	}
+		transition: transform 0.15s ease-out;
+		will-change: transform;
 
-	&.nav-tabs {
-		.active {
-			background: @main-background;
-
-			a {
-				.border-radius(0);
-				color: @main-background;
-
-				&:after {
-					color: contrast(@main-background);
-				}
-			}
+		&.hidden {
+			display: block;
+			transform: scale(0);
 		}
 	}
 }

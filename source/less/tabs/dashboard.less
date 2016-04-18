@@ -1,0 +1,131 @@
+@temperature-size: 5rem;
+
+#dashboard {
+
+	&.withGraph > .inner {
+		padding-bottom: 110px;
+	}
+
+	#temperature-graph {
+		position: absolute;
+		left: -5px;
+		bottom: -5px;
+		right: -10px;
+		background: transparent;
+		width: auto;
+		height: 150px;
+
+		.tickLabels,
+		.legend {
+			display: none;
+		}
+	}
+
+	> .inner {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-content: flex-start;
+		align-items: stretch;
+
+		@media (max-width: 400px) {
+			flex-direction: column;
+		}
+
+		#temp {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-content: flex-start;
+			align-items: stretch;
+
+			flex: 0 0 auto;
+			padding: 0 0 0 @main-gutter;
+
+			@media (max-width: 400px) {
+				flex-direction: row;
+				padding: 2rem 0 0;
+			}
+		}
+		#state_wrapper {
+			flex: 1 1 auto;
+			border: 0 none;
+		}
+	}
+
+	.accordion {
+		&-heading {
+			flex: none;
+		}
+
+		&-inner {
+			padding: 0;
+
+			strong {
+				@media (min-width: 350px) {
+					float: right;
+				}
+			}
+
+			br {
+				clear: both;
+			}
+		}
+	}
+
+	#state_wrapper, #temp {
+		flex:1 1 auto;
+	}
+
+	.collapse {
+		position: static;
+	}
+
+	.print-control {
+		i {
+			display: block;
+		}
+		span {
+			display: none !important;
+		}
+
+		#job_cancel,
+		#job_pause {
+			background: @text-color;
+			color: contrast(@text-color);
+
+			&:active {
+				background: fade(@text-color, 70%);
+				color: contrast(@text-color);
+			}
+		}
+	}
+
+	#state {
+		overflow: visible;
+
+		.accordion-inner {
+			line-height: 1.9rem;
+			font-size: 1.1rem;
+			font-weight: 300;
+			position: relative;
+		}
+
+		.progress {
+			position: absolute;
+			height: 6px;
+			top: -@main-gutter;
+			width: 100vw;
+			left: -@main-gutter;
+			background: transparent;
+
+
+			.bar {
+				background: @main-color-darker;
+			}
+		}
+	}
+}

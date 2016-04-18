@@ -1,6 +1,5 @@
 TouchUI.prototype.components.keyboard = {
 
-	isActive: ko.observable(false),
 	config: {
 
 		default: {
@@ -102,40 +101,43 @@ TouchUI.prototype.components.keyboard = {
 			beforeClose: self.components.keyboard.onClose
 		};
 
-		var notThis = ['[type="file"]','[type="checkbox"]','[type="radio"]'];
-		$(document).on("mousedown", 'input:not('+notThis+'), textarea', function(e) {
+		var notThis = ['[type="file"]','[type="checkbox"]','[type="radio"]','.select-dropdown'];
+		$(document).on("focus", 'input:not('+notThis+'), textarea', function(e) {
 			var $elm = $(e.target);
 
-			if(!self.components.keyboard.isActive()) {
+			if($elm.parents('.octoprint-container').length) {
 
-				if($elm.data("keyboard")) {
-					$elm.data("keyboard").close().destroy();
-				}
+				if(!self.settings.isKeyboardActive()) {
 
-			} else {
+					if($elm.data("keyboard")) {
+						$elm.data("keyboard").close().destroy();
+					}
 
-				if(!self.settings.hasTouch) {
-
-					// Force iScroll to stop following the mouse (bug)
-					self.scroll.currentActive._end(e);
-					setTimeout(function() {
-						self.scroll.currentActive.scrollToElement($elm[0], 200, 0, -30);
-					}, 0);
-
-				}
-
-				// $elm already has a keyboard
-				if($elm.data("keyboard")) {
-					$elm.data('keyboard').reveal();
-					return;
-				}
-
-				if($elm.attr("type") === "number") {
-					$elm.keyboard($.extend(self.components.keyboard.config.number, obj));
-				} else if($elm.attr("id") === "terminal-command") {
-					$elm.keyboard($.extend(self.components.keyboard.config.terminal, obj));
 				} else {
-					$elm.keyboard($.extend(self.components.keyboard.config.default, obj));
+
+					if(!self.settings.hasTouch) {
+
+						// Force iScroll to stop following the mouse (bug)
+						self.scroll.currentActive._end(e);
+						setTimeout(function() {
+							self.scroll.currentActive.scrollToElement($elm[0], 200, 0, -30);
+						}, 0);
+
+					}
+
+					// $elm already has a keyboard
+					if($elm.data("keyboard")) {
+						$elm.data('keyboard').reveal();
+						return;
+					}
+
+					if($elm.attr("type") === "number") {
+						$elm.keyboard($.extend(self.components.keyboard.config.number, obj));
+					} else if($elm.attr("id") === "terminal-command") {
+						$elm.keyboard($.extend(self.components.keyboard.config.terminal, obj));
+					} else {
+						$elm.keyboard($.extend(self.components.keyboard.config.default, obj));
+					}
 				}
 			}
 

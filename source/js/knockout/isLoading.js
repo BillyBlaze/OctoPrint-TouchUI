@@ -2,23 +2,49 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 	var self = this;
 
 	if(self.isActive()) {
+
+		self.components.material.sidenav.call(self);
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
-		// Prevent user from double clicking in a short period on buttons
-		$(document).on("click", "button:not(.box, .distance, .dropdown-toggle)", function(e) {
-			var printer = $(e.target);
-			printer.prop('disabled', true);
+		$("#tabs").appendTo("#navbar");
 
-			setTimeout(function() {
-				printer.prop('disabled', false);
-			}, 600);
+		// Prevent user from double clicking in a short period on buttons
+		// $(document).on("click", "button:not(.box, .distance, .dropdown-toggle)", function(e) {
+		// 	var printer = $(e.target);
+		// 	printer.prop('disabled', true);
+		//
+		// 	setTimeout(function() {
+		// 		printer.prop('disabled', false);
+		// 	}, 600);
+		// });
+
+		viewModels.temperatureViewModel.heaterOptions.subscribe(function(heaterOptions) {
+			var tmp;
+
+			_.each(_.keys(heaterOptions), function(type) {
+				if (
+					heaterOptions[type].color !== $('#navbar').css("background-color") &&
+					heaterOptions[type].color !== $('.bar').css("background-color")
+				) {
+					tmp = true;
+					if (heaterOptions[type].name === "Bed") {
+						heaterOptions[type].color = $('.bar').css("background-color");
+					} else {
+						heaterOptions[type].color = $('#navbar').css("background-color");
+					}
+				}
+			});
+
+			if (tmp) {
+				viewModels.temperatureViewModel.heaterOptions(heaterOptions);
+			}
 		});
 
 		// Update scroll area if new items arrived
 		if( !self.settings.hasTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 				setTimeout(function() {
-					self.scroll.iScrolls.body.refresh();
+					self.scroll.refresh(self.scroll.iScrolls.body);
 				}, 300);
 			});
 		}
@@ -28,10 +54,10 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 			var printLink = $("#all_touchui_settings");
 			if( !newOperationalState ) {
 				printLink.addClass("offline").removeClass("online");
-				$("#conn_link2").addClass("offline").removeClass("online");
+				$("#conn_link_mirror").addClass("offline").removeClass("online");
 			} else {
 				printLink.removeClass("offline").addClass("online");
-				$("#conn_link2").removeClass("offline").addClass("online");
+				$("#conn_link_mirror").removeClass("offline").addClass("online");
 			}
 		});
 	}

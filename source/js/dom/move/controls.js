@@ -25,6 +25,11 @@ TouchUI.prototype.DOM.move.controls = {
 
 		$("#control div.distance").prependTo("#control-jog-feedrate");
 		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
+		$("#control-jog-general").appendTo($('#control > .jog-panel')[0]);
+
+		var t = $('<div class="accordion-inner touch-area"></div>').prependTo("#control");
+		$("#control").children().appendTo(t);
+		$('<div class="accordion-heading"><a href="#controls">Controls</a></div>').prependTo("#control");
 
 	}
 

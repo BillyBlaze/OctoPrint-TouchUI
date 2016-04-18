@@ -1,0 +1,341 @@
+/** TABBAR + NAVBAR **/
+#tabs, #navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings {
+
+	#temp_link a:after,
+	#temp_link_mirror a:before {
+		content: @material-icons-print;
+	}
+	#timelapse_link a:after,
+	#timelapse_link_mirror a:before {
+		content: @material-icons-movie;
+	}
+	#control_link a:after,
+	#control_link_mirror a:before {
+		content: @material-icons-games;
+	}
+	#gcode_link a:after,
+	#gcode_link_mirror a:before {
+		content: @material-icons-layers;
+	}
+	#term_link a:after,
+	#term_link_mirror a:before {
+		content: @material-icons-code;
+	}
+	#webcam_link a:after,
+	#webcam_link_mirror a:before {
+		content: @material-icons-party-mode;
+	}
+	#files_link a:after,
+	#files_link_mirror a:before {
+		content: @material-icons-storage;
+	}
+
+	/**  PLUGINS **/
+	#tab_plugin_stats_link a:after,
+	#tab_plugin_stats_link_mirror a:before {
+		content: @material-icons-pie-chart !important;
+	}
+	#tab_plugin_printhistory_link a:after,
+	#tab_plugin_printhistory_link_mirror a:before {
+		content: @material-icons-history !important;
+	}
+
+	/** Pevent FOUT! **/
+	&:first-child {
+		&:before {
+			font-family: "touchui";
+			content: "";
+			position: absolute;
+			top: -5000px;
+		}
+	}
+}
+
+/** NAVBAR **/
+#navbar .navbar-inner .container .nav li.dropdown {
+	&#all_touchui_settings {
+		> a:after {
+			content: @material-icons-menu;
+		}
+
+		&.open .dropdown-menu .open a.dropdown-toggle:after {
+			content: @material-icons-arrow-drop-up !important;
+		}
+
+		li {
+
+			&#conn_link_mirror a:before {
+				content: @material-icons-wifi;
+			}
+
+			&#navbar_settings a:before {
+				content: @material-icons-settings;
+			}
+
+			#usersettings_button:before {
+				content: @material-icons-person;
+			}
+
+			#logout_button:before {
+				content: @material-icons-exit-to-app;
+			}
+
+			#navbar_login {
+				a.dropdown-toggle {
+					&:after {
+						font-family: @icon-font;
+						content: @material-icons-arrow-drop-down;
+						font-size: 23px;
+						line-height: 40px;
+					}
+					&:before {
+						content: @material-icons-lock;
+						font-size: 19px;
+					}
+				}
+			}
+
+			&#navbar_plugin_touchui {
+				a:before {
+					content: @material-icons-phonelink-setup;
+				}
+			}
+
+			&#navbar_systemmenu {
+				> a {
+					&:before {
+						content: @material-icons-build;
+						font-size: 19px;
+					}
+					&:after {
+						font-family: @icon-font;
+						content: @material-icons-arrow-drop-down;
+						font-size: 25px;
+					}
+				}
+				.dropdown-menu {
+					a {
+						&:before {
+							content: @material-icons-keyboard-arrow-right;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/** DASHBOARD **/
+#dashboard {
+	.confirm, .error {
+		&:after {
+			content: @material-icons-done;
+			font-family: "Material Icons";
+			font-size: 1.6rem;
+			color: @main-color-text;
+		}
+	}
+	.error:after {
+		content: @material-icons-clear;
+	}
+	.print-control {
+		i {
+			font-size: 28px;
+		}
+
+		.icon-play:before {
+			content: @material-icons-play-arrow;
+			font-size: 2.2rem;
+		}
+		.icon-pause:before {
+			content: @material-icons-pause;
+			font-size: 2.2rem;
+		}
+		.icon-stop:before {
+			content: @material-icons-stop;
+			font-size: 2.2rem;
+		}
+		.icon-print:before {
+			content: @material-icons-print;
+			font-size: 2.0rem;
+		}
+		.icon-undo:before {
+			content: @material-icons-refresh;
+		}
+	}
+}
+
+/** TERMINAL **/
+#term {
+
+	.icon-caret-down:before,
+	.icon-caret-right:before {
+		font-family: @icon-font;
+		content: "\f078";
+	}
+	.icon-caret-right:before {
+		content: "\f054";
+	}
+
+	#terminal-output,
+	#terminal-output-lowfi {
+		&:before {
+			font-family: "touchui";
+			content: "\e601\e605\e604\e603\e602\e600";
+			font-size: 34px;
+			line-height: 62px;
+			letter-spacing: 3px;
+
+			@media (max-width: 350px) {
+				font-size: 10vw;
+			}
+
+			@media (max-width: 280px) {
+				font-size: 8vw;
+			}
+		}
+	}
+}
+
+/** FILES TAB **/
+#files {
+
+	.settings-trigger .dropdown-toggle span:after {
+		content: @material-icons-swap-vert;
+	}
+	.sd-trigger .dropdown-toggle span:after {
+		content: @material-icons-sd-storage;
+		font-size: 1.8rem;
+		padding: 0 4px 0 2px;
+	}
+	.switch-view a span:after {
+		content: @material-icons-drag-handle;
+	}
+	&.condensed .switch-view a span:after {
+		content: @material-icons-view-stream;
+	}
+
+	#files-inner .entry i {
+		font-size: 2.5rem;
+		line-height: 1;
+		font-family: @icon-font;
+
+		&.icon-chevron-down {
+			font-size: 2.9rem;
+			line-height: 0;
+
+			&:before {
+				content: @material-icons-keyboard-arrow-down;
+			}
+		}
+		&.icon-chevron-up {
+			font-size: 2.9rem;
+			line-height: 0;
+
+			&:before {
+				content: @material-icons-keyboard-arrow-up;
+			}
+		}
+		&.icon-print {
+			font-size: 2rem;
+
+			&:before {
+				content: @material-icons-print;
+			}
+		}
+		&.icon-trash:before {
+			content: @material-icons-delete-forever;
+		}
+		&.icon-download-alt:before {
+			content: @material-icons-file-download;
+		}
+		&.icon-folder-open {
+			font-size: 2rem;
+
+			&:before {
+				content: @material-icons-print;
+			}
+			&:after {
+				content: @material-icons-keyboard-arrow-up;
+			}
+		}
+		&.icon-magic {
+			font-family: FontAwesome;
+			font-size: 1.8rem !important;
+		}
+	}
+}
+
+/** MAIN **/
+.track {
+	.close {
+		&:after {
+			font-family: FontAwesome;
+			content: "\f00d";
+			color: @main-color-text;
+			text-align: center;
+			line-height: 25px;
+		}
+	}
+}
+#navbar_plugin_touchui {
+	float: right;
+
+	#navbar_touchui_settings {
+		i:before {
+			font-family: FontAwesome;
+			content: "\f10b";
+			font-size: 28px;
+		}
+	}
+}
+
+/** KEYBOARD **/
+.ui-keyboard {
+	&-shift:after {
+		font-family: @icon-font;
+		content: "\f062";
+		font-size: 25px;
+		max-height: 43px;
+	}
+	&-cancel,
+	&-accept {
+		&:after {
+			font-family: @icon-font;
+			content: "\f00c";
+			color: @keyboard-background;
+		}
+	}
+	&-cancel:after {
+		content: "\f149";
+	}
+	&-bksp span:after {
+		font-family: @icon-font;
+		content: "\f00d";
+	}
+}
+
+/** MODAL **/
+.modal-scrollable .modal .modal-header h3 a.dropdown-toggle:after {
+	content: @material-icons-arrow-drop-down;
+	font-family: @icon-font;
+	font-size: 2rem;
+}
+
+/** PNOTIFY **/
+.ui-pnotify-closer .glyphicon-remove:after {
+	font-family: @icon-font !important;
+	content: @material-icons-close;
+}
+
+/** DROPDOWN **/
+.dropdown-submenu {
+	> a:after {
+		font-family: @icon-font;
+		content: @material-icons-arrow-drop-down;
+		font-size: 26px;
+	}
+	&.open > a:after {
+		content: @material-icons-arrow-drop-up !important;
+	}
+}

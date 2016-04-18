@@ -1,34 +1,14 @@
-.emulateTouch {
-	.modal-scrollable {
-		.modal {
-			z-index: 1 !important;
-			overflow: hidden;
-			.transform(translateZ(0));
-			.user-select(none);
-			.text-adjust(none);
-		}
-	}
-}
-
-&.modal-open {
-	position: fixed;
-	width: 100%;
-	overflow: hidden;
-}
-
-.modal-backdrop {
-	background: @modal-backdrop !important;
+.modal-hidden {
+	display: none !important;
 }
 
 .modal-scrollable {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	margin: -@main-gutter;
+	position: relative;
+	top: auto;
 	bottom: auto;
+	left: auto;
 	right: auto;
-	overflow: auto;
 
 	.iScrollIndicator {
 		background: @main-iScroll-color !important;
@@ -36,29 +16,14 @@
 	}
 
 	.modal {
-		position: absolute;
-		.border-radius(0);
-		-webkit-overflow-scrolling: auto;
-
-		background: @modal-background;
-		color: @modal-text;
-
-		-webkit-transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
-		-moz-transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
-		-o-transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
-		transition: opacity 0.3s linear, margin-left 0.5s ease-out, margin-top 0.3s ease-out !important;
-
-		/* Make modal appear from left */
-		top: 0 !important;
-		bottom: auto !important;
-		height: auto !important;
-		left: 0 !important;
-		width: 95% !important;
+		width: 100%;
+		min-height: 100vh;
 		margin: 0 !important;
-		min-height: 100%;
-		margin-left: -110% !important;
-
-		.box-sizing(border-box);
+		position: static;
+		background: transparent;
+		top: auto;
+		right: auto;
+		left: auto;
 
 		/*Disable some other scroll libary*/
 		.slimScrollDiv, #settings_plugin_pluginmanager_repositorydialog_list {
@@ -66,24 +31,11 @@
 		}
 
 		&.shake {
-			-webkit-animation-name: inherit;
-			-moz-animation-name: inherit;
-			-o-animation-name: inherit;
 			animation-name: inherit;
 
 			> div {
-				-webkit-animation-duration: 1s;
-				   -moz-animation-duration: 1s;
-				     -o-animation-duration: 1s;
-				        animation-duration: 1s;
-				-webkit-animation-fill-mode: both;
-				   -moz-animation-fill-mode: both;
-				     -o-animation-fill-mode: both;
-				        animation-fill-mode: both;
-
-				-webkit-animation-name: shake;
-				-moz-animation-name: shake;
-				-o-animation-name: shake;
+				animation-duration: 1s;
+				animation-fill-mode: both;
 				animation-name: shake;
 			}
 		}
@@ -111,11 +63,6 @@
 			}
 		}
 
-		&.in {
-			top: 0 !important;
-			margin-left: 0% !important;
-		}
-
 		&.show-dropdown {
 			.modal-header {
 				.span3 {
@@ -127,8 +74,7 @@
 		.modal {
 
 			&-body {
-				padding: (@modal-gutter - 10px) @modal-gutter;
-				margin-bottom: 60px;
+				padding: @modal-gutter @modal-gutter ~"calc(@{modal-gutter} + 50px)";
 				min-height: 0 !important;
 				max-height: none !important;
 
@@ -159,8 +105,7 @@
 				}
 			}
 			&-footer {
-				.border-radius(0);
-				.box-sizing(border-box);
+				border-radius: 0;
 
 				background: @modal-footer-background;
 				border-top-color: @modal-border;
@@ -174,92 +119,60 @@
 			}
 			&-header {
 				padding: 20px @modal-gutter;
-				border-bottom-color: @modal-border;
-
-				#settings_dialog_label {
-					font-size: 1.4rem;
-					padding: 0 50px 0 0;
-				}
+				background: @main-color;
+				color: @main-color-text;
+				display: flex;
+				align-items: center;
 
 				.close {
-					color: @modal-text;
-					font-size: 42px;
-					padding: 13px;
-					margin-top: -10px;
+					color: inherit;
+					font-size: 2.5rem;
+					padding: 13px 0;
+					margin: -8px 0;
 					background: transparent;
 					opacity: .6;
+					flex: 0 1 auto;
+					min-width: 23px;
+					order: 1;
 
 					&:hover {
 						opacity:1;
 					}
 				}
 
-				span.hidden {
-					display: inline-block !important;
-					position: relative;
-					padding-left: 10px;
+				h3 {
+					flex: 1 1 auto;
+					order: 0;
 
-					&:before {
-						content: "/";
-						color: mix(@modal-background, contrast(@modal-background), 70%);
-						margin-right: 10px;
+					.dropdown {
+						display: inline;
 					}
-					&:after {
-						content: "\f078";
-						.font-icon-reset(FontAwesome);
 
-						font-size: 0.8rem;
-						text-rendering: auto;
+					a.dropdown-toggle {
 						position: relative;
-						top: -4px;
-						margin-left: 10px;
-					}
+						color: @main-color-text;
+						display: inline-block;
+						font-size: inherit;
+						margin-left: 12px;
 
-					.show-dropdown {
-						position: absolute;
-						top: 40px;
-						left: 0;
-						overflow: hidden;
-						max-height: 68vh;
-						height: auto;
-						z-index: 29;
-						min-height: 0 !important;
-						margin-bottom: 100px;
-						min-width: 170px;
-						overflow-scrolling: touch;
-						-webkit-overflow-scrolling: touch;
-
-						background-color: @modal-background;
-						border: 1px solid contrast(@modal-background, @light-darker-darker-color, white);
-
-						ul {
-							margin: 0;
-							padding: 0;
-
-							.nav-header {
-								margin: 0;
-								.box-sizing(border-box);
-							}
+						&:hover {
+							text-decoration: none;
 						}
-
-						li {
-							display: block;
-							width: 100%;
-
-							a {
-								font-size: 15px;
-								padding: 10px 15px;
-								line-height: 24px;
-								margin: 0;
-								.border-radius(0);
-							}
+						&:before {
+							content: "/";
+							color: mix(@main-color-text, @main-color, 60%);
+							margin-right: 10px;
+							top: 1px;
+							position: relative;
+							font-size: 2.2rem;
+							line-height: 7px;
 						}
-
-						.iScrollIndicator {
-							background: contrast(@modal-background, @dropdown-iScroll-color, white) !important;
-							border: 0 none !important;
+						&:after {
+							text-rendering: auto;
+							position: relative;
+							top: 6px;
+							margin-left: 10px;
 						}
-
 					}
 				}
 			}

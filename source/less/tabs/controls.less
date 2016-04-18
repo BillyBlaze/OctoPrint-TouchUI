@@ -1,449 +1,115 @@
-@button-width: 16vw;
-@button-width-large: 120px;
-@button-width-small: 14vw;
-
 #control {
-	margin: 0 auto;
-	max-width: 700px;
 	overflow: visible;
-	position: relative;
 
-	.jog-panel {
-		float: right;
-		margin: 0;
+	.touch-area {
 		padding: 0;
-		.box-sizing(border-box);
+		display: flex;
+		flex-wrap: wrap;
 
-		h1 {
-			display: none;
-		}
+		> .jog-panel:first-child {
+			flex: 1 1 100%;
+			justify-content: space-between;
+			align-items: center;
+			display: flex;
 
-		&#control-jog-xy {
-			float: left;
-			margin: 0;
-			position: relative;
+			min-height: 100vh;
+			margin-top: ~"calc(-2rem - 70px)";
+			padding: 70px 0 0;
 
-			width: @button-width * 3;
+			@media (orientation: portrait) {
+				flex-direction: column;
+				justify-content: center;
 
-			@media (min-width: 700px) {
-				width: @button-width-large * 3;
-			}
-			@media (max-width: 450px) {
-				width: @button-width-small * 3;
-			}
-		}
-
-		&#control-jog-z {
-			position: absolute;
-			right: auto;
-			left: 56%;
-			top: 0;
-			z-index: 1;
-
-			@media (max-width: 450px) {
-				left: 52%;
-			}
-
-			.icon-arrow-up,
-			.icon-arrow-down {
-				position: relative;
-				&:after {
-					content: "";
-					position: absolute;
-					left: 0px;
-					bottom: 4px;
-					letter-spacing: 0;
-					width: 100%;
-					text-align: center;
-					height: auto;
-					line-height: 1;
-					border-bottom: 5px solid;
-					.border-radius(2px, 2px, 2px, 2px);
+				#control-jog-z div,
+				#control-jog-general button {
+					display: inline-block;
 				}
 			}
-		}
 
-	}
-
-	> .jog-panel {
-
-		&:first-child {
-			position: relative;
-			display: block;
-			overflow: hidden;
-			float: none;
-			margin: 0 -20px;
+			> .jog-panel {
+				padding: 0;
+			}
 
 			button {
-				color: contrast(@main-background, @dark-color, @light-color);
+				width: auto;
+				height: auto;
 				background: transparent;
+				color: @main-color;
 
-				&:active {
-					color: @btn-main-background;
-				}
+				font-size: 10vw;
+				width: 13vw;
+				height: 15vw;
 
-				font-size: 36px;
-				display: inline-block;
-				padding: 0 !important;
+				padding: 0;
 				margin: 0;
-				font-weight: normal;
 
-				width: @button-width;
-				height: 16vw;
-				font-size: 11vw;
-
-				@media (min-width: 700px) {
-					font-size: 80px !important;
-					width: @button-width-large;
-					height: 120px;
-				}
-				@media (max-width: 450px) {
-					width: @button-width-small;
-					height: 16vw;
-				}
+				// text-shadow:-1px -3px 0 @main-color-darker,
+				// 			1px -3px 0 @main-color-darker,
+				// 			-1px -6px 0 @main-color-darker,
+				// 			1px -6px 0 @main-color-darker;
+				//
+				// &#control-yinc,
+				// &#control-zinc {
+				// 	text-shadow:-1px 3px 0 @main-color-darker,
+				// 				1px 3px 0 @main-color-darker,
+				// 				-1px 6px 0 @main-color-darker,
+				// 				1px 6px 0 @main-color-darker;
+				// }
+				// &#control-xdec {
+				// 	text-align: left;
+				// 	text-shadow:3px 1px 0 @main-color-darker,
+				// 				3px -1px 0 @main-color-darker,
+				// 				6px 1px 0 @main-color-darker,
+				// 				6px -1px 0 @main-color-darker;
+				// }
+				// &#control-xinc {
+				// 	text-align: right;
+				// 	text-shadow:-3px 1px 0 @main-color-darker,
+				// 				-3px -1px 0 @main-color-darker,
+				// 				-6px 1px 0 @main-color-darker,
+				// 				-6px -1px 0 @main-color-darker;
+				// }
+				// &#control-xyhome,
+				// &#control-zhome {
+				// 	text-shadow:2px 2px 0 @main-color-darker,
+				// 				-2px -2px 0 @main-color-darker,
+				// 				-2px 2px 0 @main-color-darker,
+				// 				2px -2px 0 @main-color-darker;
+				// }
 			}
 		}
-	}
-
-	#control-jog-extrusion {
-		padding: @main-gutter 0 (@main-gutter / 2) (@main-gutter / 2);
-		width: 50%;
-
-		h1 {
-			display: none;
-		}
-
-		> div {
-			> button {
-				width: 50%;
-				float: left;
-				border-right: 1px solid @main-background;
-				padding-right: 0;
-				padding-left: 0;
-
-				&:last-child {
-					border-right: 0 none;
-				}
-			}
-		}
-
-		@media (max-width: 450px) {
-			margin-bottom: @main-gutter;
-		}
-	}
-
-	#control-jog-feedrate {
-		padding: @main-gutter (@main-gutter / 2) (@main-gutter / 2) 0;
-		position: relative;
-		float: left;
-		width: 50%;
-
-		@media (max-width: 450px) {
-			margin-top: @main-gutter;
-		}
-	}
-
-	.custom_section {
-		.slider-container {
-			min-width: 200px;
-		}
-	}
-
-	.slider-container {
-		position: relative;
-
-		&:after {
-			content: "";
-			display: block;
-			clear: both
-		}
-
-		button {
-			.box-sizing(border-box);
-			float: right;
-			width: 25% !important;
-			position: relative;
-			padding: 0;
-			margin: 0;
-			direction: rtl;
-			white-space: nowrap;
-			overflow: hidden;
-			text-indent: -700px;
-			border-left: 1px solid @main-background;
-
-			&:after {
-				.font-icon-reset();
-				content: "\f00c";
-				width: 100%;
-				position: absolute;
-				right: 0;
-				text-indent: 0;
-				font-size: 21px;
-				line-height: 19px;
-			}
-		}
-
-		input {
-			.box-sizing(border-box);
-			float: left;
-			text-align: left;
-			width: 75% !important;
-			padding-left: 90px;
-			padding-right: 0 !important;
-		}
-
-		label {
-			position: absolute;
-			margin: 10px 0 10px 10px;
-			color: @input-text-color;
-			z-index: 2;
-			left: 0;
-		}
-	}
-
-	#control-jog-extrusion,
-	#control-jog-feedrate,
-	.custom_section {
-		.btn-group.control-box {
-			height: auto;
-			margin: 0 0 20px;
-
-			button {
-				margin: 0;
-			}
-		}
-		.input-append.control-box {
-			height: auto;
-			margin: 0 38px 20px 0;
-
-			.add-on {
-				padding: 10px;
-				z-index: 200;
-			}
-			input {
-				margin: 0;
-			}
-		}
-		button, input {
-			padding: 10px 20px;
-			margin: 0 0 20px;
-			width: 100%;
-			min-height: 40px;
-			height: auto;
-			.box-sizing(border-box);
-
-			span {
-				margin-left: 5px;
-			}
-		}
-
-		@media (max-width: 450px) {
-			position: static;
+		.jog-panel {
+			flex: 0 0 auto;
 			float: none;
-			width: 100%;
-			padding: 0;
-		}
-	}
-
-	#control-jog-general {
-		position: absolute;
-		top: 0;
-		right: 0;
-		width: 16vw;
-
-		@media (min-width: 700px) {
-			width: 120px;
-		}
-		@media (max-width: 450px) {
-			width: 14vw;
-		}
-
-		> div {
-			display: inline-block;
-		}
-
-		h1 {
-			display: none;
-		}
-
-		button {
-			font-size: 36px;
-			padding: 0 !important;
+			order: 3;
 			margin: 0;
-			font-weight: normal;
-			overflow: hidden;
+			box-sizing: border-box;
+			padding-right: 15px;
 
-			color: contrast(@main-background, @dark-color, @light-color);
-			background: transparent;
-
-			&:active {
-				color: @btn-main-background;
+			h1 {
+				display: none;
 			}
 
-			width: @button-width;
-			height: 16vw;
-			font-size: 11vw;
-			line-height: 200vw;
+			&#control-jog-general {
+				div {
+					button {
+						&:after {
+							content: "\e900";
+							font-family: touchui;
+						}
 
-			@media (min-width: 700px) {
-				font-size: 80px !important;
-				width: @button-width-large;
-				height: 120px;
-			}
-			@media (max-width: 450px) {
-				width: @button-width-small;
-				height: 16vw;
-			}
+						&:first-child {
 
-			&:before,
-			&:after {
-				color: inherit;
-				font-family: FontAwesome;
-				.text-shadow(0 0 0 transparent);
-				display: block;
-				overflow: hidden;
-				line-height: 16vw;
+						}
+						&:last-child {
 
-				@media (min-width: 700px) {
-					line-height: 120px;
-				}
-			}
-		}
-
-		div {
-
-			button {
-				position: relative;
-
-				&:before {
-					font-family: touchui;
-					content: "\e900"
-				}
-
-				&:first-child {
-					&:before {
-						font-family: FontAwesome;
-						background: transparent;
-						content: "\f011";
-					}
-				}
-				&:last-child {
-
-					&:after {
-						content: "\f057";
-						color: @main-color !important;
-						font-size: 8vw;
-						position: absolute;
-						top: -2vw;
-						right: 1vw;
-						text-indent: 2000px;
-
-						@media (min-width: 700px) {
-							font-size: 58px;
-							top: -16px;
-							right: 13px;
+						}
+						span {
+							display: none;
 						}
 					}
 				}
 			}
-
 		}
 	}
-
-	.distance {
-		.btn-group {
-			width: 100%;
-			margin: 0;
-
-			button {
-				background: mix(@btn-main-background, @main-background, 60%);
-				color: @btn-main-text;
-
-				width: 25% !important;
-				border-right: 1px solid @main-background;
-				padding: 0 !important;
-
-				&:last-child {
-					border-right: 0 none;
-				}
-
-				&.active {
-					background: @btn-main-background;
-					color: @btn-main-text;
-				}
-			}
-		}
-	}
-
-	.slider {
-		.slider-track,
-		button {
-			display: none;
-		}
-
-		input {
-			display: block !important;
-		}
-	}
-
-	@media all and (orientation: portrait) {
-		#control-jog-general {
-			width: 75vw;
-			margin: 0 auto;
-			right: auto;
-			top: 85vw;
-			float: none;
-			left: 50%;
-			margin-left: -37.5vw;
-
-			> div > button {
-				float: left;
-			}
-
-			@media (max-width: 650px) {
-				top: 87vw;
-			}
-			@media (max-width: 500px) {
-				top: 89vw;
-			}
-			@media (max-width: 400px) {
-				top: 91vw;
-			}
-		}
-
-		> .jog-panel:first-child,
-		#control-jog-general {
-
-			#control-jog-xy {
-				margin: 0 auto;
-				width: 75vw;
-				float: none;
-			}
-
-			#control-jog-z {
-				position: static;
-				width: 75vw;
-				margin: 15px auto 25vw;
-				right: auto;
-				top: auto;
-				float: none;
-				overflow: hidden;
-
-				> div {
-					float: left;
-				}
-			}
-
-			button {
-				width: 25vw;
-				height: 20vw;
-				font-size: 15vw !important;
-
-				&:before {
-					line-height: 20vw;
-				}
-			}
-		}
-	}
-
 }

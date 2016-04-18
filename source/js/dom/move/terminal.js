@@ -3,7 +3,7 @@ TouchUI.prototype.DOM.move.terminal = {
 	init: function() {
 
 		// Add version number placeholder
-		$('<span></span>').prependTo("#terminal-output");
+		// $('<span></span>').prependTo("#terminal-output");
 
 		// Create iScroll container for terminal
 		var container = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");

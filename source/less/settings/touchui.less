@@ -29,15 +29,6 @@
 			right: 15px;
 			border-radius: 50%;
 			opacity: 1;
-
-			&:after {
-				.font-icon-reset();
-				content: "\f00d";
-				color: @main-color-text;
-				text-align: center;
-				display: block;
-				line-height: 25px;
-			}
 		}
 	}
 
@@ -54,17 +45,23 @@
 
 	button {
 		border: 0 none;
-		.border-radius(0);
+		border-radius: 0;
+	}
+
+	.btn-box {
+		display: inline-block;
+		width: 100%;
+		margin: 0 0 @main-gutter / 3;
 	}
 
 	.label {
 		font-size: 14px;
 		padding: 9px;
-		margin-left: -10px;
+		margin-left: -4px;
 		display: inline-block;
-		top: 2px;
+		top: 0;
 		position: relative;
-		.border-radius(0);
+		border-radius: 0;
 	}
 
 }
@@ -75,8 +72,6 @@
 
 	#navbar_touchui_settings {
 		i:before {
-			content: "\f10b";
-			font-size: 28px;
 			position: relative;
 			top: 5px;
 			margin-top: -9px;

@@ -2,13 +2,6 @@
 	background-color: @main-color;
 	border: 0 none !important;
 
-	height: 70px;
-	width: 100%;
-
-	position: absolute;
-	top: 0;
-	left: 0;
-
 	.navbar-inner {
 		background: transparent !important;
 		border: 0 none !important;
@@ -35,61 +28,173 @@
 		white-space: nowrap;
 		text-align: right;
 
-		&:active {
-			background: darken(@main-color, 15%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		transition: all 0s;
+		will-change: background;
+
+		-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+		&:hover, &:active, &:focus {
+			background: transparent;
 		}
 
 		&:after {
-			.font-icon-reset();
+			font-family: @icon-font;
 			color: @main-color-text;
 
 			text-align: center;
-			font-size: 32px;
-			line-height: 70px;
+			font-size: 2.1rem;
+			line-height: 2.3rem;
 
 			display: block;
-			height: 100%;
-			width: 100%;
-			position: absolute;
-			left: 0;
-			top: 0;
-
-			@media(max-width: 320px) {
-				font-size: 10vw !important;
-			}
+			flex: 0 0 auto;
+			width: 2.3rem;
+			height: 2.3rem;
+			position: relative;
 		}
 	}
 }
 #navbar {
-	.navbar-inner > .container > .nav-collapse > .nav {
-		width: 18%;
-		max-width: 100px;
+	position: relative;
+	overflow: hidden;
+	min-width: 70px;
+	max-width: 70px;
+	transform: translate3d(0, 0, 0);
+
+	@media (max-width: 550px) {
+		min-width: 0;
+		max-width: 0;
+		transform: translate3d(0, 0, 0);
 	}
 
-	&.items-5 {
-		.navbar-inner > .container > .nav-collapse > .nav {
-			width: 16.5%;
+	&.animate {
+		transition: min-width .3s ease-out, max-width .3s ease-out;
+		will-change: min-width, max-width;
+		// transition: min-width .3s, max-width .3s, transform .3s ease-out;
+		// will-change: transform, min-width, max-width;
+	}
+
+	.brand {
+		position: absolute;
+		right: 70px;
+		color: white;
+		background: none;
+		width: 160px;
+		padding: 14px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		span {
+			background: none;
+			padding: 0;
 		}
 	}
-	.nav > li {
-		width: 100%;
-		float: right;
+
+	#all_touchui_settings {
+		width: 70px;
+		overflow: visible;
+
+		> .dropdown-menu {
+			box-sizing: border-box;
+
+			overflow-y: auto !important;
+			-webkit-overflow-scrolling: touch;
+			height: ~"calc(100vh - 70px)";
+
+			display: block !important;
+			min-width: 230px;
+			max-width: 230px;
+			transform: translate3d(-70px, 0, 0);
+			margin: 0;
+			padding: 0;
+			box-shadow: none !important;
+
+			transition: transform .3s;
+			will-change: transform;
+
+			> ul {
+				padding: 5px 0 !important;
+			}
+		}
+
+		.dropdown-menu {
+			background-color: @main-color !important;
+			border: 0 none !important;
+
+			li a {
+				color: contrast(@main-color, @dark-color, @light-color, 50%) !important;
+			}
+
+			&:before {
+				border-bottom-color: @main-color !important;
+			}
+
+			.divider {
+				background-color: @main-color-dark !important;
+			}
+		}
+
+		&.open {
+			> .dropdown-menu {
+				transform: translate3d(0, 0, 0);
+			}
+		}
+	}
+	&.open {
+		min-width: 230px !important;
+		max-width: 230px !important;
+		transform: translate3d(0, 0, 0);
+
+		&-short {
+			min-width: 70px;
+			max-width: 70px;
+		}
+
+		#tabs {
+			transform: translate3d(70px, 0, 0);
+		}
+
+		#navbar-waves {
+			background: darken(@main-color, 15%);
+		}
+	}
+
+	.navbar-inner {
+		.container {
+			position: relative;
+			height: 70px;
+		}
+	}
+
+	#tabs {
+		position: relative;
+		transition: transform .3s;
+		will-change: transform;
+		transform: translate3d(0, 0, 0);
 	}
 }
 #tabs {
-	.nav,
-	&.nav {
-		li {
-			width: 18%;
-			max-width: 100px;
-		}
-	}
+	width: 70px;
+	margin: 0;
+	float: right;
+    border: 0 none;
 
-	&.items-5 {
-		.nav,
-		&.nav {
-			li {
-				width: 16.5%;
+	li {
+		float: none;
+
+		a {
+			border: 0 none;
+			box-shadow: 0 0 0 transparent;
+			-webkit-tap-highlight-color: rgba(0,0,0, 0.0);
+			-webkit-tap-highlight-color: transparent;
+			outline: none;
+			border-radius: 0;
+
+			&:hover, &:active, &:focus {
+				background: transparent;
 			}
 		}
 	}

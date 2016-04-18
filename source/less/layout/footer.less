@@ -1,64 +1,63 @@
 .footer {
-	font-size: 14px;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	padding: 0 @main-gutter 0;
-	.box-sizing(border-box);
-
-	.flex-display(flex);
-	.flex-direction(row);
-	.flex-wrap(nowrap);
-	.justify-content(flex-start);
-	.align-content(stretch);
-	.align-items(flex-start);
-
-	ul {
-		color: mix(@main-background, contrast(@main-background), 50%);
-
-		.flex-order(0);
-		.flex(0 0 auto);
-		.align-self(auto);
-
-		&.pull-left {
-			.flex-order(0);
-			.flex(1 1 auto);
-			.align-self(auto);
-			overflow: hidden;
-
-			li {
-				display: block;
-
-				small {
-					.box-sizing(border-box);
-					white-space: nowrap;
-					text-overflow: ellipsis;
-					overflow: hidden;
-					padding-right: 10px;
-					display: block;
-				}
-			}
-		}
-
-		li {
-			margin-left: 0;
-
-			a {
-				display: inline-block;
-				width: 20px;
-				color: mix(@main-background, contrast(@main-background), 50%);
-				height: 20px;
-				overflow: hidden;
-				margin: 0;
-				font-size: 18px;
-				padding: 0;
-
-				&:hover {
-					color: mix(@main-background, contrast(@main-background), 20%);
-					text-decoration: none;
-				}
-			}
-		}
-	}
+	display: none;
+	// font-size: 14px;
+	// position: absolute;
+	// left: 0;
+	// bottom: 0;
+	// width: 100%;
+	// padding: 0 @main-gutter 0;
+	//
+	// display: flex;
+	// flex-direction: row;
+	// flex-wrap: nowrap;
+	// justify-content: flex-start;
+	// align-content: stretch;
+	// align-items: flex-start;
+	//
+	// ul {
+	// 	color: mix(@main-background, contrast(@main-background), 50%);
+	//
+	// 	flex: 0 0 auto;
+	// 	flex-order: 0;
+	// 	align-self: auto;
+	//
+	// 	&.pull-left {
+	// 		flex-order: 0;
+	// 		flex: 1 1 auto;
+	// 		align-self: auto;
+	// 		overflow: hidden;
+	//
+	// 		li {
+	// 			display: block;
+	//
+	// 			small {
+	// 				white-space: nowrap;
+	// 				text-overflow: ellipsis;
+	// 				overflow: hidden;
+	// 				padding-right: 10px;
+	// 				display: block;
+	// 			}
+	// 		}
+	// 	}
+	//
+	// 	li {
+	// 		margin-left: 0;
+	//
+	// 		a {
+	// 			display: inline-block;
+	// 			width: 20px;
+	// 			color: mix(@main-background, contrast(@main-background), 50%);
+	// 			height: 20px;
+	// 			overflow: hidden;
+	// 			margin: 0;
+	// 			font-size: 18px;
+	// 			padding: 0;
+	//
+	// 			&:hover {
+	// 				color: mix(@main-background, contrast(@main-background), 20%);
+	// 				text-decoration: none;
+	// 			}
+	// 		}
+	// 	}
+	// }
 }

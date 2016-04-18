@@ -1,0 +1,8 @@
+{
+	"info": "This will upload the distrobution files from a local machine to a Pi.",
+	"host": "hostname",
+	"user": "username",
+	"password": "**",
+	"path": "/home/pi/path/",
+	"deleteHash": "/home/pi/path/css/hash.touchui"
+}

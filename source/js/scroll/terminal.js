@@ -8,7 +8,7 @@ TouchUI.prototype.scroll.terminal = {
 
 		// Enforce the right scrollheight and disable main scrolling if we have a scrolling content
 		self.scroll.iScrolls.terminal.on("beforeScrollStart", function() {
-			self.scroll.iScrolls.terminal.refresh();
+			self.scroll.refresh(self.scroll.iScrolls.terminal);
 
 			if(this.hasVerticalScroll) {
 				self.scroll.iScrolls.body.disable();

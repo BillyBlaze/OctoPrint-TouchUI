@@ -15,7 +15,7 @@ TouchUI.prototype = {
 
 		isFullscreen: ko.observable(false),
 		isTouchscreen: ko.observable(false),
-		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
+		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && (window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1 || window.navigator.userAgent.indexOf("Linux arm") !== -1)),
 
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
@@ -24,20 +24,23 @@ TouchUI.prototype = {
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
 
+		isKeyboardActive: ko.observable(false),
+		isHidebarActive: ko.observable(false),
+
 		whatsNew: ko.observable(false)
 	},
 
 	core: {},
-	components: {},
 	knockout: {},
 	plugins: {},
-	animate: {
-		isHidebarActive: ko.observable(false)
-	},
+	animate: {},
 	DOM: {
 		create: {},
 		move: {},
 		overwrite: {}
+	},
+	components: {
+		material: {}
 	},
 	scroll: {
 
@@ -47,8 +50,7 @@ TouchUI.prototype = {
 				mouseWheel: true,
 				interactiveScrollbars: true,
 				shrinkScrollbars: "scale",
-				fadeScrollbars: true,
-				disablePointer: true
+				fadeScrollbars: true
 			}
 		},
 

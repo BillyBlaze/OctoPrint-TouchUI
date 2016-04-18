@@ -21,6 +21,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 	def __init__(self):
 		self._whatsNewPath = os.path.dirname(__file__) + "/WHATSNEW.md"
 		self._customCssPath = os.path.dirname(__file__) + "/static/css/touchui.custom.css"
+		self._cssPath = os.path.dirname(__file__) + "/static/css/touchui.css"
 		self._customLessPath = os.path.dirname(__file__) + "/static/less/touchui.bundled.less"
 		self._customHashPath = os.path.dirname(__file__) + "/static/css/hash.touchui"
 		self._requireNewCSS = False
@@ -155,13 +156,21 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 			os.unlink(self._customHashPath)
 
 	def get_template_vars(self):
+		hashed = ""
+
 		if os.path.isfile(self._customCssPath) and self._settings.get(["useCustomization"]):
+			with open(self._customCssPath, 'r') as contentFile:
+				hashed = hashlib.md5(contentFile.read()).hexdigest()
+
 			return dict(
-				cssPath="/plugin/touchui/static/css/touchui.custom.css"
+				cssPath="/plugin/touchui/static/css/touchui.custom.css?hash=" + hashed
 			)
 		else:
+			with open(self._cssPath, 'r') as contentFile:
+				hashed = hashlib.md5(contentFile.read()).hexdigest()
+
 			return dict(
-				cssPath="/plugin/touchui/static/css/touchui.css"
+				cssPath="/plugin/touchui/static/css/touchui.css?hash=" + hashed
 			)
 
 	def get_assets(self):

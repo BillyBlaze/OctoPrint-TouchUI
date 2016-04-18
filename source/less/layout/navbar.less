@@ -1,8 +1,10 @@
 #navbar {
+	flex: 1;
+
 	.navbar-inner {
 
 		.container {
-			height: 66px;
+			height: 100%;
 			border:0 none;
 
 			.nav {
@@ -18,15 +20,17 @@
 
 						&#all_touchui_settings {
 
-							> .dropdown-menu {
-								min-width: 230px;
+							ul {
+								padding: 0;
+								margin: 0;
+								list-style: none;
 							}
 
 							&.item_active {
-								background: @main-background;
+								background: darken(@main-color, 15%);
 
 								> a:after {
-									color: contrast(@main-background);
+									color: contrast(@main-color);
 								}
 							}
 
@@ -38,10 +42,11 @@
 								animation-name: blink_online;
 							}
 
-							> a:after {
-								animation-duration: 0.6s;
-								animation-iteration-count: 5;
-								content: "\f0c9";
+							> a {
+								&:after {
+									animation-duration: 0.6s;
+									animation-iteration-count: 5;
+								}
 							}
 
 							&.open {
@@ -49,10 +54,6 @@
 									.open {
 										a.dropdown-toggle {
 											background: transparent;
-
-											&:after {
-												content: "\f0d8" !important;
-											}
 										}
 									}
 								}
@@ -72,68 +73,19 @@
 									}
 								}
 
-								&#conn_link2 {
-									a:before {
-										content: "\f1eb";
-									}
-								}
-
-								&#timelapse_link2 {
-									a:before {
-										content: "\f03e";
-										font-size: 18px;
-									}
-								}
-
-								&#gcode_link2 {
-									a:before {
-										content: "\f248";
-										font-size: 17px;
-									}
-								}
-
-								&#navbar_settings {
-									a:before {
-										content: "\f013";
-									}
-								}
-
-								#usersettings_button {
-									&:before {
-										content: "\f007";
-									}
-								}
-
-								#logout_button {
-									&:before {
-										content: "\f08b";
-									}
-								}
-
 								#navbar_login {
 									a.dropdown-toggle {
 										&:after {
-											.font-icon-reset();
-											content: "\f0d7";
 											position: absolute;
-											right: 20px;
+											right: @dropdown-gutter;
 											margin: 0;
-											line-height: 40px;
-										}
-										&:before {
-											content: "\f023";
 										}
 									}
 								}
 
 								&#navbar_plugin_touchui {
 									a:before {
-										content: "\f10b";
-										font-size: 28px;
-										line-height: 28px;
-										position: relative;
-										top: 5px;
-										margin-top: -9px;
+										left: -2px;
 									}
 								}
 
@@ -143,39 +95,19 @@
 										display: block;
 										float: none;
 
-										&.active {
-											&:after {
-												content: "\f0d8" !important;
-											}
-										}
-
-										&:before {
-											content: "\f085";
-											font-size: 19px;
-										}
 										i {
 											display: none;
 										}
 										&:after {
-											.font-icon-reset();
-											content: "\f0d7";
-											right: 18px;
 											position: absolute;
-											top: 12px;
-										}
-									}
-									.dropdown-menu {
-										a {
-											&:before {
-												content: "\f101";
-											}
+											top: 0px;
+											right: @dropdown-gutter;
 										}
 									}
 								}
 
 								a {
-									.box-sizing(border-box);
-
+									box-sizing: border-box;
 									color: @main-color-text;
 									display: block;
 									text-align: left;
@@ -189,14 +121,14 @@
 									}
 
 									&:before {
-										.font-icon-reset();
+										font-family: @icon-font;
 										content: "";
 										display: inline-block;
-										margin: 0 15px 0 0;
-										font-size: 20px;
+										margin: -6px 15px 0 0;
+										font-size: 23px;
 										position: relative;
 										width: 20px;
-										top: 2px;
+										top: 6px;
 										text-align: center;
 									}
 
@@ -214,10 +146,6 @@
 							border-top: 1px solid @dropdown-divider-color;
 							margin-top: 0;
 							padding: 5px @dropdown-gutter @dropdown-gutter !important;
-
-							> * {
-								.box-sizing(border-box);
-							}
 
 							input[type="text"],
 							input[type="password"] {

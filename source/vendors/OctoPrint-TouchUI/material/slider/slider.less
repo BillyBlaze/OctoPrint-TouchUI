@@ -1,0 +1,242 @@
+.slidert {
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	border-radius: 3rem !important;
+	background: #E6E6E6;
+	height: @temperature-size;
+	z-index: 1;
+	overflow: hidden;
+	transform: scale(0);
+	transition: all 0s;
+	box-sizing: content-box;
+
+	&.moving {
+		.grid {
+			.hotpoint {
+				span {
+					transition: all 0s !important;
+				}
+			}
+		}
+	}
+
+	&.active {
+		animation-fill-mode: forwards;
+		animation-name: show_circle;
+		animation-duration: .3s;
+		transition: left .3s ease-out, right .3s ease-out;
+		will-change: left, right;
+	}
+
+	&.done {
+		overflow: visible;
+
+		.grid {
+			.hotpoint {
+				span {
+					transform: translateY(0) rotate(320deg);
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	&.disabled {
+
+		* {
+			pointer-events: none;
+		}
+
+		.grid {
+			.highlight {
+				border-bottom: 2px solid @light-darker-color;
+			}
+			.knob:after {
+				transform: scale(0.6);
+				background: @light-darker-color;
+				box-shadow: 0 0 0 3px #E6E6E6 !important;
+			}
+		}
+	}
+
+	.input {
+		flex: 0 0 auto;
+		overflow: hidden;
+		transition: transform .3s ease-out;
+		will-change: transform;
+
+		input {
+			background: transparent;
+			border: none;
+			width: 50px;
+			height: @temperature-size;
+			padding: 0;
+			text-align: left;
+
+			&::-webkit-inner-spin-button,
+			&::-webkit-outer-spin-button {
+				appearance: none;
+				margin: 0;
+			}
+		}
+	}
+
+	&.confirmValue {
+		.grid {
+			.confirm, .error {
+				transform: scale(1);
+				z-index: 5;
+			}
+		}
+		.knob {
+			transform: scale(0);
+		}
+	}
+
+	.grid {
+		box-sizing: border-box;
+		border-bottom: 2px solid @light-darker-color;
+		height: 50%;
+		margin: 0 1.5rem;
+		position: relative;
+		transition: transform .3s ease-out;
+		will-change: transform;
+		transform: translateX(0);
+
+		flex: 1 1 auto;
+
+		&.active {
+			transform: translateX(-100px);
+		}
+
+		.fake {
+			position: absolute;
+			top: 0;
+			bottom: ~"calc(-100% + 2px)";
+			left: 0;
+			right: 0;
+		}
+
+		.knob {
+			cursor: ew-resize;
+			position: absolute;
+			width: 15px;
+			height: ~"calc(200% + 2px)";
+			top: 0;
+			right: 0;
+			margin-left: -21px;
+			padding: 0 15px 0;
+			z-index: 4;
+			transition: transform .3s;
+			will-change: transform;
+
+			&.focus {
+				&:after {
+					box-shadow: 0 0 0 0.8rem fade(@main-color, 15%) !important;
+					transform: scale(0.8);
+				}
+			}
+
+			&:after {
+				transition: all .3s	ease-out;
+				content: "";
+				display: inline-block;
+				width: 15px;
+				height: 15px;
+				background: #2984CE;
+				border-radius: 50% !important;
+				top: ~"calc(50% - 7px)";
+				position: absolute;
+			}
+		}
+
+		.hotpoint {
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			background: transparent;
+			position: absolute;
+			top: 0;
+			font-size: 0.75rem;
+			cursor: pointer;
+			width: 13px;
+			text-align: center;
+			height: 200%;
+			margin-left: -4px;
+
+			span {
+				display: inline-block;
+				margin-left: -30px;
+				top: 63%;
+				width: 22px;
+				position: relative;
+				opacity: 0;
+
+				transition: opacity .3s ease-out, transform .3s ease-out;
+				will-change: opacity, transform;
+				transform: translateY(15px) rotate(320deg);
+			}
+
+			&:after {
+				content: "";
+				display: block;
+				top: 50%;
+				position: absolute;
+				width: 7px;
+				height: 7px;
+				margin-top: -4px;
+				border-radius: 50% !important;
+				background: #E6E6E6;
+				border: 2px solid @light-darker-color;
+			}
+		}
+
+		.confirm, .error {
+			display: inline-block;
+			width: 35px;
+			height: 35px;
+			background: #2984CE;
+			border-radius: 50% !important;
+			top: 100%;
+			margin-top: -17px;
+			right: 2px;
+			cursor: pointer;
+			position: absolute;
+			transform: scale(0.2) translateX(105px);
+			transition: transform .3s;
+			will-change: transform;
+
+			text-align: center;
+			line-height: 35px;
+		}
+
+		.error {
+			right: -40px;
+			transform: scale(0.2) translateX(-105px);
+		}
+
+		.highlight {
+			box-sizing: border-box;
+			position: absolute;
+			left: 0;
+			top: 2px;
+			width: 0;
+			height: 100%;
+			border-bottom: 2px solid @main-color;
+		}
+
+	}
+}
+
+@keyframes show_circle {
+	0% {
+		transform: scale(0);
+	}
+	90% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(1);
+	}
+}

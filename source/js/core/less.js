@@ -86,7 +86,7 @@ TouchUI.prototype.core.less = {
 	},
 
 	error: function(error) {
-		var content = error.responseText;
+		var content = error.responseText || error.message;
 		if(content && content.trim() && error.status !== 401) {
 			new PNotify({
 				title: 'TouchUI: Whoops, something went wrong...',
@@ -96,6 +96,8 @@ TouchUI.prototype.core.less = {
 				hide: false
 			});
 		}
+
+		console.error(error);
 
 	}
 

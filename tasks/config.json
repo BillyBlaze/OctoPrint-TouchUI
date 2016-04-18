@@ -1,0 +1,64 @@
+{
+
+	"autoprefixer": {
+		"browsers": ["last 10 versions"],
+		"cascade": false
+	},
+
+	"pi": false,
+	"ftp": false,
+
+	"js": {
+		"path": "octoprint_touchui/static/js/",
+
+		"bootstrap": {
+			"source": "source/js/bootstrap.js",
+			"output": "touchui.bootstrap.js"
+		},
+
+		"app": {
+			"source": [
+				"!source/js/components/material/dropdown.js",
+				"!source/js/bootstrap.js",
+				"source/js/constructor.js",
+				"source/js/**/*.js",
+				"source/js/**/**/*.js"
+			],
+			"output": "touchui.bundled.js"
+		},
+
+		"libs": {
+			"output": "touchui.libraries.js"
+		}
+	},
+
+	"less": {
+		"source": "source/less/touchui.less",
+		"output": {
+			"path": "octoprint_touchui/static/less/",
+			"fileName": "touchui.bundled.less"
+		},
+		"config": {
+			"compress": true
+		}
+	},
+
+	"css": {
+		"output": "octoprint_touchui/static/css",
+		"hash": ["octoprint_touchui/static/css/hash.touchui"]
+	},
+
+	"font": {
+		"output": "octoprint_touchui/static/font"
+	},
+
+	"watch": [
+		"source/less/touchui.less",
+		"source/less/**/*.less",
+		"source/js/**/*.js",
+		"source/js/*.js",
+		"source/vendors/OctoPrint-TouchUI/**/*.js",
+		"source/vendors/OctoPrint-TouchUI/**/*.less"
+	]
+
+}

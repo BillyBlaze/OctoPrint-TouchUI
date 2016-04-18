@@ -1,0 +1,71 @@
+.circle {
+	position: relative;
+	margin-bottom: 20px;
+
+	&:last-child {
+		margin: 0;
+	}
+
+	span {
+		transition: transform 0.3s ease-out;
+		will-change: transform, font-weight;
+
+		transform: translate3d(0, 0, 0);
+	}
+
+	&.active {
+		> span {
+			transform: translate3d(0, 15px, 0);
+			font-weight: bold;
+		}
+	}
+
+	@media (max-width: 400px) {
+		margin: 0;
+	}
+
+	canvas {
+		width: @temperature-size;
+		height: @temperature-size;
+	}
+
+	span {
+		display: block;
+		text-align: center;
+		font-size: 1rem;
+	}
+
+	> span {
+		margin-top: -17px;
+	}
+
+	.inner {
+		width: 100%;
+		top: 0;
+		left: 0;
+		height: @temperature-size;
+		line-height: 1.1rem;
+		position: absolute;
+		z-index: 0;
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		transition: color .4s ease-out;
+		will-change: color;
+
+		span {
+			flex: 0 0 auto;
+			font-size: 0.85rem;
+		}
+	}
+
+	// &.active {
+	// 	.inner {
+	// 		z-index: 2;
+	// 		color: @main-color-text;
+	// 	}
+	// }
+}

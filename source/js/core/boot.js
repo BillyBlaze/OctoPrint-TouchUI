@@ -14,11 +14,7 @@ TouchUI.prototype.core.boot = function() {
 		this.DOM.storage.get("active") !== false
 	) {
 
-		if($(window).width() < 980) {
-			return true;
-		}
-
-		if(this.settings.hasTouch) {
+		if($(window).width() < 980 || this.settings.hasTouch) {
 			return true;
 		}
 

@@ -1,17 +1,68 @@
 &.emulateTouch {
 	overflow: hidden;
+	max-height: 100%;
 
 	body {
-		overflow: hidden;
+		max-height: 100vh;
 
-		.modal-scrollable,
-		.show-dropdown {
-			overflow: hidden;
-		}
-
-		.page-container {
-			height: auto;
-			min-height: 100%;
+		* {
+			user-select: none;
 		}
 	}
+
+	#navbar #all_touchui_settings > .dropdown-menu {
+		overflow: hidden !important;
+	}
+
+	.octoprint-container {
+		height: 100vh;
+		overflow: hidden;
+	}
+
+	.dropdown-menu,
+	.show-dropdown {
+		overflow: hidden !important;
+	}
+
+	.iScrollIndicator {
+		background: @main-iScroll-color !important;
+		border: 0 none !important;
+	}
+
+	.iScrollVerticalScrollbar {
+		width: 3px !important;
+	}
+
+	// overflow: hidden;
+	//
+	// body {
+	// 	overflow: hidden;
+	//
+	// 	.modal-scrollable,
+	// 	.show-dropdown {
+	// 		overflow: hidden;
+	// 	}
+	//
+	// 	.page-container {
+	// 		overflow: hidden;
+	// 		height: 100vh;
+	//
+	// 		.input-field.withLabel {
+	// 			input
+	// 			textarea {
+	// 				pointer-events: none;
+	// 			}
+	// 		}
+	//
+	// 		.dropdown-menu {
+	// 			overflow: hidden !important;
+	// 		}
+	//
+	// 		.octoprint-container {
+	// 			height: 100vh;
+	// 		}
+	//
+	// 	}
+	//
+	// }
 }

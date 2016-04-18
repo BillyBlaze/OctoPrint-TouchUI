@@ -3,25 +3,30 @@ TouchUI.prototype.scroll.body = {
 	init: function() {
 		var self = this;
 		var scrollStart = false;
-		var $noPointer = $('.page-container');
 
 		// Create main body scroll
-		self.scroll.iScrolls.body = new IScroll("#scroll", self.scroll.defaults.iScroll);
+		self.scroll.iScrolls.body = new IScroll(".octoprint-container", self.scroll.defaults.iScroll);
+		self.scroll.iScrolls.menu = new IScroll("#all_touchui_settings .dropdown-menu", self.scroll.defaults.iScroll);
 		self.scroll.currentActive = self.scroll.iScrolls.body;
 
-		// Block everthing while scrolling
-		var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $noPointer, self.scroll.iScrolls.body),
-			scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $noPointer, self.scroll.iScrolls.body);
+		_.each([self.scroll.iScrolls.body, self.scroll.iScrolls.menu], function(iScroll) {
+			var $noPointer = $(iScroll.wrapper);
 
-		// Disable all JS events while scrolling for best performance
-		self.scroll.iScrolls.body.on("scrollStart", scrollStart);
-		self.scroll.iScrolls.body.on("onBeforeScrollStart", scrollStart);
-		self.scroll.iScrolls.body.on("scrollEnd", scrollEnd);
-		self.scroll.iScrolls.body.on("scrollCancel", scrollEnd);
+			// Block everthing while scrolling
+			var scrollStart = self.scroll.blockEvents.scrollStart.bind(self, $noPointer, iScroll),
+				scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self, $noPointer, iScroll);
+
+			// Disable all JS events while scrolling for best performance
+			iScroll.on("scrollStart", scrollStart);
+			iScroll.on("onBeforeScrollStart", scrollStart);
+			iScroll.on("scrollEnd", scrollEnd);
+			iScroll.on("scrollCancel", scrollEnd);
+
+		});
 
 		// Prevent any misfortune
 		$(document).on("mouseup.prevent.pointer touchend.prevent.pointer", function() {
-			$noPointer.removeClass('no-pointer');
+			$('.no-pointer').removeClass('no-pointer');
 		});
 
 	}

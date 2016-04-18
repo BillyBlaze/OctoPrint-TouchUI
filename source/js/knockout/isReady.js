@@ -1,7 +1,58 @@
 TouchUI.prototype.knockout.isReady = function (viewModels) {
 	var self = this;
 
-	if(self.isActive()) {
+	if (self.isActive()) {
+
+		// Setup theming in Android 5
+		self.settings.colors.mainColor.subscribe(function(value) {
+			var theme;
+			if($('[name="theme-color"]').length) {
+				theme = $('[name="theme-color"]');
+			} else {
+				theme = $('<meta name="theme-color">').appendTo('head');
+			}
+			theme.attr("content", value);
+		});
+		self.settings.colors.mainColor.valueHasMutated();
+
+		if (viewModels.temperatureViewModel) {
+			if (self.settings.isTouchscreen()) {
+				$.plot = _.noop;
+			} else {
+				$('#dashboard').addClass('withGraph');
+				viewModels.temperatureViewModel.plotOptions = $.extend(viewModels.temperatureViewModel.plotOptions, {
+					xaxis: {
+						ticks: false,
+						mode: "time",
+						maxTickSize: [2, "minute"]
+					},
+					yaxis: {
+						max: 310,
+						min: 0,
+						ticks: false
+					},
+					series: {
+						lines: {
+							show: true,
+							lineWidth: 0,
+							fill: true
+						},
+						grid: {
+							hoverable: true,
+							clickable: true,
+							borderWidth: 0,
+							margin: 0
+						}
+					},
+					grid: {
+						borderWidth: 0,
+						margin: 0
+					}
+				});
+			}
+
+		}
+
 		// Repaint graph after resize (.e.g orientation changed)
 		$(window).on("resize", function() {
 			viewModels.temperatureViewModel.updatePlot();
@@ -12,7 +63,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		$('.slimScrollDiv').slimScroll({destroy: true});
 
 		// Remove active keyboard when disabled
-		self.components.keyboard.isActive.subscribe(function(isActive) {
+		self.settings.isKeyboardActive.subscribe(function(isActive) {
 			if( !isActive ) {
 				$(".ui-keyboard-input").each(function(ind, elm) {
 					$(elm).data("keyboard").destroy();
@@ -22,7 +73,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Remove drag files into website feature
 		$(document).off("dragover");
-		if(viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		if (viewModels.gcodeFilesViewModel._enableDragNDrop) {
 			viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
 		}
 
@@ -33,32 +84,29 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}
 		});
 
-		// Redo scroll-to-end interface
-		$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
-			viewModels.terminalViewModel.scrollToEnd();
-			return false;
-		});
-
-		// Resize height of low-fi terminal to enable scrolling
-		if($("#terminal-output-lowfi").prop("scrollHeight")) {
-			viewModels.terminalViewModel.plainLogOutput.subscribe(function() {
-				$("#terminal-output-lowfi").height($("#terminal-output-lowfi").prop("scrollHeight"));
-			});
-		}
-
 		// Overwrite terminal knockout functions (i.e. scroll to end)
 		this.scroll.overwrite.call(this, viewModels.terminalViewModel);
 
 		// Setup version tracking in terminal
 		this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
+		// (Re-)Apply vindings to new dashboard
+		if ($("#state_wrapper").length) {
+			if (viewModels.navigationViewModel) {
+				ko.applyBindings(viewModels.navigationViewModel, $("#dashboard .accordion-heading .accordion-toggle")[0]);
+			}
+			if (viewModels.printerStateViewModel) {
+				ko.applyBindings(viewModels.printerStateViewModel, $("#dashboard .accordion-heading .print-control")[0]);
+			}
+		}
+
 		// (Re-)Apply bindings to the new webcam div
-		if($("#webcam").length) {
+		if ($("#webcam").length) {
 			ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 		}
 
 		// (Re-)Apply bindings to the new navigation div
-		if($("#navbar_login").length) {
+		if ($("#navbar_login").length) {
 			try {
 				ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 			} catch(err) {}
@@ -72,28 +120,22 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 					$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('visible_touch');
 				}
-
-				// Refresh scroll view when login state changed
-				if( !self.settings.hasTouch ) {
-					setTimeout(function() {
-						self.scroll.currentActive.refresh();
-					}, 0);
-				}
 			});
 		}
 
 		// (Re-)Apply bindings to the new system commands div
-		if($("#navbar_systemmenu").length) {
-			ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
-			ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
-		}
+		// if ($("#navbar_systemmenu").length) {
+		// 	// ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
+		// 	ko.applyBindings(viewModels.navigationViewModel, $("#files_link_mirror")[0]);
+		// 	ko.applyBindings(viewModels.navigationViewModel, $("#temp_link_mirror")[0]);
+		// }
 
 		// Force knockout to read the change
-		$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
-			if(isTriggered !== false) {
-				$(this).find("input").trigger("change", [hex, rgb, false]);
-			}
-		});
+		// $('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
+		// 	if(isTriggered !== false) {
+		// 		$(this).find("input").trigger("change", [hex, rgb, false]);
+		// 	}
+		// });
 
 		// Reuse for code below
 		var refreshUrl = function(href) {

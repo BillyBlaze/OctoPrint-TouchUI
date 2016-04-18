@@ -9,4 +9,6 @@ dist
 *.zip
 node_modules
 octoprint_touchui/WHATSNEW.md
-source/vendors/
+source/vendors/*
+pi.json
+!/source/vendors/OctoPrint-TouchUI/

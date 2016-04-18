@@ -1,23 +1,46 @@
 &.touch {
-	.show-dropdown,
-	#terminal-scroll {
-		overflow-y: scroll !important;
-		-webkit-overflow-scrolling: auto;
-	}
 
-	::-webkit-scrollbar {
-		width: 2px;
-		height: 2px;
-		background: transparent;
-	}
-	::-webkit-scrollbar-thumb {
-		background: @main-color;
-	}
+	#navbar {
+		position: fixed;
+		z-index: 10;
+		height: 100vh;
+		padding-bottom: 50vh;
+		box-sizing: content-box;
 
-	body {
-		.modal-scrollable {
-			position: fixed !important;
+		+ .container {
+			&.animate {
+				transition: padding .3s ease-out;
+				will-change: padding;
+			}
+			padding: 0;
+		}
+
+		&.open-short + .container {
+			padding: 0 0 0 70px;
+		}
+		&.open + .container {
+			padding: 0 0 0 230px;
+		}
+
+		@media (min-width: 550px) {
+			+ .container {
+				padding: 0 0 0 70px !important;
+			}
 		}
 	}
 
+	.show-dropdown,
+	#terminal-scroll {
+		overflow-y: auto !important;
+		-webkit-overflow-scrolling: auto;
+	}
+
+// 	::-webkit-scrollbar {
+// 		width: 2px;
+// 		height: 2px;
+// 		background: transparent;
+// 	}
+// 	::-webkit-scrollbar-thumb {
+// 		background: @main-color;
+// 	}
 }

@@ -49,8 +49,8 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Get state of cookies and store them in KO
-		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
-		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
+		this.settings.isKeyboardActive(this.DOM.storage.get("keyboardActive"));
+		this.settings.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
 		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}

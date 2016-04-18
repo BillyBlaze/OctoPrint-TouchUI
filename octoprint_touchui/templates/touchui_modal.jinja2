@@ -11,11 +11,11 @@
 			</div>
 			<div class="btn-box">
 				<button class="btn btn-primary" data-bind="click: bindings.toggleKeyboard, disable: !isActive()">{{ _('Toggle Virtual Keyboard') }}</button>
-				<span class="label" data-bind="text: components.keyboard.isActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: components.keyboard.isActive() ? 'label-success' : 'label-danger'"></span>
+				<span class="label" data-bind="text: settings.isKeyboardActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: settings.isKeyboardActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box">
 				<button class="btn btn-primary" data-bind="click: bindings.toggleHidebar, disable: !isActive()">{{ _('Toggle hide navigation bar') }}</button>
-				<span class="label" data-bind="text: animate.isHidebarActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: animate.isHidebarActive() ? 'label-success' : 'label-danger'"></span>
+				<span class="label" data-bind="text: settings.isHidebarActive() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: settings.isHidebarActive() ? 'label-success' : 'label-danger'"></span>
 			</div>
 			<div class="btn-box" data-bind="visible: settings.hasFullscreen">
 				<button class="btn btn-primary" data-bind="click: bindings.toggleFullscreen">{{ _('Toggle fullscreen') }}</button>

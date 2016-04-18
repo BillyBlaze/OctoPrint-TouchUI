@@ -16,7 +16,7 @@
 	&:active, &.touch-focus {
 		color: @main-color-text;
 		background: @main-color;
-		.border-radius(5px, 5px, 5px, 5px);
+		border-radius: 5px;
 		position: relative;
 		margin-top: -32px !important;
 		padding-bottom: 40px !important;
@@ -48,25 +48,10 @@
 	right: 10px;
 }
 
-
-
-.ui-keyboard-shift {
-	span {
-		display: none !important;
-	}
-	&:after {
-		.font-icon-reset();
-		content: "\f062";
-		font-size: 25px;
-		max-height: 43px;
-	}
-}
-
-
 .ui-keyboard-cancel,
 .ui-keyboard-accept {
 	float: right;
-	.border-radius(50%,50%,50%,50%);
+	border-radius: 50%;
 	background: @keyboard-accept;
 
 	margin-top: 2px !important;
@@ -79,12 +64,6 @@
 	span {
 		display: none !important;
 	}
-
-	&:after {
-		.font-icon-reset();
-		content: "\f00c";
-		color: @keyboard-background;
-	}
 }
 .ui-keyboard-cancel {
 	background: @btn-danger-background;
@@ -93,9 +72,10 @@
 	@media (max-width: 300px) {
 		margin-right: 5px !important;
 	}
-
-	&:after {
-		content: "\f149";
+}
+.ui-keyboard-shift {
+	span {
+		display: none !important;
 	}
 }
 
@@ -122,7 +102,7 @@
 	max-width: none;
 
 	&:after {
-		.border-radius(5px, 5px, 5px, 5px);
+		border-radius: 5px;
 		content: "";
 		display: inline-block;
 		height: 20px;
@@ -154,9 +134,6 @@
 		line-height: 40px;
 
 		&:after {
-			.font-icon-reset();
-			content: "\f00d";
-
 			background: contrast(@keyboard-background);
 			color: @keyboard-background;
 			font-size: 19px;
@@ -203,7 +180,6 @@
 	top: auto !important;
 	bottom: 0;
 	width: 100%;
-	.box-sizing(border-box);
 }
 .ui-keyboard-accept span,
 .ui-keyboard-cancel span {
@@ -245,8 +221,8 @@
 }
 .ui-keyboard-empty span,
 .ui-keyboard-space span {
-	font: 0/0 a;
-	.text-shadow(none);
+	font: 0/0 @icon-font;
+	text-shadow: none;
 	color: transparent;
 }
 .ui-keyboard-preview-wrapper {
@@ -254,7 +230,6 @@
 	position: relative;
 	overflow: hidden;
 	padding: 4px;
-	.box-sizing(border-box);
 
 	input, textarea {
 		margin: 0;
@@ -274,7 +249,6 @@
 	width: 100%;
 	padding: 0 15px;
 	height: 40px;
-	.box-sizing(border-box);
 }
 .ui-keyboard-keyset {
 	text-align: center;
@@ -321,7 +295,7 @@ button.ui-keyboard-accept.ui-keyboard-invalid-input {
 	border-color: #c00;
 	background: #800;
 	color: #fff;
-	.opacity(0.5);
+	opacity: 0.5;
 }
 button.ui-keyboard-accept.ui-keyboard-invalid-input:hover {
 	background: #a00;

@@ -15,7 +15,7 @@ TouchUI.prototype = {
 
 		isFullscreen: ko.observable(false),
 		isTouchscreen: ko.observable(false),
-		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
+		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && (window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1 || window.navigator.userAgent.indexOf("Linux arm") !== -1)),
 
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
@@ -24,20 +24,23 @@ TouchUI.prototype = {
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
 
+		isKeyboardActive: ko.observable(false),
+		isHidebarActive: ko.observable(false),
+
 		whatsNew: ko.observable(false)
 	},
 
 	core: {},
-	components: {},
 	knockout: {},
 	plugins: {},
-	animate: {
-		isHidebarActive: ko.observable(false)
-	},
+	animate: {},
 	DOM: {
 		create: {},
 		move: {},
 		overwrite: {}
+	},
+	components: {
+		material: {}
 	},
 	scroll: {
 
@@ -47,54 +50,12 @@ TouchUI.prototype = {
 				mouseWheel: true,
 				interactiveScrollbars: true,
 				shrinkScrollbars: "scale",
-				fadeScrollbars: true,
-				disablePointer: true
+				fadeScrollbars: true
 			}
 		},
 
 		iScrolls: {},
 		currentActive: null
-	}
-
-}
-
-TouchUI.prototype.animate.hide = function(what) {
-	var self = this;
-
-	//Lets hide the navbar by scroll
-	if( what === "navbar" ) {
-		if( this.animate.isHidebarActive() ) {
-			var navbar = $("#navbar"),
-				navbarHeight = parseFloat(navbar.height());
-
-			if( this.settings.hasTouch ) {
-				// Hide navigation bar on mobile
-				window.scrollTo(0,1);
-
-				if(parseFloat($("html,body").prop('scrollHeight')) > ($(window).height() + navbarHeight)) {//hasEnoughScroll?
-					$("html,body").stop().animate({
-						scrollTop: navbarHeight
-					}, 160, "swing");
-				}
-
-			} else {
-				var scroll = self.scroll.iScrolls.body;
-
-				if(scroll.isAnimating) {
-					setTimeout(function() {
-						self.animate.hide.call(self, what);
-					}, 10);
-					return;
-				}
-
-				setTimeout(function() {
-					if(Math.abs(scroll.maxScrollY) > 0) {
-						scroll.scrollTo(0, -navbarHeight, 160);
-					}
-				}, 0);
-
-			}
-		}
 	}
 
 }
@@ -109,61 +70,81 @@ TouchUI.prototype.components.dropdown = {
 	// Rewrite opening of dropdowns
 	toggle: function() {
 		var self = this;
-		var namespace = ".touchui.dropdown";
+		var $document = $(document);
 
-		$(document)
-			.off('.dropdown')
-			.on('touchstart.dropdown.data-api', '.dropdown-menu', function (e) { e.stopPropagation() })
-			.on('click.dropdown.data-api', '[data-toggle=dropdown]', function(e) {
-				var $dropdownToggle = $(e.currentTarget);
-				var $dropdownContainer = $dropdownToggle.parent();
+		// Triggered when we create the dropdown and need scrolling
+		$document.on("dropdown-open.touchui", function(e, elm, $toggle) {
+			var $elm = $(elm);
+			var div;
 
-				// Stop the hashtag from propagating
-				e.preventDefault();
+			// Animate height with CSS transition
+			var $height = $elm.innerHeight();
+			$(div).height($height - ($height * 0.7));
+			$(div).height($height);
 
-				// Toggle the targeted dropdown
-				$dropdownContainer.toggleClass("open");
+			if (!self.settings.hasTouch) {
 
-				// Refresh current scroll and add a min-height so we can reach the dropdown if needed
-				self.components.dropdown.containerMinHeight.call(self, $dropdownContainer, $dropdownToggle);
+				if (!$toggle.data("iscroll")) {
 
-				// Skip everything if we are in a dropdown toggling a dropdown (one click event is enuff!)
-				if( $dropdownContainer.parents('.open > .dropdown-menu').length > 0 ) {
-					return;
+					div = $('<div/>').addClass("dropdown-menu").insertAfter(elm)[0];
+					$elm.appendTo(div).removeClass("dropdown-menu");
+
+					// Create dropdown scroll
+					self.scroll.modal.dropdown = new IScroll(div, $.extend({ fadeScrollbars: false }, self.scroll.defaults.iScroll));
+
+					// Store bindings into variable for future reference
+					var scrollStart = self.scroll.blockEvents.scrollStart.bind(self, $elm, self.scroll.modal.dropdown),
+						scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self, $elm, self.scroll.modal.dropdown);
+
+					// Disable all JS events for smooth scrolling
+					self.scroll.modal.dropdown.on("scrollStart", scrollStart);
+					self.scroll.modal.dropdown.on("scrollEnd", scrollEnd);
+					self.scroll.modal.dropdown.on("scrollCancel", scrollEnd);
+
+					$toggle.data("iscroll", self.scroll.modal.dropdown);
+
+				} else {
+
+					div = elm;
+					self.scroll.modal.dropdown = $toggle.data("iscroll");
+
 				}
 
-				// Remove all other active dropdowns
-				$('.open [data-toggle="dropdown"]').not($dropdownToggle).parent().removeClass('open');
+				setTimeout(function() {
+					if (self.scroll.modal.dropdown) {
+						self.scroll.refresh(self.scroll.modal.dropdown);
+					}
+				}, 0);
+				setTimeout(function() {
+					if (self.scroll.modal.dropdown) {
+						self.scroll.refresh(self.scroll.modal.dropdown);
+					}
+				}, 180);
 
-				if ( !self.settings.hasTouch ) {
-					self.scroll.iScrolls.terminal.disable();
-				}
+				// Set scroll to active item
+				//self.scroll.modal.dropdown.scrollToElement($elm.find('li.active')[0], 0, 0, -30);
 
-				$(document).off("click"+namespace).on("click"+namespace, function(eve) {
-					// Check if we scrolled (touch devices wont trigger this click event after scrolling so assume we didn't move)
-					var moved = ( !self.settings.hasTouch ) ? self.scroll.currentActive.moved : false,
-						$target = $(eve.target);
+				// Disable scrolling in active modal
+				self.scroll.currentActive.disable();
+				self.scroll.iScrolls.terminal.disable();
 
-					if (
-						!moved && // If scrolling did not move
-						$target.parents(".ui-pnotify").length === 0 && // if not a click within notifiaction
-						(
-							!$target.parents().is($dropdownContainer) || // if clicks are not made within the dropdown container
-							$target.is('a:not([data-toggle="dropdown"])') // Unless it's a link but not a [data-toggle]
-						)
-					) {
-						$(document).off(eve);
-						$dropdownContainer.removeClass('open');
+				$document.on("dropdown-closed.touchui", function(eve) {
+					self.scroll.refresh(self.scroll.currentActive);
+					self.scroll.iScrolls.terminal.enable();
 
-						if ( !self.settings.hasTouch ) {
-							$('.octoprint-container').css("min-height", 0);
-							self.scroll.currentActive.refresh();
-							self.scroll.iScrolls.terminal.enable();
+					if (!$toggle.parents("#all_touchui_settings").length) {
+						// Enable active modal
+						self.scroll.currentActive.enable();
+						$document.off(eve);
+
+						if (self.scroll.modal.dropdown) {
+							self.scroll.modal.dropdown = null;
 						}
 					}
-				});
-			});
 
+				});
+			}
+		});
 	},
 
 	// Support 1.3.0 onMouseOver dropdowns
@@ -173,35 +154,35 @@ TouchUI.prototype.components.dropdown = {
 	},
 
 	// Refresh current scroll and add a min-height so we can reach the dropdown if needed
-	containerMinHeight: function($dropdownContainer, $dropdownToggle) {
-		var self = this;
-
-		// Touch devices can reach the dropdown by CSS, only if we're using iScroll
-		if ( !self.settings.hasTouch ) {
-			// Get active container
-			var $container = ($dropdownContainer.parents('.modal').length === 0 ) ? $('.octoprint-container') : $dropdownContainer.parents('.modal .modal-body');
-
-			// If we toggle within the dropdown then get the parent dropdown for total height
-			var $dropdownMenu = ( $dropdownContainer.parents('.open > .dropdown-menu').length > 0 ) ? $dropdownContainer.parents('.open > .dropdown-menu') : $dropdownToggle.next();
-
-			setTimeout(function() {
-
-				//If the main dropdown has closed (by toggle) then let's remove the min-height else
-				if(!$dropdownMenu.parent().hasClass("open")) {
-					$container.css("min-height", 0);
-					self.scroll.currentActive.refresh();
-				} else {
-					var y = Math.abs(self.scroll.currentActive.y),
-						height = $dropdownMenu.outerHeight(),
-						top = $dropdownMenu.offset().top;
-
-					$container.css("min-height", y + top + height);
-					self.scroll.currentActive.refresh();
-				}
-
-			}, 0);
-		}
-	}
+	// containerMinHeight: function($dropdownContainer, $dropdownToggle) {
+	// 	var self = this;
+	//
+	// 	// Touch devices can reach the dropdown by CSS, only if we're using iScroll
+	// 	if ( !self.settings.hasTouch ) {
+	// 		// Get active container
+	// 		var $container = ($dropdownContainer.parents('.modal').length === 0 ) ? $('.octoprint-container') : $dropdownContainer.parents('.modal .modal-body');
+	//
+	// 		// If we toggle within the dropdown then get the parent dropdown for total height
+	// 		var $dropdownMenu = ( $dropdownContainer.parents('.open > .dropdown-menu').length > 0 ) ? $dropdownContainer.parents('.open > .dropdown-menu') : $dropdownToggle.next();
+	//
+	// 		setTimeout(function() {
+	//
+	// 			//If the main dropdown has closed (by toggle) then let's remove the min-height else
+	// 			if(!$dropdownMenu.parent().hasClass("open")) {
+	// 				$container.css("min-height", 0);
+	// 				self.scroll.currentActive.refresh();
+	// 			} else {
+	// 				var y = Math.abs(self.scroll.currentActive.y),
+	// 					height = $dropdownMenu.outerHeight(),
+	// 					top = $dropdownMenu.offset().top;
+	//
+	// 				$container.css("min-height", y + top + height);
+	// 				self.scroll.currentActive.refresh();
+	// 			}
+	//
+	// 		}, 0);
+	// 	}
+	// }
 
 }
 
@@ -260,7 +241,6 @@ TouchUI.prototype.components.fullscreen = {
 
 TouchUI.prototype.components.keyboard = {
 
-	isActive: ko.observable(false),
 	config: {
 
 		default: {
@@ -362,40 +342,43 @@ TouchUI.prototype.components.keyboard = {
 			beforeClose: self.components.keyboard.onClose
 		};
 
-		var notThis = ['[type="file"]','[type="checkbox"]','[type="radio"]'];
-		$(document).on("mousedown", 'input:not('+notThis+'), textarea', function(e) {
+		var notThis = ['[type="file"]','[type="checkbox"]','[type="radio"]','.select-dropdown'];
+		$(document).on("focus", 'input:not('+notThis+'), textarea', function(e) {
 			var $elm = $(e.target);
 
-			if(!self.components.keyboard.isActive()) {
+			if($elm.parents('.octoprint-container').length) {
 
-				if($elm.data("keyboard")) {
-					$elm.data("keyboard").close().destroy();
-				}
+				if(!self.settings.isKeyboardActive()) {
 
-			} else {
+					if($elm.data("keyboard")) {
+						$elm.data("keyboard").close().destroy();
+					}
 
-				if(!self.settings.hasTouch) {
-
-					// Force iScroll to stop following the mouse (bug)
-					self.scroll.currentActive._end(e);
-					setTimeout(function() {
-						self.scroll.currentActive.scrollToElement($elm[0], 200, 0, -30);
-					}, 0);
-
-				}
-
-				// $elm already has a keyboard
-				if($elm.data("keyboard")) {
-					$elm.data('keyboard').reveal();
-					return;
-				}
-
-				if($elm.attr("type") === "number") {
-					$elm.keyboard($.extend(self.components.keyboard.config.number, obj));
-				} else if($elm.attr("id") === "terminal-command") {
-					$elm.keyboard($.extend(self.components.keyboard.config.terminal, obj));
 				} else {
-					$elm.keyboard($.extend(self.components.keyboard.config.default, obj));
+
+					if(!self.settings.hasTouch) {
+
+						// Force iScroll to stop following the mouse (bug)
+						self.scroll.currentActive._end(e);
+						setTimeout(function() {
+							self.scroll.currentActive.scrollToElement($elm[0], 200, 0, -30);
+						}, 0);
+
+					}
+
+					// $elm already has a keyboard
+					if($elm.data("keyboard")) {
+						$elm.data('keyboard').reveal();
+						return;
+					}
+
+					if($elm.attr("type") === "number") {
+						$elm.keyboard($.extend(self.components.keyboard.config.number, obj));
+					} else if($elm.attr("id") === "terminal-command") {
+						$elm.keyboard($.extend(self.components.keyboard.config.terminal, obj));
+					} else {
+						$elm.keyboard($.extend(self.components.keyboard.config.default, obj));
+					}
 				}
 			}
 
@@ -425,8 +408,9 @@ TouchUI.prototype.components.keyboard = {
 TouchUI.prototype.components.modal = {
 
 	init: function() {
+
 		if($("#settings_dialog_menu").length > 0) {
-			this.components.modal.dropdown.create.call(this, "#settings_dialog_menu", "special-dropdown-uni", "#settings_dialog_label");
+			this.components.modal.dropdown.create.call(this, "#settings_dialog_menu ul.nav", "special-dropdown-uni", "#settings_dialog_label");
 		}
 		if($("#usersettings_dialog ul.nav").length > 0) {
 			this.components.modal.dropdown.create.call(this, "#usersettings_dialog ul.nav", "special-dropdown-uni-2", "#usersettings_dialog h3");
@@ -436,170 +420,51 @@ TouchUI.prototype.components.modal = {
 	dropdown: {
 		create: function(cloneId, newId, appendTo) {
 			var self = this;
+			var $appendTo = $(appendTo);
+			var $cloneId = $(cloneId);
 
-			// Remove unwanted whitespaces
-			$(appendTo).text($(appendTo).text().trim());
+			$appendTo
+				.text($appendTo.text().replace("OctoPrint", "").trim())
+
+			var $div = $('<div/>')
+				.addClass('dropdown')
+				.appendTo($appendTo);
+
+			$cloneId
+				.attr("id", newId)
+				.addClass('dropdown-menu')
+				.appendTo($div);
 
 			// Create a label that is clickable
-			var $settingsLabel = $("<span></span>")
-				.addClass("hidden")
-				.attr("id", newId)
-				.appendTo(appendTo)
-				.text($(cloneId+" .active").text().trim())
-				.on("click", function(e) {
-
-					// Stop if we clicked on the dropdown and stop the dropdown from regenerating more then once
-					if(e.target !== this || (e.target === this && $(".show-dropdown").length > 0)) {
-						return;
-					}
-
-					// Clone the main settings menu
-					var elm = $(cloneId)
-						.clone()
-						.attr("id", "")
-						.appendTo(this)
-						.addClass("show-dropdown");
-
-					// Add click binder to close down the dropdown
-					$(document).on("click", function(event) {
-
-						if(
-							$(event.target).closest('[data-toggle="tab"]').length > 0 || //Check if we clicked on a tab-link
-							$(event.target).closest("#"+newId).length === 0 //Check if we clicked outside the dropdown
-						) {
-							var href = $settingsLabel.find(".active").find('[data-toggle="tab"]').attr("href");
-							$(document).off(event).trigger("dropdown-closed.touchui"); // Trigger event for enabling scrolling
-
-							$('.show-dropdown').remove();
-							$('[href="'+href+'"]').click();
-							$settingsLabel.text($('[href="'+href+'"]').text());
-
-							if( !self.settings.hasTouch ) {
-								setTimeout(function() {
-									self.scroll.modal.stack[self.scroll.modal.stack.length-1].refresh();
-								}, 0);
-							}
-						}
-
-					});
-
-					// Trigger event for disabling scrolling
-					$(document).trigger("dropdown-open.touchui", elm[0]);
-				});
-
-			// reset the active text in dropdown on open
-			$(appendTo)
-				.closest(".modal")
-				.on("modal.touchui", function() {
-					var href = $(cloneId)
-						.find(".active")
-						.find('[data-toggle="tab"]')
-						.attr("href");
-
-					$settingsLabel.text($('[href="'+href+'"]').text());
-				});
+			var $settingsLabel = $('<a class="dropdown-toggle" href="#" data-toggle="dropdown"></a>')
+				.insertBefore($cloneId)
+				.text($("#"+newId+" .active").text().trim());
 
 		}
 	}
 }
 
-TouchUI.prototype.components.slider = {
-
-	init: function() {
-
-		ko.bindingHandlers.slider = {
-			init: function (element, valueAccessor) {
-				var $element = $(element);
-
-				// Set value on input field
-				$element.val(valueAccessor().value());
-
-				// Create container
-				var div = $('<div class="slider-container"></div>').insertBefore(element);
-
-				// Wait untill next DOM bindings are executed
-				setTimeout(function() {
-					var $button = $(element).next('button');
-					var id = _.uniqueId("ui-inp");
-
-					$button.appendTo(div);
-					$element.appendTo(div);
-
-					$(div).find('input').attr("id", id);
-
-					var lbl = $('<label for="' + id + '" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
-					lbl.appendTo('.octoprint-container')
-					$element.attr("style", "padding-left:" + (lbl.width() + 15) + "px");
-					lbl.appendTo(div);
-
-				}, 60);
-
-				$element.on("change", function(e) {
-					valueAccessor().value($element.val());
-				}).attr({
-					max: valueAccessor().max,
-					min: valueAccessor().min,
-					step: valueAccessor().step,
-				});
-
-			},
-			update: function (element, valueAccessor) {
-				$(element).val(valueAccessor().value());
-			}
-		};
-
-	}
-
-}
-
 TouchUI.prototype.components.touchList = {
 	init: function() {
-
-		/* Add touch friendly files list */
 		var self = this;
-		var touch = false;
-		var start = 0;
-		var namespace = ".files.touchui";
 
-		$(document).on("mousedown touchstart", "#files .entry:not(.folder, .back), #temp .row-fluid", function(e) {
-			try {
-				touch = e.currentTarget;
-				start = e.pageX || e.originalEvent.targetTouches[0].pageX;
-			} catch(err) {
-				return;
+		$('#files').hammerPan({
+			container: {
+				size: $(window).width(),
+			},
+			block: $('.tabbable > .tab-content'),
+			target: ['target', '.entry'],
+			width: 70,
+			reverse: true,
+			onStep: function(pos, elm) {
+				var translate = 'translate3d(' + pos + 'px, 0, 0)';
+
+				$(elm).css({
+					transform: translate,
+					mozTransform: translate,
+					webkitTransform: translate
+				});
 			}
-
-			$(document).one("mouseup"+namespace+" touchend"+namespace, function(e) {
-				touch = false;
-				start = 0;
-
-				$(document).off(namespace);
-			});
-
-			$(document).on("mousemove"+namespace+" touchmove"+namespace, function(event) {
-				if(touch !== false) {
-					try {
-						var current = event.pageX || event.originalEvent.targetTouches[0].pageX;
-
-						if(current > start + 80) {
-							$(document).trigger("fileclose" + namespace, event.target);
-							$(touch).removeClass("open");
-							start = current;
-						} else if(current < start - 80) {
-							$(document).trigger("fileopen" + namespace, event.target);
-							$(touch).addClass("open");
-							start = current;
-
-							if( $(touch).find(".btn-group").children().length > 4 ) {
-								$(touch).addClass("large");
-							}
-						}
-					} catch(err) {
-						//Ignore step
-					}
-				}
-			});
-
 		});
 
 	}
@@ -620,7 +485,7 @@ TouchUI.prototype.components.touchscreen = {
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
 		this.scroll.defaults.iScroll.interactiveScrollbars = false;
-		this.scroll.defaults.iScroll.useTransition = false;
+		// this.scroll.defaults.iScroll.useTransition = false;
 		// this.scroll.defaults.iScroll.useTransform = false;
 		// this.scroll.defaults.iScroll.HWCompositing = false;
 	},
@@ -639,7 +504,7 @@ TouchUI.prototype.components.touchscreen = {
 				viewModels.gcodeViewModel.enabled = false;
 				viewModels.gcodeViewModel.initialize = _.noop;
 				viewModels.gcodeViewModel._processData = _.noop;
-				$("#gcode_link2").hide();
+				$("#gcode_link").remove();
 			}
 		}
 
@@ -647,62 +512,261 @@ TouchUI.prototype.components.touchscreen = {
 
 }
 
-TouchUI.prototype.core.init = function() {
+TouchUI.prototype.DOM.cookies = {
 
-	// Migrate old cookies into localstorage
-	this.DOM.storage.migration.call(this);
-
-	// Bootup TouchUI if Touch, Small resolution or storage say's so
-	if (this.core.boot.call(this)) {
-
-		$("html").attr("id", this.settings.id);
-
-		// Force mobile browser to set the window size to their format
-		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
-		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
-		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
-
-		this.isActive(true);
-
-		// Enforce active cookie
-		this.DOM.storage.set("active", true);
-
-		// Create keyboard cookie if not existing
-		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.settings.hasTouch) {
-				this.DOM.storage.set("keyboardActive", true);
-			} else {
-				this.DOM.storage.set("keyboardActive", false);
-			}
+	get: function(key) {
+		var name = "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
 		}
+		return undefined;
+	},
 
-		// Create hide navbar on click if not existing
-		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
-			this.DOM.storage.set("hideNavbarActive", false);
-		}
+	set: function(key, value) {
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+	},
 
-		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
-			this.components.touchscreen.init.call(this);
-		}
+	toggleBoolean: function(key) {
+		var value = $.parseJSON(this.get(key) || "false");
 
-		// Create fullscreen cookie if not existing and trigger pNotification
-		if (this.DOM.storage.get("fullscreen") === undefined) {
-			this.DOM.storage.set("fullscreen", false);
-			this.components.fullscreen.ask.call(this);
+		if(value === true) {
+			this.set(key, "false");
 		} else {
-			//Cookie say user wants fullscreen, ask it!
-			if(this.DOM.storage.get("fullscreen")) {
-				this.components.fullscreen.ask.call(this);
-			}
+			this.set(key, "true");
 		}
 
-		// Get state of cookies and store them in KO
-		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
-		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
-		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
+		return !value;
 
 	}
+
+}
+
+TouchUI.prototype.DOM.localstorage = {
+	store: JSON.parse(localStorage["TouchUI"] || "{}"),
+
+	get: function (key) {
+		return this.store[key];
+	},
+
+	set: function (key, value) {
+		this.store[key] = value;
+		localStorage["TouchUI"] = JSON.stringify(this.store);
+		return this.store[key];
+	},
+
+	toggleBoolean: function (key) {
+		var value = this.store[key] || false;
+
+		if(value === true) {
+			this.set(key, false);
+		} else {
+			this.set(key, true);
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.pool = {
+	timer: null,
+	callTree: [],
+	duration: 100,
+
+	// For performance we will add some heavy functions into a que
+	// We will execute them later and not during this runtime (i.e. iScroll refresh after DOMloading)
+	add: function(fn, scope) {
+		if(!this.timer) {
+			this.timer = setTimeout(this.execute.bind(this), this.duration);
+		}
+
+		this.callTree.push([fn, scope]);
+	},
+
+	execute: function() {
+		_.each(this.callTree, function(fn) {
+			fn[0].call(fn[1]);
+		});
+
+		this.callTree = [];
+		this.timer = null;
+	}
+
+}
+
+// Since I messed up by releasing start_kweb3.xinit without disabling private
+// mode, we now need to check if we can store anything at all in localstorage
+// the missing -P will prevent any localstorage
+if (TouchUI.prototype.settings.hasLocalStorage) {
+	try {
+		localStorage["TouchUIcanWeHazStorage"] = "true";
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
+		delete localStorage["TouchUIcanWeHazStorage"];
+	} catch(err) {
+
+		// TODO: remove this is future
+		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
+			$(function() {
+				new PNotify({
+					type: 'error',
+					title: "Private Mode detection:",
+					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
+						"and add the parameter 'P' after the dash. \n\n" +
+						"For more information see the v0.3.3 release notes.",
+					hide: false
+				});
+			});
+		}
+
+		console.info("Localstorage defined but failback to cookies due to errors.");
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+	}
+} else {
+	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+}
+
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
+
+	if (this.settings.hasLocalStorage) {
+		if (document.cookie.indexOf("TouchUI.") !== -1) {
+			console.info("TouchUI cookies migration.");
+
+			var name = "TouchUI.";
+			var ca = document.cookie.split(';');
+			for (var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) {
+					var string = c.substring(name.length,c.length);
+					string = string.split("=");
+					var value = $.parseJSON(string[1]);
+
+					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
+					this.DOM.storage.set(string[0], value);
+
+					console.info("Removing cookie", string[0]);
+					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+				}
+			}
+		}
+	}
+
+} : _.noop;
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with files, dashboard and temperature and make it active
+	this.DOM.create.files.init.call(this, this.DOM.create.tabbar);
+	this.DOM.create.dashboard.init(this.DOM.create.tabbar);
+	this.DOM.create.temperature.init.call(this);
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init(this.DOM.create.tabbar);
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Disable these bootstrap/jquery plugins
+	this.DOM.overwrite.tabdrop.call(self);
+	this.DOM.overwrite.modal.call(self);
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+	}
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.navbar.init.call(this);
+	this.DOM.move.overlays.init.call(this);
+	this.DOM.move.terminal.init.call(this);
+
+	this.components.material.ripple();
+	// $('.dropdown-toggle').each(function(ind, elm) {
+	// 	var $elm = $(elm);
+	// 	var _id = _.uniqueId("dropdown");
+	//
+	// 	if(!$elm.parents('#all_touchui_settings').length) {
+	//
+	// 		$elm.removeClass('dropdown-toggle')
+	// 			.attr('data-toggle', null)
+	// 			.addClass('dropdown-button')
+	// 			.attr('data-activates', _id);
+	//
+	// 		$elm.next()
+	// 			.removeClass('dropdown-menu')
+	// 			.addClass('dropdown-content')
+	// 			.attr('id', _id);
+	//
+	// 	}
+	// });
+
+	var div = $('<div class="input-field"></div>').appendTo('body');
+	var $elems = $('input, textarea, select');
+	$elems.each(function moveInputs(ind, elm) {
+		var $elm = $(elm);
+		var id = $elm.attr("id");
+		var $for = (id) ? $('label[for="' + id + '"]') : [];
+		//var isControlLabel = $elm.parents('.controls').prev().hasClass('control-label');
+
+		if ($for.length) {
+
+			var $div = div.clone();
+
+			if ($elm.is('select, textarea, input:not([type="radio"]):not([type="checkbox"])')) {
+				$div.addClass('withLabel');
+			}
+
+			$div.insertAfter($elm);
+			$elm.appendTo($div);
+			$for.prependTo($div);
+
+		} /*else if ($elm.parent().hasClass("checkbox") || $elm.parent().hasClass("radio") || isControlLabel) {
+
+			var $parent = (isControlLabel) ? $elm.parents('.controls').prev() : $elm.parent();
+			var _id = _.uniqueId("input");
+
+			$div = $(div).insertAfter((isControlLabel) ? $elm : $parent);
+			$elm.appendTo($div).attr("id", _id);
+			$parent.appendTo($div).attr("for", _id);
+
+		}*/
+
+		if ($elm.prop('tagName').toLowerCase() === 'textarea') {
+			$elm.addClass('materialize-textarea');
+		}
+
+	});
+
+	// $('select').each(function(ind, elm) {
+	// 	var $elm = $(elm);
+	// 	$elm.attr("data-bind", $elm.attr("data-bind") + ', materialSelect: true');
+	// });
+	//
+	// ko.bindingHandlers.materialSelect = {
+	// 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	// 		allBindings();
+	// 		$(element).material_select();
+	// 	},
+	// 	update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	// 		allBindings();
+	// 		$(element).material_select();
+	// 	}
+	// };
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
 
 }
 
@@ -722,11 +786,7 @@ TouchUI.prototype.core.boot = function() {
 		this.DOM.storage.get("active") !== false
 	) {
 
-		if($(window).width() < 980) {
-			return true;
-		}
-
-		if(this.settings.hasTouch) {
+		if($(window).width() < 980 || this.settings.hasTouch) {
 			return true;
 		}
 
@@ -752,7 +812,8 @@ TouchUI.prototype.core.bridge = function() {
 			"navigationViewModel",
 			"pluginManagerViewModel",
 			"temperatureViewModel",
-			"loginStateViewModel"
+			"loginStateViewModel",
+			"printerStateViewModel"
 		],
 		TOUCHUI_ELEMENTS: [
 			"#touchui_settings_dialog",
@@ -762,15 +823,17 @@ TouchUI.prototype.core.bridge = function() {
 
 		domLoading: function() {
 			if (self.isActive()) {
-				self.scroll.beforeLoad.call(self);
 				self.DOM.init.call(self);
+
+				$.fn.slider = function() { return this; }
+				$.fn.slider.on = _.noop;
+				$.fn.slimScroll = _.noop;
 			}
 		},
 
 		domReady: function() {
 			if (self.isActive()) {
-
-				if(_.some(self.core.bridge.OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
+				if($("#gcode").length) {
 					self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS = self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS.concat(["gcodeViewModel"]);
 				}
 
@@ -779,7 +842,6 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.keyboard.init.call(self);
 				self.components.modal.init.call(self);
 				self.components.touchList.init.call(self);
-				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
 			}
@@ -883,7 +945,7 @@ TouchUI.prototype.core.less = {
 	},
 
 	error: function(error) {
-		var content = error.responseText;
+		var content = error.responseText || error.message;
 		if(content && content.trim() && error.status !== 401) {
 			new PNotify({
 				title: 'TouchUI: Whoops, something went wrong...',
@@ -893,6 +955,8 @@ TouchUI.prototype.core.less = {
 				hide: false
 			});
 		}
+
+		console.error(error);
 
 	}
 
@@ -935,168 +999,64 @@ TouchUI.prototype.core.version = {
 
 }
 
-TouchUI.prototype.DOM.init = function() {
+TouchUI.prototype.core.init = function() {
 
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init(this.DOM.create.tabbar);
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+	// Migrate old cookies into localstorage
+	this.DOM.storage.migration.call(this);
 
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+	// Bootup TouchUI if Touch, Small resolution or storage say's so
+	if (this.core.boot.call(this)) {
 
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call(this);
-	this.DOM.move.navbar.init.call(this);
-	this.DOM.move.afterTabAndNav.call(this );
-	this.DOM.move.overlays.init.call(this);
-	this.DOM.move.terminal.init.call(this);
+		$("html").attr("id", this.settings.id);
 
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init(this.DOM.create.tabbar);
+		// Force mobile browser to set the window size to their format
+		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
+		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
+		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
 
-	// Manipulate controls div
-	this.DOM.move.controls.init();
+		this.isActive(true);
 
-	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(self);
-	this.DOM.overwrite.modal.call(self);
+		// Enforce active cookie
+		this.DOM.storage.set("active", true);
 
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init(this.DOM.create.tabbar);
-	}
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-}
-
-TouchUI.prototype.DOM.cookies = {
-
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
-		}
-		return undefined;
-	},
-
-	set: function(key, value) {
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
-	},
-
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
-
-		if(value === true) {
-			this.set(key, "false");
-		} else {
-			this.set(key, "true");
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.localstorage = {
-	store: JSON.parse(localStorage["TouchUI"] || "{}"),
-
-	get: function (key) {
-		return this.store[key];
-	},
-
-	set: function (key, value) {
-		this.store[key] = value;
-		localStorage["TouchUI"] = JSON.stringify(this.store);
-		return this.store[key];
-	},
-
-	toggleBoolean: function (key) {
-		var value = this.store[key] || false;
-
-		if(value === true) {
-			this.set(key, false);
-		} else {
-			this.set(key, true);
-		}
-
-		return !value;
-
-	}
-
-}
-
-// Since I messed up by releasing start_kweb3.xinit without disabling private
-// mode, we now need to check if we can store anything at all in localstorage
-// the missing -P will prevent any localstorage
-if (TouchUI.prototype.settings.hasLocalStorage) {
-	try {
-		localStorage["TouchUIcanWeHazStorage"] = "true";
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
-		delete localStorage["TouchUIcanWeHazStorage"];
-	} catch(err) {
-
-		// TODO: remove this is future
-		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
-			$(function() {
-				new PNotify({
-					type: 'error',
-					title: "Private Mode detection:",
-					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
-						"and add the parameter 'P' after the dash. \n\n" +
-						"For more information see the v0.3.3 release notes.",
-					hide: false
-				});
-			});
-		}
-
-		console.info("Localstorage defined but failback to cookies due to errors.");
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-	}
-} else {
-	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-}
-
-TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
-
-	if (this.settings.hasLocalStorage) {
-		if (document.cookie.indexOf("TouchUI.") !== -1) {
-			console.info("TouchUI cookies migration.");
-
-			var name = "TouchUI.";
-			var ca = document.cookie.split(';');
-			for (var i=0; i<ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0)==' ') c = c.substring(1);
-				if (c.indexOf(name) == 0) {
-					var string = c.substring(name.length,c.length);
-					string = string.split("=");
-					var value = $.parseJSON(string[1]);
-
-					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
-					this.DOM.storage.set(string[0], value);
-
-					console.info("Removing cookie", string[0]);
-					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-				}
+		// Create keyboard cookie if not existing
+		if (this.DOM.storage.get("keyboardActive") === undefined) {
+			if (!this.settings.hasTouch) {
+				this.DOM.storage.set("keyboardActive", true);
+			} else {
+				this.DOM.storage.set("keyboardActive", false);
 			}
 		}
+
+		// Create hide navbar on click if not existing
+		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
+			this.DOM.storage.set("hideNavbarActive", false);
+		}
+
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+			this.components.touchscreen.init.call(this);
+		}
+
+		// Create fullscreen cookie if not existing and trigger pNotification
+		if (this.DOM.storage.get("fullscreen") === undefined) {
+			this.DOM.storage.set("fullscreen", false);
+			this.components.fullscreen.ask.call(this);
+		} else {
+			//Cookie say user wants fullscreen, ask it!
+			if(this.DOM.storage.get("fullscreen")) {
+				this.components.fullscreen.ask.call(this);
+			}
+		}
+
+		// Get state of cookies and store them in KO
+		this.settings.isKeyboardActive(this.DOM.storage.get("keyboardActive"));
+		this.settings.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
+		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
+
 	}
 
-} : _.noop;
+}
 
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
@@ -1114,13 +1074,13 @@ TouchUI.prototype.knockout.bindings = function() {
 
 		toggleKeyboard: function() {
 			if (self.isActive()) {
-				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
+				self.settings.isKeyboardActive(self.DOM.storage.toggleBoolean("keyboardActive"));
 			}
 		},
 
 		toggleHidebar: function() {
 			if (self.isActive()) {
-				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
+				self.settings.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
 			}
 		},
 
@@ -1147,23 +1107,49 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 	var self = this;
 
 	if(self.isActive()) {
+
+		self.components.material.sidenav.call(self);
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
-		// Prevent user from double clicking in a short period on buttons
-		$(document).on("click", "button:not(.box, .distance, .dropdown-toggle)", function(e) {
-			var printer = $(e.target);
-			printer.prop('disabled', true);
+		$("#tabs").appendTo("#navbar");
 
-			setTimeout(function() {
-				printer.prop('disabled', false);
-			}, 600);
+		// Prevent user from double clicking in a short period on buttons
+		// $(document).on("click", "button:not(.box, .distance, .dropdown-toggle)", function(e) {
+		// 	var printer = $(e.target);
+		// 	printer.prop('disabled', true);
+		//
+		// 	setTimeout(function() {
+		// 		printer.prop('disabled', false);
+		// 	}, 600);
+		// });
+
+		viewModels.temperatureViewModel.heaterOptions.subscribe(function(heaterOptions) {
+			var tmp;
+
+			_.each(_.keys(heaterOptions), function(type) {
+				if (
+					heaterOptions[type].color !== $('#navbar').css("background-color") &&
+					heaterOptions[type].color !== $('.bar').css("background-color")
+				) {
+					tmp = true;
+					if (heaterOptions[type].name === "Bed") {
+						heaterOptions[type].color = $('.bar').css("background-color");
+					} else {
+						heaterOptions[type].color = $('#navbar').css("background-color");
+					}
+				}
+			});
+
+			if (tmp) {
+				viewModels.temperatureViewModel.heaterOptions(heaterOptions);
+			}
 		});
 
 		// Update scroll area if new items arrived
 		if( !self.settings.hasTouch ) {
 			viewModels.gcodeFilesViewModel.listHelper.paginatedItems.subscribe(function(a) {
 				setTimeout(function() {
-					self.scroll.iScrolls.body.refresh();
+					self.scroll.refresh(self.scroll.iScrolls.body);
 				}, 300);
 			});
 		}
@@ -1173,10 +1159,10 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 			var printLink = $("#all_touchui_settings");
 			if( !newOperationalState ) {
 				printLink.addClass("offline").removeClass("online");
-				$("#conn_link2").addClass("offline").removeClass("online");
+				$("#conn_link_mirror").addClass("offline").removeClass("online");
 			} else {
 				printLink.removeClass("offline").addClass("online");
-				$("#conn_link2").removeClass("offline").addClass("online");
+				$("#conn_link_mirror").removeClass("offline").addClass("online");
 			}
 		});
 	}
@@ -1199,7 +1185,58 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 TouchUI.prototype.knockout.isReady = function (viewModels) {
 	var self = this;
 
-	if(self.isActive()) {
+	if (self.isActive()) {
+
+		// Setup theming in Android 5
+		self.settings.colors.mainColor.subscribe(function(value) {
+			var theme;
+			if($('[name="theme-color"]').length) {
+				theme = $('[name="theme-color"]');
+			} else {
+				theme = $('<meta name="theme-color">').appendTo('head');
+			}
+			theme.attr("content", value);
+		});
+		self.settings.colors.mainColor.valueHasMutated();
+
+		if (viewModels.temperatureViewModel) {
+			if (self.settings.isTouchscreen()) {
+				$.plot = _.noop;
+			} else {
+				$('#dashboard').addClass('withGraph');
+				viewModels.temperatureViewModel.plotOptions = $.extend(viewModels.temperatureViewModel.plotOptions, {
+					xaxis: {
+						ticks: false,
+						mode: "time",
+						maxTickSize: [2, "minute"]
+					},
+					yaxis: {
+						max: 310,
+						min: 0,
+						ticks: false
+					},
+					series: {
+						lines: {
+							show: true,
+							lineWidth: 0,
+							fill: true
+						},
+						grid: {
+							hoverable: true,
+							clickable: true,
+							borderWidth: 0,
+							margin: 0
+						}
+					},
+					grid: {
+						borderWidth: 0,
+						margin: 0
+					}
+				});
+			}
+
+		}
+
 		// Repaint graph after resize (.e.g orientation changed)
 		$(window).on("resize", function() {
 			viewModels.temperatureViewModel.updatePlot();
@@ -1210,7 +1247,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		$('.slimScrollDiv').slimScroll({destroy: true});
 
 		// Remove active keyboard when disabled
-		self.components.keyboard.isActive.subscribe(function(isActive) {
+		self.settings.isKeyboardActive.subscribe(function(isActive) {
 			if( !isActive ) {
 				$(".ui-keyboard-input").each(function(ind, elm) {
 					$(elm).data("keyboard").destroy();
@@ -1220,7 +1257,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Remove drag files into website feature
 		$(document).off("dragover");
-		if(viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		if (viewModels.gcodeFilesViewModel._enableDragNDrop) {
 			viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
 		}
 
@@ -1231,32 +1268,29 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}
 		});
 
-		// Redo scroll-to-end interface
-		$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
-			viewModels.terminalViewModel.scrollToEnd();
-			return false;
-		});
-
-		// Resize height of low-fi terminal to enable scrolling
-		if($("#terminal-output-lowfi").prop("scrollHeight")) {
-			viewModels.terminalViewModel.plainLogOutput.subscribe(function() {
-				$("#terminal-output-lowfi").height($("#terminal-output-lowfi").prop("scrollHeight"));
-			});
-		}
-
 		// Overwrite terminal knockout functions (i.e. scroll to end)
 		this.scroll.overwrite.call(this, viewModels.terminalViewModel);
 
 		// Setup version tracking in terminal
 		this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
+		// (Re-)Apply vindings to new dashboard
+		if ($("#state_wrapper").length) {
+			if (viewModels.navigationViewModel) {
+				ko.applyBindings(viewModels.navigationViewModel, $("#dashboard .accordion-heading .accordion-toggle")[0]);
+			}
+			if (viewModels.printerStateViewModel) {
+				ko.applyBindings(viewModels.printerStateViewModel, $("#dashboard .accordion-heading .print-control")[0]);
+			}
+		}
+
 		// (Re-)Apply bindings to the new webcam div
-		if($("#webcam").length) {
+		if ($("#webcam").length) {
 			ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 		}
 
 		// (Re-)Apply bindings to the new navigation div
-		if($("#navbar_login").length) {
+		if ($("#navbar_login").length) {
 			try {
 				ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 			} catch(err) {}
@@ -1270,28 +1304,22 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 					$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('visible_touch');
 				}
-
-				// Refresh scroll view when login state changed
-				if( !self.settings.hasTouch ) {
-					setTimeout(function() {
-						self.scroll.currentActive.refresh();
-					}, 0);
-				}
 			});
 		}
 
 		// (Re-)Apply bindings to the new system commands div
-		if($("#navbar_systemmenu").length) {
-			ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
-			ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
-		}
+		// if ($("#navbar_systemmenu").length) {
+		// 	// ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
+		// 	ko.applyBindings(viewModels.navigationViewModel, $("#files_link_mirror")[0]);
+		// 	ko.applyBindings(viewModels.navigationViewModel, $("#temp_link_mirror")[0]);
+		// }
 
 		// Force knockout to read the change
-		$('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
-			if(isTriggered !== false) {
-				$(this).find("input").trigger("change", [hex, rgb, false]);
-			}
-		});
+		// $('.colorPicker').tinycolorpicker().on("change", function(e, hex, rgb, isTriggered) {
+		// 	if(isTriggered !== false) {
+		// 		$(this).find("input").trigger("change", [hex, rgb, false]);
+		// 	}
+		// });
 
 		// Reuse for code below
 		var refreshUrl = function(href) {
@@ -1346,13 +1374,11 @@ TouchUI.prototype.knockout.viewModel = function() {
 
 	// Subscribe to OctoPrint events
 	self.onStartupComplete = function () {
-		if (self.isActive()) {
-			self.DOM.overwrite.tabbar.call(self);
-		}
 		self.knockout.isReady.call(self, self.core.bridge.allViewModels);
 		if (self.isActive()) {
+			self.DOM.overwrite.tabbar.call(self);
 			self.plugins.init.call(self, self.core.bridge.allViewModels);
-		}
+		};
 	}
 
 	self.onBeforeBinding = function() {
@@ -1365,21 +1391,19 @@ TouchUI.prototype.knockout.viewModel = function() {
 
 	self.onTabChange = function() {
 		if (self.isActive()) {
-			self.animate.hide.call(self, "navbar");
+			$('#fab').removeClass('show');
+			self.DOM.pool.add(function() {
 
-			if(!self.settings.hasTouch && self.scroll.currentActive) {
-				self.scroll.currentActive.refresh();
-				setTimeout(function() {
-					self.scroll.currentActive.refresh();
-				}, 0);
-			}
+				if(!self.settings.hasTouch && self.scroll.currentActive) {
+					self.scroll.refresh(self.scroll.currentActive);
+					setTimeout(function() {
+						self.scroll.refresh(self.scroll.currentActive);
+					}, 10);
+				}
+			});
 		}
 	}
 
-}
-
-TouchUI.prototype.plugins.init = function (viewModels) {
-	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
 TouchUI.prototype.plugins.navbarTemp = function() {
@@ -1429,74 +1453,20 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 
 };
 
-TouchUI.prototype.scroll.beforeLoad = function() {
-
-	// Manipulate DOM for iScroll before knockout binding kicks in
-	if (!this.settings.hasTouch) {
-		$('<div id="scroll"></div>').insertBefore('.page-container');
-		$('.page-container').appendTo("#scroll");
-	}
-
-}
-
-TouchUI.prototype.scroll.init = function() {
-	var self = this;
-
-	if ( this.settings.hasTouch ) {
-		var width = $(window).width();
-
-		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
-		$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
-		$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
-		$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
-
-		$(window).on("resize", function() {
-
-			if(width !== $(window).width()) {
-				$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
-				$("#terminal-scroll").css("height", "").height($("#terminal-scroll").outerHeight());
-				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
-				width = $(window).width();
-			}
-
-
-		});
-
-	} else {
-
-		// Set overflow hidden for best performance
-		$("html").addClass("emulateTouch");
-
-		self.scroll.terminal.init.call(self);
-		self.scroll.body.init.call(self);
-		self.scroll.modal.init.call(self);
-		self.scroll.overlay.init.call(self);
-
-		$(document).on("slideCompleted", function() {
-			self.scroll.currentActive.refresh();
-		});
-
-		// Refresh body on dropdown click
-		$(document).on("click", ".pagination ul li a", function() {
-			setTimeout(function() {
-				self.scroll.currentActive.refresh();
-			}, 0);
-		});
-
-	}
-
+TouchUI.prototype.plugins.init = function (viewModels) {
+	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
 TouchUI.prototype.scroll.blockEvents = {
 	className: "no-pointer",
 
 	scrollStart: function($elm, iScrollInstance) {
-		$elm.addClass(this.className);
+		$elm.addClass(this.scroll.blockEvents.className);
 	},
 
 	scrollEnd: function($elm, iScrollInstance) {
-		$elm.removeClass(this.className);
-		iScrollInstance.refresh();
+		$elm.removeClass(this.scroll.blockEvents.className);
+		this.scroll.refresh(iScrollInstance);
 	}
 
 }
@@ -1506,25 +1476,30 @@ TouchUI.prototype.scroll.body = {
 	init: function() {
 		var self = this;
 		var scrollStart = false;
-		var $noPointer = $('.page-container');
 
 		// Create main body scroll
-		self.scroll.iScrolls.body = new IScroll("#scroll", self.scroll.defaults.iScroll);
+		self.scroll.iScrolls.body = new IScroll(".octoprint-container", self.scroll.defaults.iScroll);
+		self.scroll.iScrolls.menu = new IScroll("#all_touchui_settings .dropdown-menu", self.scroll.defaults.iScroll);
 		self.scroll.currentActive = self.scroll.iScrolls.body;
 
-		// Block everthing while scrolling
-		var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $noPointer, self.scroll.iScrolls.body),
-			scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $noPointer, self.scroll.iScrolls.body);
+		_.each([self.scroll.iScrolls.body, self.scroll.iScrolls.menu], function(iScroll) {
+			var $noPointer = $(iScroll.wrapper);
 
-		// Disable all JS events while scrolling for best performance
-		self.scroll.iScrolls.body.on("scrollStart", scrollStart);
-		self.scroll.iScrolls.body.on("onBeforeScrollStart", scrollStart);
-		self.scroll.iScrolls.body.on("scrollEnd", scrollEnd);
-		self.scroll.iScrolls.body.on("scrollCancel", scrollEnd);
+			// Block everthing while scrolling
+			var scrollStart = self.scroll.blockEvents.scrollStart.bind(self, $noPointer, iScroll),
+				scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self, $noPointer, iScroll);
+
+			// Disable all JS events while scrolling for best performance
+			iScroll.on("scrollStart", scrollStart);
+			iScroll.on("onBeforeScrollStart", scrollStart);
+			iScroll.on("scrollEnd", scrollEnd);
+			iScroll.on("scrollCancel", scrollEnd);
+
+		});
 
 		// Prevent any misfortune
 		$(document).on("mouseup.prevent.pointer touchend.prevent.pointer", function() {
-			$noPointer.removeClass('no-pointer');
+			$('.no-pointer').removeClass('no-pointer');
 		});
 
 	}
@@ -1539,106 +1514,70 @@ TouchUI.prototype.scroll.modal = {
 		var $document = $(document),
 			self = this;
 
-		$document.on("modal.touchui", function(e, elm) {
-			var $modalElm = $(elm),
-				$modalContainer = $(elm).parent();
 
-			// Create temp iScroll within the modal
-			var curModal = new IScroll($modalContainer[0], self.scroll.defaults.iScroll);
+		// $document.on("modal.touchui", function(e, elm) {
+		// 	var $modalElm = $(elm),
+		// 		$modalContainer = $(elm).parent();
+		//
+		// 	// Create temp iScroll within the modal
+		// 	var curModal = new IScroll($modalContainer[0], self.scroll.defaults.iScroll);
+		//
+		// 	// Store into stack
+		// 	self.scroll.modal.stack.push(curModal);
+		// 	self.scroll.currentActive = curModal;
+		//
+		// 	// Force iScroll to get the correct scrollHeight
+		// 	setTimeout(function() {
+		// 		if(curModal) {
+		// 			curModal.refresh();
+		// 		}
+		// 	}, 0);
+		// 	// And Refresh again after animation
+		// 	setTimeout(function() {
+		// 		if(curModal) {
+		// 			curModal.refresh();
+		// 		}
+		// 	}, 800);
+		//
+		// 	// Store bindings into variable for future reference
+		// 	var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $modalElm, curModal),
+		// 		scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal);
+		//
+		// 	// Disable all JS events while scrolling for best performance
+		// 	curModal.on("scrollStart", scrollStart);
+		// 	curModal.on("scrollEnd", scrollEnd);
+		// 	curModal.on("scrollCancel", scrollEnd);
+		//
+		// 	// Refresh the scrollHeight and scroll back to top with these actions:
+		// 	$document.on("click.scrollHeightTouchUI", '[data-toggle="tab"], .pagination ul li a', function(e) {
+		// 		curModal._end(e);
+		//
+		// 		setTimeout(function() {
+		// 			curModal.refresh();
+		// 			curModal.scrollTo(0, 0);
+		// 		}, 0);
+		// 	});
+		//
+		// 	// Kill it with fire!
+		// 	$modalElm.one("destroy", function() {
+		// 		$document.off("click.scrollHeightTouchUI");
+		// 		self.scroll.modal.stack.pop();
+		//
+		// 		if(self.scroll.modal.stack.length > 0) {
+		// 			self.scroll.currentActive = self.scroll.modal.stack[self.scroll.modal.stack.length-1];
+		// 		} else {
+		// 			self.scroll.currentActive = self.scroll.iScrolls.body;
+		// 		}
+		//
+		// 		curModal.destroy();
+		// 		curModal.off("scrollStart", scrollStart);
+		// 		curModal.off("scrollEnd", scrollEnd);
+		// 		curModal.off("scrollCancel", scrollEnd);
+		// 		curModal = undefined;
+		// 	});
+		//
+		// });
 
-			// Store into stack
-			self.scroll.modal.stack.push(curModal);
-			self.scroll.currentActive = curModal;
-
-			// Force iScroll to get the correct scrollHeight
-			setTimeout(function() {
-				if(curModal) {
-					curModal.refresh();
-				}
-			}, 0);
-			// And Refresh again after animation
-			setTimeout(function() {
-				if(curModal) {
-					curModal.refresh();
-				}
-			}, 800);
-
-			// Store bindings into variable for future reference
-			var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $modalElm, curModal),
-				scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $modalElm, curModal);
-
-			// Disable all JS events while scrolling for best performance
-			curModal.on("scrollStart", scrollStart);
-			curModal.on("scrollEnd", scrollEnd);
-			curModal.on("scrollCancel", scrollEnd);
-
-			// Refresh the scrollHeight and scroll back to top with these actions:
-			$document.on("click.scrollHeightTouchUI", '[data-toggle="tab"], .pagination ul li a', function(e) {
-				curModal._end(e);
-
-				setTimeout(function() {
-					curModal.refresh();
-					curModal.scrollTo(0, 0);
-				}, 0);
-			});
-
-			// Kill it with fire!
-			$modalElm.one("destroy", function() {
-				$document.off("click.scrollHeightTouchUI");
-				self.scroll.modal.stack.pop();
-
-				if(self.scroll.modal.stack.length > 0) {
-					self.scroll.currentActive = self.scroll.modal.stack[self.scroll.modal.stack.length-1];
-				} else {
-					self.scroll.currentActive = self.scroll.iScrolls.body;
-				}
-
-				curModal.destroy();
-				curModal.off("scrollStart", scrollStart);
-				curModal.off("scrollEnd", scrollEnd);
-				curModal.off("scrollCancel", scrollEnd);
-				curModal = undefined;
-			});
-
-		});
-
-		// Triggered when we create the dropdown and need scrolling
-		$document.on("dropdown-open.touchui", function(e, elm) {
-			var $elm = $(elm);
-
-			// Create dropdown scroll
-			self.scroll.modal.dropdown = new IScroll(elm, {
-				scrollbars: true,
-				mouseWheel: true,
-				interactiveScrollbars: true,
-				shrinkScrollbars: "scale"
-			});
-
-			// Set scroll to active item
-			self.scroll.modal.dropdown.scrollToElement($elm.find('li.active')[0], 0, 0, -30);
-
-			// Disable scrolling in active modal
-			self.scroll.modal.stack[self.scroll.modal.stack.length-1].disable();
-
-			// Store bindings into variable for future reference
-			var scrollStart = self.scroll.blockEvents.scrollStart.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown),
-				scrollEnd = self.scroll.blockEvents.scrollEnd.bind(self.scroll.blockEvents, $elm, self.scroll.modal.dropdown);
-
-			// Disable all JS events for smooth scrolling
-			self.scroll.modal.dropdown.on("scrollStart", scrollStart);
-			self.scroll.modal.dropdown.on("scrollEnd", scrollEnd);
-			self.scroll.modal.dropdown.on("scrollCancel", scrollEnd);
-
-			$document.on("dropdown-closed.touchui", function() {
-				// Enable active modal
-				self.scroll.modal.stack[self.scroll.modal.stack.length-1].enable();
-
-				self.scroll.modal.dropdown.off("scrollStart", scrollStart);
-				self.scroll.modal.dropdown.off("scrollEnd", scrollEnd);
-				self.scroll.modal.dropdown.off("scrollCancel", scrollEnd);
-			});
-
-		});
 
 	}
 }
@@ -1651,7 +1590,7 @@ TouchUI.prototype.scroll.overlay = {
 
 		self.scroll.iScrolls.overlay = [];
 
-		$items = $(this.scroll.overlay.mainItems);
+		var $items = $(this.scroll.overlay.mainItems);
 		$items.each(function(ind, elm) {
 			var child = $(elm).children("#" + $(elm).attr("id") + "_wrapper");
 			var div = $('<div></div>').prependTo(elm);
@@ -1669,7 +1608,7 @@ TouchUI.prototype.scroll.overlay = {
 
 		setTimeout(function() {
 			$.each(self.scroll.iScrolls.overlay, function(ind) {
-				self.scroll.iScrolls.overlay[ind].refresh();
+				self.scroll.refresh(self.scroll.iScrolls.overlay[ind]);
 			});
 		}, 0);
 
@@ -1683,21 +1622,18 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 	if ( !this.settings.hasTouch ) {
 
 		// Enforce no scroll jumping
-		$("#scroll").on("scroll", function() {
-			if($("#scroll").scrollTop() !== 0) {
-				$("#scroll").scrollTop(0);
+		$(".octoprint-container").on("scroll", function(e) {
+			if($(e.target).scrollLeft() !== 0) {
+				$(e.target).scrollLeft(0);
 			}
-		});
-
-		// Refresh terminal scroll height
-		terminalViewModel.displayedLines.subscribe(function() {
-			self.scroll.iScrolls.terminal.refresh();
 		});
 
 		// Overwrite scrollToEnd function with iScroll functions
 		terminalViewModel.scrollToEnd = function() {
-			self.scroll.iScrolls.terminal.refresh();
-			self.scroll.iScrolls.terminal.scrollTo(0, self.scroll.iScrolls.terminal.maxScrollY);
+			if ($('#term.active').length) {
+				self.scroll.refresh(self.scroll.iScrolls.terminal);
+				self.scroll.iScrolls.terminal.scrollTo(0, self.scroll.iScrolls.terminal.maxScrollY);
+			}
 		};
 
 		// Overwrite orginal helper, add one step and call the orginal function
@@ -1730,13 +1666,47 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 
 		// Overwrite scrollToEnd function with #terminal-scroll as scroller
 		terminalViewModel.scrollToEnd = function() {
-			var $container = $("#terminal-scroll");
-			if ($container.length) {
-				$container.scrollTop($container[0].scrollHeight - $container.height())
+			if ($('#term.active').length) {
+				var $container = $("#terminal-scroll");
+				if ($container.length) {
+					$container.scrollTop($container[0].scrollHeight - $container.height())
+				}
 			}
 		}
 
 	}
+
+	// Resize height of low-fi terminal to enable scrolling
+	terminalViewModel.plainLogOutput.subscribe(function() {
+		if ($('#term.active').length && terminalViewModel.autoscrollEnabled()) {
+			terminalViewModel.scrollToEnd();
+		}
+	});
+
+	// Refresh terminal scroll height
+	terminalViewModel.displayedLines.subscribe(function() {
+		if ($('#term.active').length && terminalViewModel.autoscrollEnabled()) {
+			terminalViewModel.scrollToEnd();
+		}
+	});
+
+	// Redo scroll-to-end interface
+	$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
+		terminalViewModel.scrollToEnd();
+		return false;
+	});
+}
+
+TouchUI.prototype.scroll.refresh = function(iScrollInstance) {
+
+	// Refresh the scrollview, but for performance..
+	// we first check if it's needed at all
+	if(iScrollInstance) {
+		if(iScrollInstance.scrollerHeight !== $(iScrollInstance.scroller).innerHeight()) {
+			iScrollInstance.refresh();
+		}
+	}
+
 }
 
 TouchUI.prototype.scroll.terminal = {
@@ -1749,7 +1719,7 @@ TouchUI.prototype.scroll.terminal = {
 
 		// Enforce the right scrollheight and disable main scrolling if we have a scrolling content
 		self.scroll.iScrolls.terminal.on("beforeScrollStart", function() {
-			self.scroll.iScrolls.terminal.refresh();
+			self.scroll.refresh(self.scroll.iScrolls.terminal);
 
 			if(this.hasVerticalScroll) {
 				self.scroll.iScrolls.body.disable();
@@ -1762,6 +1732,199 @@ TouchUI.prototype.scroll.terminal = {
 	}
 }
 
+TouchUI.prototype.scroll.beforeLoad = function() {
+
+	// Manipulate DOM for iScroll before knockout binding kicks in
+	if (!this.settings.hasTouch) {
+		$('<div id="scroll"></div>').insertBefore('.page-container');
+		$('.page-container').appendTo("#scroll");
+	}
+
+}
+
+TouchUI.prototype.scroll.init = function() {
+	var self = this;
+
+	if ( !this.settings.hasTouch ) {
+
+		// Set overflow hidden for best performance
+		$("html").addClass("emulateTouch");
+
+		self.DOM.pool.add(function() {
+			self.scroll.terminal.init.call(self);
+			self.scroll.body.init.call(self);
+			self.scroll.modal.init.call(self);
+			self.scroll.overlay.init.call(self);
+		});
+
+		$(document).on("slideCompleted", function() {
+			self.scroll.refresh(self.scroll.currentActive);
+		});
+
+		// Refresh body on dropdown click
+		$(document).on("click", ".pagination ul li a", function() {
+			setTimeout(function() {
+				self.scroll.refresh(self.scroll.currentActive);
+			}, 0);
+		});
+
+	}
+
+}
+
+TouchUI.prototype.components.material.ripple = function() {
+
+	$('<div id="navbar-waves"></div>').on("click", function(e) {
+		$('#all_touchui_settings > a').click();
+	}).appendTo('#navbar .navbar-inner .container');
+
+	var $ripple = $('button, a.btn, .nav li:not(#all_touchui_settings) a, #navbar-waves');
+	$ripple.each(function touchUiRippleManipulate(ind, elm) {
+		var $elm = $(elm);
+		var html = $elm.html().trim();
+
+		if (html && html.indexOf("</") === -1) {
+			$elm.empty();
+			$('<span/>').text(html).appendTo($elm);
+		}
+
+		$elm.addClass("waves-effect")
+			.on("click", function(e) {
+				var $target = $(e.target);
+				if (
+					$target.parents('#navbar').length &&
+					!$target.parents('#all_touchui_settings').length &&
+					$target.attr("id") !== "navbar-waves" ||
+					$target.parents('.tabs-mirror').length
+				) {
+					$('.is-active').removeClass('is-active');
+					setTimeout(function() {
+						$elm.addClass('is-active');
+					}, 200);
+				}
+			});
+
+	});
+/*
+	$('.brand').click(function(e) {
+		e.preventDefault();
+		var navbar = $('#navbar-waves')[0];
+
+		var mousedown = new MouseEvent("mousedown", e.originalEvent);
+		var mouseup = new MouseEvent("mouseup", e.originalEvent);
+		var click = new MouseEvent("click", e.originalEvent);
+
+		navbar.dispatchEvent(mousedown);
+		setTimeout(function() {
+			navbar.dispatchEvent(mouseup);
+			$('#navbar-waves').click();
+		}, 0);
+	});
+
+	$('#all_touchui_settings > a').on('mousedown touchstart', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+
+		var navbar = $('#navbar-waves')[0];
+		e.originalEvent.target = navbar;
+
+		var mousedown = new MouseEvent("mousedown", e.originalEvent);
+		var mouseup = new MouseEvent("mouseup", e.originalEvent);
+		var click = new MouseEvent("click", e.originalEvent);
+
+		navbar.dispatchEvent(mousedown);
+		setTimeout(function() {
+			navbar.dispatchEvent(mouseup);
+			$('#navbar-waves').click();
+		}, 0);
+
+		return false;
+	});*/
+}
+
+TouchUI.prototype.components.material.sidenav = function() {
+	var self = this;
+
+	$('.tabbable > .tab-content').hammerPan({
+		container: {
+			size: $(window).width(),
+		},
+		target: $('#navbar'),
+		block: $('#files'),
+		width: 70,
+
+		onStep: function(pos, elm, ev) {
+			$(elm).removeClass('animate').css('min-width', pos);
+
+			if (self.settings.hasTouch) {
+				$('.octoprint-container').removeClass('animate').css('padding-left', pos);
+			}
+
+			if (ev.type == 'panend' || ev.type == 'pancancel') {
+				$(elm).addClass('animate');
+				if (self.settings.hasTouch) {
+					$('.octoprint-container').addClass('animate');
+				}
+			}
+		},
+
+		onTap: function(pos, elm) {
+			$(elm).addClass('animate')
+				.data("panStart", 0)
+				.css({
+					'min-width': 0
+				});
+
+			if (self.settings.hasTouch) {
+				$('.octoprint-container').addClass('animate').css('padding-left', 0);
+			}
+		}
+
+	});
+
+}
+
+TouchUI.prototype.DOM.create.dashboard = {
+
+	container: {
+		cloneTo: "#temp"
+	},
+
+	move: {
+		$state: $("#state_wrapper")
+	},
+
+	init: function( tabbar ) {
+
+		// Create dashboard
+		var $dashboard = $('<div id="dashboard" class="tab-pane active"><div class="inner"></div></div>')
+			.insertBefore(this.container.cloneTo);
+
+		this.move.$state
+			.appendTo($dashboard.find('.inner'));
+
+		$dashboard.find(".accordion-toggle")
+			.attr("data-bind", "text: appearance.name() == '' ? appearance.title : appearance.name");
+
+		$(this.container.cloneTo)
+			.appendTo($dashboard.find('.inner'))
+			.attr("class", "");
+
+		$("#temp_link a")
+			.attr("href", "#dashboard")
+			.addClass("is-active");
+
+		var $wrapper = $("#state_wrapper .accordion-heading").prependTo($dashboard);
+		$("#job_cancel").html('<i class="icon-stop"></i>');
+		$wrapper.find('a').text("");
+		$('.print-control').appendTo($wrapper);
+
+		$("#temperature-graph").appendTo($dashboard);
+
+	}
+
+}
+
 TouchUI.prototype.DOM.create.dropdown = {
 
 	menuItem: {
@@ -1771,22 +1934,24 @@ TouchUI.prototype.DOM.create.dropdown = {
 
 	init: function() {
 
-		this.menuItem.menu = $('' +
+		this.menuItem.menu = $('<!-- ko allowBindings: false -->' +
 			'<li id="all_touchui_settings" class="dropdown">' +
 				'<a href="#" class="dropdown-toggle" data-toggle="dropdown">' +
 					$('navbar_show_settings').text() +
 				'</a>' +
-			'</li>').prependTo(this.menuItem.cloneTo);
+			'</li>' +
+			'<!-- /ko -->').prependTo(this.menuItem.cloneTo);
 
-		this.container = $('<ul class="dropdown-menu"></ul>').appendTo(this.menuItem.menu);
+		this.container = $('<div class="dropdown-menu"></div>').appendTo(this.menuItem.menu);
+		this.container = $('<ul></ul>').appendTo(this.container);
 	}
 
 }
 
-TouchUI.prototype.DOM.create.printer = {
+TouchUI.prototype.DOM.create.files = {
 
 	menu: {
-		cloneTo: "#tabs"
+		cloneTo: "#temp_link"
 	},
 
 	container: {
@@ -1794,17 +1959,72 @@ TouchUI.prototype.DOM.create.printer = {
 	},
 
 	move: {
-		$state: $("#state_wrapper"),
 		$files: $("#files_wrapper")
 	},
 
 	init: function( tabbar ) {
-		this.menu.$elm = tabbar.createItem("print_link", "printer", "tab").prependTo(this.menu.cloneTo);
-		this.container.$elm = $('<div id="printer" class="tab-pane active"><div class="row-fluid"></div></div>').insertBefore(this.container.cloneTo);
+		var self = this;
+
+		// Create navbar item
+		this.DOM.create.files.menu.$elm = tabbar.createItem("files_link", "files", "tab")
+			.insertAfter(this.DOM.create.files.menu.cloneTo);
+
+		// Hijack files id :)
+		$('#files').attr('id', 'files-inner');
+
+		// Create main container
+		this.DOM.create.files.container.$elm = $('<div id="files" class="tab-pane"><div class="row-fluid"></div></div>')
+			.insertBefore(this.DOM.create.files.container.cloneTo);
 
 		// Move the contents of the hidden accordions to the new print status and files tab
-		this.move.$state.appendTo(this.container.$elm.find(".row-fluid"));
-		this.move.$files.insertAfter(this.container.$elm.find(".row-fluid #state_wrapper"));
+		this.DOM.create.files.move.$files.appendTo("#files .row-fluid");
+
+		$('<div class="switch-view"><a href="#"><span class="icon-wrench"/></a></div>').insertAfter('.sd-trigger')
+			.find('a')
+			.on("click", function(e) {
+				e.preventDefault();
+				self.DOM.create.files.container.$elm.toggleClass("condensed");
+
+				if (!self.settings.hasTouch) {
+					setTimeout(self.scroll.currentActive.refresh.bind(self.scroll.currentActive), 400);
+				}
+			});
+
+		// Create FAB
+		this.DOM.create.files.FAB();
+	},
+
+	FAB: function() {
+
+		// Create FAB
+		var $fab = $('<div/>').attr("class", "fab")
+			.attr("id", "fab");
+
+		// Toggle
+		var $fabLink = $('<a href="#" class="toggle"></a>').appendTo($fab)
+			.on("click", function(e) {
+				e.preventDefault();
+				$fab.toggleClass('active');
+			});
+
+		// Move buttons
+		var $fabInner = $('.upload-buttons').attr("class", "fab-inner")
+			.appendTo($fab);
+
+		// Move Refresh
+		$('.refresh-trigger').addClass('btn')
+			.appendTo($fabInner);
+
+		// Move progressbar
+		$('#gcode_upload_progress').appendTo($fabLink);
+
+		// Add to DOM
+		$fab.appendTo('.octoprint-container');
+
+		// Show FAB if tab is active
+		this.menu.$elm.on("shown", function() {
+			$('#fab').addClass('show');
+		});
 	}
 
 }
@@ -1814,15 +2034,45 @@ TouchUI.prototype.DOM.create.tabbar = {
 	createItem: function(itemId, linkId, toggle, text) {
 		text = (text) ? text : "";
 		return $('<li id="'+itemId+'"><a href="#'+linkId+'" data-toggle="'+toggle+'">'+text+'</a></li>');
+	}
+}
+
+TouchUI.prototype.DOM.create.temperature = {
+
+	menu: {
+	},
+
+	container: {
+	},
+
+	move: {
+	},
+
+	init: function() {
+		var self = this;
+
+		_.each(['foreach: tools', 'with: bedTemp'], function(key) {
+			$('<!-- ko ' + key + ' -->' +
+				'<div class="circle" data-bind="circle: { actual: actual, target: target }, slider: { max: ' + ((key === "with: bedTemp") ? '150, steps: 0.8' : '310, steps: 0.1') + ', value: target, enable: $root.isOperational() && $root.loginState.isUser() }' +
+					((key === "with: bedTemp") ? ', visible: $parent.hasBed' : '') +'">' +
+					'<span data-bind="html: name()"></span>' +
+					'<div class="inner">' +
+						'<span data-bind="html: actual() > 1 ? Math.floor(actual()) + \'°C\' : \'off\', visible: (actual() > 1)"></span>' +
+						'<span data-bind="html: target() > 1 ? Math.floor(target()) + \'°C\' : \'off\'"></span>' +
+					'</div>' +
+				'</div>' +
+				'<!-- /ko -->').appendTo("#temp");
+		});
 
 	}
+
 }
 
 TouchUI.prototype.DOM.create.webcam = {
 
 	menu: {
 		webcam: {
-			cloneTo: "#term_link"
+			cloneTo: "#control_link"
 		}
 	},
 
@@ -1838,8 +2088,14 @@ TouchUI.prototype.DOM.create.webcam = {
 	init: function( tabbar ) {
 		var self = this;
 
-		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
-		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertBefore(this.menu.webcam.cloneTo);
+		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>')
+			.appendTo(this.container.cloneTo);
+
+		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab")
+			.insertAfter(this.menu.webcam.cloneTo);
+
+		this.menu.webcam.$elm.children()
+			.html('<span>Webcam</span>');
 
 		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
 		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
@@ -1853,45 +2109,38 @@ TouchUI.prototype.DOM.create.webcam = {
 
 }
 
-TouchUI.prototype.DOM.move.afterTabAndNav = function() {
-
-	this.DOM.create.dropdown.container.children().each(function(ind, elm) {
-		var $elm = $(elm);
-		$('<!-- ko allowBindings: false -->').insertBefore($elm);
-		$('<!-- /ko -->').insertAfter($elm);
-	});
-
-	//Add hr before the settings icon
-	$('<li class="divider"></li>').insertBefore("#navbar_settings");
-	$('<li class="divider" id="divider_systemmenu" style="display: none;"></li>').insertBefore("#navbar_systemmenu").attr("data-bind", $("#navbar_systemmenu").attr("data-bind"));
-
-}
-
 TouchUI.prototype.DOM.move.connection = {
-	$container: null,
-	containerId: "connection_dialog",
-	$cloneContainer: $("#usersettings_dialog"),
-	$cloneModal: $("#connection_wrapper"),
-	cloneTo: "#all_touchui_settings > ul",
+	$container:			null,
+	containerId:		"connection_dialog",
+	$cloneContainer:	$("#usersettings_dialog"),
+	$cloneModal:		$("#connection_wrapper"),
+	cloneTo:			"#all_touchui_settings > div > ul",
 
 	init: function( tabbar ) {
-		var text = this.$cloneModal.find(".accordion-heading").text().trim();
+		var text = this.$cloneModal.find(".accordion-heading")
+			.text()
+			.trim();
 
 		// Clone usersettings modal
-		this.$container = this.$cloneContainer.clone().attr("id", this.containerId).insertAfter(this.$cloneContainer);
-		this.$containerBody = this.$container.find(".modal-body");
+		this.$container = this.$cloneContainer.clone()
+			.attr("id", this.containerId)
+			.insertAfter(this.$cloneContainer);
+
+		this.$containerBody = this.$container
+			.find(".modal-body");
 
 		// Remove all html from clone
-		this.$containerBody.html("");
+		this.$containerBody.empty();
 
 		// Append tab contents to modal
 		this.$cloneModal.appendTo(this.$containerBody);
 
 		// Set modal header to accordion header
-		this.$container.find(".modal-header h3").text(text);
+		this.$container.find(".modal-header h3")
+			.text(text);
 
 		// Create a link in the dropdown
-		this.$menuItem = tabbar.createItem("conn_link2", this.containerId, "modal", text)
+		this.$menuItem = tabbar.createItem("conn_link_mirror", this.containerId, "modal", text)
 			.attr("data-bind", "visible: loginState.isAdmin")
 			.prependTo(this.cloneTo);
 	}
@@ -1924,31 +2173,109 @@ TouchUI.prototype.DOM.move.controls = {
 
 		$("#control div.distance").prependTo("#control-jog-feedrate");
 		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
+		$("#control-jog-general").appendTo($('#control > .jog-panel')[0]);
+
+		var t = $('<div class="accordion-inner touch-area"></div>').prependTo("#control");
+		$("#control").children().appendTo(t);
+		$('<div class="accordion-heading"><a href="#controls">Controls</a></div>').prependTo("#control");
 
 	}
 
 }
 
 TouchUI.prototype.DOM.move.navbar = {
-	mainItems: ['#all_touchui_settings', '#navbar_plugin_navbartemp', '#navbar_login', /*'#navbar_systemmenu',*/ '.hidden_touch'],
+	mainItems: ['#all_touchui_settings'/*, '#navbar_plugin_navbartemp', '#navbar_login', '#navbar_systemmenu','.hidden_touch'*/],
 	init: function() {
 
-		$items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
-		$items.each(function(ind, elm) {
+		var self = this;
+		var _each = function(ind, elm) {
 			var $elm = $(elm);
-			$elm.appendTo(this.DOM.create.dropdown.container);
-			$elm.find('a').text($elm.text().trim());
-		}.bind(this));
+			var $clone = $elm.clone()
+				.appendTo(self.DOM.create.dropdown.container);
+
+			$clone.children('> a')
+				.text($elm.text().trim());
+
+			if (this.mirror) {
+				$clone.attr("id", $clone.attr("id") + "_mirror")
+					.addClass("tabs-mirror")
+					.children('a')
+					.on("click", function(e) {
+						e.preventDefault();
+						e.stopPropagation();
+
+						$elm.children('a').trigger("click", e);
+					});
+			} else {
+				$elm.remove();
+			}
+
+		};
+
+		var $tabs = $("#tabs > li");
+		var $navbar = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
+		$tabs.each(_each.bind({ mirror: true }));
+		$navbar.each(_each.bind({ mirror: false }));
 
 		// Move TouchUI to main dropdown
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");
 
 		// Create and Move login form to main dropdown
 		$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
-		$('#navbar_login').appendTo('#youcanhazlogin').find('a.dropdown-toggle').text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim());
+
+		$('#navbar_login').appendTo('#youcanhazlogin')
+			.find('a.dropdown-toggle')
+			.text($('#youcanhazlogin')
+			.find('a.dropdown-toggle')
+			.text().trim());
 
 		// Move the navbar temp plugin
 		this.plugins.navbarTemp.call(this);
+
+		// $('<div id="touchui_toggle_menu"><i class="fa fa-bars"></i></div>').appendTo('body').click(function() {
+		// 	$('#all_touchui_settings > a').click();
+		// });
+
+		// Remove all text in the buttons
+		var $items = $("#tabs > li > a");
+		$items.each(function(ind, elm) {
+			$(elm).text("");
+		}.bind(this));
+
+		// Set text on empty dropdown item
+		$('#files_link_mirror a').html('<span>'+$('#files_wrapper .accordion-toggle').text().trim()+'</span>');
+
+		$("#temp_link_mirror a").html('<span>' + $('#temp_link_mirror a').text() + '</span>')
+			.find('span')
+			.attr('data-bind', "text: appearance.name() == '' ? appearance.title : appearance.name");
+
+		// Add hr before the settings icon
+		$('<li class="divider"></li>').insertBefore("#navbar_settings");
+
+		$('<li class="divider" id="divider_systemmenu" style="display: none;"></li>').insertBefore("#navbar_systemmenu")
+			.attr("data-bind", $("#navbar_systemmenu").attr("data-bind"));
+
+		// Dynamicly hide icons that don't fit on screen, and show the mirror
+		$(window).on('resize', function(e) {
+			var cutOff = 0.5;
+			var itemHeight = $("#all_touchui_settings").height();
+			var height = $(window).innerHeight() - (itemHeight - (itemHeight * cutOff));
+			var $items = $('#tabs > li');
+			var fitOnScreen = Math.floor(height / itemHeight);
+
+			$items.slice(0, fitOnScreen).removeClass("hidden");
+			$('.tabs-mirror').addClass("hidden");
+
+			$items.slice(fitOnScreen).each(function(ind, elm) {
+				$(elm).addClass("hidden");
+				$("#" + $(elm).attr("id") + "_mirror").removeClass("hidden");
+			});
+		});
+
+		// Force first calculation
+		setTimeout(function touchUiResize() {
+			$(window).trigger('resize');
+		}, 0);
 
 	}
 
@@ -1968,39 +2295,12 @@ TouchUI.prototype.DOM.move.overlays = {
 
 }
 
-TouchUI.prototype.DOM.move.tabbar = {
-	mainItems: ['#print_link', '#temp_link', '#control_link', '#webcam_link', '#term_link', '.hidden_touch'],
-	init: function() {
-
-		$items = $("#tabs > li:not("+this.DOM.move.tabbar.mainItems+")");
-		$items.each(function(ind, elm) {
-			var $elm = $(elm);
-
-			// Clone the items into the dropdown, and make it click the orginal link
-			$elm.clone().attr("id", $elm.attr("id")+"2").appendTo("#all_touchui_settings .dropdown-menu").find('a').off("click").on("click", function(e) {
-				$elm.find('a').click();
-				$("#all_touchui_settings").addClass("item_active");
-				e.preventDefault();
-				return false;
-			});
-			$elm.addClass("hidden_touch");
-
-		}.bind(this));
-
-		$items = $("#tabs > li > a");
-		$items.each(function(ind, elm) {
-			$(elm).text("");
-		}.bind(this));
-
-	}
-}
-
 TouchUI.prototype.DOM.move.terminal = {
 
 	init: function() {
 
 		// Add version number placeholder
-		$('<span></span>').prependTo("#terminal-output");
+		// $('<span></span>').prependTo("#terminal-output");
 
 		// Create iScroll container for terminal
 		var container = $('<div id="terminal-scroll"></div>').insertBefore("#terminal-output");
@@ -2013,6 +2313,10 @@ TouchUI.prototype.DOM.move.terminal = {
 };
 
 TouchUI.prototype.DOM.overwrite.modal = function() {
+	$.fn.modal.defaults.backdrop = false;
+	$.fn.modal.defaults.manager = $('.octoprint-container > .row > .tabbable > .tab-content');
+
+	$('.modal.fade').removeClass('fade');
 
 	//We need a reliable event for catching new modals for attaching a scrolling bar
 	$.fn.modalBup = $.fn.modal;
@@ -2020,9 +2324,31 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 		// Update any other modifications made by others (i.e. OctoPrint itself)
 		$.fn.modalBup.defaults = $.fn.modal.defaults;
 
+		$.fn.modal.defaults.manager.find('> .modal-scrollable').not($(this).parent()).addClass('modal-hidden');
+		$.fn.modal.defaults.manager.find('> .tab-pane.active').removeClass('active').addClass('pre-active');
+
 		// Create modal, store into variable so we can trigger an event first before return
-		var tmp = $(this).modalBup(option, args);
-		$(this).trigger("modal.touchui", this);
+		var $this = $(this);
+		var tmp = $this.modalBup(option, args);
+		$this.trigger('modal.touchui', this);
+
+		// setTimeout(function() {
+		// 	Materialize.updateTextFields();
+		// }, 60);
+
+		tmp.one('destroy', function() {
+			if (!$.fn.modal.defaults.manager.find('> .modal-scrollable > .modal').not(this).length) {
+				$.fn.modal.defaults.manager.find('> .tab-pane.pre-active').removeClass('pre-active').addClass('active');
+			} else {
+				var modals = $.fn.modal.defaults.manager.find('.modal-hidden');
+				$(modals[modals.length-1]).removeClass('modal-hidden');
+			}
+		});
+
+		$this
+			.trigger('modal-destroy.touchui', this, tmp)
+			.parent()
+			.removeClass('modal-hidden');
 
 		return tmp;
 	};
@@ -2035,17 +2361,23 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 TouchUI.prototype.DOM.overwrite.tabbar = function() {
 
 	// Force the webcam tab to load the webcam feed that original is located on the controls tab
-	$('#tabs [data-toggle=tab]').each(function(ind, elm) {
+	$('#tabs [data-toggle=tab], #all_touchui_settings [data-toggle=tab]').each(function(ind, elm) {
 
 		// Get the currently attached events to the toggle
-		var events = $.extend([], jQuery._data(elm, "events").show),
-			$elm = $(elm);
+		var show = $.extend({}, jQuery._data(elm, "events").show);
+		var shown = $.extend({}, jQuery._data(elm, "events").shown);
+		var $elm = $(elm);
+		var prev = {};
+
+		delete show.delegateCount;
+		delete shown.delegateCount;
 
 		// Remove all previous set events and call them after manipulating a few things
 		$elm.off("show").on("show", function(e) {
-			var scope = this,
-				current = e.target.hash,
-				previous = e.relatedTarget.hash;
+			var scope = this;
+			var current = e.target.hash;
+			var previous = prev.hash || "";
+			prev = e.target;
 
 			current = (current === "#control") ? "#control_without_webcam" : current;
 			current = (current === "#webcam") ? "#control" : current;
@@ -2053,18 +2385,51 @@ TouchUI.prototype.DOM.overwrite.tabbar = function() {
 			previous = (previous === "#control") ? "#control_without_webcam" : previous;
 			previous = (previous === "#webcam") ? "#control" : previous;
 
+			// Unset all is-active and active
+			$("#tabs li, .tabs-mirror").removeClass('active').find('a').removeClass('is-active');
+
+			// Add active and is-active to mirror or tabbar
+			if ($(e.target).parents('#tabs').length) {
+				$("#" + $(e.target).parent().attr('id') + "_mirror").addClass('active').find('a').addClass('is-active');
+			} else {
+				$("#" + $(e.target).parent().attr('id').replace("_mirror", "")).addClass('active').find('a').addClass('is-active');
+			}
+
 			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
-			$.each(events, function(key, event) {
-				event.handler.call(scope, {
-					target: {
-						hash: current
-					},
-					relatedTarget: {
-						hash: previous
-					}
+			if (show) {
+				$.each(show, function(key, event) {
+					event.handler.call(scope, {
+						target: {
+							hash: current
+						},
+						relatedTarget: {
+							hash: previous
+						}
+					});
 				});
-			});
-		})
+			}
+		});
+
+		// Redo shown to give everyone the right previous
+		$elm.off("shown").on("shown", function(e) {
+			var scope = this;
+			var current = e.target.hash;
+			var previous = prev.hash || "";
+
+			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
+			if (shown) {
+				$.each(shown, function(key, event) {
+					event.handler.call(scope, {
+						target: {
+							hash: current
+						},
+						relatedTarget: {
+							hash: previous
+						}
+					});
+				});
+			}
+		});
 	});
 
 }

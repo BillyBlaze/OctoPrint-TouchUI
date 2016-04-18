@@ -1,4 +1,7 @@
 @touchui-base-path: "/plugin/touchui/static/";
+@font-path: "/plugin/touchui/static/font/";
+@icon-font: "Material Icons";
+
 @fontawesome-path: "/plugin/touchui/static/fonts/fontawesome/";
 @sourcecodepro-path: "/plugin/touchui/static/fonts/sourcecodepro/";
 @touchui-path: "/plugin/touchui/static/fonts/touchui/";
@@ -17,8 +20,8 @@
 @link-color: @main-color;
 
 /* Grid properties */
-@main-gutter: 30px;
-@modal-gutter: 30px;
+@main-gutter: 2rem;
+@modal-gutter: @main-gutter;
 @terminal-gutter: 10px;
 @dropdown-gutter: 15px;
 
@@ -36,11 +39,11 @@
 @swipe-list-background-open-color: mix(@main-color, @dark-color, 60%);
 
 /* Modal */
-@modal-background: @light-color;
+@modal-background: @main-background;
+@modal-text: @text-color;
 @modal-backdrop: @dark-color;
-@modal-footer-background: fade(contrast(@modal-background), 5%);
-@modal-border: fade(contrast(@modal-background), 7%);
-@modal-text: @dark-color;
+@modal-footer-background: mix(@main-background, contrast(@main-background), 85%);
+@modal-border: mix(@main-background, contrast(@main-background), 70%);
 
 /* Buttons */
 @btn-background: @light-dark-color;
@@ -55,9 +58,9 @@
 /* Dropdown + indication */
 @online-color: #9AFD00;
 @offline-color: red;
-@dropdown-color: @main-color;
-@dropdown-color-text: @main-color-text;
-@dropdown-divider-color: @main-color-dark;
+@dropdown-color: @main-background;
+@dropdown-color-text: contrast(@dropdown-color);
+@dropdown-divider-color: mix(@main-background, contrast(@main-background), 80%);
 
 /* Termional */
 @terminal-color: #0F0;

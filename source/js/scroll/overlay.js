@@ -6,7 +6,7 @@ TouchUI.prototype.scroll.overlay = {
 
 		self.scroll.iScrolls.overlay = [];
 
-		$items = $(this.scroll.overlay.mainItems);
+		var $items = $(this.scroll.overlay.mainItems);
 		$items.each(function(ind, elm) {
 			var child = $(elm).children("#" + $(elm).attr("id") + "_wrapper");
 			var div = $('<div></div>').prependTo(elm);
@@ -24,7 +24,7 @@ TouchUI.prototype.scroll.overlay = {
 
 		setTimeout(function() {
 			$.each(self.scroll.iScrolls.overlay, function(ind) {
-				self.scroll.iScrolls.overlay[ind].refresh();
+				self.scroll.refresh(self.scroll.iScrolls.overlay[ind]);
 			});
 		}, 0);
 

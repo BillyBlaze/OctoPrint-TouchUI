@@ -12,7 +12,7 @@ TouchUI.prototype.components.touchscreen = {
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
 		this.scroll.defaults.iScroll.interactiveScrollbars = false;
-		this.scroll.defaults.iScroll.useTransition = false;
+		// this.scroll.defaults.iScroll.useTransition = false;
 		// this.scroll.defaults.iScroll.useTransform = false;
 		// this.scroll.defaults.iScroll.HWCompositing = false;
 	},
@@ -31,7 +31,7 @@ TouchUI.prototype.components.touchscreen = {
 				viewModels.gcodeViewModel.enabled = false;
 				viewModels.gcodeViewModel.initialize = _.noop;
 				viewModels.gcodeViewModel._processData = _.noop;
-				$("#gcode_link2").hide();
+				$("#gcode_link").remove();
 			}
 		}
 

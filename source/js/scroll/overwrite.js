@@ -4,21 +4,18 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 	if ( !this.settings.hasTouch ) {
 
 		// Enforce no scroll jumping
-		$("#scroll").on("scroll", function() {
-			if($("#scroll").scrollTop() !== 0) {
-				$("#scroll").scrollTop(0);
+		$(".octoprint-container").on("scroll", function(e) {
+			if($(e.target).scrollLeft() !== 0) {
+				$(e.target).scrollLeft(0);
 			}
-		});
-
-		// Refresh terminal scroll height
-		terminalViewModel.displayedLines.subscribe(function() {
-			self.scroll.iScrolls.terminal.refresh();
 		});
 
 		// Overwrite scrollToEnd function with iScroll functions
 		terminalViewModel.scrollToEnd = function() {
-			self.scroll.iScrolls.terminal.refresh();
-			self.scroll.iScrolls.terminal.scrollTo(0, self.scroll.iScrolls.terminal.maxScrollY);
+			if ($('#term.active').length) {
+				self.scroll.refresh(self.scroll.iScrolls.terminal);
+				self.scroll.iScrolls.terminal.scrollTo(0, self.scroll.iScrolls.terminal.maxScrollY);
+			}
 		};
 
 		// Overwrite orginal helper, add one step and call the orginal function
@@ -51,11 +48,33 @@ TouchUI.prototype.scroll.overwrite = function(terminalViewModel) {
 
 		// Overwrite scrollToEnd function with #terminal-scroll as scroller
 		terminalViewModel.scrollToEnd = function() {
-			var $container = $("#terminal-scroll");
-			if ($container.length) {
-				$container.scrollTop($container[0].scrollHeight - $container.height())
+			if ($('#term.active').length) {
+				var $container = $("#terminal-scroll");
+				if ($container.length) {
+					$container.scrollTop($container[0].scrollHeight - $container.height())
+				}
 			}
 		}
 
 	}
+
+	// Resize height of low-fi terminal to enable scrolling
+	terminalViewModel.plainLogOutput.subscribe(function() {
+		if ($('#term.active').length && terminalViewModel.autoscrollEnabled()) {
+			terminalViewModel.scrollToEnd();
+		}
+	});
+
+	// Refresh terminal scroll height
+	terminalViewModel.displayedLines.subscribe(function() {
+		if ($('#term.active').length && terminalViewModel.autoscrollEnabled()) {
+			terminalViewModel.scrollToEnd();
+		}
+	});
+
+	// Redo scroll-to-end interface
+	$("#term .terminal small.pull-right").html('<a href="#"><i class="fa fa-angle-double-down"></i></a>').on("click", function() {
+		terminalViewModel.scrollToEnd();
+		return false;
+	});
 }

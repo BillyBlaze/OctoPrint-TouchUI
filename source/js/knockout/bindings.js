@@ -14,13 +14,13 @@ TouchUI.prototype.knockout.bindings = function() {
 
 		toggleKeyboard: function() {
 			if (self.isActive()) {
-				self.components.keyboard.isActive(self.DOM.storage.toggleBoolean("keyboardActive"));
+				self.settings.isKeyboardActive(self.DOM.storage.toggleBoolean("keyboardActive"));
 			}
 		},
 
 		toggleHidebar: function() {
 			if (self.isActive()) {
-				self.animate.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
+				self.settings.isHidebarActive(self.DOM.storage.toggleBoolean("hideNavbarActive"));
 			}
 		},
 

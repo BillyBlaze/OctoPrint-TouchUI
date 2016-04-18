@@ -4,14 +4,11 @@ button,
 	background: @btn-background;
 	color: @btn-text;
 	padding: 6px 15px;
+	border: 0 none;
+	box-shadow: 0 0 0 transparent;
 
 	&:disabled {
 		opacity: .4;
-	}
-	&:active {
-		outline: 0 none;
-		background: darken(@btn-background, 10%);
-		color: @btn-text;
 	}
 
 	&-primary {

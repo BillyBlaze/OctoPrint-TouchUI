@@ -14,7 +14,8 @@ TouchUI.prototype.core.bridge = function() {
 			"navigationViewModel",
 			"pluginManagerViewModel",
 			"temperatureViewModel",
-			"loginStateViewModel"
+			"loginStateViewModel",
+			"printerStateViewModel"
 		],
 		TOUCHUI_ELEMENTS: [
 			"#touchui_settings_dialog",
@@ -24,15 +25,17 @@ TouchUI.prototype.core.bridge = function() {
 
 		domLoading: function() {
 			if (self.isActive()) {
-				self.scroll.beforeLoad.call(self);
 				self.DOM.init.call(self);
+
+				$.fn.slider = function() { return this; }
+				$.fn.slider.on = _.noop;
+				$.fn.slimScroll = _.noop;
 			}
 		},
 
 		domReady: function() {
 			if (self.isActive()) {
-
-				if(_.some(self.core.bridge.OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
+				if($("#gcode").length) {
 					self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS = self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS.concat(["gcodeViewModel"]);
 				}
 
@@ -41,7 +44,6 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.keyboard.init.call(self);
 				self.components.modal.init.call(self);
 				self.components.touchList.init.call(self);
-				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
 			}
