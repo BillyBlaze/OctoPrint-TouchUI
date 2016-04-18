@@ -63,8 +63,10 @@ TouchUI.prototype.components.dropdown = {
 				//self.scroll.modal.dropdown.scrollToElement($elm.find('li.active')[0], 0, 0, -30);
 
 				// Disable scrolling in active modal
-				self.scroll.currentActive.disable();
-				self.scroll.iScrolls.terminal.disable();
+				if (!$(div).parents('#all_touchui_settings').length) {
+					self.scroll.currentActive.disable();
+					self.scroll.iScrolls.terminal.disable();
+				}
 
 				$document.on("dropdown-closed.touchui", function(eve) {
 					self.scroll.refresh(self.scroll.currentActive);

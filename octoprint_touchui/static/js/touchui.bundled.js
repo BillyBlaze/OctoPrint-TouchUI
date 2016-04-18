@@ -125,8 +125,10 @@ TouchUI.prototype.components.dropdown = {
 				//self.scroll.modal.dropdown.scrollToElement($elm.find('li.active')[0], 0, 0, -30);
 
 				// Disable scrolling in active modal
-				self.scroll.currentActive.disable();
-				self.scroll.iScrolls.terminal.disable();
+				if (!$(div).parents('#all_touchui_settings').length) {
+					self.scroll.currentActive.disable();
+					self.scroll.iScrolls.terminal.disable();
+				}
 
 				$document.on("dropdown-closed.touchui", function(eve) {
 					self.scroll.refresh(self.scroll.currentActive);
@@ -512,264 +514,6 @@ TouchUI.prototype.components.touchscreen = {
 
 }
 
-TouchUI.prototype.DOM.cookies = {
-
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
-		}
-		return undefined;
-	},
-
-	set: function(key, value) {
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
-	},
-
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
-
-		if(value === true) {
-			this.set(key, "false");
-		} else {
-			this.set(key, "true");
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.localstorage = {
-	store: JSON.parse(localStorage["TouchUI"] || "{}"),
-
-	get: function (key) {
-		return this.store[key];
-	},
-
-	set: function (key, value) {
-		this.store[key] = value;
-		localStorage["TouchUI"] = JSON.stringify(this.store);
-		return this.store[key];
-	},
-
-	toggleBoolean: function (key) {
-		var value = this.store[key] || false;
-
-		if(value === true) {
-			this.set(key, false);
-		} else {
-			this.set(key, true);
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.pool = {
-	timer: null,
-	callTree: [],
-	duration: 100,
-
-	// For performance we will add some heavy functions into a que
-	// We will execute them later and not during this runtime (i.e. iScroll refresh after DOMloading)
-	add: function(fn, scope) {
-		if(!this.timer) {
-			this.timer = setTimeout(this.execute.bind(this), this.duration);
-		}
-
-		this.callTree.push([fn, scope]);
-	},
-
-	execute: function() {
-		_.each(this.callTree, function(fn) {
-			fn[0].call(fn[1]);
-		});
-
-		this.callTree = [];
-		this.timer = null;
-	}
-
-}
-
-// Since I messed up by releasing start_kweb3.xinit without disabling private
-// mode, we now need to check if we can store anything at all in localstorage
-// the missing -P will prevent any localstorage
-if (TouchUI.prototype.settings.hasLocalStorage) {
-	try {
-		localStorage["TouchUIcanWeHazStorage"] = "true";
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
-		delete localStorage["TouchUIcanWeHazStorage"];
-	} catch(err) {
-
-		// TODO: remove this is future
-		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
-			$(function() {
-				new PNotify({
-					type: 'error',
-					title: "Private Mode detection:",
-					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
-						"and add the parameter 'P' after the dash. \n\n" +
-						"For more information see the v0.3.3 release notes.",
-					hide: false
-				});
-			});
-		}
-
-		console.info("Localstorage defined but failback to cookies due to errors.");
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-	}
-} else {
-	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-}
-
-TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
-
-	if (this.settings.hasLocalStorage) {
-		if (document.cookie.indexOf("TouchUI.") !== -1) {
-			console.info("TouchUI cookies migration.");
-
-			var name = "TouchUI.";
-			var ca = document.cookie.split(';');
-			for (var i=0; i<ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0)==' ') c = c.substring(1);
-				if (c.indexOf(name) == 0) {
-					var string = c.substring(name.length,c.length);
-					string = string.split("=");
-					var value = $.parseJSON(string[1]);
-
-					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
-					this.DOM.storage.set(string[0], value);
-
-					console.info("Removing cookie", string[0]);
-					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-				}
-			}
-		}
-	}
-
-} : _.noop;
-
-TouchUI.prototype.DOM.init = function() {
-
-	// Create new tab with files, dashboard and temperature and make it active
-	this.DOM.create.files.init.call(this, this.DOM.create.tabbar);
-	this.DOM.create.dashboard.init(this.DOM.create.tabbar);
-	this.DOM.create.temperature.init.call(this);
-
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init(this.DOM.create.tabbar);
-
-	// Manipulate controls div
-	this.DOM.move.controls.init();
-
-	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(self);
-	this.DOM.overwrite.modal.call(self);
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init(this.DOM.create.tabbar);
-	}
-
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.navbar.init.call(this);
-	this.DOM.move.overlays.init.call(this);
-	this.DOM.move.terminal.init.call(this);
-
-	this.components.material.ripple();
-	// $('.dropdown-toggle').each(function(ind, elm) {
-	// 	var $elm = $(elm);
-	// 	var _id = _.uniqueId("dropdown");
-	//
-	// 	if(!$elm.parents('#all_touchui_settings').length) {
-	//
-	// 		$elm.removeClass('dropdown-toggle')
-	// 			.attr('data-toggle', null)
-	// 			.addClass('dropdown-button')
-	// 			.attr('data-activates', _id);
-	//
-	// 		$elm.next()
-	// 			.removeClass('dropdown-menu')
-	// 			.addClass('dropdown-content')
-	// 			.attr('id', _id);
-	//
-	// 	}
-	// });
-
-	var div = $('<div class="input-field"></div>').appendTo('body');
-	var $elems = $('input, textarea, select');
-	$elems.each(function moveInputs(ind, elm) {
-		var $elm = $(elm);
-		var id = $elm.attr("id");
-		var $for = (id) ? $('label[for="' + id + '"]') : [];
-		//var isControlLabel = $elm.parents('.controls').prev().hasClass('control-label');
-
-		if ($for.length) {
-
-			var $div = div.clone();
-
-			if ($elm.is('select, textarea, input:not([type="radio"]):not([type="checkbox"])')) {
-				$div.addClass('withLabel');
-			}
-
-			$div.insertAfter($elm);
-			$elm.appendTo($div);
-			$for.prependTo($div);
-
-		} /*else if ($elm.parent().hasClass("checkbox") || $elm.parent().hasClass("radio") || isControlLabel) {
-
-			var $parent = (isControlLabel) ? $elm.parents('.controls').prev() : $elm.parent();
-			var _id = _.uniqueId("input");
-
-			$div = $(div).insertAfter((isControlLabel) ? $elm : $parent);
-			$elm.appendTo($div).attr("id", _id);
-			$parent.appendTo($div).attr("for", _id);
-
-		}*/
-
-		if ($elm.prop('tagName').toLowerCase() === 'textarea') {
-			$elm.addClass('materialize-textarea');
-		}
-
-	});
-
-	// $('select').each(function(ind, elm) {
-	// 	var $elm = $(elm);
-	// 	$elm.attr("data-bind", $elm.attr("data-bind") + ', materialSelect: true');
-	// });
-	//
-	// ko.bindingHandlers.materialSelect = {
-	// 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-	// 		allBindings();
-	// 		$(element).material_select();
-	// 	},
-	// 	update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-	// 		allBindings();
-	// 		$(element).material_select();
-	// 	}
-	// };
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-}
-
 TouchUI.prototype.core.boot = function() {
 
 	// This should always start TouchUI
@@ -1055,6 +799,264 @@ TouchUI.prototype.core.init = function() {
 		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
 
 	}
+
+}
+
+TouchUI.prototype.DOM.cookies = {
+
+	get: function(key) {
+		var name = "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
+		}
+		return undefined;
+	},
+
+	set: function(key, value) {
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+	},
+
+	toggleBoolean: function(key) {
+		var value = $.parseJSON(this.get(key) || "false");
+
+		if(value === true) {
+			this.set(key, "false");
+		} else {
+			this.set(key, "true");
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.localstorage = {
+	store: JSON.parse(localStorage["TouchUI"] || "{}"),
+
+	get: function (key) {
+		return this.store[key];
+	},
+
+	set: function (key, value) {
+		this.store[key] = value;
+		localStorage["TouchUI"] = JSON.stringify(this.store);
+		return this.store[key];
+	},
+
+	toggleBoolean: function (key) {
+		var value = this.store[key] || false;
+
+		if(value === true) {
+			this.set(key, false);
+		} else {
+			this.set(key, true);
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.pool = {
+	timer: null,
+	callTree: [],
+	duration: 100,
+
+	// For performance we will add some heavy functions into a que
+	// We will execute them later and not during this runtime (i.e. iScroll refresh after DOMloading)
+	add: function(fn, scope) {
+		if(!this.timer) {
+			this.timer = setTimeout(this.execute.bind(this), this.duration);
+		}
+
+		this.callTree.push([fn, scope]);
+	},
+
+	execute: function() {
+		_.each(this.callTree, function(fn) {
+			fn[0].call(fn[1]);
+		});
+
+		this.callTree = [];
+		this.timer = null;
+	}
+
+}
+
+// Since I messed up by releasing start_kweb3.xinit without disabling private
+// mode, we now need to check if we can store anything at all in localstorage
+// the missing -P will prevent any localstorage
+if (TouchUI.prototype.settings.hasLocalStorage) {
+	try {
+		localStorage["TouchUIcanWeHazStorage"] = "true";
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
+		delete localStorage["TouchUIcanWeHazStorage"];
+	} catch(err) {
+
+		// TODO: remove this is future
+		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
+			$(function() {
+				new PNotify({
+					type: 'error',
+					title: "Private Mode detection:",
+					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
+						"and add the parameter 'P' after the dash. \n\n" +
+						"For more information see the v0.3.3 release notes.",
+					hide: false
+				});
+			});
+		}
+
+		console.info("Localstorage defined but failback to cookies due to errors.");
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+	}
+} else {
+	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+}
+
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
+
+	if (this.settings.hasLocalStorage) {
+		if (document.cookie.indexOf("TouchUI.") !== -1) {
+			console.info("TouchUI cookies migration.");
+
+			var name = "TouchUI.";
+			var ca = document.cookie.split(';');
+			for (var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) {
+					var string = c.substring(name.length,c.length);
+					string = string.split("=");
+					var value = $.parseJSON(string[1]);
+
+					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
+					this.DOM.storage.set(string[0], value);
+
+					console.info("Removing cookie", string[0]);
+					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+				}
+			}
+		}
+	}
+
+} : _.noop;
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with files, dashboard and temperature and make it active
+	this.DOM.create.files.init.call(this, this.DOM.create.tabbar);
+	this.DOM.create.dashboard.init(this.DOM.create.tabbar);
+	this.DOM.create.temperature.init.call(this);
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init(this.DOM.create.tabbar);
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Disable these bootstrap/jquery plugins
+	this.DOM.overwrite.tabdrop.call(self);
+	this.DOM.overwrite.modal.call(self);
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+	}
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.navbar.init.call(this);
+	this.DOM.move.overlays.init.call(this);
+	this.DOM.move.terminal.init.call(this);
+
+	this.components.material.ripple();
+	// $('.dropdown-toggle').each(function(ind, elm) {
+	// 	var $elm = $(elm);
+	// 	var _id = _.uniqueId("dropdown");
+	//
+	// 	if(!$elm.parents('#all_touchui_settings').length) {
+	//
+	// 		$elm.removeClass('dropdown-toggle')
+	// 			.attr('data-toggle', null)
+	// 			.addClass('dropdown-button')
+	// 			.attr('data-activates', _id);
+	//
+	// 		$elm.next()
+	// 			.removeClass('dropdown-menu')
+	// 			.addClass('dropdown-content')
+	// 			.attr('id', _id);
+	//
+	// 	}
+	// });
+
+	var div = $('<div class="input-field"></div>').appendTo('body');
+	var $elems = $('input, textarea, select');
+	$elems.each(function moveInputs(ind, elm) {
+		var $elm = $(elm);
+		var id = $elm.attr("id");
+		var $for = (id) ? $('label[for="' + id + '"]') : [];
+		//var isControlLabel = $elm.parents('.controls').prev().hasClass('control-label');
+
+		if ($for.length) {
+
+			var $div = div.clone();
+
+			if ($elm.is('select, textarea, input:not([type="radio"]):not([type="checkbox"])')) {
+				$div.addClass('withLabel');
+			}
+
+			$div.insertAfter($elm);
+			$elm.appendTo($div);
+			$for.prependTo($div);
+
+		} /*else if ($elm.parent().hasClass("checkbox") || $elm.parent().hasClass("radio") || isControlLabel) {
+
+			var $parent = (isControlLabel) ? $elm.parents('.controls').prev() : $elm.parent();
+			var _id = _.uniqueId("input");
+
+			$div = $(div).insertAfter((isControlLabel) ? $elm : $parent);
+			$elm.appendTo($div).attr("id", _id);
+			$parent.appendTo($div).attr("for", _id);
+
+		}*/
+
+		if ($elm.prop('tagName').toLowerCase() === 'textarea') {
+			$elm.addClass('materialize-textarea');
+		}
+
+	});
+
+	// $('select').each(function(ind, elm) {
+	// 	var $elm = $(elm);
+	// 	$elm.attr("data-bind", $elm.attr("data-bind") + ', materialSelect: true');
+	// });
+	//
+	// ko.bindingHandlers.materialSelect = {
+	// 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	// 		allBindings();
+	// 		$(element).material_select();
+	// 	},
+	// 	update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+	// 		allBindings();
+	// 		$(element).material_select();
+	// 	}
+	// };
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
 
 }
 
