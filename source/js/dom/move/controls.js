@@ -39,8 +39,12 @@ TouchUI.prototype.DOM.move.controls = {
 		var flowrate = $('<a href="#"><span>'+flowrateBtn.text()+'</span><strong data-bind="text: flowRate() + \'%\'"></strong></div>').appendTo(cont);
 		var feedrate = $('<a href="#"><span>'+feedrateBtn.text()+'</span><strong data-bind="text: feedRate() + \'%\'"></strong></div>').appendTo(cont);
 
-		$('#jog_distance').remove();
-		cont.attr('id', 'jog_distance');
+		if ($('[data-distance]').length !== -1) {
+			steps.attr("data-bind", "text: distance()")
+		}
+
+		//$('#jog_distance').remove();
+		//cont.attr('id', 'jog_distance');
 	}
 
 }
