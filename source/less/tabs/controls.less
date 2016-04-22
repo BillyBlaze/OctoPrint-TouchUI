@@ -1,6 +1,43 @@
 #control {
 	overflow: visible;
 
+	.controls-heading {
+		flex: 0 1 auto;
+		margin-top: -1px !important;
+
+		a {
+			line-height: 1.2rem;
+			color: @main-color-text;
+			text-align: right;
+			height: auto;
+
+			&:hover {
+				text-decoration: none;
+			}
+
+			span {
+				display: block;
+				font-size: 0.7rem;
+				opacity: 0.7;
+			}
+			strong,
+			button span {
+				font-size: 1.3rem;
+				font-weight: 300;
+			}
+			button {
+				font-family: 'Roboto',sans-serif;
+				color: white;
+				background: transparent;
+				padding: 0;
+				pointer-events: none;
+			}
+			button span {
+				opacity: 1;
+			}
+		}
+	}
+
 	.touch-area {
 		padding: 0;
 		display: flex;

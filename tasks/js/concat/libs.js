@@ -10,7 +10,9 @@ module.exports = function (gulp, $, config) {
 			'source/vendors/hammerjs/hammer.min.js',
 			'source/vendors/OctoPrint-TouchUI/**/*.js'
 		])
-		.pipe($.if(["**/iscroll.js", "**/waves.js"], $.uglify()))
+		.pipe($.if(["**/*.js", "!**/*.min.js"], $.uglify()))
+		.pipe($.addSrc.prepend('source/vendors/OctoPrint-TouchUI/start.js'))
+		.pipe($.addSrc.append('source/vendors/OctoPrint-TouchUI/end.js'))
 		.pipe($.concat(config.js.libs.output))
 		.pipe(gulp.dest(config.js.path));
 
