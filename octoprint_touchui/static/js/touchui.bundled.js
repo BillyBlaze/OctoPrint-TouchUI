@@ -2183,18 +2183,20 @@ TouchUI.prototype.DOM.move.controls = {
 		var inner = $('<div class="accordion-inner touch-area"></div>').prependTo("#control");
 		$("#control").children().appendTo(inner);
 		var header = $('<div class="accordion-heading"><a href="#controls">Controls</a></div>').prependTo("#control");
-		var cont = $('<div class="controls-heading" data-bind="enable: loginState.isUser()"></div>').appendTo(header);
+		var cont = $('<div class="controls-heading" data-bind="visible: loginState.isUser()"></div>').appendTo(header);
 
-		var steps = $('<a href="#"><span>Steps</span><button class="active" data-distance="0.1">0.1</button></div>').appendTo(cont);
+		var steps = $('<a href="#"><span>Steps</span><button class="active" data-distance="10">10</button></div>').appendTo(cont);
 		var flowrate = $('<a href="#"><span>'+flowrateBtn.text()+'</span><strong data-bind="text: flowRate() + \'%\'"></strong></div>').appendTo(cont);
 		var feedrate = $('<a href="#"><span>'+feedrateBtn.text()+'</span><strong data-bind="text: feedRate() + \'%\'"></strong></div>').appendTo(cont);
 
-		if ($('[data-distance]').length !== -1) {
-			steps.attr("data-bind", "text: distance()")
+		if ($('[data-distance]').length === -1) {
+			steps.find('button').attr("data-bind", "text: distance()").removeAttr('data-distance');
+		} else {
+			// TODO: Remove backwards compatibility with OctoPrint >=1.2.10
+			$('#jog_distance').remove();
+			cont.attr('id', 'jog_distance');
 		}
 
-		//$('#jog_distance').remove();
-		//cont.attr('id', 'jog_distance');
 	}
 
 }

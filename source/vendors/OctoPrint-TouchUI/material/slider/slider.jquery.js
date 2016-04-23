@@ -49,7 +49,8 @@
 					self.$slider.removeClass('confirmValue');
 				});
 
-			this.$fake = $('<div class="fake"></div>').appendTo(this.$grid)
+			this.$fake = $('<div class="fake"></div>')
+				.appendTo(this.$grid)
 				.on("click"+namespace, function(e) {
 					var progress = (e.offsetX / self.$fake.width()) * self.max;
 					self.setValue(Math.round(progress));
@@ -66,8 +67,7 @@
 
 					var startPoint = ((parseFloat(self.$knob.css("left")) || 0) / width) * 100;
 
-					$(document)
-						.on("mousemove"+namespace+" touchmove"+namespace, function(e) {
+					$(document).on("mousemove"+namespace+" touchmove"+namespace, function(e) {
 							if(start) {
 								try {
 									e.preventDefault();
@@ -94,8 +94,7 @@
 				});
 
 				_.each(self.points, function(elm) {
-					$('<div class="hotpoint"><span>'+elm.name+'</span></div>')
-						.appendTo(self.$grid)
+					$('<div class="hotpoint"><span>'+elm.name+'</span></div>').appendTo(self.$grid)
 						.css('left', (((self.isBed) ? elm.bed / self.max : elm.extruder / self.max) * 100)+"%")
 						.on('click', function() {
 							self.setValue((self.isBed) ? elm.bed : elm.extruder);
@@ -113,21 +112,16 @@
 			var $slider = this.$slider;
 			var namespace = ".touchui.slider-click";
 
-			$elm
-				.off("click"+namespace)
+			$elm.off("click"+namespace)
 				.on("click"+namespace, function(e) {
 
-					$('.slidert')
-						.removeClass('done')
+					$('.slidert').removeClass('done')
 						.removeClass('active')
 						.removeClass('moving');
 
-					$('.circle.active')
-						.removeClass('active');
+					$('.circle.active').removeClass('active');
 
-					$slider
-						.addClass('moving');
-
+					$slider.addClass('moving');
 					self.setPosition();
 
 					setTimeout(function() {
@@ -135,8 +129,7 @@
 						$slider.removeClass('moving');
 						$elm.addClass('active');
 
-						$slider
-							.addClass('active')
+						$slider.addClass('active')
 							.one("animationend webkitAnimationEnd oAnimationEnd", function() {
 								$slider.css({
 									left: 0,
@@ -211,8 +204,8 @@
 	};
 
 	$.fn.touchuiSlider = function(configOrCommand, commandArgument) {
-		var dataName = 'slider',
-			firstInstance = this.data(dataName);
+		var dataName = 'slider';
+		var firstInstance = this.data(dataName);
 
 		if (configOrCommand == 'value') {
 			if (!firstInstance)
