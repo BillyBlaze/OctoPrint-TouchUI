@@ -8,6 +8,8 @@ TouchUI.prototype.components.touchscreen = {
 		if (this.settings.isEpiphanyOrKweb) {
 			this.settings.hasFullscreen(false);
 		}
+		
+		$('.modal.fade').removeClass('fade');
 
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;

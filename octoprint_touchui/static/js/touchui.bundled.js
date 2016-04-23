@@ -616,6 +616,8 @@ TouchUI.prototype.components.touchscreen = {
 		if (this.settings.isEpiphanyOrKweb) {
 			this.settings.hasFullscreen(false);
 		}
+		
+		$('.modal.fade').removeClass('fade');
 
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
@@ -2016,14 +2018,13 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 
 	//We need a reliable event for catching new modals for attaching a scrolling bar
 	$.fn.modalBup = $.fn.modal;
-	$.fn.modal = function(option, args) {
+	$.fn.modal = function(options, args) {
 		// Update any other modifications made by others (i.e. OctoPrint itself)
 		$.fn.modalBup.defaults = $.fn.modal.defaults;
 
 		// Create modal, store into variable so we can trigger an event first before return
-		var tmp = $(this).modalBup(option, args);
+		var tmp = $(this).modalBup(options, args);
 		$(this).trigger("modal.touchui", this);
-
 		return tmp;
 	};
 	$.fn.modal.prototype = { constructor: $.fn.modal };
