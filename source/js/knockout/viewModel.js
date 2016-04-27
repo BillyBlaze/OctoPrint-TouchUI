@@ -32,5 +32,13 @@ TouchUI.prototype.knockout.viewModel = function() {
 			}
 		}
 	}
+	
+	self.onBrowserTabVisibilityChange = function() {
+		if (localStorage) {
+			if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
+				TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
+			}
+		}
+	}
 
 }
