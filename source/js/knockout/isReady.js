@@ -68,9 +68,18 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				if( loggedIn ) {
 					$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
+					
+					if (self.DOM.cookies.get("remember_token", true)) {
+						localStorage["remember_token"] = self.DOM.cookies.get("remember_token", true);
+					}
+					
 				} else {
 					$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('visible_touch');
+					
+					if (localStorage["remember_token"]) {
+						delete localStorage["remember_token"];
+					}
 				}
 
 				// Refresh scroll view when login state changed

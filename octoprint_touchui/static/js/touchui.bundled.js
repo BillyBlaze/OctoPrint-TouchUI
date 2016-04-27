@@ -980,31 +980,35 @@ TouchUI.prototype.DOM.init = function() {
 
 TouchUI.prototype.DOM.cookies = {
 
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
+	get: function(key, isPlain) {
+		var name = (isPlain) ? key + "=" : "TouchUI." + key + "=";
 		var ca = document.cookie.split(';');
+		var tmp;
 		for(var i=0; i<ca.length; i++) {
 			var c = ca[i];
 			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
+			if (c.indexOf(name) == 0) tmp = c.substring(name.length,c.length);
+			return (isPlain) ? tmp : $.parseJSON(tmp);
+			
 		}
 		return undefined;
 	},
 
-	set: function(key, value) {
+	set: function(key, value, isPlain) {
+		key = (isPlain) ? key + "=" : "TouchUI." + key + "=";
 		var d = new Date();
 		d.setTime(d.getTime()+(360*24*60*60*1000));
 		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+		document.cookie = key + value + "; " + expires;
 	},
 
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
+	toggleBoolean: function(key, isPlain) {
+		var value = $.parseJSON(this.get(key, isPlain) || "false");
 
 		if(value === true) {
-			this.set(key, "false");
+			this.set(key, "false", isPlain);
 		} else {
-			this.set(key, "true");
+			this.set(key, "true", isPlain);
 		}
 
 		return !value;
@@ -1099,6 +1103,13 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 	}
 
 } : _.noop;
+
+
+if (localStorage) {
+	if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
+		TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
+	}
+}
 
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
@@ -1268,9 +1279,18 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				if( loggedIn ) {
 					$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
+					
+					if (self.DOM.cookies.get("remember_token", true)) {
+						localStorage["remember_token"] = self.DOM.cookies.get("remember_token", true);
+					}
+					
 				} else {
 					$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('visible_touch');
+					
+					if (localStorage["remember_token"]) {
+						delete localStorage["remember_token"];
+					}
 				}
 
 				// Refresh scroll view when login state changed
