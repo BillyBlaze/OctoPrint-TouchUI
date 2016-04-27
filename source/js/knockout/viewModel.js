@@ -33,10 +33,11 @@ TouchUI.prototype.knockout.viewModel = function() {
 		}
 	}
 	
+	// Auto-Login with localStorage
 	self.onBrowserTabVisibilityChange = function() {
 		if (localStorage) {
-			if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
-				TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
+			if (localStorage["remember_token"] && !self.DOM.cookies.get("remember_token", true)) {
+				self.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
 			}
 		}
 	}
