@@ -1398,6 +1398,7 @@ TouchUI.prototype.knockout.viewModel = function() {
 		}
 	}
 	
+	// Auto-Login with localStorage
 	self.onBrowserTabVisibilityChange = function() {
 		if (localStorage) {
 			if (localStorage["remember_token"] && !self.DOM.cookies.get("remember_token", true)) {
