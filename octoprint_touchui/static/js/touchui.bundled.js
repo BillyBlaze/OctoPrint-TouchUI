@@ -657,6 +657,16 @@ TouchUI.prototype.core.init = function() {
 	// Bootup TouchUI if Touch, Small resolution or storage say's so
 	if (this.core.boot.call(this)) {
 
+		// Send Touchscreen loading status
+		if (window.top.postMessage) {
+			window.top.postMessage("loading", "*");
+			
+			$(window).on("error.touchui", function(event) {
+				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
+			});
+		}
+
+		// Attach id for TouchUI styling
 		$("html").attr("id", this.settings.id);
 
 		// Force mobile browser to set the window size to their format
@@ -1360,6 +1370,11 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}, 100);
 		}
 	});
+	
+	if (window.top.postMessage) {
+		window.top.postMessage("ready", "*");
+		$(window).off("error.touchui");
+	}
 
 }
 

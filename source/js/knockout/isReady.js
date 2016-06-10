@@ -149,5 +149,10 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}, 100);
 		}
 	});
+	
+	if (window.top.postMessage) {
+		window.top.postMessage("ready", "*");
+		$(window).off("error.touchui");
+	}
 
 }
