@@ -1123,6 +1123,57 @@ if (localStorage) {
 	}
 }
 
+TouchUI.prototype.plugins.init = function (viewModels) {
+	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
+}
+
+TouchUI.prototype.plugins.navbarTemp = function() {
+
+	// Manually move navbar temp (hard move)
+	if( $("#navbar_plugin_navbartemp").length > 0 ) {
+		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
+		$('<li class="divider"></li>').insertBefore(navBarTmp);
+	}
+
+}
+
+TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
+	var shown = false;
+
+	pluginManagerViewModel.plugins.items.subscribe(function() {
+
+		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
+			return (elm.key === "ScreenSquish");
+		}, true) || false;
+
+		if(!shown && ScreenSquish && ScreenSquish.enabled) {
+			shown = true;
+			new PNotify({
+				title: 'TouchUI: ScreenSquish is running',
+				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
+				icon: 'glyphicon glyphicon-question-sign',
+				type: 'error',
+				hide: false,
+				confirm: {
+					confirm: true,
+					buttons: [{
+						text: 'Disable ScreenSquish',
+						addClass: 'btn-primary',
+						click: function(notice) {
+							if(!ScreenSquish.pending_disable) {
+								pluginManagerViewModel.togglePlugin(ScreenSquish);
+							}
+							notice.remove();
+						}
+					}]
+				},
+			});
+		}
+
+	});
+
+};
+
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
 
@@ -1382,7 +1433,12 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
 		
 		// Stop watching for errors
-		$(window).off("error.touchui").trigger("resize");
+		$(window).off("error.touchui");
+		
+		// Trigger wake-up for iScroll
+		if(window.dispatchEvent) {
+			window.dispatchEvent(new Event('resize'));
+		}
 	}
 
 }
@@ -1432,57 +1488,6 @@ TouchUI.prototype.knockout.viewModel = function() {
 	}
 
 }
-
-TouchUI.prototype.plugins.init = function (viewModels) {
-	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
-}
-
-TouchUI.prototype.plugins.navbarTemp = function() {
-
-	// Manually move navbar temp (hard move)
-	if( $("#navbar_plugin_navbartemp").length > 0 ) {
-		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
-		$('<li class="divider"></li>').insertBefore(navBarTmp);
-	}
-
-}
-
-TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
-	var shown = false;
-
-	pluginManagerViewModel.plugins.items.subscribe(function() {
-
-		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
-			return (elm.key === "ScreenSquish");
-		}, true) || false;
-
-		if(!shown && ScreenSquish && ScreenSquish.enabled) {
-			shown = true;
-			new PNotify({
-				title: 'TouchUI: ScreenSquish is running',
-				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
-				icon: 'glyphicon glyphicon-question-sign',
-				type: 'error',
-				hide: false,
-				confirm: {
-					confirm: true,
-					buttons: [{
-						text: 'Disable ScreenSquish',
-						addClass: 'btn-primary',
-						click: function(notice) {
-							if(!ScreenSquish.pending_disable) {
-								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							}
-							notice.remove();
-						}
-					}]
-				},
-			});
-		}
-
-	});
-
-};
 
 TouchUI.prototype.scroll.beforeLoad = function() {
 

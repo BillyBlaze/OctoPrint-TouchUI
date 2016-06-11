@@ -159,7 +159,12 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
 		
 		// Stop watching for errors
-		$(window).off("error.touchui").trigger("resize");
+		$(window).off("error.touchui");
+		
+		// Trigger wake-up for iScroll
+		if(window.dispatchEvent) {
+			window.dispatchEvent(new Event('resize'));
+		}
 	}
 
 }
