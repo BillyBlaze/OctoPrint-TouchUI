@@ -116,9 +116,18 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				if( loggedIn ) {
 					$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
+					
+					if (self.DOM.cookies.get("remember_token", true)) {
+						localStorage["remember_token"] = self.DOM.cookies.get("remember_token", true);
+					}
+					
 				} else {
 					$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('visible_touch');
+					
+					if (localStorage["remember_token"]) {
+						delete localStorage["remember_token"];
+					}
 				}
 			});
 		}
@@ -182,5 +191,22 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}, 100);
 		}
 	});
+	
+	if (window.top.postMessage) {
+		// Tell bootloader we're ready with giving him the expected version for the bootloader
+		// if version is lower on the bootloader, then the bootloader will throw an update msg
+		window.top.postMessage(1, "*");
+		
+		// Sync customization with bootloader
+		window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
+		
+		// Stop watching for errors
+		$(window).off("error.touchui");
+		
+		// Trigger wake-up for iScroll
+		if(window.dispatchEvent) {
+			window.dispatchEvent(new Event('resize'));
+		}
+	}
 
 }

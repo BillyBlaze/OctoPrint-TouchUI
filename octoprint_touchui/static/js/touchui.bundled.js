@@ -15,7 +15,9 @@ TouchUI.prototype = {
 
 		isFullscreen: ko.observable(false),
 		isTouchscreen: ko.observable(false),
-		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && (window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1 || window.navigator.userAgent.indexOf("Linux arm") !== -1)),
+
+		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
+		isChromiumArm: (window.navigator.userAgent.indexOf("X11") !== -1 && window.navigator.userAgent.indexOf("Chromium") !== -1 && window.navigator.userAgent.indexOf("armv7l") !== -1),
 
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
@@ -809,6 +811,16 @@ TouchUI.prototype.core.init = function() {
 	// Bootup TouchUI if Touch, Small resolution or storage say's so
 	if (this.core.boot.call(this)) {
 
+		// Send Touchscreen loading status
+		if (window.top.postMessage) {
+			window.top.postMessage("loading", "*");
+			
+			$(window).on("error.touchui", function(event) {
+				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
+			});
+		}
+
+		// Attach id for TouchUI styling
 		$("html").attr("id", this.settings.id);
 
 		// Force mobile browser to set the window size to their format
@@ -836,7 +848,7 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 
@@ -862,31 +874,35 @@ TouchUI.prototype.core.init = function() {
 
 TouchUI.prototype.DOM.cookies = {
 
-	get: function(key) {
-		var name = "TouchUI." + key + "=";
+	get: function(key, isPlain) {
+		var name = (isPlain) ? key + "=" : "TouchUI." + key + "=";
 		var ca = document.cookie.split(';');
+		var tmp;
 		for(var i=0; i<ca.length; i++) {
 			var c = ca[i];
 			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) return $.parseJSON(c.substring(name.length,c.length));
+			if (c.indexOf(name) == 0) tmp = c.substring(name.length,c.length);
+			return (isPlain) ? tmp : $.parseJSON(tmp);
+			
 		}
 		return undefined;
 	},
 
-	set: function(key, value) {
+	set: function(key, value, isPlain) {
+		key = (isPlain) ? key + "=" : "TouchUI." + key + "=";
 		var d = new Date();
 		d.setTime(d.getTime()+(360*24*60*60*1000));
 		var expires = "expires="+d.toUTCString();
-		document.cookie = "TouchUI." + key + "=" + value + "; " + expires;
+		document.cookie = key + value + "; " + expires;
 	},
 
-	toggleBoolean: function(key) {
-		var value = $.parseJSON(this.get(key) || "false");
+	toggleBoolean: function(key, isPlain) {
+		var value = $.parseJSON(this.get(key, isPlain) || "false");
 
 		if(value === true) {
-			this.set(key, "false");
+			this.set(key, "false", isPlain);
 		} else {
-			this.set(key, "true");
+			this.set(key, "true", isPlain);
 		}
 
 		return !value;
@@ -1007,6 +1023,13 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 	}
 
 } : _.noop;
+
+// Auto-Login with localStorage
+if (localStorage) {
+	if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
+		TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
+	}
+}
 
 TouchUI.prototype.DOM.init = function() {
 
@@ -1363,9 +1386,18 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				if( loggedIn ) {
 					$('#navbar_login a.dropdown-toggle').addClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('hide dropdown open').addClass('visible_touch');
+					
+					if (self.DOM.cookies.get("remember_token", true)) {
+						localStorage["remember_token"] = self.DOM.cookies.get("remember_token", true);
+					}
+					
 				} else {
 					$('#navbar_login a.dropdown-toggle').removeClass("hidden_touch");
 					$('#login_dropdown_loggedin').removeClass('visible_touch');
+					
+					if (localStorage["remember_token"]) {
+						delete localStorage["remember_token"];
+					}
 				}
 			});
 		}
@@ -1429,6 +1461,23 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			}, 100);
 		}
 	});
+	
+	if (window.top.postMessage) {
+		// Tell bootloader we're ready with giving him the expected version for the bootloader
+		// if version is lower on the bootloader, then the bootloader will throw an update msg
+		window.top.postMessage(1, "*");
+		
+		// Sync customization with bootloader
+		window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
+		
+		// Stop watching for errors
+		$(window).off("error.touchui");
+		
+		// Trigger wake-up for iScroll
+		if(window.dispatchEvent) {
+			window.dispatchEvent(new Event('resize'));
+		}
+	}
 
 }
 
@@ -1464,6 +1513,15 @@ TouchUI.prototype.knockout.viewModel = function() {
 					}, 10);
 				}
 			});
+		}
+	}
+	
+	// Auto-Login with localStorage
+	self.onBrowserTabVisibilityChange = function() {
+		if (localStorage) {
+			if (localStorage["remember_token"] && !self.DOM.cookies.get("remember_token", true)) {
+				self.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
+			}
 		}
 	}
 
