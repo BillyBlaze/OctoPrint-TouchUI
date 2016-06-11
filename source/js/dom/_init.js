@@ -101,6 +101,9 @@ TouchUI.prototype.DOM.init = function() {
 	// 	}
 	// };
 
+	// Create headers
+	this.DOM.create.headers.init.call(this);
+
 	// Remove active class when clicking on a tab in the tabbar
 	$('#tabs [data-toggle=tab]').on("click", function() {
 		$("#all_touchui_settings").removeClass("item_active");

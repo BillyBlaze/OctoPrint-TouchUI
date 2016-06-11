@@ -1,7 +1,7 @@
 {
 
 	"autoprefixer": {
-		"browsers": ["last 10 versions"],
+		"browsers": ["last 1 version", "> 10%", "iOS > 7", "ie > 11", "Android > 2.1"],
 		"cascade": false
 	},
 

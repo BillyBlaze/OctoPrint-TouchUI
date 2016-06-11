@@ -3,13 +3,17 @@ TouchUI.prototype.scroll.body = {
 	init: function() {
 		var self = this;
 		var scrollStart = false;
+		var tmp = [];
 
 		// Create main body scroll
 		self.scroll.iScrolls.body = new IScroll(".octoprint-container", self.scroll.defaults.iScroll);
-		self.scroll.iScrolls.menu = new IScroll("#all_touchui_settings .dropdown-menu", self.scroll.defaults.iScroll);
+		if ($("#all_touchui_settings .dropdown-menu").length > 0) {
+			self.scroll.iScrolls.menu = new IScroll("#all_touchui_settings .dropdown-menu", self.scroll.defaults.iScroll);
+			tmp.push(self.scroll.iScrolls.menu);
+		}
 		self.scroll.currentActive = self.scroll.iScrolls.body;
 
-		_.each([self.scroll.iScrolls.body, self.scroll.iScrolls.menu], function(iScroll) {
+		_.each([self.scroll.iScrolls.body].concat(tmp), function(iScroll) {
 			var $noPointer = $(iScroll.wrapper);
 
 			// Block everthing while scrolling

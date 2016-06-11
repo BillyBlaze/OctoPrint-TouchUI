@@ -1,16 +1,238 @@
 &.isTouchscreenUI {
 
-	.modal-backdrop {
-		background: transparent !important;
+	#navbar {
+		display: none;
 	}
 
-	.modal.fade {
-		opacity: 1 !important;
+	.page-container .octoprint-container>.row>.tabbable>.tab-content>.tab-pane,
+	.page-container .octoprint-container>.row>.tabbable>.tab-content>.modal-scrollable>.modal {
+		transition: none !important;
 	}
 
 	#reloadui_overlay_background,
 	#offline_overlay_background {
 		background: transparent !important;
+	}
+
+	#touchui-overlay-animation {
+		overflow: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		z-index: -1;
+
+		&.active {
+			z-index: 10;
+			opacity: 1;
+		}
+	}
+
+	#touchui-overlay-menu {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		min-height: min-content;
+		background: rgba(255, 255, 255, .9);
+		list-style: none;
+		padding: @main-gutter;
+		margin: 0;
+		box-sizing: border-box;
+
+		align-content: center;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+
+		&.open {
+			transform: translate3d(-100%, 0, 0);
+
+			.fab-back {
+				color: @main-color-text;
+				background-color: @main-color;
+				padding: 0;
+				border-radius: 50%;
+				cursor: pointer;
+				vertical-align: middle;
+				text-align: center;
+				position: absolute;
+				z-index: 2;
+				top: @main-gutter;
+				right: @main-gutter;
+				width: 2.6rem;
+				height: 2.6rem;
+				border: 0 none;
+
+				&:after {
+					font-family: @icon-font;
+					content: @material-icons-arrow-back;
+					line-height: 39px;
+					font-size: 1.6rem;
+				}
+			}
+		}
+
+		li {
+			position: relative;
+			overflow: visible;
+			display: flex;
+			flex: 0 0 auto;
+			padding: 1rem 0.75rem 1.2rem;
+
+			&.hidden {
+				display: block;
+			}
+
+			&.divider {
+				display: none;
+			}
+
+			&.active {
+				order: -1;
+
+				a:before {
+					content: @material-icons-arrow-back !important;
+				}
+			}
+
+			&#navbar_login_settings {
+				position: static;
+				padding: 0;
+			}
+
+			#youcanhazlogin {
+				margin: 0;
+
+				> li {
+					position: static;
+					padding: 0;
+				}
+
+				#navbar_login > div.dropdown-menu {
+					padding: 15px;
+
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+
+					position: absolute;
+					width: 100%;
+					min-height: 100%;
+					left: 100%;
+					top: 0;
+					margin: 0;
+					box-sizing: border-box;
+					background: rgba(255, 255, 255, .9);
+				}
+			}
+
+			#login_dropdown_loggedin {
+				display: flex !important;
+				padding: 0 !important;
+				margin: 0 !important;
+				box-shadow: none !important;
+				min-width: 0;
+
+				&.hide {
+					display: none !important;
+				}
+
+				&:before {
+					content: none !important;
+				}
+			}
+
+			#login_dropdown_loggedout {
+				margin: 0 auto;
+			}
+
+			#navbar_login {
+				.dropdown-toggle {
+					margin: @main-gutter / 2;
+					position: relative;
+
+					span {
+						top: 105%;
+						overflow: visible;
+					}
+
+					&:before {
+						font-size: 8vw;
+					}
+					&:after {
+						content: none;
+					}
+				}
+			}
+
+			.hidden_touch {
+				display: flex;
+			}
+
+			&#conn_link_mirror a:before {
+				content: @material-icons-wifi;
+			}
+			&#navbar_settings a:before {
+				content: @material-icons-settings;
+			}
+
+			> a {
+				background: @main-color !important;
+				color: @main-color-text;
+				text-align: center;
+				border-radius: 50%;
+				position: static;
+				flex-direction: column-reverse;
+				height: 13vw;
+				width: 13vw;
+
+				@media (min-width: 500px) {
+					height: 70px;
+					width: 70px;
+				}
+
+				span {
+					position: absolute;
+					color: @main-color;
+					bottom: 0;
+					left: 0;
+					display: block;
+					width: 100%;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					font-size: 0.9rem;
+					line-height: 1;
+					font-weight: normal;
+					box-sizing: border-box;
+					padding: 0 10px;
+				}
+
+				&:hover {
+					text-decoration: none;
+				}
+
+				&:after, &:before {
+					content: "";
+					font-family: @icon-font;
+					color: @main-color-text !important;
+					font-size: 7vw;
+					width: auto;
+					height: auto;
+
+					@media (min-width: 500px) {
+						font-size: 42px;
+					}
+				}
+			}
+		}
+	}
+
+	.accordion-heading {
+		> a:before {
+			margin-left: -3px;
+		}
 	}
 
 }

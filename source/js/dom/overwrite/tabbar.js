@@ -31,8 +31,10 @@ TouchUI.prototype.DOM.overwrite.tabbar = function() {
 			// Add active and is-active to mirror or tabbar
 			if ($(e.target).parents('#tabs').length) {
 				$("#" + $(e.target).parent().attr('id') + "_mirror").addClass('active').find('a').addClass('is-active');
+				$("#" + $(e.target).parent().attr('id') + "_clone").addClass('active').find('a').addClass('is-active');
 			} else {
 				$("#" + $(e.target).parent().attr('id').replace("_mirror", "")).addClass('active').find('a').addClass('is-active');
+				$("#" + $(e.target).parent().attr('id').replace("_mirror", "_clone")).addClass('active').find('a').addClass('is-active');
 			}
 
 			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)

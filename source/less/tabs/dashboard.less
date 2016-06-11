@@ -2,8 +2,13 @@
 
 #dashboard {
 
-	&.withGraph > .inner {
-		padding-bottom: 110px;
+	&.withGraph {
+		#temperature-graph {
+			height: 150px !important;
+		}
+		> .inner {
+			padding-bottom: 110px;
+		}
 	}
 
 	#temperature-graph {
@@ -13,7 +18,7 @@
 		right: -10px;
 		background: transparent;
 		width: auto;
-		height: 150px;
+		height: 0;
 
 		.tickLabels,
 		.legend {

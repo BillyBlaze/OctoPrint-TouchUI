@@ -1,5 +1,5 @@
 /** TABBAR + NAVBAR **/
-#tabs, #navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings {
+#tabs, #touchui-overlay-menu, #navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings {
 
 	#temp_link a:after,
 	#temp_link_mirror a:before {
@@ -51,73 +51,76 @@
 	}
 }
 
+.accordion-heading > a:before {
+	content: @material-icons-widgets;
+}
+
 /** NAVBAR **/
-#navbar .navbar-inner .container .nav li.dropdown {
-	&#all_touchui_settings {
-		> a:after {
-			content: @material-icons-menu;
+#navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings,
+#touchui-overlay-menu {
+	> a:after {
+		content: @material-icons-menu;
+	}
+
+	&.open .dropdown-menu .open a.dropdown-toggle:after {
+		content: @material-icons-arrow-drop-up !important;
+	}
+
+	li {
+
+		&#conn_link_mirror a:before {
+			content: @material-icons-wifi;
 		}
 
-		&.open .dropdown-menu .open a.dropdown-toggle:after {
-			content: @material-icons-arrow-drop-up !important;
+		&#navbar_settings a:before {
+			content: @material-icons-settings;
 		}
 
-		li {
+		#usersettings_button:before {
+			content: @material-icons-person;
+		}
 
-			&#conn_link_mirror a:before {
-				content: @material-icons-wifi;
+		#logout_button:before {
+			content: @material-icons-exit-to-app;
+		}
+
+		#navbar_login {
+			a.dropdown-toggle {
+				&:after {
+					font-family: @icon-font;
+					content: @material-icons-arrow-drop-down;
+					font-size: 23px;
+					line-height: 40px;
+				}
+				&:before {
+					content: @material-icons-lock;
+					font-size: 19px;
+				}
 			}
+		}
 
-			&#navbar_settings a:before {
-				content: @material-icons-settings;
+		&#navbar_plugin_touchui {
+			a:before {
+				content: @material-icons-phonelink-setup;
 			}
+		}
 
-			#usersettings_button:before {
-				content: @material-icons-person;
+		&#navbar_systemmenu {
+			> a {
+				&:before {
+					content: @material-icons-build;
+					font-size: 19px;
+				}
+				&:after {
+					font-family: @icon-font;
+					content: @material-icons-arrow-drop-down;
+					font-size: 25px;
+				}
 			}
-
-			#logout_button:before {
-				content: @material-icons-exit-to-app;
-			}
-
-			#navbar_login {
-				a.dropdown-toggle {
-					&:after {
-						font-family: @icon-font;
-						content: @material-icons-arrow-drop-down;
-						font-size: 23px;
-						line-height: 40px;
-					}
+			.dropdown-menu {
+				a {
 					&:before {
-						content: @material-icons-lock;
-						font-size: 19px;
-					}
-				}
-			}
-
-			&#navbar_plugin_touchui {
-				a:before {
-					content: @material-icons-phonelink-setup;
-				}
-			}
-
-			&#navbar_systemmenu {
-				> a {
-					&:before {
-						content: @material-icons-build;
-						font-size: 19px;
-					}
-					&:after {
-						font-family: @icon-font;
-						content: @material-icons-arrow-drop-down;
-						font-size: 25px;
-					}
-				}
-				.dropdown-menu {
-					a {
-						&:before {
-							content: @material-icons-keyboard-arrow-right;
-						}
+						content: @material-icons-keyboard-arrow-right;
 					}
 				}
 			}
@@ -281,7 +284,7 @@
 #navbar_plugin_touchui {
 	float: right;
 
-	#navbar_touchui_settings {
+	a {
 		i:before {
 			font-family: FontAwesome;
 			content: "\f10b";

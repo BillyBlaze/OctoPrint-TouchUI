@@ -36,13 +36,11 @@ TouchUI.prototype.DOM.move.navbar = {
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");
 
 		// Create and Move login form to main dropdown
-		$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
+		$('<li id="navbar_login_settings"><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
 
 		$('#navbar_login').appendTo('#youcanhazlogin')
 			.find('a.dropdown-toggle')
-			.text($('#youcanhazlogin')
-			.find('a.dropdown-toggle')
-			.text().trim());
+			.text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim());
 
 		// Move the navbar temp plugin
 		this.plugins.navbarTemp.call(this);
@@ -59,6 +57,8 @@ TouchUI.prototype.DOM.move.navbar = {
 
 		// Set text on empty dropdown item
 		$('#files_link_mirror a').html('<span>'+$('#files_wrapper .accordion-toggle').text().trim()+'</span>');
+		$('#navbar_settings a').html($('#navbar_settings a').text().trim());
+		$('#navbar_plugin_touchui a').html($('#navbar_plugin_touchui a').text().trim());
 
 		$("#temp_link_mirror a").html('<span>' + $('#temp_link_mirror a').text() + '</span>')
 			.find('span')
