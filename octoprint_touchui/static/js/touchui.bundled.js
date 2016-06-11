@@ -99,6 +99,304 @@ TouchUI.prototype.animate.hide = function(what) {
 
 }
 
+TouchUI.prototype.core.init = function() {
+
+	// Migrate old cookies into localstorage
+	this.DOM.storage.migration.call(this);
+
+	// Bootup TouchUI if Touch, Small resolution or storage say's so
+	if (this.core.boot.call(this)) {
+
+		// Send Touchscreen loading status
+		if (window.top.postMessage) {
+			window.top.postMessage("loading", "*");
+			
+			$(window).on("error.touchui", function(event) {
+				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
+			});
+		}
+
+		// Attach id for TouchUI styling
+		$("html").attr("id", this.settings.id);
+
+		// Force mobile browser to set the window size to their format
+		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
+		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
+		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
+
+		this.isActive(true);
+
+		// Enforce active cookie
+		this.DOM.storage.set("active", true);
+
+		// Create keyboard cookie if not existing
+		if (this.DOM.storage.get("keyboardActive") === undefined) {
+			if (!this.settings.hasTouch) {
+				this.DOM.storage.set("keyboardActive", true);
+			} else {
+				this.DOM.storage.set("keyboardActive", false);
+			}
+		}
+
+		// Create hide navbar on click if not existing
+		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
+			this.DOM.storage.set("hideNavbarActive", false);
+		}
+
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
+			this.components.touchscreen.init.call(this);
+		}
+
+		// Create fullscreen cookie if not existing and trigger pNotification
+		if (this.DOM.storage.get("fullscreen") === undefined) {
+			this.DOM.storage.set("fullscreen", false);
+			this.components.fullscreen.ask.call(this);
+		} else {
+			//Cookie say user wants fullscreen, ask it!
+			if(this.DOM.storage.get("fullscreen")) {
+				this.components.fullscreen.ask.call(this);
+			}
+		}
+
+		// Get state of cookies and store them in KO
+		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
+		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
+		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
+
+	}
+
+}
+
+TouchUI.prototype.core.boot = function() {
+
+	// This should always start TouchUI
+	if(
+		document.location.hash === "#touch" ||
+		document.location.href.indexOf("?touch") > 0 ||
+		this.DOM.storage.get("active")
+	) {
+
+		return true;
+
+	} else if(
+		this.settings.canLoadAutomatically &&
+		this.DOM.storage.get("active") !== false
+	) {
+
+		if($(window).width() < 980) {
+			return true;
+		}
+
+		if(this.settings.hasTouch) {
+			return true;
+		}
+
+	}
+
+	return false;
+
+}
+
+TouchUI.prototype.core.bridge = function() {
+	var self = this;
+
+	this.core.bridge = {
+
+		allViewModels: {},
+		TOUCHUI_REQUIRED_VIEWMODELS: [
+			"terminalViewModel",
+			"connectionViewModel",
+			"settingsViewModel",
+			"softwareUpdateViewModel",
+			"controlViewModel",
+			"gcodeFilesViewModel",
+			"navigationViewModel",
+			"pluginManagerViewModel",
+			"temperatureViewModel",
+			"loginStateViewModel"
+		],
+		TOUCHUI_ELEMENTS: [
+			"#touchui_settings_dialog",
+			"#settings_plugin_touchui",
+			"#navbar_plugin_touchui"
+		],
+
+		domLoading: function() {
+			if (self.isActive()) {
+				self.scroll.beforeLoad.call(self);
+				self.DOM.init.call(self);
+			}
+		},
+
+		domReady: function() {
+			if (self.isActive()) {
+
+				if(_.some(self.core.bridge.OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
+					self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS = self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS.concat(["gcodeViewModel"]);
+				}
+
+				self.components.dropdown.init.call(self);
+				self.components.fullscreen.init.call(self);
+				self.components.keyboard.init.call(self);
+				self.components.modal.init.call(self);
+				self.components.touchList.init.call(self);
+				self.components.slider.init.call(self);
+
+				self.scroll.init.call(self);
+			}
+		},
+
+		koStartup: function TouchUIViewModel(viewModels) {
+			self.core.bridge.allViewModels = _.object(self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
+			self.knockout.isLoading.call(self, self.core.bridge.allViewModels);
+			return self;
+		}
+	}
+
+	return this.core.bridge;
+}
+
+TouchUI.prototype.core.less = {
+
+	options: {
+		template: {
+			importUrl:	"/plugin/touchui/static/less/touchui.bundled.less",
+			import:		'@import "{importUrl}"; \n',
+			variables:	"@main-color: {mainColor}; \n" +
+						"@terminal-color: {termColor}; \n" +
+						"@text-color: {textColor}; \n" +
+						"@main-background: {bgColor}; \n\n"
+		},
+		API: "/plugin/touchui/css"
+	},
+
+	save: function() {
+		var variables = "";
+		var options = this.core.less.options;
+		var self = this;
+
+		if(self.settings.useCustomization()) {
+			if(self.settings.colors.useLocalFile()) {
+
+				$.get(options.API, {
+						path: self.settings.colors.customPath()
+					})
+					.done(function(response) {
+						self.core.less.render.call(self, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
+					})
+					.error(function(error) {
+						self.core.less.error.call(self, error);
+					});
+
+			} else {
+
+				self.core.less.render.call(self, "" +
+					options.template.import.replace("{importUrl}", options.template.importUrl) +
+					options.template.variables.replace("{mainColor}", self.settings.colors.mainColor())
+						.replace("{termColor}", self.settings.colors.termColor())
+						.replace("{textColor}", self.settings.colors.textColor())
+						.replace("{bgColor}", self.settings.colors.bgColor())
+				);
+
+			}
+		}
+	},
+
+	render: function(data) {
+		var self = this;
+		var callback = function(error, result) {
+
+				if (error) {
+					self.core.less.error.call(self, error);
+				} else {
+
+					$.post(self.core.less.options.API, {
+							css: result.css
+						})
+						.done(function() {
+							if (self.settings.requireNewCSS()) {
+								self.settings.refreshCSS("fast");
+							}
+						})
+						.error(function(error) {
+							self.core.less.error.call(self, error);
+						});
+
+				}
+			}
+
+		if(window.less.render) {
+			window.less.render(data, {
+				compress: true
+			}, callback);
+		} else {
+			window.less.Parser({}).parse(data, function(error, result) {
+				if(result) {
+					result = {
+						css: result.toCSS({
+							compress: true
+						})
+					}
+				}
+				callback.call(this, error, result);
+			});
+		}
+	},
+
+	error: function(error) {
+		var content = error.responseText;
+		if(content && content.trim() && error.status !== 401) {
+			new PNotify({
+				title: 'TouchUI: Whoops, something went wrong...',
+				text: content,
+				icon: 'glyphicon glyphicon-question-sign',
+				type: 'error',
+				hide: false
+			});
+		}
+
+	}
+
+}
+
+TouchUI.prototype.core.version = {
+
+	init: function(softwareUpdateViewModel) {
+		var self = this;
+
+		$("<span></span>").appendTo("#terminal-output");
+
+		if(softwareUpdateViewModel) {
+
+			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
+
+				touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
+					return (elm.key === "touchui");
+				}, true) || false;
+
+				if( touchui !== false && touchui.information !== null ) {
+					var remote = Number(touchui.information.remote.value.split('.').join('')),
+						local = Number(touchui.information.local.value.split('.').join(''));
+
+					if(remote > local) {
+						$("#touch_updates_css").remove();
+						$('head').append('<style id="touch_updates_css">#term pre span:first-child:before{ content: "v'+touchui.information.local.value+" outdated, new version: v"+touchui.information.remote.value+'" !important; }</style>');
+					} else {
+						if( $("#touch_updates_css").length === 0 ) {
+							$('head').append('<style id="touch_updates_css">#term pre span:first-child:before{ content: "v'+touchui.information.local.value+'" !important; }</style>');
+						}
+					}
+				}
+
+			});
+
+		}
+
+	}
+
+}
+
 TouchUI.prototype.components.dropdown = {
 
 	init: function() {
@@ -649,478 +947,6 @@ TouchUI.prototype.components.touchscreen = {
 
 }
 
-TouchUI.prototype.core.init = function() {
-
-	// Migrate old cookies into localstorage
-	this.DOM.storage.migration.call(this);
-
-	// Bootup TouchUI if Touch, Small resolution or storage say's so
-	if (this.core.boot.call(this)) {
-
-		// Send Touchscreen loading status
-		if (window.top.postMessage) {
-			window.top.postMessage("loading", "*");
-			
-			$(window).on("error.touchui", function(event) {
-				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
-			});
-		}
-
-		// Attach id for TouchUI styling
-		$("html").attr("id", this.settings.id);
-
-		// Force mobile browser to set the window size to their format
-		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
-		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
-		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
-
-		this.isActive(true);
-
-		// Enforce active cookie
-		this.DOM.storage.set("active", true);
-
-		// Create keyboard cookie if not existing
-		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.settings.hasTouch) {
-				this.DOM.storage.set("keyboardActive", true);
-			} else {
-				this.DOM.storage.set("keyboardActive", false);
-			}
-		}
-
-		// Create hide navbar on click if not existing
-		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
-			this.DOM.storage.set("hideNavbarActive", false);
-		}
-
-		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.DOM.storage.get("touchscreenActive")) {
-			this.components.touchscreen.init.call(this);
-		}
-
-		// Create fullscreen cookie if not existing and trigger pNotification
-		if (this.DOM.storage.get("fullscreen") === undefined) {
-			this.DOM.storage.set("fullscreen", false);
-			this.components.fullscreen.ask.call(this);
-		} else {
-			//Cookie say user wants fullscreen, ask it!
-			if(this.DOM.storage.get("fullscreen")) {
-				this.components.fullscreen.ask.call(this);
-			}
-		}
-
-		// Get state of cookies and store them in KO
-		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
-		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
-		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
-
-	}
-
-}
-
-TouchUI.prototype.core.boot = function() {
-
-	// This should always start TouchUI
-	if(
-		document.location.hash === "#touch" ||
-		document.location.href.indexOf("?touch") > 0 ||
-		this.DOM.storage.get("active")
-	) {
-
-		return true;
-
-	} else if(
-		this.settings.canLoadAutomatically &&
-		this.DOM.storage.get("active") !== false
-	) {
-
-		if($(window).width() < 980) {
-			return true;
-		}
-
-		if(this.settings.hasTouch) {
-			return true;
-		}
-
-	}
-
-	return false;
-
-}
-
-TouchUI.prototype.core.bridge = function() {
-	var self = this;
-
-	this.core.bridge = {
-
-		allViewModels: {},
-		TOUCHUI_REQUIRED_VIEWMODELS: [
-			"terminalViewModel",
-			"connectionViewModel",
-			"settingsViewModel",
-			"softwareUpdateViewModel",
-			"controlViewModel",
-			"gcodeFilesViewModel",
-			"navigationViewModel",
-			"pluginManagerViewModel",
-			"temperatureViewModel",
-			"loginStateViewModel"
-		],
-		TOUCHUI_ELEMENTS: [
-			"#touchui_settings_dialog",
-			"#settings_plugin_touchui",
-			"#navbar_plugin_touchui"
-		],
-
-		domLoading: function() {
-			if (self.isActive()) {
-				self.scroll.beforeLoad.call(self);
-				self.DOM.init.call(self);
-			}
-		},
-
-		domReady: function() {
-			if (self.isActive()) {
-
-				if(_.some(self.core.bridge.OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
-					self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS = self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS.concat(["gcodeViewModel"]);
-				}
-
-				self.components.dropdown.init.call(self);
-				self.components.fullscreen.init.call(self);
-				self.components.keyboard.init.call(self);
-				self.components.modal.init.call(self);
-				self.components.touchList.init.call(self);
-				self.components.slider.init.call(self);
-
-				self.scroll.init.call(self);
-			}
-		},
-
-		koStartup: function TouchUIViewModel(viewModels) {
-			self.core.bridge.allViewModels = _.object(self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS, viewModels);
-			self.knockout.isLoading.call(self, self.core.bridge.allViewModels);
-			return self;
-		}
-	}
-
-	return this.core.bridge;
-}
-
-TouchUI.prototype.core.less = {
-
-	options: {
-		template: {
-			importUrl:	"/plugin/touchui/static/less/touchui.bundled.less",
-			import:		'@import "{importUrl}"; \n',
-			variables:	"@main-color: {mainColor}; \n" +
-						"@terminal-color: {termColor}; \n" +
-						"@text-color: {textColor}; \n" +
-						"@main-background: {bgColor}; \n\n"
-		},
-		API: "/plugin/touchui/css"
-	},
-
-	save: function() {
-		var variables = "";
-		var options = this.core.less.options;
-		var self = this;
-
-		if(self.settings.useCustomization()) {
-			if(self.settings.colors.useLocalFile()) {
-
-				$.get(options.API, {
-						path: self.settings.colors.customPath()
-					})
-					.done(function(response) {
-						self.core.less.render.call(self, options.template.import.replace("{importUrl}", options.template.importUrl) + response);
-					})
-					.error(function(error) {
-						self.core.less.error.call(self, error);
-					});
-
-			} else {
-
-				self.core.less.render.call(self, "" +
-					options.template.import.replace("{importUrl}", options.template.importUrl) +
-					options.template.variables.replace("{mainColor}", self.settings.colors.mainColor())
-						.replace("{termColor}", self.settings.colors.termColor())
-						.replace("{textColor}", self.settings.colors.textColor())
-						.replace("{bgColor}", self.settings.colors.bgColor())
-				);
-
-			}
-		}
-	},
-
-	render: function(data) {
-		var self = this;
-		var callback = function(error, result) {
-
-				if (error) {
-					self.core.less.error.call(self, error);
-				} else {
-
-					$.post(self.core.less.options.API, {
-							css: result.css
-						})
-						.done(function() {
-							if (self.settings.requireNewCSS()) {
-								self.settings.refreshCSS("fast");
-							}
-						})
-						.error(function(error) {
-							self.core.less.error.call(self, error);
-						});
-
-				}
-			}
-
-		if(window.less.render) {
-			window.less.render(data, {
-				compress: true
-			}, callback);
-		} else {
-			window.less.Parser({}).parse(data, function(error, result) {
-				if(result) {
-					result = {
-						css: result.toCSS({
-							compress: true
-						})
-					}
-				}
-				callback.call(this, error, result);
-			});
-		}
-	},
-
-	error: function(error) {
-		var content = error.responseText;
-		if(content && content.trim() && error.status !== 401) {
-			new PNotify({
-				title: 'TouchUI: Whoops, something went wrong...',
-				text: content,
-				icon: 'glyphicon glyphicon-question-sign',
-				type: 'error',
-				hide: false
-			});
-		}
-
-	}
-
-}
-
-TouchUI.prototype.core.version = {
-
-	init: function(softwareUpdateViewModel) {
-		var self = this;
-
-		$("<span></span>").appendTo("#terminal-output");
-
-		if(softwareUpdateViewModel) {
-
-			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
-
-				touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
-					return (elm.key === "touchui");
-				}, true) || false;
-
-				if( touchui !== false && touchui.information !== null ) {
-					var remote = Number(touchui.information.remote.value.split('.').join('')),
-						local = Number(touchui.information.local.value.split('.').join(''));
-
-					if(remote > local) {
-						$("#touch_updates_css").remove();
-						$('head').append('<style id="touch_updates_css">#term pre span:first-child:before{ content: "v'+touchui.information.local.value+" outdated, new version: v"+touchui.information.remote.value+'" !important; }</style>');
-					} else {
-						if( $("#touch_updates_css").length === 0 ) {
-							$('head').append('<style id="touch_updates_css">#term pre span:first-child:before{ content: "v'+touchui.information.local.value+'" !important; }</style>');
-						}
-					}
-				}
-
-			});
-
-		}
-
-	}
-
-}
-
-TouchUI.prototype.DOM.init = function() {
-
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init(this.DOM.create.tabbar);
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
-
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call(this);
-	this.DOM.move.navbar.init.call(this);
-	this.DOM.move.afterTabAndNav.call(this );
-	this.DOM.move.overlays.init.call(this);
-	this.DOM.move.terminal.init.call(this);
-
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init(this.DOM.create.tabbar);
-
-	// Manipulate controls div
-	this.DOM.move.controls.init();
-
-	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(self);
-	this.DOM.overwrite.modal.call(self);
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init(this.DOM.create.tabbar);
-	}
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-}
-
-TouchUI.prototype.DOM.cookies = {
-
-	get: function(key, isPlain) {
-		var name = (isPlain) ? key + "=" : "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		var tmp;
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) tmp = c.substring(name.length,c.length);
-			return (isPlain) ? tmp : $.parseJSON(tmp);
-			
-		}
-		return undefined;
-	},
-
-	set: function(key, value, isPlain) {
-		key = (isPlain) ? key + "=" : "TouchUI." + key + "=";
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = key + value + "; " + expires;
-	},
-
-	toggleBoolean: function(key, isPlain) {
-		var value = $.parseJSON(this.get(key, isPlain) || "false");
-
-		if(value === true) {
-			this.set(key, "false", isPlain);
-		} else {
-			this.set(key, "true", isPlain);
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.localstorage = {
-	store: JSON.parse(localStorage["TouchUI"] || "{}"),
-
-	get: function (key) {
-		return this.store[key];
-	},
-
-	set: function (key, value) {
-		this.store[key] = value;
-		localStorage["TouchUI"] = JSON.stringify(this.store);
-		return this.store[key];
-	},
-
-	toggleBoolean: function (key) {
-		var value = this.store[key] || false;
-
-		if(value === true) {
-			this.set(key, false);
-		} else {
-			this.set(key, true);
-		}
-
-		return !value;
-
-	}
-
-}
-
-// Since I messed up by releasing start_kweb3.xinit without disabling private
-// mode, we now need to check if we can store anything at all in localstorage
-// the missing -P will prevent any localstorage
-if (TouchUI.prototype.settings.hasLocalStorage) {
-	try {
-		localStorage["TouchUIcanWeHazStorage"] = "true";
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
-		delete localStorage["TouchUIcanWeHazStorage"];
-	} catch(err) {
-
-		// TODO: remove this is future
-		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
-			$(function() {
-				new PNotify({
-					type: 'error',
-					title: "Private Mode detection:",
-					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
-						"and add the parameter 'P' after the dash. \n\n" +
-						"For more information see the v0.3.3 release notes.",
-					hide: false
-				});
-			});
-		}
-
-		console.info("Localstorage defined but failback to cookies due to errors.");
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-	}
-} else {
-	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-}
-
-TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
-
-	if (this.settings.hasLocalStorage) {
-		if (document.cookie.indexOf("TouchUI.") !== -1) {
-			console.info("TouchUI cookies migration.");
-
-			var name = "TouchUI.";
-			var ca = document.cookie.split(';');
-			for (var i=0; i<ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0)==' ') c = c.substring(1);
-				if (c.indexOf(name) == 0) {
-					var string = c.substring(name.length,c.length);
-					string = string.split("=");
-					var value = $.parseJSON(string[1]);
-
-					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
-					this.DOM.storage.set(string[0], value);
-
-					console.info("Removing cookie", string[0]);
-					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-				}
-			}
-		}
-	}
-
-} : _.noop;
-
-// Auto-Login with localStorage
-if (localStorage) {
-	if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
-		TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
-	}
-}
-
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
 
@@ -1373,7 +1199,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 	
 	if (window.top.postMessage) {
 		window.top.postMessage("ready", "*");
-		$(window).off("error.touchui");
+		$(window).off("error.touchui").trigger("resize");
 	}
 
 }
@@ -1422,6 +1248,180 @@ TouchUI.prototype.knockout.viewModel = function() {
 		}
 	}
 
+}
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with printer status and make it active
+	this.DOM.create.printer.init(this.DOM.create.tabbar);
+	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.tabbar.init.call(this);
+	this.DOM.move.navbar.init.call(this);
+	this.DOM.move.afterTabAndNav.call(this );
+	this.DOM.move.overlays.init.call(this);
+	this.DOM.move.terminal.init.call(this);
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init(this.DOM.create.tabbar);
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Disable these bootstrap/jquery plugins
+	this.DOM.overwrite.tabdrop.call(self);
+	this.DOM.overwrite.modal.call(self);
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+	}
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
+
+}
+
+TouchUI.prototype.DOM.cookies = {
+
+	get: function(key, isPlain) {
+		var name = (isPlain) ? key + "=" : "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		var tmp;
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) tmp = c.substring(name.length,c.length);
+			return (isPlain) ? tmp : $.parseJSON(tmp);
+			
+		}
+		return undefined;
+	},
+
+	set: function(key, value, isPlain) {
+		key = (isPlain) ? key + "=" : "TouchUI." + key + "=";
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = key + value + "; " + expires;
+	},
+
+	toggleBoolean: function(key, isPlain) {
+		var value = $.parseJSON(this.get(key, isPlain) || "false");
+
+		if(value === true) {
+			this.set(key, "false", isPlain);
+		} else {
+			this.set(key, "true", isPlain);
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.localstorage = {
+	store: JSON.parse(localStorage["TouchUI"] || "{}"),
+
+	get: function (key) {
+		return this.store[key];
+	},
+
+	set: function (key, value) {
+		this.store[key] = value;
+		localStorage["TouchUI"] = JSON.stringify(this.store);
+		return this.store[key];
+	},
+
+	toggleBoolean: function (key) {
+		var value = this.store[key] || false;
+
+		if(value === true) {
+			this.set(key, false);
+		} else {
+			this.set(key, true);
+		}
+
+		return !value;
+
+	}
+
+}
+
+// Since I messed up by releasing start_kweb3.xinit without disabling private
+// mode, we now need to check if we can store anything at all in localstorage
+// the missing -P will prevent any localstorage
+if (TouchUI.prototype.settings.hasLocalStorage) {
+	try {
+		localStorage["TouchUIcanWeHazStorage"] = "true";
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
+		delete localStorage["TouchUIcanWeHazStorage"];
+	} catch(err) {
+
+		// TODO: remove this is future
+		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
+			$(function() {
+				new PNotify({
+					type: 'error',
+					title: "Private Mode detection:",
+					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
+						"and add the parameter 'P' after the dash. \n\n" +
+						"For more information see the v0.3.3 release notes.",
+					hide: false
+				});
+			});
+		}
+
+		console.info("Localstorage defined but failback to cookies due to errors.");
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+	}
+} else {
+	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+}
+
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
+
+	if (this.settings.hasLocalStorage) {
+		if (document.cookie.indexOf("TouchUI.") !== -1) {
+			console.info("TouchUI cookies migration.");
+
+			var name = "TouchUI.";
+			var ca = document.cookie.split(';');
+			for (var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) {
+					var string = c.substring(name.length,c.length);
+					string = string.split("=");
+					var value = $.parseJSON(string[1]);
+
+					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
+					this.DOM.storage.set(string[0], value);
+
+					console.info("Removing cookie", string[0]);
+					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+				}
+			}
+		}
+	}
+
+} : _.noop;
+
+// Auto-Login with localStorage
+if (localStorage) {
+	if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
+		TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
+	}
 }
 
 TouchUI.prototype.plugins.init = function (viewModels) {

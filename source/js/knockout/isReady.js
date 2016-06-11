@@ -152,7 +152,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 	
 	if (window.top.postMessage) {
 		window.top.postMessage("ready", "*");
-		$(window).off("error.touchui");
+		$(window).off("error.touchui").trigger("resize");
 	}
 
 }
