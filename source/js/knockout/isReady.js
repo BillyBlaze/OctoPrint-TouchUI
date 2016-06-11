@@ -151,7 +151,14 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 	});
 	
 	if (window.top.postMessage) {
-		window.top.postMessage("ready", "*");
+		// Tell bootloader we're ready with giving him the expected version for the bootloader
+		// if version is lower on the bootloader, then the bootloader will throw an update msg
+		window.top.postMessage(1, "*");
+		
+		// Sync customization with bootloader
+		window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
+		
+		// Stop watching for errors
 		$(window).off("error.touchui").trigger("resize");
 	}
 
