@@ -50,7 +50,8 @@ TouchUI.prototype = {
 				interactiveScrollbars: true,
 				shrinkScrollbars: "scale",
 				fadeScrollbars: true,
-				disablePointer: true
+				disablePointer: true,
+				directionLockThreshold: 25
 			}
 		},
 

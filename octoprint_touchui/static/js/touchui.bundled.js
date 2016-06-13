@@ -50,7 +50,8 @@ TouchUI.prototype = {
 				interactiveScrollbars: true,
 				shrinkScrollbars: "scale",
 				fadeScrollbars: true,
-				disablePointer: true
+				disablePointer: true,
+				directionLockThreshold: 25
 			}
 		},
 
@@ -615,7 +616,7 @@ TouchUI.prototype.components.touchscreen = {
 		//this.settings.hasTouch = false;
 		this.settings.isTouchscreen(true);
 
-		if (this.settings.isEpiphanyOrKweb) {
+		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm) {
 			this.settings.hasFullscreen(false);
 		}
 		
@@ -696,7 +697,7 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm || this.DOM.storage.get("touchscreenActive")) {
+		if ((this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm && this.DOM.storage.get("touchscreenActive") === undefined) || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 
