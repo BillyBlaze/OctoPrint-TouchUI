@@ -21,7 +21,7 @@ TouchUI.prototype = {
 
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
-		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
+		hasTouch: false,//('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
 
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
@@ -51,6 +51,9 @@ TouchUI.prototype = {
 				shrinkScrollbars: "scale",
 				fadeScrollbars: true,
 				disablePointer: true,
+				disableMouse: false,
+				disableTouch: false,
+				preventDefault: false,
 				directionLockThreshold: 25
 			}
 		},
@@ -613,7 +616,6 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		//this.settings.hasTouch = false;
 		this.settings.isTouchscreen(true);
 
 		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm) {

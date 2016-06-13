@@ -2,7 +2,6 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		//this.settings.hasTouch = false;
 		this.settings.isTouchscreen(true);
 
 		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm) {
