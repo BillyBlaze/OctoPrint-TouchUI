@@ -21,7 +21,7 @@ TouchUI.prototype = {
 
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
-		hasTouch: false,//('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
+		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
 
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
