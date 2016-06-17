@@ -179,7 +179,7 @@ class TouchUIPlugin(octoprint.plugin.SettingsPlugin,
 
 		return flask.make_response(data, 200)
 
-	@octoprint.plugin.BlueprintPlugin.route("/echo", methods=["GET"])
+	@octoprint.plugin.BlueprintPlugin.route("/ping", methods=["GET"])
 	@crossdomain(origin='*')
 	def isAlive(self):
 		return flask.make_response("Ok.", 200)
