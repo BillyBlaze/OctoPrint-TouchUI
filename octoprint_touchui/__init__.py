@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from .server import touchui_server
+from .api import touchui_api
 from .customization import touchui_customization
 
 import octoprint.plugin
@@ -9,7 +9,7 @@ import octoprint.settings
 import octoprint.util
 import os
 
-class touchui_core(	touchui_server,
+class touchui_core(	touchui_api,
 					touchui_customization,
 					octoprint.plugin.SettingsPlugin,
 					octoprint.plugin.AssetPlugin,

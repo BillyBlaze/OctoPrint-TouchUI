@@ -12,10 +12,9 @@ import os
 from octoprint.server.util.flask import restricted_access
 from octoprint.server import admin_permission, VERSION
 
-class touchui_server(octoprint.plugin.BlueprintPlugin):
+class touchui_api(octoprint.plugin.BlueprintPlugin):
 	
 	def increase_upload_bodysize(self, current_max_body_sizes, *args, **kwargs):
-		# set a maximum body size of 1 MB for plugin archive uploads
 		return [("POST", r"/css", 1 * 1024 * 1024), ("GET", r"/css", 1 * 1024 * 1024)]
 
 	@octoprint.plugin.BlueprintPlugin.route("/css", methods=["POST"])
