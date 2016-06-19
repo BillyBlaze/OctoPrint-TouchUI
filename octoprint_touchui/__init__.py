@@ -22,7 +22,7 @@ class touchui_core(	touchui_api,
 
 	def on_settings_load(self):
 		return self._load_custom_settings()
-		
+
 	def on_settings_save(self, data):
 		self._save_custom_settings(data)
 
@@ -34,7 +34,7 @@ class touchui_core(	touchui_api,
 
 	def get_assets(self):
 		return dict(
-			js=["js/touchui.libraries.js", "js/touchui.bundled.js", "js/touchui.bootstrap.js"]
+			js=["js/touchui.bundled.js", "js/touchui.bootstrap.js", "js/touchui.libraries.js"]
 		)
 
 	def get_template_configs(self):
