@@ -16,25 +16,28 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 		// Create modal, store into variable so we can trigger an event first before return
 		var $this = $(this);
 		var tmp = $this.modalBup(option, args);
-		$this.trigger('modal.touchui', this);
+		
+		if (options !== "hide") {
+			$this.trigger('modal.touchui', this);
 
-		// setTimeout(function() {
-		// 	Materialize.updateTextFields();
-		// }, 60);
+			// setTimeout(function() {
+			// 	Materialize.updateTextFields();
+			// }, 60);
 
-		tmp.one('destroy', function() {
-			if (!$.fn.modal.defaults.manager.find('> .modal-scrollable > .modal').not(this).length) {
-				$.fn.modal.defaults.manager.find('> .tab-pane.pre-active').removeClass('pre-active').addClass('active');
-			} else {
-				var modals = $.fn.modal.defaults.manager.find('.modal-hidden');
-				$(modals[modals.length-1]).removeClass('modal-hidden');
-			}
-		});
+			tmp.one('destroy', function() {
+				if (!$.fn.modal.defaults.manager.find('> .modal-scrollable > .modal').not(this).length) {
+					$.fn.modal.defaults.manager.find('> .tab-pane.pre-active').removeClass('pre-active').addClass('active');
+				} else {
+					var modals = $.fn.modal.defaults.manager.find('.modal-hidden');
+					$(modals[modals.length-1]).removeClass('modal-hidden');
+				}
+			});
 
-		$this
-			.trigger('modal-destroy.touchui', this, tmp)
-			.parent()
-			.removeClass('modal-hidden');
+			$this
+				.trigger('modal-destroy.touchui', this, tmp)
+				.parent()
+				.removeClass('modal-hidden');
+		}
 
 		return tmp;
 	};
