@@ -16,8 +16,8 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 		// Create modal, store into variable so we can trigger an event first before return
 		var $this = $(this);
 		var tmp = $this.modalBup(option, args);
-		
-		if (options !== "hide") {
+
+		if (option !== "hide") {
 			$this.trigger('modal.touchui', this);
 
 			// setTimeout(function() {
