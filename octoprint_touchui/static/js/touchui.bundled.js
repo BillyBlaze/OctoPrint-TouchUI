@@ -17,7 +17,7 @@ TouchUI.prototype = {
 		isTouchscreen: ko.observable(false),
 
 		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
-		isChromiumArm: (window.navigator.userAgent.indexOf("X11") !== -1 && window.navigator.userAgent.indexOf("Chromium") !== -1 && window.navigator.userAgent.indexOf("armv7l") !== -1 || window.navigator.userAgent === "touchui-chrome-touchscreen"),
+		isChromiumArm: (window.navigator.userAgent.indexOf("X11") !== -1 && window.navigator.userAgent.indexOf("Chromium") !== -1 && window.navigator.userAgent.indexOf("armv7l") !== -1 || window.navigator.userAgent.indexOf("TouchUI") !== -1),
 
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
@@ -479,10 +479,9 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		this.settings.hasTouch = false;
 		this.settings.isTouchscreen(true);
 
-		if (this.settings.isEpiphanyOrKweb) {
+		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm) {
 			this.settings.hasFullscreen(false);
 		}
 
@@ -848,7 +847,7 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm || this.DOM.storage.get("touchscreenActive")) {
+		if ((this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm && this.DOM.storage.get("touchscreenActive") === undefined) || this.DOM.storage.get("touchscreenActive")) {
 			this.components.touchscreen.init.call(this);
 		}
 
@@ -2501,25 +2500,28 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 		// Create modal, store into variable so we can trigger an event first before return
 		var $this = $(this);
 		var tmp = $this.modalBup(option, args);
-		$this.trigger('modal.touchui', this);
+		
+		if (options !== "hide") {
+			$this.trigger('modal.touchui', this);
 
-		// setTimeout(function() {
-		// 	Materialize.updateTextFields();
-		// }, 60);
+			// setTimeout(function() {
+			// 	Materialize.updateTextFields();
+			// }, 60);
 
-		tmp.one('destroy', function() {
-			if (!$.fn.modal.defaults.manager.find('> .modal-scrollable > .modal').not(this).length) {
-				$.fn.modal.defaults.manager.find('> .tab-pane.pre-active').removeClass('pre-active').addClass('active');
-			} else {
-				var modals = $.fn.modal.defaults.manager.find('.modal-hidden');
-				$(modals[modals.length-1]).removeClass('modal-hidden');
-			}
-		});
+			tmp.one('destroy', function() {
+				if (!$.fn.modal.defaults.manager.find('> .modal-scrollable > .modal').not(this).length) {
+					$.fn.modal.defaults.manager.find('> .tab-pane.pre-active').removeClass('pre-active').addClass('active');
+				} else {
+					var modals = $.fn.modal.defaults.manager.find('.modal-hidden');
+					$(modals[modals.length-1]).removeClass('modal-hidden');
+				}
+			});
 
-		$this
-			.trigger('modal-destroy.touchui', this, tmp)
-			.parent()
-			.removeClass('modal-hidden');
+			$this
+				.trigger('modal-destroy.touchui', this, tmp)
+				.parent()
+				.removeClass('modal-hidden');
+		}
 
 		return tmp;
 	};
