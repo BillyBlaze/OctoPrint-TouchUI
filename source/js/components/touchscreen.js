@@ -2,6 +2,13 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
+		
+		if (this.settings.isEpiphanyOrKweb) {
+			this.settings.hasTouch = false;
+			this.scroll.defaults.iScroll.disableTouch = true;
+			this.scroll.defaults.iScroll.disableMouse = false;
+		}
+		
 		this.settings.isTouchscreen(true);
 
 		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm) {
