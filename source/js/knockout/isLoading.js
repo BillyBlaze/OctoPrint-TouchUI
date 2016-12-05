@@ -5,7 +5,7 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
 		// Prevent user from double clicking in a short period on buttons
-		$(document).on("click", "button:not(.box, .distance, .dropdown-toggle)", function(e) {
+		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle)", function(e) {
 			var printer = $(e.target);
 			printer.prop('disabled', true);
 

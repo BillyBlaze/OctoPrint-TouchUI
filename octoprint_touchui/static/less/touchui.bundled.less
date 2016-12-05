@@ -1,7 +1,7 @@
-@touchui-base-path: "/plugin/touchui/static/";
-@fontawesome-path: "/plugin/touchui/static/fonts/fontawesome/";
-@sourcecodepro-path: "/plugin/touchui/static/fonts/sourcecodepro/";
-@touchui-path: "/plugin/touchui/static/fonts/touchui/";
+@touchui-base-path: "../";
+@fontawesome-path: "../fonts/fontawesome/";
+@sourcecodepro-path: "../fonts/sourcecodepro/";
+@touchui-path: "../fonts/touchui/";
 @main-color: #00B0FF;
 @main-color-text: contrast(@main-color, @dark-color, @light-color, 51%);
 @main-color-dark: darken(@main-color, 5%);
@@ -2454,7 +2454,9 @@ color: @text-color;
 position: relative;
 * {
 font-family: 'Source Code Pro', monospace;
-.text-shadow(none) !important; 			.box-shadow(none) !important; 		}
+.text-shadow(none) !important;
+.box-shadow(none) !important;
+}
 .no-pointer * {
 pointer-events: none !important;
 }
@@ -2903,7 +2905,11 @@ padding: 5px @dropdown-gutter @dropdown-gutter !important;
 input[type="text"],
 input[type="password"] {
 width: 100%;
+display: inline-block;
 height: 30px;
+padding-left: 0;
+padding-right: 0;
+text-indent: 12px;
 }
 }
 }

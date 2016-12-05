@@ -657,75 +657,6 @@ TouchUI.prototype.components.touchscreen = {
 
 }
 
-TouchUI.prototype.core.init = function() {
-
-	// Migrate old cookies into localstorage
-	this.DOM.storage.migration.call(this);
-
-	// Bootup TouchUI if Touch, Small resolution or storage say's so
-	if (this.core.boot.call(this)) {
-
-		// Send Touchscreen loading status
-		if (window.top.postMessage) {
-			window.top.postMessage("loading", "*");
-			
-			$(window).on("error.touchui", function(event) {
-				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
-			});
-		}
-
-		// Attach id for TouchUI styling
-		$("html").attr("id", this.settings.id);
-
-		// Force mobile browser to set the window size to their format
-		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
-		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
-		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
-
-		this.isActive(true);
-
-		// Enforce active cookie
-		this.DOM.storage.set("active", true);
-
-		// Create keyboard cookie if not existing
-		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.settings.hasTouch) {
-				this.DOM.storage.set("keyboardActive", true);
-			} else {
-				this.DOM.storage.set("keyboardActive", false);
-			}
-		}
-
-		// Create hide navbar on click if not existing
-		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
-			this.DOM.storage.set("hideNavbarActive", false);
-		}
-
-		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if ((this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm && this.DOM.storage.get("touchscreenActive") === undefined) || this.DOM.storage.get("touchscreenActive")) {
-			this.components.touchscreen.init.call(this);
-		}
-
-		// Create fullscreen cookie if not existing and trigger pNotification
-		if (this.DOM.storage.get("fullscreen") === undefined) {
-			this.DOM.storage.set("fullscreen", false);
-			this.components.fullscreen.ask.call(this);
-		} else {
-			//Cookie say user wants fullscreen, ask it!
-			if(this.DOM.storage.get("fullscreen")) {
-				this.components.fullscreen.ask.call(this);
-			}
-		}
-
-		// Get state of cookies and store them in KO
-		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
-		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
-		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
-
-	}
-
-}
-
 TouchUI.prototype.core.boot = function() {
 
 	// This should always start TouchUI
@@ -819,14 +750,14 @@ TouchUI.prototype.core.less = {
 
 	options: {
 		template: {
-			importUrl:	"/plugin/touchui/static/less/touchui.bundled.less",
+			importUrl:	"./plugin/touchui/static/less/touchui.bundled.less",
 			import:		'@import "{importUrl}"; \n',
 			variables:	"@main-color: {mainColor}; \n" +
 						"@terminal-color: {termColor}; \n" +
 						"@text-color: {textColor}; \n" +
 						"@main-background: {bgColor}; \n\n"
 		},
-		API: "/plugin/touchui/css"
+		API: "./plugin/touchui/css"
 	},
 
 	save: function() {
@@ -955,44 +886,72 @@ TouchUI.prototype.core.version = {
 
 }
 
-TouchUI.prototype.DOM.init = function() {
+TouchUI.prototype.core.init = function() {
 
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init(this.DOM.create.tabbar);
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+	// Migrate old cookies into localstorage
+	this.DOM.storage.migration.call(this);
 
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+	// Bootup TouchUI if Touch, Small resolution or storage say's so
+	if (this.core.boot.call(this)) {
 
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call(this);
-	this.DOM.move.navbar.init.call(this);
-	this.DOM.move.afterTabAndNav.call(this );
-	this.DOM.move.overlays.init.call(this);
-	this.DOM.move.terminal.init.call(this);
+		// Send Touchscreen loading status
+		if (window.top.postMessage) {
+			window.top.postMessage("loading", "*");
+			
+			$(window).on("error.touchui", function(event) {
+				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
+			});
+		}
 
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init(this.DOM.create.tabbar);
+		// Attach id for TouchUI styling
+		$("html").attr("id", this.settings.id);
 
-	// Manipulate controls div
-	this.DOM.move.controls.init();
+		// Force mobile browser to set the window size to their format
+		$('<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no, minimal-ui">').appendTo("head");
+		$('<meta name="apple-mobile-web-app-capable" content="yes">').appendTo("head");
+		$('<meta name="mobile-web-app-capable" content="yes">').appendTo("head");
 
-	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(self);
-	this.DOM.overwrite.modal.call(self);
+		this.isActive(true);
 
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+		// Enforce active cookie
+		this.DOM.storage.set("active", true);
+
+		// Create keyboard cookie if not existing
+		if (this.DOM.storage.get("keyboardActive") === undefined) {
+			if (!this.settings.hasTouch) {
+				this.DOM.storage.set("keyboardActive", true);
+			} else {
+				this.DOM.storage.set("keyboardActive", false);
+			}
+		}
+
+		// Create hide navbar on click if not existing
+		if (this.DOM.storage.get("hideNavbarActive") === undefined) {
+			this.DOM.storage.set("hideNavbarActive", false);
+		}
+
+		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
+		if ((this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm && this.DOM.storage.get("touchscreenActive") === undefined) || this.DOM.storage.get("touchscreenActive")) {
+			this.components.touchscreen.init.call(this);
+		}
+
+		// Create fullscreen cookie if not existing and trigger pNotification
+		if (this.DOM.storage.get("fullscreen") === undefined) {
+			this.DOM.storage.set("fullscreen", false);
+			this.components.fullscreen.ask.call(this);
+		} else {
+			//Cookie say user wants fullscreen, ask it!
+			if(this.DOM.storage.get("fullscreen")) {
+				this.components.fullscreen.ask.call(this);
+			}
+		}
+
+		// Get state of cookies and store them in KO
+		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
+		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
+		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
+
 	}
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
 
 }
 
@@ -1129,6 +1088,98 @@ if (localStorage) {
 	}
 }
 
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with printer status and make it active
+	this.DOM.create.printer.init(this.DOM.create.tabbar);
+	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.tabbar.init.call(this);
+	this.DOM.move.navbar.init.call(this);
+	this.DOM.move.afterTabAndNav.call(this );
+	this.DOM.move.overlays.init.call(this);
+	this.DOM.move.terminal.init.call(this);
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init(this.DOM.create.tabbar);
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Disable these bootstrap/jquery plugins
+	this.DOM.overwrite.tabdrop.call(self);
+	this.DOM.overwrite.modal.call(self);
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+	}
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
+
+}
+
+TouchUI.prototype.plugins.navbarTemp = function() {
+
+	// Manually move navbar temp (hard move)
+	if( $("#navbar_plugin_navbartemp").length > 0 ) {
+		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
+		$('<li class="divider"></li>').insertBefore(navBarTmp);
+	}
+
+}
+
+TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
+	var shown = false;
+
+	pluginManagerViewModel.plugins.items.subscribe(function() {
+
+		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
+			return (elm.key === "ScreenSquish");
+		}, true) || false;
+
+		if(!shown && ScreenSquish && ScreenSquish.enabled) {
+			shown = true;
+			new PNotify({
+				title: 'TouchUI: ScreenSquish is running',
+				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
+				icon: 'glyphicon glyphicon-question-sign',
+				type: 'error',
+				hide: false,
+				confirm: {
+					confirm: true,
+					buttons: [{
+						text: 'Disable ScreenSquish',
+						addClass: 'btn-primary',
+						click: function(notice) {
+							if(!ScreenSquish.pending_disable) {
+								pluginManagerViewModel.togglePlugin(ScreenSquish);
+							}
+							notice.remove();
+						}
+					}]
+				},
+			});
+		}
+
+	});
+
+};
+
+TouchUI.prototype.plugins.init = function (viewModels) {
+	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
+}
+
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
 
@@ -1181,7 +1232,7 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
 		// Prevent user from double clicking in a short period on buttons
-		$(document).on("click", "button:not(.box, .distance, .dropdown-toggle)", function(e) {
+		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle)", function(e) {
 			var printer = $(e.target);
 			printer.prop('disabled', true);
 
@@ -1440,115 +1491,6 @@ TouchUI.prototype.knockout.viewModel = function() {
 				self.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
 			}
 		}
-	}
-
-}
-
-TouchUI.prototype.plugins.init = function (viewModels) {
-	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
-}
-
-TouchUI.prototype.plugins.navbarTemp = function() {
-
-	// Manually move navbar temp (hard move)
-	if( $("#navbar_plugin_navbartemp").length > 0 ) {
-		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
-		$('<li class="divider"></li>').insertBefore(navBarTmp);
-	}
-
-}
-
-TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
-	var shown = false;
-
-	pluginManagerViewModel.plugins.items.subscribe(function() {
-
-		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
-			return (elm.key === "ScreenSquish");
-		}, true) || false;
-
-		if(!shown && ScreenSquish && ScreenSquish.enabled) {
-			shown = true;
-			new PNotify({
-				title: 'TouchUI: ScreenSquish is running',
-				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
-				icon: 'glyphicon glyphicon-question-sign',
-				type: 'error',
-				hide: false,
-				confirm: {
-					confirm: true,
-					buttons: [{
-						text: 'Disable ScreenSquish',
-						addClass: 'btn-primary',
-						click: function(notice) {
-							if(!ScreenSquish.pending_disable) {
-								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							}
-							notice.remove();
-						}
-					}]
-				},
-			});
-		}
-
-	});
-
-};
-
-TouchUI.prototype.scroll.beforeLoad = function() {
-
-	// Manipulate DOM for iScroll before knockout binding kicks in
-	if (!this.settings.hasTouch) {
-		$('<div id="scroll"></div>').insertBefore('.page-container');
-		$('.page-container').appendTo("#scroll");
-	}
-
-}
-
-TouchUI.prototype.scroll.init = function() {
-	var self = this;
-
-	if ( this.settings.hasTouch ) {
-		var width = $(window).width();
-
-		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
-		$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
-		$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
-		$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
-
-		$(window).on("resize", function() {
-
-			if(width !== $(window).width()) {
-				$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
-				$("#terminal-scroll").css("height", "").height($("#terminal-scroll").outerHeight());
-				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
-				width = $(window).width();
-			}
-
-
-		});
-
-	} else {
-
-		// Set overflow hidden for best performance
-		$("html").addClass("emulateTouch");
-
-		self.scroll.terminal.init.call(self);
-		self.scroll.body.init.call(self);
-		self.scroll.modal.init.call(self);
-		self.scroll.overlay.init.call(self);
-
-		$(document).on("slideCompleted", function() {
-			self.scroll.currentActive.refresh();
-		});
-
-		// Refresh body on dropdown click
-		$(document).on("click", ".pagination ul li a", function() {
-			setTimeout(function() {
-				self.scroll.currentActive.refresh();
-			}, 0);
-		});
-
 	}
 
 }
@@ -1826,6 +1768,64 @@ TouchUI.prototype.scroll.terminal = {
 		});
 
 	}
+}
+
+TouchUI.prototype.scroll.beforeLoad = function() {
+
+	// Manipulate DOM for iScroll before knockout binding kicks in
+	if (!this.settings.hasTouch) {
+		$('<div id="scroll"></div>').insertBefore('.page-container');
+		$('.page-container').appendTo("#scroll");
+	}
+
+}
+
+TouchUI.prototype.scroll.init = function() {
+	var self = this;
+
+	if ( this.settings.hasTouch ) {
+		var width = $(window).width();
+
+		// Covert VH to the initial height (prevent height from jumping when navigation bar hides/shows)
+		$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
+		$("#terminal-scroll").height($("#terminal-scroll").outerHeight());
+		$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
+
+		$(window).on("resize", function() {
+
+			if(width !== $(window).width()) {
+				$("#temperature-graph").parent().height($("#temperature-graph").parent().outerHeight());
+				$("#terminal-scroll").css("height", "").height($("#terminal-scroll").outerHeight());
+				$("#terminal-sendpanel").css("top", $("#terminal-scroll").outerHeight()-1);
+				width = $(window).width();
+			}
+
+
+		});
+
+	} else {
+
+		// Set overflow hidden for best performance
+		$("html").addClass("emulateTouch");
+
+		self.scroll.terminal.init.call(self);
+		self.scroll.body.init.call(self);
+		self.scroll.modal.init.call(self);
+		self.scroll.overlay.init.call(self);
+
+		$(document).on("slideCompleted", function() {
+			self.scroll.currentActive.refresh();
+		});
+
+		// Refresh body on dropdown click
+		$(document).on("click", ".pagination ul li a", function() {
+			setTimeout(function() {
+				self.scroll.currentActive.refresh();
+			}, 0);
+		});
+
+	}
+
 }
 
 TouchUI.prototype.DOM.create.dropdown = {

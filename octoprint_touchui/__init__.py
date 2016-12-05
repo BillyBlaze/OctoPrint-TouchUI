@@ -31,9 +31,9 @@ class touchui_core(	touchui_api,
 
 	def get_template_vars(self):
 		if os.path.isfile(self._customCssPath) and self._settings.get(["useCustomization"]):
-			return dict(cssPath="/plugin/touchui/static/css/touchui.custom.css")
+			return dict(cssPath="./plugin/touchui/static/css/touchui.custom.css")
 		else:
-			return dict(cssPath="/plugin/touchui/static/css/touchui.css")
+			return dict(cssPath="./plugin/touchui/static/css/touchui.css")
 
 	def get_assets(self):
 		return dict(

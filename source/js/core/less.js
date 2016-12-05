@@ -2,14 +2,14 @@ TouchUI.prototype.core.less = {
 
 	options: {
 		template: {
-			importUrl:	"/plugin/touchui/static/less/touchui.bundled.less",
+			importUrl:	"./plugin/touchui/static/less/touchui.bundled.less",
 			import:		'@import "{importUrl}"; \n',
 			variables:	"@main-color: {mainColor}; \n" +
 						"@terminal-color: {termColor}; \n" +
 						"@text-color: {textColor}; \n" +
 						"@main-background: {bgColor}; \n\n"
 		},
-		API: "/plugin/touchui/css"
+		API: "./plugin/touchui/css"
 	},
 
 	save: function() {
