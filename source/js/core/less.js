@@ -2,7 +2,7 @@ TouchUI.prototype.core.less = {
 
 	options: {
 		template: {
-			importUrl:	"./plugin/touchui/static/less/touchui.bundled.less",
+			importUrl:	"./plugin/touchui/static/less/touchui.bundled.less?t=" + new Date().getTime(),
 			import:		'@import "{importUrl}"; \n',
 			variables:	"@main-color: {mainColor}; \n" +
 						"@terminal-color: {termColor}; \n" +

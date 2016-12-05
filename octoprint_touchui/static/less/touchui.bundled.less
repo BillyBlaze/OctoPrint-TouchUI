@@ -3249,14 +3249,19 @@ width: 100%;
 background-color: @main-background;
 color: @terminal-color;
 border: 1px solid @terminal-color;
-padding: 14px;
-display: inline-block;
+padding: 0;
+display: block;
 z-index: 2;
+font-size: 14px;
+height: 30px;
+text-indent: 10px;
+padding-right: 90px;
 .box-sizing(border-box);
 .border-radius(0, 0, 5px, 5px);
 }
 button {
 position: absolute;
+top: 0;
 right: 1px;
 background-color: @terminal-color;
 color: @main-background;
