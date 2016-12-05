@@ -537,7 +537,7 @@ TouchUI.prototype.components.slider = {
 				}, 60);
 
 				$element.on("change", function(e) {
-					valueAccessor().value($element.val());
+					valueAccessor().value(parseFloat($element.val()));
 				}).attr({
 					max: valueAccessor().max,
 					min: valueAccessor().min,
@@ -546,7 +546,7 @@ TouchUI.prototype.components.slider = {
 
 			},
 			update: function (element, valueAccessor) {
-				$(element).val(valueAccessor().value());
+				$(element).val(parseFloat(valueAccessor().value()));
 			}
 		};
 
