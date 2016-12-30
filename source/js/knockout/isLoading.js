@@ -18,6 +18,12 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		// 	}, 600);
 		// });
 
+		// Reload dimensions of webcam with onload event
+		// Fixes bug #78
+		$("#webcam_image").on("load", function() {
+			viewModels.controlViewModel.updateRotatorWidth();
+		});
+
 		viewModels.temperatureViewModel.heaterOptions.subscribe(function(heaterOptions) {
 			var tmp;
 

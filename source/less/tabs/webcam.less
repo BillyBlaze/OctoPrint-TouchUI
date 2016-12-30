@@ -12,4 +12,34 @@
 		display: block;
 	}
 
+	.rotate90 {
+		transform: rotate(0deg) !important;
+		height: auto;
+
+		#webcam_image {
+			transform: rotate(-90deg) !important;
+			position: absolute;
+			left: 0;
+			transform-origin: top left;
+			top: 100%;
+
+			width: 100%;
+			height: auto;
+
+			&.flipV {
+				transform: rotate(-90deg) scaleX(-1) !important;
+				top: 0;
+			}
+			&.flipH {
+				transform: rotate(-90deg) scaleY(-1) !important;
+				left: 100%;
+			}
+			&.flipV.flipH {
+				transform: rotate(-90deg) scaleY(-1) scaleX(-1) !important;
+				top: 0;
+				left: 100%;
+			}
+		}
+	}
+
 }

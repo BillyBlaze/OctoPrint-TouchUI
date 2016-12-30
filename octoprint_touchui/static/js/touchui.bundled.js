@@ -671,14 +671,14 @@ TouchUI.prototype.core.less = {
 
 	options: {
 		template: {
-			importUrl:	"/plugin/touchui/static/less/touchui.bundled.less",
+			importUrl:	"./plugin/touchui/static/less/touchui.bundled.less?t=" + new Date().getTime(),
 			import:		'@import "{importUrl}"; \n',
 			variables:	"@main-color: {mainColor}; \n" +
 						"@terminal-color: {termColor}; \n" +
 						"@text-color: {textColor}; \n" +
 						"@main-background: {bgColor}; \n\n"
 		},
-		API: "/plugin/touchui/css"
+		API: "./plugin/touchui/css"
 	},
 
 	save: function() {
@@ -1215,6 +1215,12 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		// 	}, 600);
 		// });
 
+		// Reload dimensions of webcam with onload event
+		// Fixes bug #78
+		$("#webcam_image").on("load", function() {
+			viewModels.controlViewModel.updateRotatorWidth();
+		});
+
 		viewModels.temperatureViewModel.heaterOptions.subscribe(function(heaterOptions) {
 			var tmp;
 
@@ -1531,6 +1537,57 @@ TouchUI.prototype.knockout.viewModel = function() {
 		}
 	}
 
+}
+
+TouchUI.prototype.plugins.navbarTemp = function() {
+
+	// Manually move navbar temp (hard move)
+	if( $("#navbar_plugin_navbartemp").length > 0 ) {
+		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
+		$('<li class="divider"></li>').insertBefore(navBarTmp);
+	}
+
+}
+
+TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
+	var shown = false;
+
+	pluginManagerViewModel.plugins.items.subscribe(function() {
+
+		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
+			return (elm.key === "ScreenSquish");
+		}, true) || false;
+
+		if(!shown && ScreenSquish && ScreenSquish.enabled) {
+			shown = true;
+			new PNotify({
+				title: 'TouchUI: ScreenSquish is running',
+				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
+				icon: 'glyphicon glyphicon-question-sign',
+				type: 'error',
+				hide: false,
+				confirm: {
+					confirm: true,
+					buttons: [{
+						text: 'Disable ScreenSquish',
+						addClass: 'btn-primary',
+						click: function(notice) {
+							if(!ScreenSquish.pending_disable) {
+								pluginManagerViewModel.togglePlugin(ScreenSquish);
+							}
+							notice.remove();
+						}
+					}]
+				},
+			});
+		}
+
+	});
+
+};
+
+TouchUI.prototype.plugins.init = function (viewModels) {
+	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
 TouchUI.prototype.scroll.blockEvents = {
@@ -1861,57 +1918,6 @@ TouchUI.prototype.scroll.init = function() {
 
 	}
 
-}
-
-TouchUI.prototype.plugins.navbarTemp = function() {
-
-	// Manually move navbar temp (hard move)
-	if( $("#navbar_plugin_navbartemp").length > 0 ) {
-		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
-		$('<li class="divider"></li>').insertBefore(navBarTmp);
-	}
-
-}
-
-TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
-	var shown = false;
-
-	pluginManagerViewModel.plugins.items.subscribe(function() {
-
-		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
-			return (elm.key === "ScreenSquish");
-		}, true) || false;
-
-		if(!shown && ScreenSquish && ScreenSquish.enabled) {
-			shown = true;
-			new PNotify({
-				title: 'TouchUI: ScreenSquish is running',
-				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
-				icon: 'glyphicon glyphicon-question-sign',
-				type: 'error',
-				hide: false,
-				confirm: {
-					confirm: true,
-					buttons: [{
-						text: 'Disable ScreenSquish',
-						addClass: 'btn-primary',
-						click: function(notice) {
-							if(!ScreenSquish.pending_disable) {
-								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							}
-							notice.remove();
-						}
-					}]
-				},
-			});
-		}
-
-	});
-
-};
-
-TouchUI.prototype.plugins.init = function (viewModels) {
-	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
 TouchUI.prototype.components.material.ripple = function() {
