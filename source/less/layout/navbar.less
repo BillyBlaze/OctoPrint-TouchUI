@@ -214,10 +214,18 @@
 						width: 100%;
 						overflow: hidden;
 
+						#navbar_login {
+							&.open {
+								#login_dropdown_loggedout {
+									padding: 5px @dropdown-gutter @dropdown-gutter;
+								}
+							}
+						}
+
 						#login_dropdown_loggedout {
 							border-top: 1px solid @dropdown-divider-color;
 							margin-top: 0;
-							padding: 5px @dropdown-gutter @dropdown-gutter !important;
+							padding: 0;
 
 							> * {
 								.box-sizing(border-box);
