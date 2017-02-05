@@ -47,21 +47,10 @@ TouchUI.prototype.core.init = function() {
 			this.components.touchscreen.init.call(this);
 		}
 
-		// Create fullscreen cookie if not existing and trigger pNotification
-		if (this.DOM.storage.get("fullscreen") === undefined) {
-			this.DOM.storage.set("fullscreen", false);
-			this.components.fullscreen.ask.call(this);
-		} else {
-			//Cookie say user wants fullscreen, ask it!
-			if(this.DOM.storage.get("fullscreen")) {
-				this.components.fullscreen.ask.call(this);
-			}
-		}
-
 		// Get state of cookies and store them in KO
 		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
 		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
-		this.settings.isFullscreen(this.DOM.storage.get("fullscreen"));
+		this.settings.isFullscreen($(document).fullScreen() !== false);
 
 	}
 
