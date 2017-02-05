@@ -32,7 +32,7 @@ TouchUI.prototype.core.bridge = function() {
 		domReady: function() {
 			if (self.isActive()) {
 
-				if(_.some(self.core.bridge.OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
+				if($("#gcode").length > 0) {
 					self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS = self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS.concat(["gcodeViewModel"]);
 				}
 
