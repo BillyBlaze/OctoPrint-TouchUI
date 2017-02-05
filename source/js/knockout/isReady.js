@@ -106,7 +106,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Reuse for code below
 		var refreshUrl = function(href) {
-			return href.split("?")[0] + "?ts=" + new Date().getMilliseconds();
+			return href.split("?")[0] + "?ts=" + new Date().getTime();
 		}
 
 		// Reload CSS if needed

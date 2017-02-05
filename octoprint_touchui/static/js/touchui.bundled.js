@@ -720,7 +720,7 @@ TouchUI.prototype.core.bridge = function() {
 		domReady: function() {
 			if (self.isActive()) {
 
-				if(_.some(self.core.bridge.OCTOPRINT_VIEWMODELS, function(v) { return v[2] === "#gcode"; })) {
+				if($("#gcode").length > 0) {
 					self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS = self.core.bridge.TOUCHUI_REQUIRED_VIEWMODELS.concat(["gcodeViewModel"]);
 				}
 
@@ -1340,7 +1340,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Reuse for code below
 		var refreshUrl = function(href) {
-			return href.split("?")[0] + "?ts=" + new Date().getMilliseconds();
+			return href.split("?")[0] + "?ts=" + new Date().getTime();
 		}
 
 		// Reload CSS if needed
@@ -1447,57 +1447,6 @@ TouchUI.prototype.knockout.viewModel = function() {
 		}
 	}
 
-}
-
-TouchUI.prototype.plugins.navbarTemp = function() {
-
-	// Manually move navbar temp (hard move)
-	if( $("#navbar_plugin_navbartemp").length > 0 ) {
-		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
-		$('<li class="divider"></li>').insertBefore(navBarTmp);
-	}
-
-}
-
-TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
-	var shown = false;
-
-	pluginManagerViewModel.plugins.items.subscribe(function() {
-
-		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
-			return (elm.key === "ScreenSquish");
-		}, true) || false;
-
-		if(!shown && ScreenSquish && ScreenSquish.enabled) {
-			shown = true;
-			new PNotify({
-				title: 'TouchUI: ScreenSquish is running',
-				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
-				icon: 'glyphicon glyphicon-question-sign',
-				type: 'error',
-				hide: false,
-				confirm: {
-					confirm: true,
-					buttons: [{
-						text: 'Disable ScreenSquish',
-						addClass: 'btn-primary',
-						click: function(notice) {
-							if(!ScreenSquish.pending_disable) {
-								pluginManagerViewModel.togglePlugin(ScreenSquish);
-							}
-							notice.remove();
-						}
-					}]
-				},
-			});
-		}
-
-	});
-
-};
-
-TouchUI.prototype.plugins.init = function (viewModels) {
-	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
 TouchUI.prototype.scroll.blockEvents = {
@@ -1833,6 +1782,57 @@ TouchUI.prototype.scroll.init = function() {
 
 }
 
+TouchUI.prototype.plugins.navbarTemp = function() {
+
+	// Manually move navbar temp (hard move)
+	if( $("#navbar_plugin_navbartemp").length > 0 ) {
+		var navBarTmp = $("#navbar_plugin_navbartemp").appendTo(this.DOM.create.dropdown.container);
+		$('<li class="divider"></li>').insertBefore(navBarTmp);
+	}
+
+}
+
+TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
+	var shown = false;
+
+	pluginManagerViewModel.plugins.items.subscribe(function() {
+
+		var ScreenSquish = pluginManagerViewModel.plugins.getItem(function(elm) {
+			return (elm.key === "ScreenSquish");
+		}, true) || false;
+
+		if(!shown && ScreenSquish && ScreenSquish.enabled) {
+			shown = true;
+			new PNotify({
+				title: 'TouchUI: ScreenSquish is running',
+				text: 'Running ScreenSquish and TouchUI will give issues since both plugins try the same, we recommend turning off ScreenSquish.',
+				icon: 'glyphicon glyphicon-question-sign',
+				type: 'error',
+				hide: false,
+				confirm: {
+					confirm: true,
+					buttons: [{
+						text: 'Disable ScreenSquish',
+						addClass: 'btn-primary',
+						click: function(notice) {
+							if(!ScreenSquish.pending_disable) {
+								pluginManagerViewModel.togglePlugin(ScreenSquish);
+							}
+							notice.remove();
+						}
+					}]
+				},
+			});
+		}
+
+	});
+
+};
+
+TouchUI.prototype.plugins.init = function (viewModels) {
+	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
+}
+
 TouchUI.prototype.DOM.create.dropdown = {
 
 	menuItem: {
@@ -1922,6 +1922,70 @@ TouchUI.prototype.DOM.create.webcam = {
 
 	}
 
+}
+
+TouchUI.prototype.DOM.overwrite.modal = function() {
+
+	//We need a reliable event for catching new modals for attaching a scrolling bar
+	$.fn.modalBup = $.fn.modal;
+	$.fn.modal = function(options, args) {
+		// Update any other modifications made by others (i.e. OctoPrint itself)
+		$.fn.modalBup.defaults = $.fn.modal.defaults;
+
+		// Create modal, store into variable so we can trigger an event first before return
+		var tmp = $(this).modalBup(options, args);
+		if (options !== "hide") {
+			$(this).trigger("modal.touchui", this);
+		}
+		return tmp;
+	};
+	$.fn.modal.prototype = { constructor: $.fn.modal };
+	$.fn.modal.Constructor = $.fn.modal;
+	$.fn.modal.defaults = $.fn.modalBup.defaults;
+
+}
+
+TouchUI.prototype.DOM.overwrite.tabbar = function() {
+
+	// Force the webcam tab to load the webcam feed that original is located on the controls tab
+	$('#tabs [data-toggle=tab]').each(function(ind, elm) {
+
+		// Get the currently attached events to the toggle
+		var events = $.extend([], jQuery._data(elm, "events").show),
+			$elm = $(elm);
+
+		// Remove all previous set events and call them after manipulating a few things
+		$elm.off("show").on("show", function(e) {
+			var scope = this,
+				current = e.target.hash,
+				previous = e.relatedTarget.hash;
+
+			current = (current === "#control") ? "#control_without_webcam" : current;
+			current = (current === "#webcam") ? "#control" : current;
+
+			previous = (previous === "#control") ? "#control_without_webcam" : previous;
+			previous = (previous === "#webcam") ? "#control" : previous;
+
+			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
+			$.each(events, function(key, event) {
+				event.handler.call(scope, {
+					target: {
+						hash: current
+					},
+					relatedTarget: {
+						hash: previous
+					}
+				});
+			});
+		})
+	});
+
+}
+
+TouchUI.prototype.DOM.overwrite.tabdrop = function() {
+	$.fn.tabdrop = function() {};
+	$.fn.tabdrop.prototype = { constructor: $.fn.tabdrop };
+	$.fn.tabdrop.Constructor = $.fn.tabdrop;
 }
 
 TouchUI.prototype.DOM.move.afterTabAndNav = function() {
@@ -2082,67 +2146,3 @@ TouchUI.prototype.DOM.move.terminal = {
 	}
 
 };
-
-TouchUI.prototype.DOM.overwrite.modal = function() {
-
-	//We need a reliable event for catching new modals for attaching a scrolling bar
-	$.fn.modalBup = $.fn.modal;
-	$.fn.modal = function(options, args) {
-		// Update any other modifications made by others (i.e. OctoPrint itself)
-		$.fn.modalBup.defaults = $.fn.modal.defaults;
-
-		// Create modal, store into variable so we can trigger an event first before return
-		var tmp = $(this).modalBup(options, args);
-		if (options !== "hide") {
-			$(this).trigger("modal.touchui", this);
-		}
-		return tmp;
-	};
-	$.fn.modal.prototype = { constructor: $.fn.modal };
-	$.fn.modal.Constructor = $.fn.modal;
-	$.fn.modal.defaults = $.fn.modalBup.defaults;
-
-}
-
-TouchUI.prototype.DOM.overwrite.tabbar = function() {
-
-	// Force the webcam tab to load the webcam feed that original is located on the controls tab
-	$('#tabs [data-toggle=tab]').each(function(ind, elm) {
-
-		// Get the currently attached events to the toggle
-		var events = $.extend([], jQuery._data(elm, "events").show),
-			$elm = $(elm);
-
-		// Remove all previous set events and call them after manipulating a few things
-		$elm.off("show").on("show", function(e) {
-			var scope = this,
-				current = e.target.hash,
-				previous = e.relatedTarget.hash;
-
-			current = (current === "#control") ? "#control_without_webcam" : current;
-			current = (current === "#webcam") ? "#control" : current;
-
-			previous = (previous === "#control") ? "#control_without_webcam" : previous;
-			previous = (previous === "#webcam") ? "#control" : previous;
-
-			// Call previous unset functions (e.g. let's trigger the event onTabChange in all the viewModels)
-			$.each(events, function(key, event) {
-				event.handler.call(scope, {
-					target: {
-						hash: current
-					},
-					relatedTarget: {
-						hash: previous
-					}
-				});
-			});
-		})
-	});
-
-}
-
-TouchUI.prototype.DOM.overwrite.tabdrop = function() {
-	$.fn.tabdrop = function() {};
-	$.fn.tabdrop.prototype = { constructor: $.fn.tabdrop };
-	$.fn.tabdrop.Constructor = $.fn.tabdrop;
-}

@@ -7,6 +7,8 @@ from .customization import touchui_customization
 import octoprint.plugin
 import octoprint.settings
 import octoprint.util
+import hashlib
+import time
 import os
 
 class touchui_core(	touchui_api,
@@ -31,9 +33,11 @@ class touchui_core(	touchui_api,
 
 	def get_template_vars(self):
 		if os.path.isfile(self._customCssPath) and self._settings.get(["useCustomization"]):
-			return dict(cssPath="./plugin/touchui/static/css/touchui.custom.css")
+			with open(self._customCssPath, 'r') as contentFile:
+				return dict(cssPath="./plugin/touchui/static/css/touchui.custom.css", timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])
 		else:
-			return dict(cssPath="./plugin/touchui/static/css/touchui.css")
+			with open(self._cssPath, 'r') as contentFile:
+				return dict(cssPath="./plugin/touchui/static/css/touchui.css", timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])
 
 	def get_assets(self):
 		return dict(

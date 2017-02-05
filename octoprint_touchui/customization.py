@@ -12,6 +12,7 @@ import os
 
 class touchui_customization(object):
 	def __init__(self):
+		self._cssPath = os.path.dirname(__file__) + "/static/css/touchui.css"
 		self._customCssPath = os.path.dirname(__file__) + "/static/css/touchui.custom.css"
 		self._customLessPath = os.path.dirname(__file__) + "/static/less/touchui.bundled.less"
 		self._customHashPath = os.path.dirname(__file__) + "/static/css/hash.touchui"
