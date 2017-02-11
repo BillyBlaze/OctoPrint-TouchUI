@@ -6,7 +6,16 @@ TouchUI.prototype.DOM.move.navbar = {
 		$items.each(function(ind, elm) {
 			var $elm = $(elm);
 			$elm.appendTo(this.DOM.create.dropdown.container);
-			$elm.find('a').text($elm.text().trim());
+
+			if($elm.children('a').length > 0) {
+				var elme = $elm.children('a')[0];
+
+				$.each(elme.childNodes, function(key, node) {
+					if(node.nodeName === "#text") {
+						node.nodeValue = node.nodeValue.trim();
+					}
+				});
+			}
 		}.bind(this));
 
 		// Move TouchUI to main dropdown
@@ -18,6 +27,7 @@ TouchUI.prototype.DOM.move.navbar = {
 
 		// Move the navbar temp plugin
 		this.plugins.navbarTemp.call(this);
+		this.plugins.psuControl.call(this);
 
 	}
 

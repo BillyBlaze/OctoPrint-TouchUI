@@ -2454,9 +2454,7 @@ color: @text-color;
 position: relative;
 * {
 font-family: 'Source Code Pro', monospace;
-.text-shadow(none) !important;
-.box-shadow(none) !important;
-}
+.text-shadow(none) !important; 			.box-shadow(none) !important; 		}
 .no-pointer * {
 pointer-events: none !important;
 }
@@ -2730,6 +2728,9 @@ z-index: 2;
 &#all_touchui_settings {
 > .dropdown-menu {
 min-width: 230px;
+}
+b.caret {
+display: none;
 }
 &.item_active {
 background: @main-background;
@@ -5196,6 +5197,14 @@ tr {
 td, &:hover {
 background: transparent;
 }
+}
+}
+}
+a#navbar_plugin_psucontrol {
+#powercontrol_psu_indicator {
+margin-left: -28px;
+.icon-bolt {
+font-size: 19px;
 }
 }
 }
