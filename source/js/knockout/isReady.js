@@ -150,6 +150,13 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		}
 	});
 	
+	$("li.dropdown#navbar_login > a.dropdown-toggle").off("click").on("click", function(e) {
+		e.stopImmediatePropagation();
+		e.preventDefault();
+
+		$(this).parent().toggleClass("open");
+	});
+	
 	if (window.top.postMessage) {
 		// Tell bootloader we're ready with giving him the expected version for the bootloader
 		// if version is lower on the bootloader, then the bootloader will throw an update msg
