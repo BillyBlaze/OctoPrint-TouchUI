@@ -45,6 +45,7 @@ TouchUI.prototype = {
 
 		defaults: {
 			iScroll: {
+				eventPassthrough: 'horizontal',
 				scrollbars: true,
 				mouseWheel: true,
 				interactiveScrollbars: true,
