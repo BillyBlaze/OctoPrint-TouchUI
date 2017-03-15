@@ -37,4 +37,10 @@ TouchUI.prototype.DOM.init = function() {
 		$("#all_touchui_settings").removeClass("item_active");
 	});
 
+	// If touch emulator is enabled, then disable dragging of a menu item for scrolling
+	if(!this.settings.hasTouch) {
+		$("#navbar ul.nav > li a").on("dragstart drop", function(e) {
+			return false;
+		});
+	}
 }
