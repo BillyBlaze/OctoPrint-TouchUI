@@ -2411,6 +2411,9 @@ overflow: hidden;
 height: auto;
 min-height: 100%;
 }
+#webcam_container {
+pointer-events: none;
+}
 }
 }
 &.touch {
@@ -2877,6 +2880,9 @@ float: none;
 .icon-wrench{
 display: none;
 }
+&:active {
+background: darken(@main-color, 15%);
+}
 &:hover {
 background: transparent;
 }
@@ -2891,6 +2897,9 @@ width: 20px;
 top: 2px;
 text-align: center;
 }
+}
+&:active > a {
+background: darken(@main-color, 15%);
 }
 }
 }
@@ -3075,6 +3084,9 @@ display: none;
 }
 &-inner {
 padding: 0;
+hr {
+display: none;
+}
 }
 }
 .print-control {

@@ -943,6 +943,12 @@ TouchUI.prototype.DOM.init = function() {
 		$("#all_touchui_settings").removeClass("item_active");
 	});
 
+	// If touch emulator is enabled, then disable dragging of a menu item for scrolling
+	if(!this.settings.hasTouch) {
+		$("#navbar ul.nav > li a").on("dragstart drop", function(e) {
+			return false;
+		});
+	}
 }
 
 TouchUI.prototype.DOM.cookies = {
@@ -1117,6 +1123,7 @@ TouchUI.prototype.knockout.bindings = function() {
 
 		show: function() {
 			self.settings.touchuiModal.modal("show");
+			$("#all_touchui_settings").dropdown("toggle");
 		}
 
 	}
@@ -1811,7 +1818,7 @@ TouchUI.prototype.DOM.create.dropdown = {
 		this.menuItem.menu = $('' +
 			'<li id="all_touchui_settings" class="dropdown">' +
 				'<a href="#" class="dropdown-toggle" data-toggle="dropdown">' +
-					$('navbar_show_settings').text() +
+					$('navbar_show_settings').text() || $('navbar_show_settings').attr("title") +
 				'</a>' +
 			'</li>').prependTo(this.menuItem.cloneTo);
 
@@ -1864,7 +1871,7 @@ TouchUI.prototype.DOM.create.webcam = {
 	},
 
 	container: {
-		cloneTo: ".tab-content",
+		cloneTo: "#tabs + .tab-content",
 
 		webcam: {
 			$container: $("#webcam_container"),
@@ -1983,6 +1990,10 @@ TouchUI.prototype.DOM.move.navbar = {
 						node.nodeValue = node.nodeValue.trim();
 					}
 				});
+				
+				if(!$(elme).text()) {
+					$(elme).text($(elme).attr("title"));
+				}
 			}
 		}.bind(this));
 

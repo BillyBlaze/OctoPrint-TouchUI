@@ -15,6 +15,10 @@ TouchUI.prototype.DOM.move.navbar = {
 						node.nodeValue = node.nodeValue.trim();
 					}
 				});
+				
+				if(!$(elme).text()) {
+					$(elme).text($(elme).attr("title"));
+				}
 			}
 		}.bind(this));
 
