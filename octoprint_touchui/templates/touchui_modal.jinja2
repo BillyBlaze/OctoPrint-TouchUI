@@ -21,9 +21,12 @@
 				<button class="btn btn-primary" data-bind="click: bindings.toggleFullscreen">{{ _('Toggle fullscreen') }}</button>
 				<span class="label" data-bind="text: settings.isFullscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: settings.isFullscreen() ? 'label-success' : 'label-danger'"></span>
 			</div>
-			<div class="btn-box" data-bind="visible: !settings.hasTouch">
+			<div class="btn-box">
 				<button class="btn btn-primary" data-bind="click: bindings.toggleTouchscreen, disable: !isActive()">{{ _('Toggle touchscreen mode') }}</button>
 				<span class="label" data-bind="text: settings.isTouchscreen() ? '{{ _('Active') }}' : '{{ _('Inactive') }}', css: settings.isTouchscreen() ? 'label-success' : 'label-danger'"></span>
+			</div>
+			<div class="btn-box" data-bind="visible: settings.isTouchscreen">
+				<button class="btn btn-primary" data-bind="click: function() { window.location.reload(); }">{{ _('Refresh TouchUI') }}</button>
 			</div>
 		</form>
 
