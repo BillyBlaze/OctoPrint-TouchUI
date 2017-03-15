@@ -7,7 +7,7 @@ TouchUI.prototype.DOM.create.webcam = {
 	},
 
 	container: {
-		cloneTo: ".tab-content",
+		cloneTo: "#tabs + .tab-content",
 
 		webcam: {
 			$container: $("#webcam_container"),
