@@ -10,7 +10,7 @@ TouchUI.prototype.DOM.create.dropdown = {
 		this.menuItem.menu = $('' +
 			'<li id="all_touchui_settings" class="dropdown">' +
 				'<a href="#" class="dropdown-toggle" data-toggle="dropdown">' +
-					$('navbar_show_settings').text() +
+					$('navbar_show_settings').text() || $('navbar_show_settings').attr("title") +
 				'</a>' +
 			'</li>').prependTo(this.menuItem.cloneTo);
 
