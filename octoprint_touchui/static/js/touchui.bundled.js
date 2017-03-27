@@ -1123,7 +1123,6 @@ TouchUI.prototype.knockout.bindings = function() {
 
 		show: function() {
 			self.settings.touchuiModal.modal("show");
-			$("#all_touchui_settings").dropdown("toggle");
 		}
 
 	}

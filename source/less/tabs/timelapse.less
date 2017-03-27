@@ -3,11 +3,21 @@
 	> h1 {
 		margin: 30px 0 0;
 	}
-
-	> .pull-right {
-		float: none;
-		margin-bottom: 20px;
-		font-size: 16px;
+	
+	.icon-unchecked:before, 
+	.icon-check-empty:before {
+		content: "\f0c5";
+	}
+	
+	.caret {
+		display: none;
+	}
+	
+	.pull-left, .pull-right {
+		button {
+			font-size: 1.1rem;
+			padding: 10px 15px;
+		}
 	}
 
 	input[type="text"],
@@ -21,8 +31,9 @@
 
 	.help-block {
 		color: fade(contrast(@main-background), 80%);
-		padding: 0 0 20px;
-		margin-top: -10px;
+		padding: 0;
+		font-size: 0.9em;
+		line-height: 1rem;
 	}
 
 	.input-append {
