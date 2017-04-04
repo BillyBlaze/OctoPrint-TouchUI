@@ -2,7 +2,7 @@ title: TouchUI
 description: A touch friendly interface for a small TFT module or phone
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-tactile
+theme: jekyll-theme-slate
 
 gems:
   - jekyll-mentions
