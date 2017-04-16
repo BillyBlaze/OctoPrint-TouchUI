@@ -3040,7 +3040,13 @@ opacity: 0 !important;
 }
 }
 #webcam {
-margin: -@main-gutter -@main-gutter 0;
+margin: (-@main-gutter + 1px) -@main-gutter 0;
+#webcam_rotator {
+display: flex;
+align-content: center;
+align-items: center;
+justify-content: center;
+}
 #webcam_image {
 display: block;
 width: 100%;
@@ -3055,25 +3061,29 @@ transform: rotate(0deg) !important;
 height: auto;
 #webcam_image {
 transform: rotate(-90deg) !important;
-position: absolute;
-left: 0;
-transform-origin: top left;
-top: 100%;
-width: 100%;
-height: auto;
+max-width: ~"calc(100vh - 69px)";
 &.flipV {
 transform: rotate(-90deg) scaleX(-1) !important;
-top: 0;
 }
 &.flipH {
 transform: rotate(-90deg) scaleY(-1) !important;
-left: 100%;
 }
 &.flipV.flipH {
 transform: rotate(-90deg) scaleY(-1) scaleX(-1) !important;
-top: 0;
-left: 100%;
 }
+}
+}
+@supports (object-fit: contain) {
+#webcam_rotator {
+height: ~"calc(100vh - 69px)";
+}
+#webcam_image {
+object-fit: contain;
+display: block;
+width: 100%;
+height: auto;
+max-height: 100%;
+max-width: 100%;
 }
 }
 }
@@ -4417,6 +4427,10 @@ width: 100% !important;
 overflow: visible;
 margin: 0;
 padding: 0;
+.help-inline {
+display: block;
+padding: 5px 0 0;
+}
 }
 .pagination ul > li {
 > a {
@@ -4707,7 +4721,7 @@ background: transparent;
 border: 13px solid transparent;
 border-right-color: contrast(@keyboard-background);
 position: absolute;
-left: -26px;
+left: -25px;
 top: 0;
 }
 }
