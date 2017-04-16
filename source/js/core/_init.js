@@ -51,7 +51,6 @@ TouchUI.prototype.core.init = function() {
 		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
 		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
 		this.settings.isFullscreen($(document).fullScreen() !== false);
-
 	}
 
 }

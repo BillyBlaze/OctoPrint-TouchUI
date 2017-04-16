@@ -44,6 +44,7 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
+				self.plugins.tempsGraph.call(self);
 			}
 		},
 

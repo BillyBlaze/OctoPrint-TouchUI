@@ -670,7 +670,6 @@ TouchUI.prototype.core.init = function() {
 		this.components.keyboard.isActive(this.DOM.storage.get("keyboardActive"));
 		this.animate.isHidebarActive(this.DOM.storage.get("hideNavbarActive"));
 		this.settings.isFullscreen($(document).fullScreen() !== false);
-
 	}
 
 }
@@ -751,6 +750,7 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
+				self.plugins.tempsGraph.call(self);
 			}
 		},
 
@@ -1471,6 +1471,19 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 	});
 
 };
+
+TouchUI.prototype.plugins.tempsGraph = function() {
+
+	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
+		if (obj[0] && obj[0].name === "TempsgraphViewModel") {
+			console.info("TouchUI: TempsGraph is disabled while TouchUI is active.");
+			return true;
+		}
+		
+		return false;
+	});
+
+}
 
 TouchUI.prototype.scroll.beforeLoad = function() {
 
