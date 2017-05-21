@@ -5,10 +5,13 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		self.components.touchscreen.isLoading.call(self, viewModels);
 
 		// Reload dimensions of webcam with onload event
+		// Legacy code from 1.3.3
 		// Fixes bug #78
-		$("#webcam_image").on("load", function() {
-			viewModels.controlViewModel.updateRotatorWidth();
-		});
+		if(viewModels.controlViewModel && viewModels.controlViewModel.updateRotatorWidth) {
+			$("#webcam_image").on("load", function() {
+				viewModels.controlViewModel.updateRotatorWidth();
+			});
+		}
 
 		// Prevent user from double clicking in a short period on buttons
 		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle)", function(e) {

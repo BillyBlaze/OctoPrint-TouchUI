@@ -2456,13 +2456,14 @@ min-height: 100%;
 background: @main-background;
 color: @text-color;
 position: relative;
-*:not(.fa) {
+* {
 font-family: 'Source Code Pro', monospace;
 .text-shadow(none) !important; 			.box-shadow(none) !important; 		}
 .no-pointer * {
 pointer-events: none !important;
 }
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"], [class*=" icon-"],
+[class^="fa-"], [class*=" fa-"] {
 font-family: FontAwesome !important;
 }
 #navbar {
@@ -3042,11 +3043,17 @@ opacity: 0 !important;
 }
 #webcam {
 margin: (-@main-gutter + 1px) -@main-gutter 0;
-#webcam_rotator {
+#webcam_rotator,
+#webcam_rotator .webcam_fixed_ratio .webcam_fixed_ratio_inner {
 display: flex;
 align-content: center;
 align-items: center;
 justify-content: center;
+}
+#webcam_rotator .webcam_fixed_ratio	{
+padding: 0;
+height: 100%;
+width: 100%;
 }
 #webcam_image {
 display: block;
@@ -3057,7 +3064,8 @@ height: auto;
 padding: 35px;
 display: block;
 }
-.rotate90 {
+.rotate90,
+.webcam_rotated .webcam_fixed_ratio {
 transform: rotate(0deg) !important;
 height: auto;
 #webcam_image {
@@ -3074,8 +3082,12 @@ transform: rotate(-90deg) scaleY(-1) scaleX(-1) !important;
 }
 }
 }
+.webcam_rotated .webcam_fixed_ratio {
+padding: 0;
+}
 @supports (object-fit: contain) {
-#webcam_rotator {
+#webcam_rotator,
+#webcam_rotator .webcam_fixed_ratio .webcam_fixed_ratio_inner {
 height: ~"calc(100vh - 69px)";
 }
 #webcam_image {

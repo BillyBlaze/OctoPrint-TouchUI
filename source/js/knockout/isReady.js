@@ -21,9 +21,12 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		});
 
 		// Remove drag files into website feature
+		$(document).off("drag");
 		$(document).off("dragover");
-		if(viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		if(viewModels.gcodeFilesViewModel && viewModels.gcodeFilesViewModel._enableDragNDrop) {
+			viewModels.gcodeFilesViewModel._enableDragNDrop(false);
 			viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
+			viewModels.gcodeFilesViewModel._forceEndDragNDrop = function() {};
 		}
 
 		// Hide the dropdown after login

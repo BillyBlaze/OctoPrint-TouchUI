@@ -25,7 +25,7 @@
 		color: @text-color;
 		position: relative;
 
-		*:not(.fa) {
+		* {
 			font-family: 'Source Code Pro', monospace;
 			.text-shadow(none) !important; /* This should increase performance */
 			.box-shadow(none) !important; /* This should increase performance */
@@ -35,7 +35,8 @@
 			pointer-events: none !important;
 		}
 
-		[class^="icon-"], [class*=" icon-"] {
+		[class^="icon-"], [class*=" icon-"],
+		[class^="fa-"], [class*=" fa-"] {
 			font-family: FontAwesome !important;
 		}
 

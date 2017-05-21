@@ -1,11 +1,18 @@
 #webcam {
 	margin: (-@main-gutter + 1px) -@main-gutter 0;
 
-	#webcam_rotator {
+	#webcam_rotator,
+	#webcam_rotator .webcam_fixed_ratio .webcam_fixed_ratio_inner {
 		display: flex;
 		align-content: center;
 		align-items: center;
 		justify-content: center;
+	}
+
+	#webcam_rotator .webcam_fixed_ratio	{
+		padding: 0;
+		height: 100%;
+		width: 100%;
 	}
 
 	#webcam_image {
@@ -19,7 +26,8 @@
 		display: block;
 	}
 
-	.rotate90 {
+	.rotate90,
+	.webcam_rotated .webcam_fixed_ratio {
 		transform: rotate(0deg) !important;
 		height: auto;
 
@@ -38,9 +46,13 @@
 			}
 		}
 	}
+	.webcam_rotated .webcam_fixed_ratio {
+		padding: 0;
+	}
 
 	@supports (object-fit: contain) {
-		#webcam_rotator {
+		#webcam_rotator,
+		#webcam_rotator .webcam_fixed_ratio .webcam_fixed_ratio_inner {
 			height: ~"calc(100vh - 69px)";
 		}
 
