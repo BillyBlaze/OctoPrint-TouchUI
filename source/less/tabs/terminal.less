@@ -27,7 +27,8 @@
 		color: @terminal-color;
 	}
 
-	button {
+	button,
+	.btn {
 		background: @terminal-color;
 		color: contrast(@terminal-color, @dark-color, @light-color, 51%);
 
@@ -53,7 +54,8 @@
 				right: 0;
 			}
 
-			button {
+			button,
+			.btn {
 				padding: 3px 10px;
 				background: transparent;
 				color: @terminal-color;
@@ -67,7 +69,7 @@
 				}
 			}
 		}
-		a {
+		a:not(.btn) {
 			font-size: 35px;
 
 			i:before {
@@ -75,7 +77,8 @@
 			}
 		}
 
-		button {
+		button,
+		.btn {
 			padding: 4px 12px;
 			background: @main-background;
 			color: contrast(@main-background);
@@ -164,7 +167,7 @@
 			display: none;
 		}
 
-		input, button {
+		input, button, .btn {
 			&:disabled, .disabled {
 				opacity: 1;
 				background: mix(@terminal-color, @main-background, 30%);
@@ -191,7 +194,7 @@
 			.box-sizing(border-box);
 			.border-radius(0, 0, 5px, 5px);
 		}
-		button {
+		button, .btn {
 			position: absolute;
 			top: 0;
 			right: 1px;
@@ -204,6 +207,10 @@
 			.border-radius(0, 0, 5px, 0);
 			z-index: 21;
 			padding: 4px 12px;
+		}
+
+		.btn {
+			width: auto;
 		}
 	}
 }
