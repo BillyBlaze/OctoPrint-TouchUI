@@ -70,7 +70,7 @@
 			}
 		}
 		a:not(.btn) {
-			font-size: 35px;
+			.rem(font-size, 35);
 
 			i:before {
 				font-family: FontAwesome;
@@ -98,10 +98,10 @@
 	#terminal-scroll {
 		border: 1px solid @terminal-color;
 		overflow: hidden;
+		.rem(margin-bottom, 28);
 		.border-radius(5px, 5px, 0, 0);
 		height: 69vh;
 		min-height: 150px;
-		margin-bottom: 28px;
 		background: @terminal-background;
 		z-index: 2;
 	}
@@ -119,6 +119,8 @@
 		overflow: hidden;
 		color: @terminal-text-color;
 		background-color: transparent;
+		font-size: 0.8rem;
+		line-height: 1.4rem;
 
 		&:before {
 			font-family: "touchui";
@@ -127,8 +129,8 @@
 			width: 100%;
 			margin: 5px auto 0;
 			position: relative;
-			font-size: 34px;
-			line-height: 62px;
+			.rem(font-size, 34);
+			.rem(line-height, 62);
 			letter-spacing: 3px;
 			text-align: center;
 
@@ -149,8 +151,8 @@
 				position: relative;
 				left: 0;
 				margin: -5px 0 20px;
-				line-height: 17px;
-				font-size: 14px;
+				.rem(line-height, 17);
+				.rem(font-size, 14);
 				width: 100%;
 				text-align: center;
 			}
@@ -162,6 +164,7 @@
 		width: 100%;
 		margin: 0;
 		top: 69vh;
+		.rem(font-size, 14);
 
 		.muted {
 			display: none;
@@ -186,8 +189,8 @@
 			display: block;
 			z-index: 2;
 
-			font-size: 14px;
-			height: 30px;
+			.rem(font-size, 14);
+			.rem(height, 30);
 			text-indent: 10px;
 			padding-right: 90px;
 
@@ -205,6 +208,10 @@
 			border-left: 1px solid @terminal-color;
 			.text-shadow(0 0 0 transparent);
 			.border-radius(0, 0, 5px, 0);
+			.box-sizing();
+			.rem(height, 30);
+			.rem(line-height, 20);
+			.rem(font-size, 18);
 			z-index: 21;
 			padding: 4px 12px;
 		}

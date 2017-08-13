@@ -2,7 +2,7 @@
 	background-color: @main-color;
 	border: 0 none !important;
 
-	height: 70px;
+	.rem(height, 70);
 	width: 100%;
 
 	position: absolute;
@@ -26,7 +26,7 @@
 		background: transparent;
 		color: @main-color;
 
-		height: 70px;
+		.rem(height, 70);
 		padding: 0;
 		margin: 0;
 
@@ -42,10 +42,11 @@
 		&:after {
 			.font-icon-reset();
 			color: @main-color-text;
+			content: '\f128';
 
 			text-align: center;
-			font-size: 32px;
-			line-height: 70px;
+			.rem(font-size, 32);
+			.rem(line-height, 70);
 
 			display: block;
 			height: 100%;
@@ -59,39 +60,23 @@
 			}
 		}
 	}
-}
-#navbar {
-	.navbar-inner > .container > .nav-collapse > .nav {
-		width: 18%;
-		max-width: 100px;
+	&#touchui_dropdown_link a:after {
+		content: none;
 	}
+}
 
-	&.items-5 {
-		.navbar-inner > .container > .nav-collapse > .nav {
-			width: 16.5%;
-		}
-	}
-	.nav > li {
-		width: 100%;
-		float: right;
-	}
-}
 #tabs {
+	.flex-display();
+
 	.nav,
 	&.nav {
 		li {
-			width: 18%;
-			max-width: 100px;
-		}
-	}
+			.flex(1 0 auto);
+			.rem(max-width, 112);
 
-	&.items-5 {
-		.nav,
-		&.nav {
-			li {
-				width: 16.5%;
+			&#touchui_dropdown_link {
+				pointer-events: none;
 			}
 		}
 	}
-
 }

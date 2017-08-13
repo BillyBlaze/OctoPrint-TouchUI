@@ -7,7 +7,7 @@
 	margin: 1px !important;
 	padding: 0 !important;
 	border: 0 none;
-	font-size: 22px;
+	.rem(font-size, 22);
 	max-height: 43px;
 	max-width: 80px;
 	min-height: 33px;
@@ -57,7 +57,7 @@
 	&:after {
 		.font-icon-reset();
 		content: "\f062";
-		font-size: 25px;
+		.rem(font-size, 25);
 		max-height: 43px;
 	}
 }
@@ -73,7 +73,7 @@
 	width: 35px;
 	height: 35px !important;
 
-	line-height: 20px !important;
+	.rem(line-height, 20) !important;
 	text-align: center;
 
 	span {
@@ -108,7 +108,7 @@
 	min-width: auto !important;
 	width: auto;
 	opacity: .7;
-	font-size: 17px;
+	.rem(font-size, 17);
 	padding: 0 10px !important;
 }
 
@@ -151,7 +151,7 @@
 	span {
 		position: relative;
 		margin-right: -17px !important;
-		line-height: 40px;
+		.rem(line-height, 40);
 
 		&:after {
 			.font-icon-reset();
@@ -159,10 +159,10 @@
 
 			background: contrast(@keyboard-background);
 			color: @keyboard-background;
-			font-size: 19px;
+			.rem(font-size, 19);
 			width: 24px;
 			display: block;
-			line-height: 26px;
+			.rem(line-height, 26);
 			height: 26px;
 			overflow: hidden;
 			text-indent: -3px;
@@ -364,7 +364,7 @@ div.ui-body.ui-keyboard button.ui-keyboard-button.ui-btn {
 }
 .ui-body .ui-btn {
 	margin: 0;
-	font-size: 13px;
+	.rem(font-size, 13);
 }
 button.ui-keyboard-button.btn {
 	padding: 1px 6px;
@@ -422,14 +422,14 @@ button.ui-keyboard-extender span {
 }
 @media all and (max-width:319px) {
 	.ui-keyboard div {
-		font-size: 9px;
+		.rem(font-size, 9);
 	}
 	.ui-keyboard .ui-keyboard-input {
-		font-size: 12px;
+		.rem(font-size, 12);
 	}
 	.ui-body .ui-btn {
 		margin: 0;
-		font-size: 9px;
+		.rem(font-size, 9);
 	}
 	.ui-body .ui-keyboard-button {
 		width: 1.8em;
@@ -448,14 +448,14 @@ button.ui-keyboard-extender span {
 }
 @media all and (min-width:320px) and (max-width:479px) {
 	.ui-keyboard div {
-		font-size: 9px;
+		.rem(font-size, 9);
 	}
 	.ui-keyboard .ui-keyboard-input {
-		font-size: 14px;
+		.rem(font-size, 14);
 	}
 	.ui-body .ui-btn {
 		margin: 0;
-		font-size: 11px;
+		.rem(font-size, 11);
 	}
 	.ui-body .ui-keyboard-button {
 		width: 1.8em;
@@ -474,14 +474,14 @@ button.ui-keyboard-extender span {
 }
 @media all and (min-width:480px) and (max-width:767px) {
 	.ui-keyboard div {
-		font-size: 13px;
+		.rem(font-size, 13);
 	}
 	.ui-keyboard .ui-keyboard-input {
-		font-size: 14px;
+		.rem(font-size, 14);
 	}
 	.ui-body .ui-btn {
 		margin: 0;
-		font-size: 10px;
+		.rem(font-size, 10);
 	}
 	.ui-body .ui-keyboard-button {
 		height: 2.5em;

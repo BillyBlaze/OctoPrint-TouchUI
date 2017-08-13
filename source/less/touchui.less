@@ -12,6 +12,7 @@
 	width: 100%;
 	height: 100%;
 	background: @main-background;
+	font-size: @main-font-size + 0px;
 
 	@import "components/emulate.touch.less";
 	@import "components/scrollbars.less";
@@ -24,6 +25,8 @@
 		background: @main-background;
 		color: @text-color;
 		position: relative;
+		.rem(font-size, 14);
+		.rem(line-height, 20);
 
 		* {
 			font-family: 'Source Code Pro', monospace;

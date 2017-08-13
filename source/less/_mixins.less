@@ -4,6 +4,10 @@
 	A set of useful LESS mixins
 	More info at: http://lesselements.com
   ---------------------------------------------------*/
+.rem (@property, @value) {
+	@remValue: @value / 16;
+	mixin:~'placeholder;@{property}: @{remValue}rem';
+}
 .gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
 	background: @color;
 	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, @start), color-stop(1, @stop));

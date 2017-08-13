@@ -138,6 +138,13 @@
 		float: left;
 		width: 50%;
 
+		.btn-group {
+			.btn {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+
 		@media (max-width: 450px) {
 			margin-top: @main-gutter;
 		}
@@ -178,15 +185,15 @@
 				position: absolute;
 				right: 0;
 				text-indent: 0;
-				font-size: 21px;
-				line-height: 19px;
+				.rem(font-size, 21);
+				.rem(line-height, 19);
 			}
 		}
 
 		input {
 			.box-sizing(border-box);
 			float: left;
-			text-align: left;
+			text-align: right;
 			width: 75% !important;
 			padding-left: 90px;
 			padding-right: 0 !important;
@@ -361,7 +368,6 @@
 
 				width: 25% !important;
 				border-right: 1px solid @main-background;
-				padding: 0 !important;
 
 				&:last-child {
 					border-right: 0 none;

@@ -2,7 +2,7 @@
 	.navbar-inner {
 
 		.container {
-			height: 66px;
+			.rem(height, 66);
 			border:0 none;
 
 			.nav {
@@ -82,17 +82,35 @@
 									}
 								}
 
+								&#temp_link2 {
+									a:before {
+										content: "\f0e4";
+									}
+								}
+
+								&#control_link2 {
+									a:before {
+										content: "\f11b";
+									}
+								}
+
+								&#term_link2 {
+									a:before {
+										content: "\f120";
+									}
+								}
+
 								&#timelapse_link2 {
 									a:before {
 										content: "\f03e";
-										font-size: 18px;
+										.rem(font-size, 18);
 									}
 								}
 
 								&#gcode_link2 {
 									a:before {
 										content: "\f248";
-										font-size: 17px;
+										.rem(font-size, 17);
 									}
 								}
 
@@ -126,7 +144,7 @@
 											position: absolute;
 											right: 20px;
 											margin: 0;
-											line-height: 40px;
+											.rem(line-height, 40);
 										}
 										&:before {
 											content: "\f023";
@@ -137,8 +155,8 @@
 								&#navbar_plugin_touchui {
 									a:before {
 										content: "\f10b";
-										font-size: 28px;
-										line-height: 28px;
+										.rem(font-size, 28);
+										.rem(line-height, 28);
 										position: relative;
 										top: 5px;
 										margin-top: -9px;
@@ -159,7 +177,7 @@
 
 										&:before {
 											content: "\f085";
-											font-size: 19px;
+											.rem(font-size, 19);
 										}
 										i {
 											display: none;
@@ -206,12 +224,12 @@
 
 									&:before {
 										.font-icon-reset();
-										content: "";
+										content: '\f128';
 										display: inline-block;
 										margin: 0 15px 0 0;
-										font-size: 20px;
+										.rem(font-size, 20);
+										.rem(width, 20);
 										position: relative;
-										width: 20px;
 										top: 2px;
 										text-align: center;
 									}

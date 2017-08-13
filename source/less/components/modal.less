@@ -182,14 +182,17 @@
 				padding: 20px @modal-gutter;
 				border-bottom-color: @modal-border;
 
-				#settings_dialog_label {
+				#settings_dialog_label,
+				> h3 {
 					font-size: 1.4rem;
+					line-height: 1.7rem;
 					padding: 0 50px 0 0;
+					color: mix(@modal-background, contrast(@modal-background), 40%);
 				}
 
 				.close {
 					color: @modal-text;
-					font-size: 42px;
+					.rem(font-size, 42);
 					padding: 13px;
 					margin-top: -10px;
 					background: transparent;
@@ -204,6 +207,8 @@
 					display: inline-block !important;
 					position: relative;
 					padding-left: 10px;
+					color: contrast(@modal-background);
+					cursor: pointer;
 
 					&:before {
 						content: "/";
@@ -253,9 +258,9 @@
 							width: 100%;
 
 							a {
-								font-size: 15px;
+								.rem(font-size, 15);
 								padding: 10px 15px;
-								line-height: 24px;
+								.rem(line-height, 24);
 								margin: 0;
 								.border-radius(0);
 							}

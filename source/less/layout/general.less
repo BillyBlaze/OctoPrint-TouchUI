@@ -45,7 +45,8 @@
 		}
 
 		> .row {
-			margin-bottom: 40px;
+			.rem(margin-bottom, 20);
+			padding-bottom: 20px;
 		}
 
 		.tab-content {
@@ -68,7 +69,7 @@
 					&:first-child {
 						th {
 							margin: 0;
-							font-size: 18px;
+							.rem(font-size, 18);
 							border-bottom: 1px solid @main-background;
 							background: @table-row-header-background;
 							color: @table-row-header-text-color;
@@ -126,6 +127,12 @@
 		}
 
 	}
+}
+
+label, input, button, select, textarea, .input-mini {
+	height: auto;
+	.rem(font-size, 14);
+	.rem(line-height, 20);
 }
 
 .control-group {

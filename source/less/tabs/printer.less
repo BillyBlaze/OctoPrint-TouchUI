@@ -15,14 +15,15 @@
 
 	.print-control {
 		.btn {
-			padding: 12px 0;
-			height: 50px;
+			.flex-display();
+			.rem(height, 50);
+			padding: 0;
 			overflow: hidden;
 		}
 		i {
-			font-size: 28px;
-			display: block;
-			margin-bottom: 200px;
+			.rem(font-size, 28);
+			.flex(1 1 100%);
+			min-width: 100%;
 		}
 		.icon-print:before {
 			content: "\f051";
@@ -46,12 +47,12 @@
 	}
 
 	#state {
-		padding-top: 100px;
+		padding-top: ~"calc(3.125rem + 60px)";
 
 		.progress,
 		.print-control {
 			position: absolute;
-			top: 67px;
+			top: ~"calc(3.125rem + 15px)";
 			left: 0;
 			height: 20px;
 			width: 100%;

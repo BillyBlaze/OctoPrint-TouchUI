@@ -9,20 +9,20 @@
 		display: block;
 		pointer-events: none;
 		margin: 40px -@main-gutter 0;
-		padding: 5px @main-gutter;
-		height: 40px;
+		padding: 0.5rem @main-gutter;
 
 		background-color: @main-color;
 		color: @main-color-text;
 
 		> a, > a i {
 			color: @main-color-text;
-			font-size: 23px;
+			.rem(font-size, 23);
 			padding-right: 0;
 			padding-left: 0;
 		}
 		> div {
 			pointer-events: all;
+			margin: -8px 5px -8px 0;
 
 			&.settings-trigger {
 				position: relative;
@@ -31,14 +31,20 @@
 
 			> a {
 				background: transparent;
+				padding: 15px 10px !important;
+				margin: 0;
 
-				@media (max-width: 350px) {
-					padding: 9px 4px;
+				//@media (max-width: 350px) {
+				//	padding: 9px 4px;
+				//}
+
+				* {
+					display: none;
 				}
 
 				&:after {
 					.font-icon-reset(FontAwesome);
-					font-size: 25px;
+					.rem(font-size, 25);
 					color: @main-color-text;
 					content: "\f0b0";
 				}
@@ -55,6 +61,8 @@
 			.dropdown-toggle {
 				&:after {
 					content: "\f0ea";
+					top: 3px;
+					position: relative;
 				}
 			}
 		}
@@ -91,7 +99,7 @@
 		.folder-button {
 			.btn {
 				padding: 12px;
-				font-size: 22px;
+				.rem(font-size, 22);
 				display: block;
 				width: 100%;
 				margin-left: 0;
@@ -129,6 +137,9 @@
 				background-color: @swipe-list-background-color;
 				color: contrast(@swipe-list-background-color);
 				border-top: 1px solid @main-background;
+
+				.rem(font-size, 14);
+				.rem(line-height, 20);
 
 				padding: 15px (@main-gutter + 110px) 15px @main-gutter;
 				margin: 0;
@@ -209,7 +220,7 @@
 
 					i {
 						font-size: 32px;
-						line-height: 40px;
+						.rem(line-height, 40);
 					}
 
 					.btn.disabled, .btn[disabled] {

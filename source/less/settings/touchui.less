@@ -36,7 +36,7 @@
 				color: @main-color-text;
 				text-align: center;
 				display: block;
-				line-height: 25px;
+				.rem(line-height, 25);
 			}
 		}
 	}
@@ -47,9 +47,13 @@
 #touchui_settings_dialog {
 
 	.btn-box {
-		display: block;
+		.flex-display();
+		.flex-wrap(wrap);
 		margin: 10px 0;
-		white-space: nowrap;
+
+		&:first-child {
+			margin-top: 0;
+		}
 	}
 
 	button {
@@ -58,13 +62,12 @@
 	}
 
 	.label {
-		font-size: 14px;
-		padding: 9px;
-		margin-left: -10px;
-		display: inline-block;
-		top: 2px;
-		position: relative;
+		.flex-display();
+		.align-items(center);
+		.rem(font-size, 14);
+		.rem(line-height, 20);
 		.border-radius(0);
+		padding: 6px 9px;
 	}
 
 }
@@ -76,7 +79,7 @@
 	#navbar_touchui_settings {
 		i:before {
 			content: "\f10b";
-			font-size: 28px;
+			.rem(font-size, 28);
 			position: relative;
 			top: 5px;
 			margin-top: -9px;

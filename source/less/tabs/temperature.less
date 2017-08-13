@@ -80,20 +80,31 @@
 
 		table {
 			margin: 0 !important;
+			width: 100%;
 
 			tr {
 				&:first-child {
 					th {
-						font-size: 18px;
+						.rem(font-size, 18);
 
 						&:first-child {
 							width: 13% !important;
+						}
+						&:nth-child(3) {
+							width: auto !important;
+						}
+						@media (max-width: 730px) {
+							&:last-child {
+								width: 38vw !important;
+								.box-sizing();
+							}
 						}
 					}
 				}
 
 				th, td {
-					font-size: 16px;
+					.rem(font-size, 16);
+					padding: 12px;
 
 					&:nth-child(1) {
 						text-align: right;
@@ -104,9 +115,9 @@
 						text-align: center !important;
 					}
 
-					&:nth-child(3) {
+					/*&:nth-child(3) {
 						padding-right: 30px;
-					}
+					}*/
 
 					.dropdown-menu {
 						margin: 2px 0 9px;
@@ -125,51 +136,59 @@
 							right: 9px;
 						}
 					}
+
+					&.temperature_offset {
+						.form-inline {
+							.input-append {
+								.flex-wrap(wrap);
+								max-width: 100%;
+							}
+						}
+					}
+
+					.form-inline,
 					.input-append {
 						.box-sizing(border-box);
 
 						.flex-display(flex);
 						.flex-direction(row);
-						.flex-wrap(nowrap);
+						.flex-wrap(wrap);
 						.justify-content(flex-start);
 						.align-content(stretch);
 						.align-items(flex-start);
-
-						@media (max-width: 370px) {
-							.flex-direction(column);
-							.align-items(stretch);
-							position: relative;
-						}
 
 						> * {
 							.flex-order(0);
 							.flex(0 1 auto);
 							.align-self(auto);
+							margin-top: 2px;
+							margin-bottom: 2px;
 						}
 
-						input {
+						> .input-append {
+							.flex(1 1 0%);
+							.flex-wrap();
+							padding-right: 10px;
+							margin-bottom: 0;
+							margin-top: 0;
+						}
+
+						input, .input-mini {
 							.flex-order(0);
-							.flex(1 0 auto);
+							.flex(1 1 20px);
 							.align-self(auto);
 
 							margin-right: 0px;
-							padding: 7px 15px;
+							padding: 7px 0 7px 15px;
 							.border-radius(0);
 							text-align: left;
-
-							@media (max-width: 370px) {
-								margin: 0 30px 5px 0;
-								width: auto;
-							}
 						}
 						.btn-group,
 						> button {
 							.border-radius(0);
-
-							@media (max-width: 370px) {
-								button:first-child {
-									width: 80%;
-								}
+							
+							.fa, .icon {
+								pointer-events: none;
 							}
 
 							.btn.dropdown-toggle {
@@ -178,13 +197,13 @@
 						}
 						.add-on {
 							padding: 7px;
-							margin-right: 10px;
+							margin-right: 1px;
+							.rem(font-size, 14);
+							.rem(line-height, 20);
+							height: auto;
 
-							@media (max-width: 370px) {
-								margin-right: 0;
-								position: absolute;
-								top: 0;
-								right: 0;
+							@media (max-width: 474px) {
+								display: none;
 							}
 						}
 						button {
@@ -197,17 +216,9 @@
 								&:after {
 									content: "\f0d7";
 									font-family: FontAwesome;
-									font-size: 18px;
+									.rem(font-size, 18);
 									top: -7px;
 									position: relative;
-								}
-							}
-
-							@media (max-width: 370px) {
-								.box-sizing(border-box);
-
-								&.dropdown-toggle {
-									width: 20%;
 								}
 							}
 						}
@@ -216,8 +227,8 @@
 			}
 		}
 
-		@media (max-width: 700px) {
-			width: 161vw !important;
+		@media (max-width: 730px) {
+			width: 138vw !important;
 			margin: 0 0 @main-gutter 0 !important;
 			transition: left 0.5s ease;
 			cursor: w-resize;
@@ -225,7 +236,7 @@
 			left: 0;
 
 			&.open {
-				left: -61vw !important;
+				left: -38vw !important;
 			}
 		}
 	}

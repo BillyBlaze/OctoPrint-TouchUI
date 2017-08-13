@@ -1,5 +1,5 @@
 .footer {
-	font-size: 14px;
+	.rem(font-size, 14);
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -43,15 +43,16 @@
 
 		li {
 			margin-left: 0;
+			.rem(line-height, 20);
 
 			a {
 				display: inline-block;
-				width: 20px;
+				.rem(width, 20);
+				.rem(height, 20);
 				color: mix(@main-background, contrast(@main-background), 50%);
-				height: 20px;
 				overflow: hidden;
 				margin: 0;
-				font-size: 18px;
+				.rem(font-size, 18);
 				padding: 0;
 
 				&:hover {
