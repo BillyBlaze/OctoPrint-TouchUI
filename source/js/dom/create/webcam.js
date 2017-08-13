@@ -2,7 +2,7 @@ TouchUI.prototype.DOM.create.webcam = {
 
 	menu: {
 		webcam: {
-			cloneTo: "#term_link"
+			cloneTo: "#touchui_dropdown_link"
 		}
 	},
 
@@ -28,7 +28,9 @@ TouchUI.prototype.DOM.create.webcam = {
 		$('<!-- /ko -->').insertAfter(this.container.$elm);
 
 		$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
-
+		$("#webcam_image").on("mousedown", function(e) {
+			e.preventDefault();
+		});
 	}
 
 }

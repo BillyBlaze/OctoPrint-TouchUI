@@ -817,6 +817,7 @@ TouchUI.prototype.core.less = {
 				if (error) {
 					self.core.less.error.call(self, error);
 				} else {
+					result.css = result.css.replace(/mixin\:placeholder\;/g, '');
 
 					$.post(self.core.less.options.API, {
 							css: result.css
@@ -1145,7 +1146,7 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		}
 
 		// Prevent user from double clicking in a short period on buttons
-		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle)", function(e) {
+		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle, .btn-input-inc, .btn-input-dec)", function(e) {
 			var printer = $(e.target);
 			printer.prop('disabled', true);
 
@@ -1332,44 +1333,48 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				$css.attr("href", refreshUrl(href));
 			}
 		});
-	}
 
-	// Check if we need to update an old LESS file with a new LESS one
-	var requireNewCSS = ko.computed(function() {
-		return self.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
-	});
-	requireNewCSS.subscribe(function(requireNewCSS) {
-		if(requireNewCSS) {
-			setTimeout(function() {
-				self.core.less.save.call(self, self);
-			}, 100);
+		// Check if we need to update an old LESS file with a new LESS one
+		var requireNewCSS = ko.computed(function() {
+			return self.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin();
+		});
+		requireNewCSS.subscribe(function(requireNewCSS) {
+			if(requireNewCSS) {
+				setTimeout(function() {
+					self.core.less.save.call(self, self);
+				}, 100);
+			}
+		});
+		
+		// Evuluate computed subscriber defined above:
+		// In OctoPrint >1.3.5 the settings will be defined upfront
+		requireNewCSS.notifySubscribers(self.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin());
+		
+		//TODO: move this
+		$("li.dropdown#navbar_login > a.dropdown-toggle").off("click").on("click", function(e) {
+			e.stopImmediatePropagation();
+			e.preventDefault();
+
+			$(this).parent().toggleClass("open");
+		});
+		
+		if (window.top.postMessage) {
+			// Tell bootloader we're ready with giving him the expected version for the bootloader
+			// if version is lower on the bootloader, then the bootloader will throw an update msg
+			window.top.postMessage(1, "*");
+			
+			// Sync customization with bootloader
+			window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
+			
+			// Stop watching for errors
+			$(window).off("error.touchui");
+			
+			// Trigger wake-up for iScroll
+			if(window.dispatchEvent) {
+				window.dispatchEvent(new Event('resize'));
+			}
 		}
-	});
-	
-	$("li.dropdown#navbar_login > a.dropdown-toggle").off("click").on("click", function(e) {
-		e.stopImmediatePropagation();
-		e.preventDefault();
-
-		$(this).parent().toggleClass("open");
-	});
-	
-	if (window.top.postMessage) {
-		// Tell bootloader we're ready with giving him the expected version for the bootloader
-		// if version is lower on the bootloader, then the bootloader will throw an update msg
-		window.top.postMessage(1, "*");
-		
-		// Sync customization with bootloader
-		window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
-		
-		// Stop watching for errors
-		$(window).off("error.touchui");
-		
-		// Trigger wake-up for iScroll
-		if(window.dispatchEvent) {
-			window.dispatchEvent(new Event('resize'));
-		}
 	}
-
 }
 
 TouchUI.prototype.knockout.viewModel = function() {
@@ -1884,7 +1889,7 @@ TouchUI.prototype.DOM.create.webcam = {
 
 	menu: {
 		webcam: {
-			cloneTo: "#term_link"
+			cloneTo: "#touchui_dropdown_link"
 		}
 	},
 
@@ -1910,7 +1915,9 @@ TouchUI.prototype.DOM.create.webcam = {
 		$('<!-- /ko -->').insertAfter(this.container.$elm);
 
 		$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
-
+		$("#webcam_image").on("mousedown", function(e) {
+			e.preventDefault();
+		});
 	}
 
 }
@@ -2021,6 +2028,20 @@ TouchUI.prototype.DOM.move.navbar = {
 		// Create and Move login form to main dropdown
 		$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
 		$('#navbar_login').appendTo('#youcanhazlogin').find('a.dropdown-toggle').text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim());
+		
+		// Create fake TouchUI tabbar and map it to the original dropdown
+		$('<li id="touchui_dropdown_link"><a href="#"></a></li>').appendTo("#tabs");
+		function resizeMenuItem() {
+			var width = $('#touchui_dropdown_link').width();
+			$('#all_touchui_settings').width(width);
+			
+			setTimeout(function() {
+				var width = $('#touchui_dropdown_link').width();
+				$('#all_touchui_settings').width(width);
+			}, 600);
+		}
+		$(window).on('resize.touchui.navbar', resizeMenuItem);
+		resizeMenuItem();
 
 		// Move the navbar temp plugin
 		this.plugins.navbarTemp.call(this);
@@ -2045,11 +2066,11 @@ TouchUI.prototype.DOM.move.overlays = {
 }
 
 TouchUI.prototype.DOM.move.tabbar = {
-	mainItems: ['#print_link', '#temp_link', '#control_link', '#webcam_link', '#term_link', '.hidden_touch'],
 	init: function() {
+		var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
 
-		$items = $("#tabs > li:not("+this.DOM.move.tabbar.mainItems+")");
-		$items.each(function(ind, elm) {
+		$items = $("#tabs > li:not(#print_link, .hidden_touch)");
+		$($items.splice(howManyToSplice)).each(function(ind, elm) {
 			var $elm = $(elm);
 
 			// Clone the items into the dropdown, and make it click the orginal link

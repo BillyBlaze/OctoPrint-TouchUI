@@ -1,9 +1,9 @@
 TouchUI.prototype.DOM.move.tabbar = {
-	mainItems: ['#print_link', '#temp_link', '#control_link', '#webcam_link', '#term_link', '.hidden_touch'],
 	init: function() {
+		var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
 
-		$items = $("#tabs > li:not("+this.DOM.move.tabbar.mainItems+")");
-		$items.each(function(ind, elm) {
+		$items = $("#tabs > li:not(#print_link, .hidden_touch)");
+		$($items.splice(howManyToSplice)).each(function(ind, elm) {
 			var $elm = $(elm);
 
 			// Clone the items into the dropdown, and make it click the orginal link
