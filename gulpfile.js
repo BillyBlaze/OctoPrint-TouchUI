@@ -18,6 +18,14 @@ gulp.task('js', ['js:concat:app', 'js:concat:libs', 'js:concat:bootstrap']);
 gulp.task('lessc', function () {
 	return gulp.src('source/less/touchui.less')
 		.pipe(less({compress: true}))
+		.pipe(through.obj(function(file, enc, cb) {
+			var contents = file.contents.toString();
+			contents = contents.replace(/mixin\:placeholder\;/g, '');
+
+			file.contents = new Buffer(contents);
+
+			cb(null, file);
+		}))
 		.pipe(gulp.dest('octoprint_touchui/static/css'));
 });
 

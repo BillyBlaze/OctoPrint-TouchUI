@@ -51,6 +51,7 @@ TouchUI.prototype.core.less = {
 				if (error) {
 					self.core.less.error.call(self, error);
 				} else {
+					result.css = result.css.replace(/mixin\:placeholder\;/g, '');
 
 					$.post(self.core.less.options.API, {
 							css: result.css
