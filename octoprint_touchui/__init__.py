@@ -69,6 +69,7 @@ class touchui_core(	touchui_api,
 				termColor="#0F0",
 				bgColor="#000",
 				textColor="#FFF",
+				fontSize="16",
 				customPath="",
 				useLocalFile=False
 			)
