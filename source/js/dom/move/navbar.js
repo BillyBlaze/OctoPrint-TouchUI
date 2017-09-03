@@ -26,8 +26,14 @@ TouchUI.prototype.DOM.move.navbar = {
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");
 
 		// Create and Move login form to main dropdown
-		$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
-		$('#navbar_login').appendTo('#youcanhazlogin').find('a.dropdown-toggle').text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim());
+		$('<li><ul id="youcanhazlogin"></ul></li>')
+			.insertAfter("#navbar_plugin_touchui");
+		
+		$('#navbar_login')
+			.appendTo('#youcanhazlogin')
+			.find('a.dropdown-toggle')
+			.text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim())
+			.attr("data-bind", "visible: !loginState.loggedIn()");
 		
 		// Create fake TouchUI tabbar and map it to the original dropdown
 		$('<li id="touchui_dropdown_link"><a href="#"></a></li>').appendTo("#tabs");
