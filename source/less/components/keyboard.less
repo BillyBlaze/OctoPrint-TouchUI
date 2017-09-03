@@ -1,14 +1,11 @@
 .ui-keyboard-button {
 	background: transparent;
 	color: @keyboard-color;
-
-	height: 17vh !important;
 	min-width: 0 !important;
 	margin: 1px !important;
 	padding: 0 !important;
 	border: 0 none;
 	.rem(font-size, 22);
-	max-height: 43px;
 	max-width: 80px;
 	min-height: 33px;
 	width: 8vw;
@@ -62,6 +59,9 @@
 	}
 }
 
+.ui-keyboard-accept {
+	clear: right;
+}
 
 .ui-keyboard-cancel,
 .ui-keyboard-accept {
@@ -70,8 +70,8 @@
 	background: @keyboard-accept;
 
 	margin-top: 2px !important;
-	width: 35px;
-	height: 35px !important;
+	width: 1.8rem;
+	height: 1.8rem !important;
 
 	.rem(line-height, 20) !important;
 	text-align: center;
@@ -120,6 +120,7 @@
 .ui-keyboard-space {
 	width: 33vw !important;
 	max-width: none;
+	position: relative;
 
 	&:after {
 		.border-radius(5px, 5px, 5px, 5px);
@@ -128,6 +129,11 @@
 		height: 20px;
 		width: 100%;
 		background: mix(@keyboard-background, contrast(@keyboard-background), 70%);
+
+		top: 50%;
+		position: absolute;
+		left: 0;
+		margin-top: -10px;
 	}
 	&:active, &.touch-focus {
 		background: transparent;
@@ -147,6 +153,7 @@
 	margin-right: 10px;
 	min-width: 40px !important;
 	max-width: 40px;
+	overflow: visible !important;
 
 	span {
 		position: relative;
@@ -163,17 +170,17 @@
 			width: 24px;
 			display: block;
 			.rem(line-height, 26);
-			height: 26px;
+			height: 1.6rem;
 			overflow: hidden;
 			text-indent: -3px;
 		}
 		&:before {
 			content: "";
 			background: transparent;
-			border: 13px solid transparent;
+			border: 0.8rem solid transparent;
 			border-right-color: contrast(@keyboard-background);
 			position: absolute;
-			left: -25px;
+			left: -1.6rem;
 			top: 0;
 		}
 	}
@@ -245,6 +252,7 @@
 }
 .ui-keyboard-empty span,
 .ui-keyboard-space span {
+	display: none;
 	font: 0/0 a;
 	.text-shadow(none);
 	color: transparent;
@@ -274,7 +282,7 @@
 	display: block !important;
 	width: 100%;
 	padding: 0 15px;
-	height: 40px;
+	line-height: 2.3rem;
 	.box-sizing(border-box);
 }
 .ui-keyboard-keyset {
@@ -346,6 +354,8 @@ div.ui-body.ui-keyboard button.ui-keyboard-button.ui-btn {
 }
 .ui-body .ui-keyboard-space {
 	width: 15em;
+	display: inline-flex;
+	height: 2rem;
 }
 .ui-body .ui-keyboard-space span {
 	visibility: hidden;
