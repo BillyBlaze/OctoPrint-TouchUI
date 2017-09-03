@@ -6,7 +6,7 @@ TouchUI.prototype.scroll.overlay = {
 
 		self.scroll.iScrolls.overlay = [];
 
-		$items = $(this.scroll.overlay.mainItems);
+		var $items = $(this.scroll.overlay.mainItems);
 		$items.each(function(ind, elm) {
 			var child = $(elm).children("#" + $(elm).attr("id") + "_wrapper");
 			var div = $('<div></div>').prependTo(elm);

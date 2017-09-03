@@ -2,7 +2,7 @@ TouchUI.prototype.DOM.move.tabbar = {
 	init: function() {
 		var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
 
-		$items = $("#tabs > li:not(#print_link, .hidden_touch)");
+		var $items = $("#tabs > li:not(#print_link, .hidden_touch)");
 		$($items.splice(howManyToSplice)).each(function(ind, elm) {
 			var $elm = $(elm);
 

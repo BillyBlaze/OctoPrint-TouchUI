@@ -1718,7 +1718,7 @@ TouchUI.prototype.scroll.overlay = {
 
 		self.scroll.iScrolls.overlay = [];
 
-		$items = $(this.scroll.overlay.mainItems);
+		var $items = $(this.scroll.overlay.mainItems);
 		$items.each(function(ind, elm) {
 			var child = $(elm).children("#" + $(elm).attr("id") + "_wrapper");
 			var div = $('<div></div>').prependTo(elm);
@@ -2002,7 +2002,7 @@ TouchUI.prototype.DOM.move.navbar = {
 	mainItems: ['#all_touchui_settings', '#navbar_plugin_navbartemp', '#navbar_login', /*'#navbar_systemmenu',*/ '.hidden_touch'],
 	init: function() {
 
-		$items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
+		var $items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
 		$items.each(function(ind, elm) {
 			var $elm = $(elm);
 			$elm.appendTo(this.DOM.create.dropdown.container);
@@ -2069,7 +2069,7 @@ TouchUI.prototype.DOM.move.tabbar = {
 	init: function() {
 		var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
 
-		$items = $("#tabs > li:not(#print_link, .hidden_touch)");
+		var $items = $("#tabs > li:not(#print_link, .hidden_touch)");
 		$($items.splice(howManyToSplice)).each(function(ind, elm) {
 			var $elm = $(elm);
 

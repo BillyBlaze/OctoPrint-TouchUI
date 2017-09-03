@@ -2,7 +2,7 @@ TouchUI.prototype.DOM.move.navbar = {
 	mainItems: ['#all_touchui_settings', '#navbar_plugin_navbartemp', '#navbar_login', /*'#navbar_systemmenu',*/ '.hidden_touch'],
 	init: function() {
 
-		$items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
+		var $items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
 		$items.each(function(ind, elm) {
 			var $elm = $(elm);
 			$elm.appendTo(this.DOM.create.dropdown.container);
