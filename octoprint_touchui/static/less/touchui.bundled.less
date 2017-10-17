@@ -5205,7 +5205,7 @@ li {
 padding: 0 @dropdown-gutter;
 }
 a {
-color: @dropdown-color-text !important;
+color: @dropdown-color-text;
 .rem(font-size, 15) !important;
 width: 100%;
 .box-sizing(border-box);
@@ -5314,11 +5314,14 @@ color: @main-color-dark-text;
 }
 }
 #navbar_plugin_navbartemp {
-padding: 0;
+padding: 5px 0;
+overflow: hidden;
 > div {
 margin: 0;
 }
 p {
+.rem(font-size, 14);
+.rem(line-height, 25);
 float: none;
 color: inherit;
 margin: 0;
@@ -5344,13 +5347,8 @@ background: transparent;
 }
 }
 }
-a#navbar_plugin_psucontrol {
-#powercontrol_psu_indicator {
-margin-left: -28px;
-.icon-bolt {
-.rem(font-size, 19);
-}
-}
+#navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings li #psucontrol_indicator:before {
+content: '\f0e7';
 }
 #control {
 #control-jog-xy {

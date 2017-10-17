@@ -1433,8 +1433,9 @@ TouchUI.prototype.plugins.navbarTemp = function() {
 TouchUI.prototype.plugins.psuControl = function() {
 
 	// Manually move navbar temp (hard move)
-	if( $("#navbar_plugin_psucontrol").length > 0 ) {
-		var navBarTmp = $("#navbar_plugin_psucontrol").appendTo(this.DOM.create.dropdown.container);
+	if( $("#navbar_plugin_psucontrol a").length > 0 ) {
+		$("#navbar_plugin_psucontrol a")
+			.text('PSU Control');
 	}
 
 }
@@ -1992,17 +1993,18 @@ TouchUI.prototype.DOM.move.controls = {
 }
 
 TouchUI.prototype.DOM.move.navbar = {
-	mainItems: ['#all_touchui_settings', '#navbar_plugin_navbartemp', '#navbar_login', /*'#navbar_systemmenu',*/ '.hidden_touch'],
+	mainItems: ['#all_touchui_settings', '#navbar_login', '.hidden_touch'],
 	init: function() {
 
 		var $items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
 		$items.each(function(ind, elm) {
 			var $elm = $(elm);
-			$elm.appendTo(this.DOM.create.dropdown.container);
 
 			if($elm.children('a').length > 0) {
 				var elme = $elm.children('a')[0];
-
+				
+				$elm.appendTo(this.DOM.create.dropdown.container);
+				
 				$.each(elme.childNodes, function(key, node) {
 					if(node.nodeName === "#text") {
 						node.nodeValue = node.nodeValue.trim();
@@ -2012,6 +2014,8 @@ TouchUI.prototype.DOM.move.navbar = {
 				if(!$(elme).text()) {
 					$(elme).text($(elme).attr("title"));
 				}
+			} else {
+				$elm.prependTo(this.DOM.create.dropdown.container);
 			}
 		}.bind(this));
 
@@ -2045,7 +2049,6 @@ TouchUI.prototype.DOM.move.navbar = {
 		// Move the navbar temp plugin
 		this.plugins.navbarTemp.call(this);
 		this.plugins.psuControl.call(this);
-
 	}
 
 }
