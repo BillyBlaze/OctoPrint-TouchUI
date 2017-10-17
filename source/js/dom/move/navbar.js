@@ -24,7 +24,7 @@ TouchUI.prototype.DOM.move.navbar = {
 			} else {
 				if(!hasTextLinks) {
 					hasTextLinks = true;
-					$('<li><ul id="touchui_text_link_container"></ul></li>').appendTo(this.DOM.create.dropdown.container);
+					$('<li><ul id="touchui_text_nonlink_container"></ul></li>').appendTo(this.DOM.create.dropdown.container);
 				}
 
 				$elm.appendTo("#touchui_text_nonlink_container");
