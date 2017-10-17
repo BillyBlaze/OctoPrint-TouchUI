@@ -7,12 +7,19 @@ TouchUI.prototype.DOM.move.tabbar = {
 			var $elm = $(elm);
 
 			// Clone the items into the dropdown, and make it click the orginal link
-			$elm.clone().attr("id", $elm.attr("id")+"2").appendTo("#all_touchui_settings .dropdown-menu").find('a').off("click").on("click", function(e) {
-				$elm.find('a').click();
-				$("#all_touchui_settings").addClass("item_active");
-				e.preventDefault();
-				return false;
-			});
+			$elm
+				.clone()
+				.attr("id", $elm.attr("id")+"2")
+				.prependTo("#all_touchui_settings > .dropdown-menu")
+				.find("a")
+				.off("click")
+				.on("click", function(e) {
+					$elm.find('a').click();
+					$("#all_touchui_settings").addClass("item_active");
+					e.preventDefault();
+					return false;
+				});
+
 			$elm.addClass("hidden_touch");
 
 		}.bind(this));

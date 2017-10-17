@@ -8,8 +8,8 @@ TouchUI.prototype.DOM.init = function() {
 	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
 
 	// Move all other items from tabbar into dropdown
-	this.DOM.move.tabbar.init.call(this);
 	this.DOM.move.navbar.init.call(this);
+	this.DOM.move.tabbar.init.call(this);
 	this.DOM.move.afterTabAndNav.call(this );
 	this.DOM.move.overlays.init.call(this);
 	this.DOM.move.terminal.init.call(this);
