@@ -1,43 +1,58 @@
-#tabs {
-	#temp_link {
-		a:after {
+#tabs,
+#navbar #all_touchui_settings {
+	#temp_link,
+	#temp_link2 {
+		a:before {
 			content: "\f0e4";
 		}
 	}
-	#control_link {
-		a:after {
+	#control_link,
+	#control_link2 {
+		a:before {
 			content: "\f11b";
 		}
 	}
-	#gcode_link {
-		a:after {
+	#gcode_link,
+	#gcode_link2 {
+		a:before {
 			content: "\f248";
 		}
 	}
-	#term_link {
-		a:after {
+	#term_link,
+	#term_link2 {
+		a:before {
 			content: "\f120";
 		}
 	}
-	#timelapse_link {
-		a:after {
+	#timelapse_link,
+	#timelapse_link2 {
+		a:before {
 			content: "\f03e";
 		}
 	}
-	#webcam_link {
-		a:after {
+	#webcam_link,
+	#webcam_link2 {
+		a:before {
 			content: "\f030";
-			.rem(font-size, 29);
-			.rem(line-height, 73);
 		}
 	}
-	#print_link {
-		a:after {
+	#print_link,
+	#print_link2 {
+		a:before {
 			content: "\f233";
-			.rem(line-height, 74);
 		}
+	}
+}
+#tabs {
+	#webcam_link {
+		.rem(font-size, 29);
+		.rem(line-height, 73);
 	}
 
+	#print_link {
+		.rem(line-height, 74);
+	}
+	
 	// Pevent FOUT! (not dutch error!)
 	&:first-child {
 		&:before {

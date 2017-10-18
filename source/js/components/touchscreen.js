@@ -16,7 +16,7 @@ TouchUI.prototype.components.touchscreen = {
 		}
 		
 		$('.modal.fade').removeClass('fade');
-		$("#gcode_link").addClass('hidden_touch');
+		$('#gcode_link').remove();
 
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;

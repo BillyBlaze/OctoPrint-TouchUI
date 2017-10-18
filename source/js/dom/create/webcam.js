@@ -2,7 +2,7 @@ TouchUI.prototype.DOM.create.webcam = {
 
 	menu: {
 		webcam: {
-			cloneTo: "#touchui_dropdown_link"
+			cloneTo: "#tabs #control_link"
 		}
 	},
 
@@ -16,10 +16,8 @@ TouchUI.prototype.DOM.create.webcam = {
 	},
 
 	init: function( tabbar ) {
-		var self = this;
-
 		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
-		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertBefore(this.menu.webcam.cloneTo);
+		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertAfter(this.menu.webcam.cloneTo).find('a').text('Webcam');
 
 		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
 		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);

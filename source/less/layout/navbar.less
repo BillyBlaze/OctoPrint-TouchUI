@@ -36,20 +36,20 @@
 							&.item_active {
 								background: @main-background;
 
-								> a:after {
+								> a:before {
 									color: contrast(@main-background);
 								}
 							}
 
-							&.offline > a:after {
+							&.offline > a:before {
 								animation-name: blink_offline;
 							}
 
-							&.online > a:after {
+							&.online > a:before {
 								animation-name: blink_online;
 							}
 
-							> a:after {
+							> a:before {
 								animation-duration: 0.6s;
 								animation-iteration-count: 5;
 								content: "\f0c9";
@@ -89,34 +89,14 @@
 									}
 								}
 
-								&#temp_link2 {
-									a:before {
-										content: "\f0e4";
-									}
-								}
-
-								&#control_link2 {
-									a:before {
-										content: "\f11b";
-									}
-								}
-
-								&#term_link2 {
-									a:before {
-										content: "\f120";
-									}
-								}
-
 								&#timelapse_link2 {
 									a:before {
-										content: "\f03e";
 										.rem(font-size, 18);
 									}
 								}
 
 								&#gcode_link2 {
 									a:before {
-										content: "\f248";
 										.rem(font-size, 17);
 									}
 								}

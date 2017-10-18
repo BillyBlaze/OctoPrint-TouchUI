@@ -26,7 +26,8 @@ TouchUI.prototype = {
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
 
-		whatsNew: ko.observable(false)
+		whatsNew: ko.observable(false),
+		orderTab: ko.observable()
 	},
 
 	core: {},

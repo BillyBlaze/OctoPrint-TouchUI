@@ -26,7 +26,8 @@ TouchUI.prototype = {
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
 
-		whatsNew: ko.observable(false)
+		whatsNew: ko.observable(false),
+		orderTab: ko.observable()
 	},
 
 	core: {},
@@ -586,7 +587,7 @@ TouchUI.prototype.components.touchscreen = {
 		}
 		
 		$('.modal.fade').removeClass('fade');
-		$("#gcode_link").addClass('hidden_touch');
+		$('#gcode_link').remove();
 
 		// Improve performace
 		this.scroll.defaults.iScroll.scrollbars = false;
@@ -914,10 +915,15 @@ TouchUI.prototype.DOM.init = function() {
 	// Create a new persistent dropdown
 	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
 
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+	}
+
 	// Move all other items from tabbar into dropdown
 	this.DOM.move.navbar.init.call(this);
 	this.DOM.move.tabbar.init.call(this);
-	this.DOM.move.afterTabAndNav.call(this );
+	this.DOM.move.afterTabAndNav.call(this);
 	this.DOM.move.overlays.init.call(this);
 	this.DOM.move.terminal.init.call(this);
 
@@ -930,11 +936,6 @@ TouchUI.prototype.DOM.init = function() {
 	// Disable these bootstrap/jquery plugins
 	this.DOM.overwrite.tabdrop.call(self);
 	this.DOM.overwrite.modal.call(self);
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init(this.DOM.create.tabbar);
-	}
 
 	// Add class with how many tab-items
 	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
@@ -1875,7 +1876,7 @@ TouchUI.prototype.DOM.create.webcam = {
 
 	menu: {
 		webcam: {
-			cloneTo: "#touchui_dropdown_link"
+			cloneTo: "#tabs #control_link"
 		}
 	},
 
@@ -1889,10 +1890,8 @@ TouchUI.prototype.DOM.create.webcam = {
 	},
 
 	init: function( tabbar ) {
-		var self = this;
-
 		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
-		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertBefore(this.menu.webcam.cloneTo);
+		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertAfter(this.menu.webcam.cloneTo).find('a').text('Webcam');
 
 		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
 		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
@@ -1990,7 +1989,7 @@ TouchUI.prototype.DOM.move.controls = {
 TouchUI.prototype.DOM.move.navbar = {
 	mainItems: ['#all_touchui_settings', '#navbar_login', '.hidden_touch'],
 	init: function() {
-		
+
 		var $items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
 		var hasTextLinks = false;
 		$($items.get().reverse()).each(function(ind, elm) {
@@ -1998,15 +1997,15 @@ TouchUI.prototype.DOM.move.navbar = {
 
 			if($elm.children('a').length > 0) {
 				var elme = $elm.children('a')[0];
-				
+
 				$elm.prependTo(this.DOM.create.dropdown.container);
-				
+
 				$.each(elme.childNodes, function(key, node) {
 					if(node.nodeName === "#text") {
 						node.nodeValue = node.nodeValue.trim();
 					}
 				});
-				
+
 				if(!$(elme).text()) {
 					$(elme).text($(elme).attr("title"));
 				}
@@ -2031,6 +2030,9 @@ TouchUI.prototype.DOM.move.navbar = {
 			.find('a.dropdown-toggle')
 			.text($('#youcanhazlogin').find('a.dropdown-toggle').text().trim())
 			.attr("data-bind", "visible: !loginState.loggedIn()");
+
+		// Create a fake dropdown link that will be overlapped by settings icon
+		$('<li id="touchui_dropdown_link"><a href="#"></a></li>').appendTo("#tabs");
 		
 		// Create fake TouchUI tabbar and map it to the original dropdown
 		function resizeMenuItem() {
@@ -2067,10 +2069,10 @@ TouchUI.prototype.DOM.move.overlays = {
 
 TouchUI.prototype.DOM.move.tabbar = {
 	init: function() {
-		var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
+		//var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
 
-		var $items = $("#tabs > li:not(#print_link, .hidden_touch)");
-		$($items.splice(howManyToSplice)).each(function(ind, elm) {
+		var $items = $("#tabs > li:not(#print_link, #touchui_dropdown_link, .hidden_touch)");
+		$($items).each(function(ind, elm) {
 			var $elm = $(elm);
 
 			// Clone the items into the dropdown, and make it click the orginal link
@@ -2088,13 +2090,32 @@ TouchUI.prototype.DOM.move.tabbar = {
 				});
 
 			$elm.addClass("hidden_touch");
-
 		}.bind(this));
 
 		$items = $("#tabs > li > a");
 		$items.each(function(ind, elm) {
 			$(elm).text("");
 		}.bind(this));
+
+		$(window).on('resize.tabbar', function() {
+			var width = $('#print_link').width();
+			var winWidth = $(window).width();
+			var items = $('#tabs > li');
+			var itemsFit = Math.ceil(winWidth / width) - 3;
+
+			if (winWidth > (width * 2)) {
+				items.each(function(key, elm) {
+					if (key > itemsFit) {
+						$(elm).addClass('hidden_touch');
+						$('#' + $(elm).attr('id') + '2').removeClass('hidden_touch');
+					} else {
+						$(elm).removeClass('hidden_touch');
+						$('#' + $(elm).attr('id') + '2').addClass('hidden_touch');
+					}
+				});
+			}
+		});
+		$(window).trigger('resize.tabbar');
 
 	}
 }

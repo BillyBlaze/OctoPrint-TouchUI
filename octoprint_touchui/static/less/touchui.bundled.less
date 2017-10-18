@@ -2513,7 +2513,7 @@ text-align: right;
 &:active {
 background: darken(@main-color, 15%);
 }
-&:after {
+&:before {
 .font-icon-reset();
 color: @main-color-text;
 content: '\f128';
@@ -2531,7 +2531,7 @@ font-size: 10vw !important;
 }
 }
 }
-&#touchui_dropdown_link a:after {
+&#touchui_dropdown_link a:before {
 content: none;
 }
 }
@@ -2751,17 +2751,17 @@ display: none;
 }
 &.item_active {
 background: @main-background;
-> a:after {
+> a:before {
 color: contrast(@main-background);
 }
 }
-&.offline > a:after {
+&.offline > a:before {
 animation-name: blink_offline;
 }
-&.online > a:after {
+&.online > a:before {
 animation-name: blink_online;
 }
-> a:after {
+> a:before {
 animation-duration: 0.6s;
 animation-iteration-count: 5;
 content: "\f0c9";
@@ -2794,30 +2794,13 @@ a:before {
 content: "\f1eb";
 }
 }
-&#temp_link2 {
-a:before {
-content: "\f0e4";
-}
-}
-&#control_link2 {
-a:before {
-content: "\f11b";
-}
-}
-&#term_link2 {
-a:before {
-content: "\f120";
-}
-}
 &#timelapse_link2 {
 a:before {
-content: "\f03e";
 .rem(font-size, 18);
 }
 }
 &#gcode_link2 {
 a:before {
-content: "\f248";
 .rem(font-size, 17);
 }
 }
@@ -2995,44 +2978,58 @@ color: @main-color-text;
 }
 }
 }
-#tabs {
-#temp_link {
-a:after {
+#tabs,
+#navbar #all_touchui_settings {
+#temp_link,
+#temp_link2 {
+a:before {
 content: "\f0e4";
 }
 }
-#control_link {
-a:after {
+#control_link,
+#control_link2 {
+a:before {
 content: "\f11b";
 }
 }
-#gcode_link {
-a:after {
+#gcode_link,
+#gcode_link2 {
+a:before {
 content: "\f248";
 }
 }
-#term_link {
-a:after {
+#term_link,
+#term_link2 {
+a:before {
 content: "\f120";
 }
 }
-#timelapse_link {
-a:after {
+#timelapse_link,
+#timelapse_link2 {
+a:before {
 content: "\f03e";
 }
 }
-#webcam_link {
-a:after {
+#webcam_link,
+#webcam_link2 {
+a:before {
 content: "\f030";
+}
+}
+#print_link,
+#print_link2 {
+a:before {
+content: "\f233";
+}
+}
+}
+#tabs {
+#webcam_link {
 .rem(font-size, 29);
 .rem(line-height, 73);
 }
-}
 #print_link {
-a:after {
-content: "\f233";
 .rem(line-height, 74);
-}
 }
 &:first-child {
 &:before {
