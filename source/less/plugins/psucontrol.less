@@ -1,3 +1,13 @@
-#navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings li #psucontrol_indicator:before {
-	content: '\f0e7';
+#navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings li #psucontrol_indicator {
+    &:before {
+        content: '\f0e7';
+    }
+
+    &.on {
+        color: #00FF00;
+    }
+
+    &.off {
+        color: #808080;
+    }
 }
