@@ -9,7 +9,7 @@ TouchUI.prototype.core.version = {
 
 			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
 
-				touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
+				var touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
 					return (elm.key === "touchui");
 				}, true) || false;
 

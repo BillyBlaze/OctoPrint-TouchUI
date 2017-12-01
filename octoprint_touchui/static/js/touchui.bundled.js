@@ -26,8 +26,7 @@ TouchUI.prototype = {
 		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
 		touchuiModal: $('#touchui_settings_dialog'),
 
-		whatsNew: ko.observable(false),
-		orderTab: ko.observable()
+		whatsNew: ko.observable(false)
 	},
 
 	core: {},
@@ -610,6 +609,7 @@ TouchUI.prototype.components.touchscreen = {
 				console.info("TouchUI: GCodeViewer is disabled while TouchUI is active and in touchscreen mode.");
 				viewModels.gcodeViewModel.enabled = false;
 				viewModels.gcodeViewModel.initialize = _.noop;
+				viewModels.gcodeViewModel.clear = _.noop;
 				viewModels.gcodeViewModel._processData = _.noop;
 			}
 		}
@@ -733,6 +733,18 @@ TouchUI.prototype.core.bridge = function() {
 			if (self.isActive()) {
 				self.scroll.beforeLoad.call(self);
 				self.DOM.init.call(self);
+
+				if (moment && moment.locale) {
+					// Overwrite the 'moment.locale' fuction and call original:
+					// The purpose is that we want to remove data before
+					// registering it to OctoPrint. Moment.locale is called
+					// just before this happens.
+					var old = moment.locale;
+					moment.locale = function() {
+						self.plugins.tempsGraph.call(self);
+						old.apply(moment, arguments);
+					};
+				}
 			}
 		},
 
@@ -751,7 +763,6 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
-				self.plugins.tempsGraph.call(self);
 			}
 		},
 
@@ -880,7 +891,7 @@ TouchUI.prototype.core.version = {
 
 			softwareUpdateViewModel.versions.items.subscribe(function(changes) {
 
-				touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
+				var touchui = softwareUpdateViewModel.versions.getItem(function(elm) {
 					return (elm.key === "touchui");
 				}, true) || false;
 
@@ -1471,7 +1482,6 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 };
 
 TouchUI.prototype.plugins.tempsGraph = function() {
-
 	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
 		if (obj[0] && obj[0].name === "TempsgraphViewModel") {
 			console.info("TouchUI: TempsGraph is disabled while TouchUI is active.");

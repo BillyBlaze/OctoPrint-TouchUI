@@ -3245,6 +3245,9 @@ margin-right: 30px;
 span {
 display: block !important;
 padding: 10px 0 0 0 !important;
++ span {
+display: none !important;;
+}
 }
 }
 &.pull-right {
@@ -5368,9 +5371,7 @@ padding: 0 @main-gutter 0;
 .flex-display(flex);
 .flex-direction(row);
 .flex-wrap(nowrap);
-.justify-content(flex-start);
-.align-content(stretch);
-.align-items(flex-start);
+.justify-content(space-between);
 ul {
 color: mix(@main-background, contrast(@main-background), 50%);
 .flex-order(0);
@@ -5381,6 +5382,7 @@ color: mix(@main-background, contrast(@main-background), 50%);
 .flex(1 1 auto);
 .align-self(auto);
 overflow: hidden;
+max-width: 100%;
 li {
 display: block;
 small {

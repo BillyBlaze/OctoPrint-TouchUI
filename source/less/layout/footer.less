@@ -10,9 +10,7 @@
 	.flex-display(flex);
 	.flex-direction(row);
 	.flex-wrap(nowrap);
-	.justify-content(flex-start);
-	.align-content(stretch);
-	.align-items(flex-start);
+	.justify-content(space-between);
 
 	ul {
 		color: mix(@main-background, contrast(@main-background), 50%);
@@ -26,6 +24,7 @@
 			.flex(1 1 auto);
 			.align-self(auto);
 			overflow: hidden;
+			max-width: 100%;
 
 			li {
 				display: block;

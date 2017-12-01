@@ -26,6 +26,18 @@ TouchUI.prototype.core.bridge = function() {
 			if (self.isActive()) {
 				self.scroll.beforeLoad.call(self);
 				self.DOM.init.call(self);
+
+				if (moment && moment.locale) {
+					// Overwrite the 'moment.locale' fuction and call original:
+					// The purpose is that we want to remove data before
+					// registering it to OctoPrint. Moment.locale is called
+					// just before this happens.
+					var old = moment.locale;
+					moment.locale = function() {
+						self.plugins.tempsGraph.call(self);
+						old.apply(moment, arguments);
+					};
+				}
 			}
 		},
 
@@ -44,7 +56,6 @@ TouchUI.prototype.core.bridge = function() {
 				self.components.slider.init.call(self);
 
 				self.scroll.init.call(self);
-				self.plugins.tempsGraph.call(self);
 			}
 		},
 
