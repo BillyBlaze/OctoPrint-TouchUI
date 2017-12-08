@@ -30,7 +30,7 @@ TouchUI.prototype.core.init = function() {
 
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.settings.hasTouch) {
+			if (!this.settings.hasTouch || this.settings.isChromiumArm) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -43,8 +43,22 @@ TouchUI.prototype.core.init = function() {
 		}
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
-		if ((this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm && this.DOM.storage.get("touchscreenActive") === undefined) || this.DOM.storage.get("touchscreenActive")) {
+		if (
+			(
+				this.settings.isEpiphanyOrKweb || 
+				this.settings.isChromiumArm && 
+				this.DOM.storage.get("touchscreenActive") === undefined
+			) || 
+			this.DOM.storage.get("touchscreenActive")
+		) {
 			this.components.touchscreen.init.call(this);
+		}
+
+		// If TouchUI has been started through bootloader then initialize the process during reloads
+		if (this.settings.isChromiumArm && window.top.postMessage) {
+			window.onbeforeunload = function(event) {
+				window.top.postMessage("reset", "*");
+			};
 		}
 
 		// Get state of cookies and store them in KO
