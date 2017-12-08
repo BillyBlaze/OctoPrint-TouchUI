@@ -160,7 +160,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		if (window.top.postMessage) {
 			// Tell bootloader we're ready with giving him the expected version for the bootloader
 			// if version is lower on the bootloader, then the bootloader will throw an update msg
-			window.top.postMessage(1, "*");
+			window.top.postMessage(self.settings.requiredBootloaderVersion, "*");
 			
 			// Sync customization with bootloader
 			window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
