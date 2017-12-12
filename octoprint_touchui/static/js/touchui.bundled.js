@@ -12,7 +12,7 @@ TouchUI.prototype = {
 	settings: {
 		id: "touch",
 		version: 0,
-		bootloadVersion: 2,
+		requiredBootloaderVersion: 2,
 
 		isFullscreen: ko.observable(false),
 		isTouchscreen: ko.observable(false),
@@ -1174,7 +1174,7 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 		}
 
 		// Prevent user from double clicking in a short period on buttons
-		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle, .btn-input-inc, .btn-input-dec)", function(e) {
+		$(document).on("click", "button:not(#login_button, .box, .distance, .dropdown-toggle, .btn-input-inc, .btn-input-dec, .temperature_target .btn-group button)", function(e) {
 			var printer = $(e.target);
 			printer.prop('disabled', true);
 
@@ -1382,7 +1382,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		if (window.top.postMessage) {
 			// Tell bootloader we're ready with giving him the expected version for the bootloader
 			// if version is lower on the bootloader, then the bootloader will throw an update msg
-			window.top.postMessage(self.settings.bootloadVersion, "*");
+			window.top.postMessage(self.settings.requiredBootloaderVersion, "*");
 			
 			// Sync customization with bootloader
 			window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
@@ -2068,6 +2068,11 @@ TouchUI.prototype.DOM.move.navbar = {
 			setTimeout(function() {
 				var width = $('#print_link').width();
 				$('#all_touchui_settings').width(width);
+			}, 100);
+
+			setTimeout(function() {
+				var width = $('#print_link').width();
+				$('#all_touchui_settings').width(width);
 			}, 600);
 		}
 		$(window).on('resize.touchui.navbar', resizeMenuItem);
@@ -2122,8 +2127,8 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$items.each(function(ind, elm) {
 			$(elm).text("");
 		}.bind(this));
-
-		$(window).on('resize.tabbar', function() {
+		
+		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
 			var items = $('#tabs > li');
@@ -2140,8 +2145,12 @@ TouchUI.prototype.DOM.move.tabbar = {
 					}
 				});
 			}
-		});
-		$(window).trigger('resize.tabbar');
+		}
+
+		$(window).on('resize.touchui.tabbar', resize);
+		$(window).on('resize.touchui.tabbar', _.debounce(resize, 200));
+		$(window).on('resize.touchui.tabbar', _.debounce(resize, 600));
+		resize();
 
 	}
 }
