@@ -4708,10 +4708,10 @@ max-height: 75px;
 }
 .ui-keyboard-right,
 .ui-keyboard-left {
+color: @keyboard-background;
 position: absolute;
 top: 4px;
 right: 40px;
-color: @input-text-color;
 width: 30px;
 &:active, &.touch-focus {
 position: absolute;
@@ -4931,9 +4931,11 @@ min-height: 70px;
 }
 .ui-keyboard-preview {
 background: contrast(@keyboard-background);
+color: @keyboard-background;
 text-align: left;
 display: block !important;
 width: 100% !important;
+height: auto !important;
 padding: 0 15px;
 line-height: 2.3rem;
 .box-sizing(border-box);
