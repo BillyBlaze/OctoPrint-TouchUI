@@ -54,6 +54,11 @@ TouchUI.prototype.DOM.move.navbar = {
 			setTimeout(function() {
 				var width = $('#print_link').width();
 				$('#all_touchui_settings').width(width);
+			}, 100);
+
+			setTimeout(function() {
+				var width = $('#print_link').width();
+				$('#all_touchui_settings').width(width);
 			}, 600);
 		}
 		$(window).on('resize.touchui.navbar', resizeMenuItem);

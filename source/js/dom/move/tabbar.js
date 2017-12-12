@@ -27,8 +27,8 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$items.each(function(ind, elm) {
 			$(elm).text("");
 		}.bind(this));
-
-		$(window).on('resize.tabbar', function() {
+		
+		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
 			var items = $('#tabs > li');
@@ -45,8 +45,12 @@ TouchUI.prototype.DOM.move.tabbar = {
 					}
 				});
 			}
-		});
-		$(window).trigger('resize.tabbar');
+		}
+
+		$(window).on('resize.touchui.tabbar', resize);
+		$(window).on('resize.touchui.tabbar', _.debounce(resize, 200));
+		$(window).on('resize.touchui.tabbar', _.debounce(resize, 600));
+		resize();
 
 	}
 }
