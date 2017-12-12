@@ -23,7 +23,6 @@ Read more [configuration options](https://github.com/BillyBlaze/OctoPrint-TouchU
 You can change 4 main colors of the interface with the power of LESS. If you would like to change more colors, then you're free to add your own LESS file. [Read more about this and the variables](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Customize:-Use-your-own-file) on our wiki.
 
 ## Supported browsers
-1. Kweb3 & Epiphany
 1. Chrome 30+
 1. Firefox 40+
 1. Safari Mobile
