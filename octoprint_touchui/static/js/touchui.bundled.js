@@ -366,6 +366,10 @@ TouchUI.prototype.components.keyboard = {
 	},
 
 	onShow: function(event, keyboard, el) {
+		// Set
+		var prev = keyboard.$preview.get(0);
+		prev.selectionStart = prev.selectionEnd = prev.value.length;
+		
 		keyboard.$keyboard.find("button").on("mousedown", function(e) {
 			$(e.target).addClass("touch-focus");
 
