@@ -12,7 +12,7 @@ TouchUI.prototype = {
 	settings: {
 		id: "touch",
 		version: 0,
-		requiredBootloaderVersion: 2,
+		requiredBootloaderVersion: 1,
 
 		isFullscreen: ko.observable(false),
 		isTouchscreen: ko.observable(false),
@@ -961,8 +961,9 @@ TouchUI.prototype.DOM.init = function() {
 	this.DOM.move.controls.init();
 
 	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(self);
-	this.DOM.overwrite.modal.call(self);
+	this.DOM.overwrite.tabdrop.call(this);
+	this.DOM.overwrite.modal.call(this);
+	this.DOM.overwrite.pnotify.call(this);
 
 	// Add class with how many tab-items
 	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
@@ -2190,6 +2191,17 @@ TouchUI.prototype.DOM.overwrite.modal = function() {
 	$.fn.modal.prototype = { constructor: $.fn.modal };
 	$.fn.modal.Constructor = $.fn.modal;
 	$.fn.modal.defaults = $.fn.modalBup.defaults;
+
+}
+
+TouchUI.prototype.DOM.overwrite.pnotify = function() {
+
+	// Force the webcam tab to load the webcam feed that original is located on the controls tab
+	if(!this.settings.hasTouch) {
+		var tmp = PNotify.prototype.options.stack;
+		tmp.context = $('#scroll .page-container');
+		PNotify.prototype.options.stack = tmp;
+	}
 
 }
 

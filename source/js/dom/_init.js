@@ -26,8 +26,9 @@ TouchUI.prototype.DOM.init = function() {
 	this.DOM.move.controls.init();
 
 	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(self);
-	this.DOM.overwrite.modal.call(self);
+	this.DOM.overwrite.tabdrop.call(this);
+	this.DOM.overwrite.modal.call(this);
+	this.DOM.overwrite.pnotify.call(this);
 
 	// Add class with how many tab-items
 	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
