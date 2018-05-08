@@ -5,6 +5,7 @@ exemptLabels:
   - up for grabs
   - fixed
   - confirmed
+  - pending
 staleLabel: inactive
 markComment: >
   This issue has been automatically marked as inactive because it has not had
