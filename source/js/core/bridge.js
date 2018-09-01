@@ -35,6 +35,7 @@ TouchUI.prototype.core.bridge = function() {
 					var old = moment.locale;
 					moment.locale = function() {
 						self.plugins.tempsGraph.call(self);
+						self.plugins.webcamTab.call(self);
 						old.apply(moment, arguments);
 					};
 				}

@@ -766,6 +766,7 @@ TouchUI.prototype.core.bridge = function() {
 					var old = moment.locale;
 					moment.locale = function() {
 						self.plugins.tempsGraph.call(self);
+						self.plugins.webcamTab.call(self);
 						old.apply(moment, arguments);
 					};
 				}
@@ -1508,9 +1509,23 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 };
 
 TouchUI.prototype.plugins.tempsGraph = function() {
+
 	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
 		if (obj[0] && obj[0].name === "TempsgraphViewModel") {
 			console.info("TouchUI: TempsGraph is disabled while TouchUI is active.");
+			return true;
+		}
+		
+		return false;
+	});
+
+}
+
+TouchUI.prototype.plugins.webcamTab = function() {
+
+	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
+		if (obj[0] && obj[0].construct && obj[0].construct.name === "WebcamTabViewModel") {
+			console.info("TouchUI: WebcamTab is disabled while TouchUI is active.");
 			return true;
 		}
 		
