@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tiny Colorpicker: A lightweight cross browser color picker.</title>
+    <link rel="stylesheet" href="tinycolorpicker.css" type="text/css" media="screen"/>
+
+    <!-- build:js tinycolorpicker.js -->
+    <script type="text/javascript" src="../../lib/tinycolorpicker.js"></script>
+    <!-- /build -->
+    <script type="text/javascript">
+        window.onload = function()
+        {
+            // The plain javascript api is very similar to the jquery version with some exceptions.
+            // There is no chaining like in the jquery api. So when you create a instance it
+            // will return all methods and properties.
+            //
+            var $picker = document.getElementById("colorPicker")
+            ,   picker  = tinycolorpicker($picker)
+            ;
+        }
+    </script>
+</head>
+<body>
+    <div id="colorPicker">
+        <a class="color"><div class="colorInner"></div></a>
+        <div class="track"></div>
+        <ul class="dropdown"><li></li></ul>
+        <input type="hidden" class="colorInput"/>
+    </div>
+</body>
+</html>

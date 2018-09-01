@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Tiny Colorpicker: A lightweight cross browser color picker.</title>
+
+        <meta charset="utf-8">
+        <meta name="robots" content="all" />
+        <meta name="description" content="Tiny Colorpicker is a lightweight jQuery based content slider." />
+        <meta name="keywords" content="lightweight, jQuery, colorpicker, colors, javascript, web 2.0, User Interface" />
+        <meta name="author" content="Maarten baijs" />
+        <meta name="copyright" content="" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, target-densitydpi=device-dpi" />
+
+        <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+        <!-- build:[href] css/ -->
+        <link rel="stylesheet" href="../node_modules/baijs/css/website.css" type="text/css" media="screen"/>
+        <!-- /build -->
+        <link rel="stylesheet" href="css/tinycolorpicker.css" type="text/css" media="screen"/>
+
+        <!--[if lte IE 8]>
+            <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6/html5shiv.min.js"></script>
+        <![endif]-->
+
+        <!-- build:[href] css/ -->
+        <!--[if lte IE 7]>
+            <link rel="stylesheet" href="../node_modules/baijs/css/website_ie.css" type="text/css" media="screen"/>
+        <![endif]-->
+        <!-- /build -->
+
+        <!--[if lte IE 5]>
+            <script type="text/javascript"> function handleError() { return true; } window.onerror = handleError; </script>
+        <![endif]-->
+
+        <script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"></script>
+        <!-- build:[src] js/ -->
+        <script type="text/javascript" src="../lib/jquery.tinycolorpicker.js"></script>
+        <!-- /build -->
+
+        <!-- build:[src] js/ -->
+        <script type="text/javascript" src="../node_modules/baijs/js/prettify.js"></script>
+        <script type="text/javascript" src="../node_modules/baijs/js/website.js"></script>
+        <!-- /build -->
+        <script type="text/javascript">window.google_analytics_uacct = "UA-4459599-4";</script>
+    </head>
+
+    <body>
+
+    <!-- OPEN WRAPPER -->
+    <div id="wrapper">
+
+        <header id="header">
+            <h1>Tiny Colorpicker</h1>
+            <span class="slogan"> A lightweight cross browser color picker.</span>
+
+            <section class="download">
+                <a href="tinycolorpicker-<%= version %>.zip" class="btn">Download v<%= version %></a>
+                <p>The latest source is available on <a href="https://github.com/wieringen/tinycolorpicker">GitHub</a>.</p>
+            </section>
+        </header>
+
+        <nav id="menu-primary" class="menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="../tinycarousel">Tiny Carousel</a></li>
+                <li><a href="../tinyscrollbar">Tiny Scrollbar</a></li>
+                <li><a href="../tinycircleslider">Tiny Circleslider</a></li>
+                <li><a href="../tinycolorpicker" class="active">Tiny Colorpicker</a></li>
+            </ul>
+
+            <select>
+                <option value="" selected="selected">Go to..</option>
+                <option value="/">Home</option>
+                <option value="../tinycarousel">Tiny Carousel</option>
+                <option value="../tinyscrollbar">Tiny Scrollbar</option>
+                <option value="../tinycircleslider">Tiny Circleslider</option>
+                <option value="../tinycolorpicker">Tiny Colorpicker</option>
+                <option value="../model-train-speedometer">Model Train Speedometer</option>
+            </select>
+        </nav>
+
+        <article id="col-main">
+
+            <section class="block">
+                <!-- google_ad_section_start -->
+                <h2>What is it?</h2>
+                <p>Tiny Colorpicker is a crossbrowser lib that creates a color picker (form) input. Its a easy way to add color pickers to your forms or user interface.</p>
+                <p>It comes in 2 flavours as a <strong>vanilla Javascript microlib</strong> and as a <strong>jQuery plugin</strong>.</p>
+                <p>Browser support differs between the jQuery plugin and the plain Javascript microlib. Specifically, the plain Javascript microlib does not support legacy browsers such as IE6-8. Use the jQuery plugin release if support for those browsers is required.</p>
+
+                <!-- google_ad_section_end -->
+
+
+                <!-- AddThis Button BEGIN -->
+                <div class="addthis_toolbox addthis_default_style ">
+                    <a class="addthis_button_facebook"></a>
+                    <a class="addthis_button_twitter"></a>
+                    <a class="addthis_button_delicious"></a>
+                </div>
+                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4ce416993f847623"></script>
+                <!-- AddThis Button END -->
+            </section>
+
+            <section class="block">
+                <h2>Features</h2>
+                <ul class="list">
+                    <li><strong>IOS, Android and Windows Phone support.</strong></li>
+                    <li><strong>Available as a jQuery plugin and as a vanilla Javascript microlib.</strong></li>
+                    <li>AMD, Node, requirejs and commonjs support.</li>
+                    <li>Easy customizable</li>
+                    <li>Can be used inside forms or outside</li>
+                    <li>Lightweight</li>
+                    <li><a href="https://github.com/wieringen/tinycolorpicker">Source is on GitHub</a></li>
+                </ul>
+            </section>
+
+            <section class="block">
+                <h2>Examples</h2>
+                <p>The examples below are all for the jQuery Plugin. You can find some more (advanced and simple) <a href="examples">examples here</a>. You can also find a example for the plain javascript library there.</p>
+                <p>The example below is the most basic version. The colors are just a image that is taken from the css and drawn to a canvas. So you are completely free in how your picker looks and how its styled.</p>
+
+                <div id="colorPicker1">
+                    <a class="color"><div class="colorInner"></div></a>
+                    <div class="track"></div>
+                    <ul class="dropdown"><li></li></ul>
+                    <input type="hidden" class="colorInput"/>
+                </div>
+
+                <script type="text/javascript">
+                    $(document).ready(function()
+                    {
+                        $("#colorPicker1").tinycolorpicker();
+                    });
+                </script>
+
+                <pre class="prettyprint"><code>
+$(document).ready(function()
+{
+    $("#colorpicker1").tinycolorpicker();
+});
+                </code></pre>
+
+                <p>The example below is to make clear that it can pick colors from any image in any shape or form you want. The image is taken from stylesheet.</p>
+                <div id="colorPicker2">
+                    <a class="color"><div class="colorInner"></div>Color :</a>
+                    <div class="track"></div>
+                    <ul class="dropdown"><li></li></ul>
+                    <input type="hidden" class="colorInput"/>
+                </div>
+
+                <script type="text/javascript">
+                    $(document).ready(function()
+                    {
+                        $("#colorPicker2").tinycolorpicker();
+                    });
+                </script>
+
+                <pre class="prettyprint"><code>
+$(document).ready(function()
+{
+    $("#colorpicker2").tinycolorpicker();
+});
+                    </code></pre>
+
+                <p>The example below is to show how to use the setColor method.</p>
+                    <div id="colorPicker3">
+                    <a class="color"><div class="colorInner"></div></a>
+                    <div class="track"></div>
+                    <ul class="dropdown"><li></li></ul>
+                    <input type="hidden" class="colorInput"/>
+                </div>
+
+                <script type="text/javascript">
+                    $(document).ready(function()
+                    {
+                        $("#colorPicker3").tinycolorpicker();
+                        var picker = $('#colorPicker3').data("plugin_tinycolorpicker");
+
+                        picker.setColor("#FF45CC");
+                    });
+                </script>
+
+                <pre class="prettyprint"><code>
+$(document).ready(function()
+{
+    $("#colorPicker3").tinycolorpicker();
+    var picker = $('#colorPicker3').data("plugin_tinycolorpicker");
+
+    picker.setColor("#FF45CC");
+});
+                    </code></pre>
+            </section>
+
+            <section class="block">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Responsive -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-6364750078473156"
+                     data-ad-slot="7734741654"
+                     data-ad-format="auto"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </section>
+
+            <section class="block">
+                <!-- build:include ../../docs/technical/generated/classes/tinycolorpicker.html -->
+                <p>The generated API docs will be included here.</p>
+                <!-- /build -->
+            </section>
+
+            <section class="block">
+                <h2>Usage</h2>
+                <pre class="prettyprint"><code>
+$(document).ready(function()
+{
+    // Initialize a colorpicker like this.
+    //
+    var $box = $('#box');
+    $box.tinycolorpicker();
+
+    // Try this to get access to the actual colorpicker instance.
+    //
+    var box = $box.data("plugin_tinycolorpicker");
+
+    // Now you have access to all the methods and properties.
+    //
+    // box.setColor("#cccccc");
+    // console.log(box.colorRGB);
+    //
+    // etc..
+
+    // You can bind to the change event like this.
+    //
+    $box.bind("change", function()
+    {
+        console.log("do something when a new color is set");
+    });
+});
+                </code></pre>
+            </section>
+        </article>
+
+        <aside id="col-right">
+            <section class="block">
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Responsive2 -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-6364750078473156"
+                     data-ad-slot="6807908455"
+                     data-ad-format="auto"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </section>
+
+            <section class="block">
+                <h2>Other projects</h2>
+
+                <nav id="menu-secondary" class="menu">
+                    <ul class="block-menu">
+                        <li><a href="../model-train-speedometer">Model Train Speedometer</a></li>
+                    </ul>
+                </nav>
+            </section>
+
+            <section class="block">
+                <h2>License</h2>
+
+                <p>Tinycolorpicker is a free script its licensed under the MIT license. However a donation for my labor of love is greatly appreciated :) </p>
+                <p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" class="beer">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
+                    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" src="https://www.paypal.com/nl_NL/i/scr/pixel.gif" width="1" height="1" />
+                </form></p>
+            </section>
+
+            <section class="block">
+                <h2>Support</h2>
+                <p> For a small fee I can help you implement the script in your project. Missing any features? I can build them for you <span id="mcon"></span></p>
+            </section>
+        </aside>
+
+        <footer id="footer">&copy; <a href="/">Maarten Baijs</a> 2009-2014</footer>
+    </div>
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-4459599-4']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+</html>

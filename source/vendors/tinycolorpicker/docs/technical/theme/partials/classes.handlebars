@@ -1,0 +1,42 @@
+{{#is_constructor}}
+    <h2>Constructor</h2>
+    <table class="constructor">
+        {{>method}}
+    </table>
+{{/is_constructor}}
+
+{{#if properties}}
+    <h2>Properties</h2>
+    <table>
+        {{#properties}}
+            {{>props}}
+        {{/properties}}
+    </table>
+{{/if}}
+
+{{#if attrs}}
+    <h2>Attributes</h2>
+    <table>
+        {{#attrs}}
+            {{>attrs}}
+        {{/attrs}}
+    </table>
+{{/if}}
+
+{{#if methods}}
+    <h2>Methods</h2>
+    <table>
+        {{#methods}}
+            {{>method}}
+        {{/methods}}
+    </table>
+{{/if}}
+
+{{#if events}}
+    <h2>Events</h2>
+    <table>
+        {{#events}}
+            {{>events}}
+        {{/events}}
+    </table>
+{{/if}}
