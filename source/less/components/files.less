@@ -85,9 +85,18 @@
 			display: none;
 		}
 
+		// Depracated 1.3.9
 		.slimScrollDiv {
 			margin: 0 -@main-gutter 10px;
 			height: auto !important;
+			clear: both;
+		}
+		
+		// Introduced 1.3.9
+		.scroll-wrapper {
+			margin: 0 -@main-gutter 10px;
+			height: auto !important;
+			overflow: visible;
 			clear: both;
 		}
 

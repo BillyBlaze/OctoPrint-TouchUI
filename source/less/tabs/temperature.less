@@ -3,6 +3,17 @@
 	margin-right: -@main-gutter;
 	overflow: hidden;
 
+	position: absolute;
+	left: -99999px;
+	top: -99999px;
+	display: block;
+
+	&.active {
+		position: relative;
+		left: auto;
+		top: auto;
+	}
+
 	> div:first-child {
 		.box-sizing(border-box);
 		overflow: hidden;
@@ -19,8 +30,6 @@
 			.box-sizing(border-box);
 			position: relative;
 
-			//background: transparent;
-			//background-image: url("/static/img/graph-background.png");
 			background-position: center 37%;
 			background-repeat: no-repeat;
 			background-size: auto 80%;
@@ -37,10 +46,10 @@
 				height: 112%;
 			}
 
-			canvas {
+			/*canvas {
 				width: 100% !important;
 				height: 100% !important;
-			}
+			}*/
 
 			.tickLabel, .legendLabel {
 				color: contrast(@main-background);
