@@ -9,4 +9,5 @@ dist
 *.zip
 node_modules
 octoprint_touchui/WHATSNEW.md
+!source/vendors/tinycolorpicker/*
 source/vendors/

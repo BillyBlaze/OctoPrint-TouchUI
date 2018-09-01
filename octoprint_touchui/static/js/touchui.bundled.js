@@ -864,7 +864,7 @@ TouchUI.prototype.core.less = {
 							self.settings.refreshCSS(true);
 							$(window).trigger('resize');
 						})
-						.error(function(error) {
+						.fail(function(error) {
 							self.core.less.error.call(self, error);
 						});
 
