@@ -4232,6 +4232,7 @@ border: 0 none !important;
 touch-action: pan-y;
 }
 #files_wrapper {
+position: relative;
 .accordion-heading {
 display: block;
 pointer-events: none;
@@ -4285,6 +4286,13 @@ position: relative;
 a {
 &:after {
 content: "\f021";
+}
+}
+}
+.upload-trigger {
+a {
+&:after {
+content: "\f093";
 }
 }
 }
@@ -4397,10 +4405,19 @@ div:not(.title) {
 transition: color 0.7s ease;
 color: fade(contrast(@swipe-list-background-color), 70%);
 }
+&.back {
+margin: 0 -@main-gutter;
+}
 &.back, &.folder {
+cursor: default;
+&.clickable {
 cursor: pointer;
+}
 .title {
 color: contrast(@swipe-list-background-color);
+}
+.btn {
+top: 10px !important;
 }
 }
 .additionalInfo {

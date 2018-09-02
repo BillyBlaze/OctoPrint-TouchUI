@@ -4,6 +4,7 @@
 }
 
 #files_wrapper {
+	position: relative;
 
 	.accordion-heading {
 		display: block;
@@ -71,6 +72,14 @@
 			a {
 				&:after {
 					content: "\f021";
+				}
+			}
+		}
+
+		.upload-trigger {
+			a {
+				&:after {
+					content: "\f093";
 				}
 			}
 		}
@@ -209,11 +218,23 @@
 					color: fade(contrast(@swipe-list-background-color), 70%);
 				}
 
+				&.back {
+					margin: 0 -@main-gutter;
+				}
+
 				&.back, &.folder {
-					cursor: pointer;
+					cursor: default;
+
+					&.clickable {
+						cursor: pointer;
+					}
 
 					.title {
 						color: contrast(@swipe-list-background-color);
+					}
+
+					.btn {
+						top: 10px !important;
 					}
 				}
 
