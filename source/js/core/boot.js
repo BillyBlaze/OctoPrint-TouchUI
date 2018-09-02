@@ -11,15 +11,14 @@ TouchUI.prototype.core.boot = function() {
 		return true;
 
 	} else if(
-		this.settings.canLoadAutomatically &&
 		this.DOM.storage.get("active") !== false
 	) {
 
-		if($(window).width() < 980) {
+		if($(window).width() < 980 && this.settings.canBoot.resolution) {
 			return true;
 		}
 
-		if(this.settings.hasTouch) {
+		if(this.settings.hasTouch && this.settings.canBoot.touch) {
 			return true;
 		}
 

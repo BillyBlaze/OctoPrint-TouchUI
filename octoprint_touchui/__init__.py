@@ -52,9 +52,14 @@ class touchui_core(	touchui_api,
 			dict(type="generic", template="touchui_load_css.jinja2", custom_bindings=False)
 		]
 
-		if self._settings.get(["automaticallyLoad"]):
+		if self._settings.get(["automaticallyLoadResolution"]):
 			files.append(
-				dict(type="generic", template="touchui_auto_load.jinja2", custom_bindings=False)
+				dict(type="generic", template="touchui_auto_load_resolution.jinja2", custom_bindings=False)
+			)
+
+		if self._settings.get(["automaticallyLoadTouch"]):
+			files.append(
+				dict(type="generic", template="touchui_auto_load_touch.jinja2", custom_bindings=False)
 			)
 
 		return files
@@ -62,7 +67,8 @@ class touchui_core(	touchui_api,
 	def get_settings_defaults(self):
 		return dict(
 			hasVisibleSettings=True,
-			automaticallyLoad=True,
+			automaticallyLoadResolution=True,
+			automaticallyLoadTouch=True,
 			useCustomization=False,
 			colors=dict(
 				mainColor="#00B0FF",

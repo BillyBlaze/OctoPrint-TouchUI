@@ -24,7 +24,11 @@ TouchUI.prototype = {
 		hasLocalStorage: ('localStorage' in window),
 		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
 
-		canLoadAutomatically: ($("#loadsomethingsomethingdarkside").length > 0),
+		canBoot: {
+			resolution: $("#loadsomethingsomethingdarkside_resolution").length > 0,
+			touch: $("#loadsomethingsomethingdarkside_touch").length > 0
+		},
+
 		touchuiModal: $('#touchui_settings_dialog'),
 
 		whatsNew: ko.observable(false)
@@ -711,15 +715,14 @@ TouchUI.prototype.core.boot = function() {
 		return true;
 
 	} else if(
-		this.settings.canLoadAutomatically &&
 		this.DOM.storage.get("active") !== false
 	) {
 
-		if($(window).width() < 980) {
+		if($(window).width() < 980 && this.settings.canBoot.resolution) {
 			return true;
 		}
 
-		if(this.settings.hasTouch) {
+		if(this.settings.hasTouch && this.settings.canBoot.touch) {
 			return true;
 		}
 

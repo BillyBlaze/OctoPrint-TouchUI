@@ -12,7 +12,13 @@
 
 		<div class="controls">
 			<label class="checkbox">
-				<input type="checkbox" data-bind="checked: settings.automaticallyLoad"> Start TouchUI automatically onload based on resolution or touch device.
+				<input type="checkbox" data-bind="checked: settings.automaticallyLoadResolution"> Start TouchUI automatically onload based on resolution.
+			</label>
+		</div>
+
+		<div class="controls">
+			<label class="checkbox">
+				<input type="checkbox" data-bind="checked: settings.automaticallyLoadTouch"> Start TouchUI automatically onload based on touch device.
 			</label>
 		</div>
 
