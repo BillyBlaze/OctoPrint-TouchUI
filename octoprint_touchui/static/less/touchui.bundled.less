@@ -2983,6 +2983,14 @@ color: @main-color-text;
 }
 #tabs,
 #navbar #all_touchui_settings {
+#navbar_plugin_pi_support {
+a:before {
+content: none;
+}
+span {
+margin-left: 5px;
+}
+}
 #temp_link,
 #temp_link2 {
 a:before {
@@ -5340,6 +5348,35 @@ color: @main-color-dark-text;
 }
 }
 }
+}
+}
+.popover {
+background: @main-color;
+color: @main-color-text;
+border-color: @main-color-dark;
+padding: 0;
+border-radius: 0;
+&-title {
+background: @main-color-dark;
+border-bottom-color: @main-color-dark;
+color: @main-color-dark-text;
+font-weight: bold;
+border-radius: 0;
+}
+&-content {
+padding: 6px 0;
+}
+&.bottom .arrow:after {
+border-bottom-color: @main-color-dark;
+}
+&.top .arrow:after {
+border-top-color: @main-color-dark;
+}
+&.left .arrow:after {
+border-left-color: @main-color-dark;
+}
+&.right .arrow:after {
+border-right-color: @main-color-dark;
 }
 }
 #navbar_plugin_navbartemp {

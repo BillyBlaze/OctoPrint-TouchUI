@@ -1,0 +1,35 @@
+.popover {
+	background: @main-color;
+	color: @main-color-text;
+	border-color: @main-color-dark;
+	padding: 0;
+	border-radius: 0;
+
+	&-title {
+		background: @main-color-dark;
+		border-bottom-color: @main-color-dark;
+		color: @main-color-dark-text;
+		font-weight: bold;
+		border-radius: 0;
+	}
+
+	&-content {
+		padding: 6px 0;
+	}
+
+	&.bottom .arrow:after {
+		border-bottom-color: @main-color-dark;
+	}
+
+	&.top .arrow:after {
+		border-top-color: @main-color-dark;
+	}
+
+	&.left .arrow:after {
+		border-left-color: @main-color-dark;
+	}
+
+	&.right .arrow:after {
+		border-right-color: @main-color-dark;
+	}
+}
