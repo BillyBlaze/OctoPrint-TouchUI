@@ -1524,7 +1524,7 @@ TouchUI.prototype.plugins.tempsGraph = function() {
 TouchUI.prototype.plugins.webcamTab = function() {
 
 	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
-		if (obj[0] && obj[0].construct && obj[0].construct.name === "WebcamTabViewModel") {
+		if (obj && obj.construct && obj.construct.name && obj.construct.name === "WebcamTabViewModel") {
 			console.info("TouchUI: WebcamTab is disabled while TouchUI is active.");
 			return true;
 		}
