@@ -31,8 +31,8 @@ TouchUI.prototype.DOM.move.tabbar = {
 		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
-			var items = $('#tabs > li');
-			var itemsFit = Math.ceil(winWidth / width) - 3;
+			var items = $('#tabs > li:not("#touchui_dropdown_link")');
+			var itemsFit = Math.floor(winWidth / width) - 2;
 
 			if (winWidth > (width * 2)) {
 				items.each(function(key, elm) {
@@ -45,6 +45,9 @@ TouchUI.prototype.DOM.move.tabbar = {
 					}
 				});
 			}
+
+			// Sync width of dropdown link
+			$('#all_touchui_settings').width(width);
 		}
 
 		$(window).on('resize.touchui.tabbar', resize);

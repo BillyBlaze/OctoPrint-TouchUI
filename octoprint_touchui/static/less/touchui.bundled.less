@@ -2540,8 +2540,14 @@ content: none;
 .nav,
 &.nav {
 li {
-.flex(1 0 auto);
-.rem(max-width, 112);
+.flex(0 0 100%);
+max-width: 7rem;
+@media(max-width: 565px) {
+max-width: 5.5rem;
+}
+@media(max-width: 352px) {
+max-width: 5rem;
+}
 &#touchui_dropdown_link {
 pointer-events: none;
 }
@@ -2572,6 +2578,24 @@ display: none;
 position: absolute;
 top: -5000px;
 left: -5000px;
+}
+.page-container .octoprint-container .tab-content h1 {
+font-size: 1.3rem;
+line-height: 1.8rem;
+padding: 0 0 (@main-gutter / 2);
+}
+.touchui-accordion {
+.accordion-heading {
+a:extend(#touch body .page-container .octoprint-container .tab-content h1) {
+pointer-events: none;
+.fa {
+display: none;
+}
+}
+}
+.accordion-inner {
+padding: 0;
+}
 }
 .page-container {
 width: 100%;
@@ -2983,7 +3007,8 @@ color: @main-color-text;
 }
 #tabs,
 #navbar #all_touchui_settings {
-#tab_plugin_webcamtab_link {
+#tab_plugin_webcamtab_link,
+#tab_plugin_webcamtab_link2 {
 display: none !important;
 }
 #navbar_plugin_pi_support {

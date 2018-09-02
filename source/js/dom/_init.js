@@ -13,6 +13,7 @@ TouchUI.prototype.DOM.init = function() {
 	}
 
 	// Move all other items from tabbar into dropdown
+	this.DOM.move.sidebar.init.call(this);
 	this.DOM.move.navbar.init.call(this);
 	this.DOM.move.tabbar.init.call(this);
 	this.DOM.move.afterTabAndNav.call(this);

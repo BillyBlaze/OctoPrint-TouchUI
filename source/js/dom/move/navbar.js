@@ -46,24 +46,6 @@ TouchUI.prototype.DOM.move.navbar = {
 		// Create a fake dropdown link that will be overlapped by settings icon
 		$('<li id="touchui_dropdown_link"><a href="#"></a></li>').appendTo("#tabs");
 		
-		// Create fake TouchUI tabbar and map it to the original dropdown
-		function resizeMenuItem() {
-			var width = $('#print_link').width();
-			$('#all_touchui_settings').width(width);
-			
-			setTimeout(function() {
-				var width = $('#print_link').width();
-				$('#all_touchui_settings').width(width);
-			}, 100);
-
-			setTimeout(function() {
-				var width = $('#print_link').width();
-				$('#all_touchui_settings').width(width);
-			}, 600);
-		}
-		$(window).on('resize.touchui.navbar', resizeMenuItem);
-		resizeMenuItem();
-		
 		// Move the navbar temp plugin
 		this.plugins.psuControl.call(this);
 	}

@@ -958,6 +958,7 @@ TouchUI.prototype.DOM.init = function() {
 	}
 
 	// Move all other items from tabbar into dropdown
+	this.DOM.move.sidebar.init.call(this);
 	this.DOM.move.navbar.init.call(this);
 	this.DOM.move.tabbar.init.call(this);
 	this.DOM.move.afterTabAndNav.call(this);
@@ -1526,6 +1527,7 @@ TouchUI.prototype.plugins.webcamTab = function() {
 	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
 		if (obj && obj.construct && obj.construct.name && obj.construct.name === "WebcamTabViewModel") {
 			console.info("TouchUI: WebcamTab is disabled while TouchUI is active.");
+			$('#tab_plugin_webcamtab_link, #tab_plugin_webcamtab').remove();
 			return true;
 		}
 		
@@ -2085,24 +2087,6 @@ TouchUI.prototype.DOM.move.navbar = {
 		// Create a fake dropdown link that will be overlapped by settings icon
 		$('<li id="touchui_dropdown_link"><a href="#"></a></li>').appendTo("#tabs");
 		
-		// Create fake TouchUI tabbar and map it to the original dropdown
-		function resizeMenuItem() {
-			var width = $('#print_link').width();
-			$('#all_touchui_settings').width(width);
-			
-			setTimeout(function() {
-				var width = $('#print_link').width();
-				$('#all_touchui_settings').width(width);
-			}, 100);
-
-			setTimeout(function() {
-				var width = $('#print_link').width();
-				$('#all_touchui_settings').width(width);
-			}, 600);
-		}
-		$(window).on('resize.touchui.navbar', resizeMenuItem);
-		resizeMenuItem();
-		
 		// Move the navbar temp plugin
 		this.plugins.psuControl.call(this);
 	}
@@ -2118,6 +2102,45 @@ TouchUI.prototype.DOM.move.overlays = {
 			var $elm = $(elm);
 			$elm.appendTo('body');
 		}.bind(this));
+
+	}
+
+}
+
+TouchUI.prototype.DOM.move.sidebar = {
+
+	items: ".octoprint-container > .row > .accordion > div",
+
+	menu: {
+		cloneTo: "#tabs"
+	},
+
+	container: {
+		cloneTo: "#temp"
+	},
+
+	doNotMove: [
+		'#sidebar_plugin_printer_safety_check_wrapper',
+		'#connection_wrapper'
+	],
+
+	init: function() {
+		var tabbar = this.DOM.create.tabbar;
+
+		$(this.DOM.move.sidebar.items + ':not(' + this.DOM.move.sidebar.doNotMove + ')').each(function(ind, elm) {
+			var id = $(elm).attr('id');
+			
+			tabbar.createItem(id + "_link", id, "tab")
+				.appendTo(this.menu.cloneTo)
+				.find('[data-toggle="tab"]')
+				.text($(elm).find('.accordion-toggle').text().trim());
+
+			$('<div id="' + id + '" class="tab-pane touchui touchui-accordion"><div class="row-fluid"></div></div>')
+				.insertBefore(this.container.cloneTo)
+				.children().get(0)
+				.prepend(elm);
+
+		}.bind(this.DOM.move.sidebar));
 
 	}
 
@@ -2156,8 +2179,8 @@ TouchUI.prototype.DOM.move.tabbar = {
 		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
-			var items = $('#tabs > li');
-			var itemsFit = Math.ceil(winWidth / width) - 3;
+			var items = $('#tabs > li:not("#touchui_dropdown_link")');
+			var itemsFit = Math.floor(winWidth / width) - 2;
 
 			if (winWidth > (width * 2)) {
 				items.each(function(key, elm) {
@@ -2170,6 +2193,9 @@ TouchUI.prototype.DOM.move.tabbar = {
 					}
 				});
 			}
+
+			// Sync width of dropdown link
+			$('#all_touchui_settings').width(width);
 		}
 
 		$(window).on('resize.touchui.tabbar', resize);

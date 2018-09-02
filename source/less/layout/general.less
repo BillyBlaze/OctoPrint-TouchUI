@@ -26,6 +26,28 @@
 	left: -5000px;
 }
 
+.page-container .octoprint-container .tab-content h1 {
+	font-size: 1.3rem;
+	line-height: 1.8rem;
+	padding: 0 0 (@main-gutter / 2);
+}
+
+.touchui-accordion {
+	.accordion-heading {
+		a:extend(#touch body .page-container .octoprint-container .tab-content h1) {
+			pointer-events: none;
+
+			.fa {
+				display: none;
+			}
+		}
+	}
+
+	.accordion-inner {
+		padding: 0;
+	}
+}
+
 .page-container {
 	width: 100%;
 

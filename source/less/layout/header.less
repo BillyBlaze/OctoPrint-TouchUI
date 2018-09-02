@@ -71,8 +71,16 @@
 	.nav,
 	&.nav {
 		li {
-			.flex(1 0 auto);
-			.rem(max-width, 112);
+			.flex(0 0 100%);
+			max-width: 7rem;
+
+			@media(max-width: 565px) {
+				max-width: 5.5rem;
+			}
+
+			@media(max-width: 352px) {
+				max-width: 5rem;
+			}
 
 			&#touchui_dropdown_link {
 				pointer-events: none;
