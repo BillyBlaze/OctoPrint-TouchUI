@@ -1,11 +1,13 @@
 !function() {
 
 	// Catch errors
-	if (window.log && window.log.error) {
-		var old = window.log.error;
-		window.log.error = function(plugin, msg) {
-			window.top.postMessage([msg, ''], "*");
-			old.apply(window.log, arguments);
+	if (TouchUI.prototype.settings.isChromiumArm) {
+		if (window.log && window.log.error) {
+			var old = window.log.error;
+			window.log.error = function(plugin, msg) {
+				window.top.postMessage([msg, ''], "*");
+				old.apply(window.log, arguments);
+			}
 		}
 	}
 
