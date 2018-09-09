@@ -17,7 +17,6 @@ TouchUI.prototype.DOM.move.sidebar = {
 
 	init: function() {
 		var tabbar = this.DOM.create.tabbar;
-
 		$(this.DOM.move.sidebar.items + ':not(' + this.DOM.move.sidebar.doNotMove + ')').each(function(ind, elm) {
 			var id = $(elm).attr('id');
 			

@@ -651,10 +651,6 @@ TouchUI.prototype.core.init = function() {
 		// Send Touchscreen loading status
 		if (window.top.postMessage) {
 			window.top.postMessage("loading", "*");
-			
-			$(window).on("error.touchui", function(event) {
-				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
-			});
 		}
 
 		// Attach id for TouchUI styling
@@ -2151,7 +2147,6 @@ TouchUI.prototype.DOM.move.sidebar = {
 
 	init: function() {
 		var tabbar = this.DOM.create.tabbar;
-
 		$(this.DOM.move.sidebar.items + ':not(' + this.DOM.move.sidebar.doNotMove + ')').each(function(ind, elm) {
 			var id = $(elm).attr('id');
 			

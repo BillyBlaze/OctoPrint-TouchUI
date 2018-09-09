@@ -9,10 +9,6 @@ TouchUI.prototype.core.init = function() {
 		// Send Touchscreen loading status
 		if (window.top.postMessage) {
 			window.top.postMessage("loading", "*");
-			
-			$(window).on("error.touchui", function(event) {
-				window.top.postMessage([event.originalEvent.message, event.originalEvent.filename], "*");
-			});
 		}
 
 		// Attach id for TouchUI styling

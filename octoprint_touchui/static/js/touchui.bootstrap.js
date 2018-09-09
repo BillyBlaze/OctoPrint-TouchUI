@@ -1,1 +1,1 @@
-!function(){var E=new TouchUI;E.domLoading(),$(function(){E.domReady(),OCTOPRINT_VIEWMODELS.push([E.koStartup,E.TOUCHUI_REQUIRED_VIEWMODELS,E.TOUCHUI_ELEMENTS,E.TOUCHUI_REQUIRED_VIEWMODELS])})}();
+!function(){if(window.log&&window.log.error){var o=window.log.error;window.log.error=function(n,w){window.top.postMessage([w,""],"*"),o.apply(window.log,arguments)}}var n=new TouchUI;n.domLoading(),$(function(){n.domReady(),OCTOPRINT_VIEWMODELS.push([n.koStartup,n.TOUCHUI_REQUIRED_VIEWMODELS,n.TOUCHUI_ELEMENTS,n.TOUCHUI_REQUIRED_VIEWMODELS])})}();
