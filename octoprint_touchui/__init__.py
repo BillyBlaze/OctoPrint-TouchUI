@@ -22,6 +22,9 @@ class touchui_core(	touchui_api,
 		super(touchui_core, self).__init__()
 		self._whatsNewPath = os.path.dirname(__file__) + "/WHATSNEW.md"
 
+	def on_startup(self, host, port):
+		self._startup_customization(host, port)
+
 	def on_settings_load(self):
 		return self._load_custom_settings()
 		
@@ -34,7 +37,7 @@ class touchui_core(	touchui_api,
 	def get_template_vars(self):
 		if os.path.isfile(self._customCssPath) and self._settings.get(["useCustomization"]):
 			with open(self._customCssPath, 'r') as contentFile:
-				return dict(cssPath="./plugin/touchui/static/css/touchui.custom.css", timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])
+				return dict(cssPath="./plugin/touchui/static/css/touchui.custom.{port}.css".format(port=self._port), timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])
 		else:
 			with open(self._cssPath, 'r') as contentFile:
 				return dict(cssPath="./plugin/touchui/static/css/touchui.css", timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])

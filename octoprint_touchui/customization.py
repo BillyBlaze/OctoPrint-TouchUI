@@ -8,17 +8,33 @@ import octoprint.settings
 import octoprint.util
 import hashlib
 import time
+import sys
 import os
 
 class touchui_customization(object):
-	def __init__(self):
-		self._cssPath = os.path.dirname(__file__) + "/static/css/touchui.css"
-		self._customCssPath = os.path.dirname(__file__) + "/static/css/touchui.custom.css"
-		self._customLessPath = os.path.dirname(__file__) + "/static/less/touchui.bundled.less"
-		self._customHashPath = os.path.dirname(__file__) + "/static/css/hash.touchui"
+	def _startup_customization(self, host, port):
+		self._port = port
+		self._cssPath = "{base}/static/css/touchui.css".format(base=os.path.dirname(__file__))
+		self._customCssPath = "{base}/static/css/touchui.custom.{port}.css".format(base=os.path.dirname(__file__), port=port)
+		self._customLessPath = "{base}/static/less/touchui.bundled.less".format(base=os.path.dirname(__file__))
+		self._customHashPath = "{base}/static/css/hash.{port}.touchui".format(base=os.path.dirname(__file__), port=port)
 		self._requireNewCSS = False
 		self._refreshCSS = False
 		self._refreshTime = 0
+
+		# Migrate old css file to path with port
+		if os.path.isfile("{base}/static/css/touchui.custom.css".format(base=os.path.dirname(__file__))):
+			os.rename(
+				"{base}/static/css/touchui.custom.css".format(base=os.path.dirname(__file__)),
+				"{base}/static/css/touchui.custom.{port}.css".format(base=os.path.dirname(__file__), port=port)
+			)
+
+		# Migrate old hash file to path with port
+		if os.path.isfile("{base}/static/css/hash.touchui".format(base=os.path.dirname(__file__))):
+			os.rename(
+				"{base}/static/css/hash.touchui".format(base=os.path.dirname(__file__)),
+				"{base}/static/css/hash.{port}.touchui".format(base=os.path.dirname(__file__), port=port)
+			)
 
 	def _check_customization(self):
 		# When generating LESS to CSS we also store the LESS contents into a md5 hash

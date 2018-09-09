@@ -51,7 +51,7 @@ gulp.task("less:concat", function() {
 
 gulp.task('clean:hash', function () {
 	return del([
-		'octoprint_touchui/static/css/hash.touchui',
+		'octoprint_touchui/static/css/hash.*.touchui',
 	]);
 });
 
