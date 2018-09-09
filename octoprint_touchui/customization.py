@@ -8,7 +8,6 @@ import octoprint.settings
 import octoprint.util
 import hashlib
 import time
-import sys
 import os
 
 class touchui_customization(object):
