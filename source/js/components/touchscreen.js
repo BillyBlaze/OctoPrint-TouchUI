@@ -24,6 +24,15 @@ TouchUI.prototype.components.touchscreen = {
 		this.scroll.defaults.iScroll.useTransition = false;
 		// this.scroll.defaults.iScroll.useTransform = false;
 		// this.scroll.defaults.iScroll.HWCompositing = false;
+
+		// Remove any links opening in a new tab
+		$('[target="_blank"]').each(function(ind, elm) {
+			$(elm)
+				.attr("target", "")
+				.on("click", function(e) {
+					return confirm("Do you want to navigate away from TouchUI?");
+				});
+		});
 	},
 
 	isLoading: function (viewModels) {
