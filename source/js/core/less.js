@@ -14,7 +14,6 @@ TouchUI.prototype.core.less = {
 	},
 
 	save: function() {
-		var variables = "";
 		var options = this.core.less.options;
 		var self = this;
 
@@ -51,7 +50,8 @@ TouchUI.prototype.core.less = {
 		var callback = function(error, result) {
 
 				if (error) {
-					self.core.less.error.call(self, error);
+					self.core.less.error.call(self, { responseText: 'Less parser: ' + error.message, status: 0 });
+					console.error(error);
 				} else {
 					result.css = result.css.replace(/mixin\:placeholder\;/g, '');
 
