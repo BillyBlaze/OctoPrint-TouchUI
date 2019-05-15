@@ -19,7 +19,9 @@ TouchUI.prototype.DOM.move.navbar = {
 				});
 
 				if(!$(elme).text()) {
-					$(elme).text($(elme).attr("title"));
+					if(!$(elme).text()) {
+						$(elme).text($(elme).attr("title"));
+					}
 				}
 			} else {
 				if(!hasTextLinks) {

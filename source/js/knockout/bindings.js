@@ -36,7 +36,7 @@ TouchUI.prototype.knockout.bindings = function() {
 		},
 
 		show: function() {
-			self.settings.touchuiModal.modal("show");
+			$('#touchui_settings_dialog').modal("show");
 		}
 
 	}

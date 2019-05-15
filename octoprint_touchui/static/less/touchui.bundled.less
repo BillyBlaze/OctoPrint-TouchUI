@@ -2748,6 +2748,7 @@ color: @btn-danger-text;
 }
 }
 #navbar {
+z-index: 2;
 .navbar-inner {
 .container {
 .rem(height, 66);
@@ -2913,6 +2914,8 @@ width: 100% !important;
 max-width: 100% !important;
 height: auto !important;
 float: none;
+text-overflow: ellipsis;
+overflow: hidden;
 .icon-wrench{
 display: none;
 }
@@ -5273,6 +5276,7 @@ color: @dropdown-color-text;
 border: 1px solid @dropdown-divider-color !important;
 margin-top: 10px;
 padding: (@dropdown-gutter / 3) 0;
+max-width: 100vw;
 @media (max-width: 300px) {
 width: 90vw;
 min-width: 0 !important;

@@ -29,8 +29,6 @@ TouchUI.prototype = {
 			touch: $("#loadsomethingsomethingdarkside_touch").length > 0
 		},
 
-		touchuiModal: $('#touchui_settings_dialog'),
-
 		whatsNew: ko.observable(false)
 	},
 
@@ -1171,7 +1169,7 @@ TouchUI.prototype.knockout.bindings = function() {
 		},
 
 		show: function() {
-			self.settings.touchuiModal.modal("show");
+			$('#touchui_settings_dialog').modal("show");
 		}
 
 	}
@@ -2081,7 +2079,9 @@ TouchUI.prototype.DOM.move.navbar = {
 				});
 
 				if(!$(elme).text()) {
-					$(elme).text($(elme).attr("title"));
+					if(!$(elme).text()) {
+						$(elme).text($(elme).attr("title"));
+					}
 				}
 			} else {
 				if(!hasTextLinks) {

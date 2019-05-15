@@ -29,8 +29,6 @@ TouchUI.prototype = {
 			touch: $("#loadsomethingsomethingdarkside_touch").length > 0
 		},
 
-		touchuiModal: $('#touchui_settings_dialog'),
-
 		whatsNew: ko.observable(false)
 	},
 
