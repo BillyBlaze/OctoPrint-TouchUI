@@ -774,6 +774,7 @@ TouchUI.prototype.core.bridge = function() {
 						self.plugins.tempsGraph.call(self);
 						self.plugins.webcamTab.call(self);
 						self.plugins.autoBedLevel.call(self);
+						self.plugins.themify.call(self);
 						old.apply(moment, arguments);
 					};
 				}
@@ -1539,6 +1540,19 @@ TouchUI.prototype.plugins.tempsGraph = function() {
 	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
 		if (obj[0] && obj[0].name === "TempsgraphViewModel") {
 			console.info("TouchUI: TempsGraph is disabled while TouchUI is active.");
+			return true;
+		}
+		
+		return false;
+	});
+
+}
+
+TouchUI.prototype.plugins.themify = function() {
+
+	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
+		if (obj[2] && obj[2].indexOf("#settings_plugin_themeify") !== -1) {
+			console.info("TouchUI: Themeify is disabled while TouchUI is active.");
 			return true;
 		}
 		

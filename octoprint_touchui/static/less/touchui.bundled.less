@@ -548,9 +548,11 @@ position: relative;
 * {
 .text-shadow(none) !important;
 .box-shadow(none) !important;
-}
-*:not(.fa) {
 font-family: 'Source Code Pro', monospace;
+}
+[class^="icon-"], [class*=" icon-"],
+[class^="fa-"], [class*=" fa-"] {
+font-family: FontAwesome;
 }
 .no-pointer * {
 pointer-events: none !important;

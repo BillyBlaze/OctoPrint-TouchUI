@@ -37,6 +37,7 @@ TouchUI.prototype.core.bridge = function() {
 						self.plugins.tempsGraph.call(self);
 						self.plugins.webcamTab.call(self);
 						self.plugins.autoBedLevel.call(self);
+						self.plugins.themify.call(self);
 						old.apply(moment, arguments);
 					};
 				}
