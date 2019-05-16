@@ -25,8 +25,8 @@ TouchUI.prototype = {
 		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
 
 		canBoot: {
-			resolution: $("#loadsomethingsomethingdarkside_resolution").length > 0,
-			touch: $("#loadsomethingsomethingdarkside_touch").length > 0
+			resolution: $("#touchui_auto_load_resolution").length > 0,
+			touch: $("#touchui_auto_load_touch").length > 0
 		},
 
 		whatsNew: ko.observable(false)
@@ -231,8 +231,8 @@ TouchUI.prototype.components.keyboard = {
 		default: {
 
 			display: {
-				'accept' :  "Save",
-				'bksp'   :  " ",
+				'accept' :  'Save',
+				'bksp'   :  ' ',
 				'default': 'ABC',
 				'meta1'  : '.?123',
 				'meta2'  : '#+='
@@ -269,7 +269,7 @@ TouchUI.prototype.components.keyboard = {
 		},
 		terminal: {
 			display: {
-				'bksp'   :  " ",
+				'bksp'   :  ' ',
 				'accept' : 'Save',
 				'default': 'ABC',
 				'meta1'  : '.?123',
@@ -301,9 +301,9 @@ TouchUI.prototype.components.keyboard = {
 		},
 		number: {
 			display: {
-				'bksp'   :  " ",
-				'a'      :  "Save",
-				'c'      :  "Cancel"
+				'bksp'   :  ' ',
+				'a'      :  'Save',
+				'c'      :  'Cancel'
 			},
 
 			layout: 'custom',
@@ -2065,7 +2065,7 @@ TouchUI.prototype.DOM.move.controls = {
 }
 
 TouchUI.prototype.DOM.move.navbar = {
-	mainItems: ['#all_touchui_settings', '#navbar_login', '.hidden_touch'],
+	mainItems: ['#all_touchui_settings', '#navbar_login', '.hidden_touch', '#touchui_auto_load_touch', '#touchui_auto_load_resolution'],
 	init: function() {
 
 		var $items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
@@ -2105,6 +2105,8 @@ TouchUI.prototype.DOM.move.navbar = {
 				$(elm.target).addClass('itemActive');
 			}
 		});
+
+		$('[href="'+document.location.hash+'"]').addClass('itemActive');
 
 		// Move TouchUI to main dropdown
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");

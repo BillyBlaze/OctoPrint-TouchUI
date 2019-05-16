@@ -1,5 +1,5 @@
 TouchUI.prototype.DOM.move.navbar = {
-	mainItems: ['#all_touchui_settings', '#navbar_login', '.hidden_touch'],
+	mainItems: ['#all_touchui_settings', '#navbar_login', '.hidden_touch', '#touchui_auto_load_touch', '#touchui_auto_load_resolution'],
 	init: function() {
 
 		var $items = $("#navbar ul.nav > li:not("+this.DOM.move.navbar.mainItems+")");
@@ -39,6 +39,8 @@ TouchUI.prototype.DOM.move.navbar = {
 				$(elm.target).addClass('itemActive');
 			}
 		});
+
+		$('[href="'+document.location.hash+'"]').addClass('itemActive');
 
 		// Move TouchUI to main dropdown
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");

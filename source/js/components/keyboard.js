@@ -8,7 +8,7 @@ TouchUI.prototype.components.keyboard = {
 			display: {
 				'accept' :  'Save',
 				'bksp'   :  ' ',
-				'default': gettext('ABC'),
+				'default': 'ABC',
 				'meta1'  : '.?123',
 				'meta2'  : '#+='
 			},
@@ -16,27 +16,27 @@ TouchUI.prototype.components.keyboard = {
 			layout: 'custom',
 			customLayout: {
 				'default': [
-					gettext('q w e r t y u i o p'),
-					gettext('a s d f g h j k l'),
-					'{bksp} {s} ' + gettext('z x c v b n m'),
+					'q w e r t y u i o p',
+					'a s d f g h j k l',
+					'{bksp} {s} z x c v b n m',
 					'{accept} {c} {left} {right} {meta1} {space}'
 				],
 				'shift': [
-					gettext(('Q W E R T Y U I O P'),
-					gettext('A S D F G H J K L'),
-					'{bksp} {s} ' + gettext('Z X C V B N M'),
+					'Q W E R T Y U I O P',
+					'A S D F G H J K L',
+					'{bksp} {s} Z X C V B N M',
 					'{accept} {c} {left} {right} {meta1} {space}'
 				],
 				'meta1': [
-					gettext('1 2 3 4 5 6 7 8 9 0'),
-					gettext('- / : ; ( ) \u20ac & @'),
-					'{bksp} {meta2} ' + gettext('. , ? ! \' "'),
+					'1 2 3 4 5 6 7 8 9 0',
+					'- / : ; ( ) \u20ac & @',
+					'{bksp} {meta2} . , ? ! \' "',
 					'{accept} {c} {left} {right} {default} {space}'
 				],
 				'meta2': [
-					gettext('[ ] { } # % ^ * + ='),
-					gettext('_ \\ | ~ < > $ \u00a3 \u00a5'),
-					'{bksp} {meta1} ' + gettext('. , ? ! \' "'),
+					'[ ] { } # % ^ * + =',
+					'_ \\ | ~ < > $ \u00a3 \u00a5',
+					'{bksp} {meta1} . , ? ! \' "',
 					'{accept} {c} {left} {right} {default} {space}'
 				]
 			}
@@ -46,7 +46,7 @@ TouchUI.prototype.components.keyboard = {
 			display: {
 				'bksp'   :  ' ',
 				'accept' : 'Save',
-				'default': gettext('ABC'),
+				'default': 'ABC',
 				'meta1'  : '.?123',
 				'meta2'  : '#+='
 			},
@@ -54,21 +54,21 @@ TouchUI.prototype.components.keyboard = {
 			layout: 'custom',
 			customLayout: {
 				'default': [
-					gettext(('Q W E R T Y U I O P'),
-					gettext('A S D F G H J K L'),
-					'{bksp} {s} ' + gettext('Z X C V B N M'),
+					'Q W E R T Y U I O P',
+					'A S D F G H J K L',
+					'{bksp} {s} Z X C V B N M',
 					'{accept} {c} {left} {right} {meta1} {space}'
 				],
 				'meta1': [
-					gettext('1 2 3 4 5 6 7 8 9 0'),
-					gettext('- / : ; ( ) \u20ac & @'),
-					'{bksp} {meta2} ' + gettext('. , ? ! \' "'),
+					'1 2 3 4 5 6 7 8 9 0',
+					'- / : ; ( ) \u20ac & @',
+					'{bksp} {meta2} . , ? ! \' "',
 					'{accept} {c} {left} {right} {default} {space}'
 				],
 				'meta2': [
-					gettext('[ ] { } # % ^ * + ='),
-					gettext('_ \\ | ~ < > $ \u00a3 \u00a5'),
-					'{bksp} {meta1} ' + gettext('. , ? ! \' "'),
+					'[ ] { } # % ^ * + =',
+					'_ \\ | ~ < > $ \u00a3 \u00a5',
+					'{bksp} {meta1} . , ? ! \' "',
 					'{accept} {c} {left} {right} {default} {space}'
 				]
 			}

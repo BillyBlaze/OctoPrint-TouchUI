@@ -57,12 +57,12 @@ class touchui_core(	touchui_api,
 
 		if self._settings.get(["automaticallyLoadResolution"]):
 			files.append(
-				dict(type="settings", template="touchui_auto_load_resolution.jinja2", custom_bindings=False)
+				dict(type="navbar", template="empty.jinja2", custom_bindings=False, div="touchui_auto_load_resolution")
 			)
 
 		if self._settings.get(["automaticallyLoadTouch"]):
 			files.append(
-				dict(type="settings", template="touchui_auto_load_touch.jinja2", custom_bindings=False)
+				dict(type="navbar", template="empty.jinja2", custom_bindings=False, div="touchui_auto_load_touch")
 			)
 
 		return files

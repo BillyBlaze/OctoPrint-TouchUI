@@ -25,8 +25,8 @@ TouchUI.prototype = {
 		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
 
 		canBoot: {
-			resolution: $("#loadsomethingsomethingdarkside_resolution").length > 0,
-			touch: $("#loadsomethingsomethingdarkside_touch").length > 0
+			resolution: $("#touchui_auto_load_resolution").length > 0,
+			touch: $("#touchui_auto_load_touch").length > 0
 		},
 
 		whatsNew: ko.observable(false)
