@@ -41,6 +41,7 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 			} else {
 				printLink.removeClass("offline").addClass("online");
 				$("#conn_link2").removeClass("offline").addClass("online");
+				$('#connection_dialog').modal('hide');
 			}
 		});
 	}

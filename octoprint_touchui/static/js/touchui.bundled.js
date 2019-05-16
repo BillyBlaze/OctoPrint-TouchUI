@@ -1164,7 +1164,7 @@ TouchUI.prototype.knockout.bindings = function() {
 		},
 
 		show: function() {
-			$('#touchui_settings_dialog').modal("show");
+			$('#touchui_settings_dialog').modal("show").trigger('click');
 		}
 
 	}
@@ -1214,6 +1214,7 @@ TouchUI.prototype.knockout.isLoading = function (viewModels) {
 			} else {
 				printLink.removeClass("offline").addClass("online");
 				$("#conn_link2").removeClass("offline").addClass("online");
+				$('#connection_dialog').modal('hide');
 			}
 		});
 	}
