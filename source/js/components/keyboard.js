@@ -6,9 +6,9 @@ TouchUI.prototype.components.keyboard = {
 		default: {
 
 			display: {
-				'accept' :  "Save",
-				'bksp'   :  " ",
-				'default': 'ABC',
+				'accept' :  'Save',
+				'bksp'   :  ' ',
+				'default': gettext('ABC'),
 				'meta1'  : '.?123',
 				'meta2'  : '#+='
 			},
@@ -16,27 +16,27 @@ TouchUI.prototype.components.keyboard = {
 			layout: 'custom',
 			customLayout: {
 				'default': [
-					'q w e r t y u i o p',
-					'a s d f g h j k l',
-					'{bksp} {s} z x c v b n m',
+					gettext('q w e r t y u i o p'),
+					gettext('a s d f g h j k l'),
+					'{bksp} {s} ' + gettext('z x c v b n m'),
 					'{accept} {c} {left} {right} {meta1} {space}'
 				],
 				'shift': [
-					'Q W E R T Y U I O P',
-					'A S D F G H J K L',
-					'{bksp} {s} Z X C V B N M',
+					gettext(('Q W E R T Y U I O P'),
+					gettext('A S D F G H J K L'),
+					'{bksp} {s} ' + gettext('Z X C V B N M'),
 					'{accept} {c} {left} {right} {meta1} {space}'
 				],
 				'meta1': [
-					'1 2 3 4 5 6 7 8 9 0',
-					'- / : ; ( ) \u20ac & @',
-					'{bksp} {meta2} . , ? ! \' "',
+					gettext('1 2 3 4 5 6 7 8 9 0'),
+					gettext('- / : ; ( ) \u20ac & @'),
+					'{bksp} {meta2} ' + gettext('. , ? ! \' "'),
 					'{accept} {c} {left} {right} {default} {space}'
 				],
 				'meta2': [
-					'[ ] { } # % ^ * + =',
-					'_ \\ | ~ < > $ \u00a3 \u00a5',
-					'{bksp} {meta1} . , ? ! \' "',
+					gettext('[ ] { } # % ^ * + ='),
+					gettext('_ \\ | ~ < > $ \u00a3 \u00a5'),
+					'{bksp} {meta1} ' + gettext('. , ? ! \' "'),
 					'{accept} {c} {left} {right} {default} {space}'
 				]
 			}
@@ -44,9 +44,9 @@ TouchUI.prototype.components.keyboard = {
 		},
 		terminal: {
 			display: {
-				'bksp'   :  " ",
+				'bksp'   :  ' ',
 				'accept' : 'Save',
-				'default': 'ABC',
+				'default': gettext('ABC'),
 				'meta1'  : '.?123',
 				'meta2'  : '#+='
 			},
@@ -54,21 +54,21 @@ TouchUI.prototype.components.keyboard = {
 			layout: 'custom',
 			customLayout: {
 				'default': [
-					'Q W E R T Y U I O P',
-					'A S D F G H J K L',
-					'{bksp} {s} Z X C V B N M',
+					gettext(('Q W E R T Y U I O P'),
+					gettext('A S D F G H J K L'),
+					'{bksp} {s} ' + gettext('Z X C V B N M'),
 					'{accept} {c} {left} {right} {meta1} {space}'
 				],
 				'meta1': [
-					'1 2 3 4 5 6 7 8 9 0',
-					'- / : ; ( ) \u20ac & @',
-					'{bksp} {meta2} . , ? ! \' "',
+					gettext('1 2 3 4 5 6 7 8 9 0'),
+					gettext('- / : ; ( ) \u20ac & @'),
+					'{bksp} {meta2} ' + gettext('. , ? ! \' "'),
 					'{accept} {c} {left} {right} {default} {space}'
 				],
 				'meta2': [
-					'[ ] { } # % ^ * + =',
-					'_ \\ | ~ < > $ \u00a3 \u00a5',
-					'{bksp} {meta1} . , ? ! \' "',
+					gettext('[ ] { } # % ^ * + ='),
+					gettext('_ \\ | ~ < > $ \u00a3 \u00a5'),
+					'{bksp} {meta1} ' + gettext('. , ? ! \' "'),
 					'{accept} {c} {left} {right} {default} {space}'
 				]
 			}
@@ -76,9 +76,9 @@ TouchUI.prototype.components.keyboard = {
 		},
 		number: {
 			display: {
-				'bksp'   :  " ",
-				'a'      :  "Save",
-				'c'      :  "Cancel"
+				'bksp'   :  ' ',
+				'a'      :  'Save',
+				'c'      :  'Cancel'
 			},
 
 			layout: 'custom',
