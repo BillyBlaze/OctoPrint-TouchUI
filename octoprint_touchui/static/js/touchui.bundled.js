@@ -1126,13 +1126,6 @@ TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === Tou
 
 } : _.noop;
 
-// Auto-Login with localStorage
-if (localStorage) {
-	if (localStorage["remember_token"] && !TouchUI.prototype.DOM.cookies.get("remember_token", true)) {
-		TouchUI.prototype.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
-	}
-}
-
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
 
@@ -1308,18 +1301,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 			} catch(err) {}
 
-			viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
-				if( loggedIn ) {
-					if (self.DOM.cookies.get("remember_token", true)) {
-						localStorage["remember_token"] = self.DOM.cookies.get("remember_token", true);
-					}
-					
-				} else {
-					if (localStorage["remember_token"]) {
-						delete localStorage["remember_token"];
-					}
-				}
-
+			viewModels.navigationViewModel.loginState.loggedIn.subscribe(function() {
 				// Refresh scroll view when login state changed
 				if( !self.settings.hasTouch ) {
 					setTimeout(function() {
@@ -1452,16 +1434,6 @@ TouchUI.prototype.knockout.viewModel = function() {
 			}
 		}
 	}
-	
-	// Auto-Login with localStorage
-	self.onBrowserTabVisibilityChange = function() {
-		if (localStorage) {
-			if (localStorage["remember_token"] && !self.DOM.cookies.get("remember_token", true)) {
-				self.DOM.cookies.set("remember_token", localStorage["remember_token"], true)
-			}
-		}
-	}
-
 }
 
 TouchUI.prototype.plugins.init = function (viewModels) {
@@ -2113,7 +2085,7 @@ TouchUI.prototype.DOM.move.navbar = {
 
 				if(!$(elme).text()) {
 					if(!$(elme).text()) {
-						$(elme).text($(elme).attr("title"));
+						$(elme).text($(elme).attr('title'));
 					}
 				}
 			} else {
@@ -2125,6 +2097,13 @@ TouchUI.prototype.DOM.move.navbar = {
 				$elm.appendTo("#touchui_text_nonlink_container");
 			}
 		}.bind(this));
+
+		$(document).on('click', function(elm) {
+			if($(elm.target).parents('#tabs').length > 0) {
+				$('#tabs .itemActive').removeClass('itemActive');
+				$(elm.target).addClass('itemActive');
+			}
+		});
 
 		// Move TouchUI to main dropdown
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");

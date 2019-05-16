@@ -20,7 +20,7 @@ TouchUI.prototype.DOM.move.navbar = {
 
 				if(!$(elme).text()) {
 					if(!$(elme).text()) {
-						$(elme).text($(elme).attr("title"));
+						$(elme).text($(elme).attr('title'));
 					}
 				}
 			} else {
@@ -32,6 +32,13 @@ TouchUI.prototype.DOM.move.navbar = {
 				$elm.appendTo("#touchui_text_nonlink_container");
 			}
 		}.bind(this));
+
+		$(document).on('click', function(elm) {
+			if($(elm.target).parents('#tabs').length > 0) {
+				$('#tabs .itemActive').removeClass('itemActive');
+				$(elm.target).addClass('itemActive');
+			}
+		});
 
 		// Move TouchUI to main dropdown
 		$("#navbar_plugin_touchui").insertAfter("#navbar_settings");

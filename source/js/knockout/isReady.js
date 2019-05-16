@@ -66,18 +66,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 			} catch(err) {}
 
-			viewModels.navigationViewModel.loginState.loggedIn.subscribe(function(loggedIn) {
-				if( loggedIn ) {
-					if (self.DOM.cookies.get("remember_token", true)) {
-						localStorage["remember_token"] = self.DOM.cookies.get("remember_token", true);
-					}
-					
-				} else {
-					if (localStorage["remember_token"]) {
-						delete localStorage["remember_token"];
-					}
-				}
-
+			viewModels.navigationViewModel.loginState.loggedIn.subscribe(function() {
 				// Refresh scroll view when login state changed
 				if( !self.settings.hasTouch ) {
 					setTimeout(function() {
