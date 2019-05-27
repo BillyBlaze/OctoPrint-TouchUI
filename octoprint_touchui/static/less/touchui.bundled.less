@@ -561,6 +561,10 @@ pointer-events: none !important;
 #touchui_auto_load_touch {
 display: none;
 }
+div.error {
+background: transparent !important;
+color: inherit !important;
+}
 #navbar {
 background-color: @main-color;
 border: 0 none !important;
@@ -1250,6 +1254,13 @@ opacity: .4;
 .rem(font-size, 14);
 .rem(height, 20);
 .rem(line-height, 20);
+}
+legend {
+margin-bottom: 0;
+}
+.control-group {
+margin-top: 0;
+margin-bottom: 20px;
 }
 #webcam {
 margin: (-@main-gutter + 1px) -@main-gutter 0;
@@ -2714,6 +2725,11 @@ max-height: none !important;
 .span3.scrollable,
 .nav.nav-pills {
 display: none;
+}
+.tab-pane {
+.nav.nav-pills {
+display: block;
+}
 }
 .span9.scrollable {
 width: 100% !important;
