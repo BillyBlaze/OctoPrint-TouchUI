@@ -6,25 +6,25 @@
 
 		<div class="controls">
 			<label class="checkbox">
-				<input type="checkbox" data-bind="checked: settings.hasVisibleSettings"> Display 'TouchUI settings' when the touch interface is inactive.
+				<input type="checkbox" data-bind="checked: settings.hasVisibleSettings"> 当触摸界面处于非活动状态时显示“TouchUI设置”
 			</label>
 		</div>
 
 		<div class="controls">
 			<label class="checkbox">
-				<input type="checkbox" data-bind="checked: settings.automaticallyLoadResolution"> Start TouchUI automatically onload based on resolution.
+				<input type="checkbox" data-bind="checked: settings.automaticallyLoadResolution">根据分辨率自动启动TouchUI
 			</label>
 		</div>
 
 		<div class="controls">
 			<label class="checkbox">
-				<input type="checkbox" data-bind="checked: settings.automaticallyLoadTouch"> Start TouchUI automatically onload based on touch device.
+				<input type="checkbox" data-bind="checked: settings.automaticallyLoadTouch"> 基于触摸设备自动启动TouchUI
 			</label>
 		</div>
 
 		<div class="controls">
 			<label class="checkbox">
-				<input type="checkbox" data-bind="checked: settings.useCustomization"> Enable customization
+				<input type="checkbox" data-bind="checked: settings.useCustomization"> 启用自定义
 			</label>
 		</div>
 
@@ -34,16 +34,16 @@
 		<fieldset>
 
 			<legend>
-				<span>Customization</span>
+				<span>自定义</span>
 				<label class="checkbox pull-right">
 					<input type="checkbox" data-bind="checked: settings.colors.useLocalFile">
-					Use local file
+					使用本地文件
 				</label>
 			</legend>
 
 			<div data-bind="visible: settings.colors.useLocalFile()">
 				<div class="control-group">
-					<label class="control-label" for="settings-touchui-path">Path to file:</label>
+					<label class="control-label" for="settings-touchui-path">文件路径:</label>
 					<div class="controls">
 						<input type="text" data-bind="value: settings.colors.customPath" id="settings-touchui-path" aria-haspopup="true" role="textbox" placeholder="/home/pi/my-variables.less">
 					</div>
@@ -53,7 +53,7 @@
 			<div data-bind="visible: !settings.colors.useLocalFile()">
 				<div class="colorPickers">
 					<div class="controls">
-						<label>Main color:</label>
+						<label>主要颜色：</label>
 						<div class="colorPicker" id="colorPicker1">
 							<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.mainColor">
 							<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.mainColor }"></span></a>
@@ -63,7 +63,7 @@
 					</div>
 
 					<div class="controls">
-						<label>Terminal color:</label>
+						<label>终端颜色:</label>
 						<div class="colorPicker" id="colorPicker2">
 							<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.termColor">
 							<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.termColor }"></span></a>
@@ -73,7 +73,7 @@
 					</div>
 
 					<div class="controls">
-						<label>Background color:</label>
+						<label>背景颜色:</label>
 						<div class="colorPicker" id="colorPicker3">
 							<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.bgColor">
 							<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.bgColor }"></span></a>
@@ -83,7 +83,7 @@
 					</div>
 
 					<div class="controls">
-						<label>Text color:</label>
+						<label>文本颜色:</label>
 						<div class="colorPicker" id="colorPicker4">
 							<input type="text" class="colorInput input-block-level" data-bind="value: settings.colors.textColor">
 							<a class="color"><span class="colorInner" data-bind="style: { backgroundColor: settings.colors.textColor }"></span></a>
@@ -93,12 +93,12 @@
 					</div>
 
 					<div class="controls">
-						<label>Font size:</label>
+						<label>字体大小</label>
 						<select data-bind="value: settings.colors.fontSize">
-							<option value="14">Small</option>
-							<option value="16" selected>Normal</option>
-							<option value="18">Large</option>
-							<option value="20">Extra Large</option>
+							<option value="14">小</option>
+							<option value="16" selected>中等</option>
+							<option value="18">大</option>
+							<option value="20">加大</option>
 						</select>
 					</div>
 				</div>
