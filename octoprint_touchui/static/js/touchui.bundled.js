@@ -229,6 +229,8 @@ TouchUI.prototype.components.keyboard = {
 	config: {
 
 		default: {
+			usePreview : false,
+			autoAccept : true,
 
 			display: {
 				'accept' :  'Save',
@@ -268,6 +270,8 @@ TouchUI.prototype.components.keyboard = {
 
 		},
 		terminal: {
+			usePreview : false,
+			autoAccept : true,
 			display: {
 				'bksp'   :  ' ',
 				'accept' : 'Save',
@@ -300,6 +304,8 @@ TouchUI.prototype.components.keyboard = {
 
 		},
 		number: {
+			usePreview : false,
+			autoAccept : true,
 			display: {
 				'bksp'   :  ' ',
 				'a'      :  'Save',
@@ -375,7 +381,7 @@ TouchUI.prototype.components.keyboard = {
 				prev.selectionStart = prev.selectionEnd = prev.value.length;
 			}
 		}, 10);
-		
+
 		keyboard.$keyboard.find("button").on("mousedown", function(e) {
 			$(e.target).addClass("touch-focus");
 
