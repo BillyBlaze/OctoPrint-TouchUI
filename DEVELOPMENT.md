@@ -11,17 +11,16 @@
 
 
 ## Prerequisites
-Install [NodeJS](http://www.nodejs.org/) and update NPM with ``sudo npm install npm -g``
+Install [NodeJS](http://www.nodejs.org/)
 
 1. Install required global NPM plguins:
 ```
-(sudo) npm install -g less bower gulp
+(sudo) npm install gulp-cli -g
 ```
 
 1. Install development dependencies
 ```
-(sudo) npm install
-(sudo) bower install
+npm install
 ```
 
 ## Commands

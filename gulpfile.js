@@ -1,19 +1,14 @@
+var fs = require('fs');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var del = require('del');
-var cssimport = require("gulp-cssimport");
 var rename = require("gulp-rename");
 var uglify = require("gulp-uglify");
 var through = require("through2");
 var gulpif = require("gulp-if");
-var strip = require('gulp-strip-comments');
 var trimlines = require('gulp-trimlines');
-var removeEmptyLines = require('gulp-remove-empty-lines');
 var concat = require('gulp-concat');
-
-gulp.task('default', ['lessc', 'clean:hash', 'less:concat', 'js:concat:app', 'js:concat:libs', 'js:concat:bootstrap']);
-gulp.task('less', ['lessc', 'clean:hash', 'less:concat']);
-gulp.task('js', ['js:concat:app', 'js:concat:libs', 'js:concat:bootstrap']);
+var stripCssComments = require('gulp-strip-css-comments');
 
 gulp.task('lessc', function () {
 	return gulp.src('source/less/touchui.less')
@@ -22,7 +17,7 @@ gulp.task('lessc', function () {
 			var contents = file.contents.toString();
 			contents = contents.replace(/mixin\:placeholder\;/g, '');
 
-			file.contents = new Buffer(contents);
+			file.contents = Buffer.from(contents);
 
 			cb(null, file);
 		}))
@@ -31,18 +26,35 @@ gulp.task('lessc', function () {
 
 gulp.task("less:concat", function() {
 	return gulp.src('source/less/touchui.less')
-		.pipe(cssimport({
-			extensions: ["less"],
-			matchPattern: "*.less"
+		.pipe(through.obj(function(file, enc, cb) {
+			var contents = file.contents.toString();
+			var regex = /@import \"(.*)\"\;/gm;
+			
+			while ((m = regex.exec(contents)) !== null) {
+				if (m.index === regex.lastIndex) {
+					regex.lastIndex++;
+				}
+
+				var replaceString = m[0];
+				var fileName = m[1];
+
+				var importContents = fs.readFileSync(__dirname + '/source/less/' + fileName);
+
+				contents = contents.replace(replaceString, importContents);
+			}
+
+			file.contents = Buffer.from(contents);
+
+			cb(null, file);
 		}))
-		.pipe(strip())
+		.pipe(stripCssComments())
 		.pipe(rename("touchui.bundled.less"))
 		.pipe(trimlines())
 		.pipe(through.obj(function(file, enc, cb) {
 			var contents = file.contents.toString();
 			contents = contents.replace(/\n\s*\n/g, '\n');
 
-			file.contents = new Buffer(contents);
+			file.contents = Buffer.from(contents);
 
 			cb(null, file);
 		}))
@@ -57,9 +69,9 @@ gulp.task('clean:hash', function () {
 
 gulp.task('js:concat:libs', function () {
 	return gulp.src([
-			'source/vendors/keyboard/dist/js/jquery.keyboard.min.js',
-			'source/vendors/jquery-fullscreen/jquery.fullscreen-min.js',
-			'source/vendors/iscroll/build/iscroll.js',
+			'node_modules/keyboard/dist/js/jquery.keyboard.min.js',
+			'node_modules/jquery-fullscreen-kayahr/jquery.fullscreen-min.js',
+			'node_modules/iscroll/build/iscroll.js',
 			'source/vendors/tinycolorpicker/lib/jquery.tinycolorpicker.min.js'
 		])
 		.pipe(gulpif("**/iscroll.js", uglify()))
@@ -96,13 +108,17 @@ gulp.task('watch', function () {
 			'source/js/**/*.js',
 			'source/js/*.js'
 		],
-		[
+		gulp.series(
 			'lessc',
 			'clean:hash',
 			'less:concat',
 			'js:concat:app',
 			'js:concat:libs',
 			'js:concat:bootstrap'
-		]
+		)
 	);
 });
+
+gulp.task('default', gulp.series('lessc', 'clean:hash', 'less:concat', 'js:concat:app', 'js:concat:libs', 'js:concat:bootstrap'));
+gulp.task('less', gulp.series('lessc', 'clean:hash', 'less:concat'));
+gulp.task('js', gulp.series('js:concat:app', 'js:concat:libs', 'js:concat:bootstrap'));

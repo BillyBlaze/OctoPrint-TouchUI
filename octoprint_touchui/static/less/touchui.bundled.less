@@ -221,11 +221,15 @@ line-height: 1;
 -webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;
 }
+// --------------------------------------------------
+// Flexbox LESS mixins
+// The spec: http://www.w3.org/TR/css3-flexbox
+// --------------------------------------------------
 .flex-display(@display: flex) {
 display: ~"-webkit-@{display}";
 display: ~"-moz-@{display}";
-display: ~"-ms-@{display}box";
-display: ~"-ms-@{display}";
+display: ~"-ms-@{display}box"; // IE10 uses -ms-flexbox
+display: ~"-ms-@{display}"; // IE11
 display: @display;
 }
 .flex(@columns: initial) {
@@ -683,6 +687,12 @@ padding: 0;
 }
 .page-container {
 width: 100%;
+// &.no-pointer {
+// 	:active {
+// 		color: inherit !important;
+// 		background: inherit !important;
+// 	}
+// }
 .octoprint-container {
 margin: 0;
 * {
@@ -1151,6 +1161,7 @@ a:before {
 content: "\f233";
 }
 }
+// Plugins
 #sidebar_plugin_filamentmanager_wrapper_link,
 #sidebar_plugin_filamentmanager_wrapper_link2 {
 a:before {
@@ -1202,6 +1213,7 @@ content: "\f11b";
 #print_link {
 .rem(line-height, 74);
 }
+// Pevent FOUT! (not dutch error!)
 &:first-child {
 &:before {
 font-family: "touchui";
@@ -2187,6 +2199,7 @@ line-height: 20vw;
 #gcode_canvas {
 width: 100% !important;
 height: 100% !important;
+// Disable hard all events
 pointer-events: none !important;
 }
 .slider {
@@ -2400,6 +2413,9 @@ margin-right: -10px;
 background: transparent;
 padding: 15px 10px !important;
 margin: 0;
+//@media (max-width: 350px) {
+//	padding: 9px 4px;
+//}
 * {
 display: none;
 }
@@ -2447,11 +2463,13 @@ display: none;
 .form-search {
 display: none;
 }
+// Depracated 1.3.9
 .slimScrollDiv {
 margin: 0 -@main-gutter 10px;
 height: auto !important;
 clear: both;
 }
+// Introduced 1.3.9
 .scroll-wrapper {
 margin: 0 -@main-gutter 10px;
 height: auto !important;
@@ -2872,7 +2890,7 @@ width: 100%;
 overflow: hidden;
 .page-container,
 #terminal-scroll-inner,
-#terminal-scroll > pre {
+#terminal-scroll > pre { //TODO remove ' > pre' backwards compatibility for <1.3.0
 position: absolute;
 z-index: 1;
 -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -3680,6 +3698,7 @@ text-decoration: none;
 }
 }
 }
+// For phone users
 #files_wrapper .entry,
 #temp .row-fluid table {
 .transform(translateZ(0));
