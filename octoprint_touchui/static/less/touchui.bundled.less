@@ -2525,6 +2525,11 @@ left: 0;
 clear: both;
 cursor: w-resize;
 transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
+.title.text-success:after {
+content: "\f00c";
+font-family: FontAwesome;
+padding-left: 10px;
+}
 &.open {
 left: -(@main-gutter + 40px);
 background: @swipe-list-background-open-color;
