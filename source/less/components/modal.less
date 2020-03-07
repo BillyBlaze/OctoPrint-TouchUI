@@ -67,26 +67,10 @@
 		}
 
 		&.shake {
-			-webkit-animation-name: inherit;
-			-moz-animation-name: inherit;
-			-o-animation-name: inherit;
-			animation-name: inherit;
-
-			> div {
-				-webkit-animation-duration: 1s;
-				   -moz-animation-duration: 1s;
-				     -o-animation-duration: 1s;
-				        animation-duration: 1s;
-				-webkit-animation-fill-mode: both;
-				   -moz-animation-fill-mode: both;
-				     -o-animation-fill-mode: both;
-				        animation-fill-mode: both;
-
-				-webkit-animation-name: shake;
-				-moz-animation-name: shake;
-				-o-animation-name: shake;
-				animation-name: shake;
-			}
+			-webkit-animation-name: shakeTouchUI;
+			-moz-animation-name: shakeTouchUI;
+			-o-animation-name: shakeTouchUI;
+			animation-name: shakeTouchUI;
 		}
 
 		.accordion-group {
@@ -301,4 +285,28 @@
 
 .controls {
 	margin-left: 20px;
+}
+
+@-webkit-keyframes shakeTouchUI {
+	0%, 100% {margin-left:0;}
+	10%, 30%, 50%, 70%, 90% {margin-left:-10px;}
+	20%, 40%, 60%, 80% {margin-left:10px;}
+}
+
+@-moz-keyframes shakeTouchUI {
+	0%, 100% {margin-left:0;}
+	10%, 30%, 50%, 70%, 90% {margin-left:-10px;}
+	20%, 40%, 60%, 80% {margin-left:10px;}
+}
+
+@-o-keyframes shakeTouchUI {
+	0%, 100% {margin-left:0;}
+	10%, 30%, 50%, 70%, 90% {margin-left:-10px;}
+	20%, 40%, 60%, 80% {margin-left:10px;}
+}
+
+@keyframes shakeTouchUI {
+	0%, 100% {margin-left:0;}
+	10%, 30%, 50%, 70%, 90% {margin-left:-10px;}
+	20%, 40%, 60%, 80% {margin-left:10px;}
 }
