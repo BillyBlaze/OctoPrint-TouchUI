@@ -18,14 +18,12 @@ TouchUI.prototype.DOM.move.controls = {
 
 		}
 
-		$("#control-jog-feedrate").attr("data-bind", $("#control-jog-extrusion").data("bind")).insertAfter("#control-jog-extrusion");
+		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
 		$("#control-jog-extrusion button:last-child").prependTo("#control-jog-feedrate");
-		$("#control-jog-extrusion input:last-child").prependTo("#control-jog-feedrate");
+		$("#control-jog-extrusion input:last-child").attr('data-bind', $("#control-jog-extrusion input:last-child").attr('data-bind').replace('slider: {', 'slider: {tools: tools(), ')).prependTo("#control-jog-feedrate");
 		$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
 
 		$("#control div.distance").prependTo("#control-jog-feedrate");
-		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
-
 	}
 
 }

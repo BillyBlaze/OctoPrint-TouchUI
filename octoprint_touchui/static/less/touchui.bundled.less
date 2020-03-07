@@ -1346,6 +1346,7 @@ display: none;
 }
 &-inner {
 padding: 0;
+background: transparent !important;
 hr {
 display: none;
 }
@@ -2740,8 +2741,14 @@ padding: (@modal-gutter - 10px) @modal-gutter;
 margin-bottom: 60px;
 min-height: 0 !important;
 max-height: none !important;
-.span3.scrollable,
-.nav.nav-pills {
+#settings_dialog_menu {
+width: 0;
+height: 0;
+}
+#settingsTabs,
+#usersettings_access_link,
+#usersettings_interface_link,
+#usersettings_plugin_appkeys_link {
 display: none;
 }
 .tab-pane {

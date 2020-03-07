@@ -27,7 +27,7 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$items.each(function(ind, elm) {
 			$(elm).text("");
 		}.bind(this));
-		
+
 		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
@@ -54,6 +54,6 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 200));
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 600));
 		resize();
-
+		_.debounce(resize, 200);
 	}
 }

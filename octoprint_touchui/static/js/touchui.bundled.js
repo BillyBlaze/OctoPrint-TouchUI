@@ -495,16 +495,23 @@ TouchUI.prototype.components.slider = {
 				setTimeout(function() {
 					var $button = $(element).next('button');
 					var id = _.uniqueId("ui-inp");
+					var text = $button.text().split(":")[0].replace(" ", "");
 
 					$button.appendTo(div);
 					$element.appendTo(div);
 
 					$(div).find('input').attr("id", id);
 
-					var lbl = $('<label for="' + id + '" style="display: inline-block;">' + $button.text().split(":")[0].replace(" ", "") + ':</label>');
+					var lbl = $('<label for="' + id + '" style="display: inline-block;">' + text + ':</label>');
 					lbl.appendTo('.octoprint-container')
 					$element.attr("style", "padding-left:" + (lbl.width() + 15) + "px");
 					lbl.appendTo(div);
+
+					if (valueAccessor().tools && valueAccessor().tools.length === 0) {
+						div.hide();
+					} else {
+						div.show();
+					}
 
 				}, 60);
 
@@ -519,6 +526,12 @@ TouchUI.prototype.components.slider = {
 			},
 			update: function (element, valueAccessor) {
 				$(element).val(parseFloat(valueAccessor().value()));
+
+				if (valueAccessor().tools && valueAccessor().tools.length === 0) {
+					$(element).parent().hide();
+				} else {
+					$(element).parent().show();
+				}
 			}
 		};
 
@@ -2097,14 +2110,12 @@ TouchUI.prototype.DOM.move.controls = {
 
 		}
 
-		$("#control-jog-feedrate").attr("data-bind", $("#control-jog-extrusion").data("bind")).insertAfter("#control-jog-extrusion");
+		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
 		$("#control-jog-extrusion button:last-child").prependTo("#control-jog-feedrate");
-		$("#control-jog-extrusion input:last-child").prependTo("#control-jog-feedrate");
+		$("#control-jog-extrusion input:last-child").attr('data-bind', $("#control-jog-extrusion input:last-child").attr('data-bind').replace('slider: {', 'slider: {tools: tools(), ')).prependTo("#control-jog-feedrate");
 		$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
 
 		$("#control div.distance").prependTo("#control-jog-feedrate");
-		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
-
 	}
 
 }
@@ -2255,7 +2266,7 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$items.each(function(ind, elm) {
 			$(elm).text("");
 		}.bind(this));
-		
+
 		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
@@ -2282,7 +2293,7 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 200));
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 600));
 		resize();
-
+		_.debounce(resize, 200);
 	}
 }
 
