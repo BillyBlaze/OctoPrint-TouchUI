@@ -17,9 +17,10 @@ TouchUI.prototype = {
 		isFullscreen: ko.observable(false),
 		isTouchscreen: ko.observable(false),
 
-		isEpiphanyOrKweb: (window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1),
-		isChromiumArm: (window.navigator.userAgent.indexOf("X11") !== -1 && window.navigator.userAgent.indexOf("Chromium") !== -1 && window.navigator.userAgent.indexOf("armv7l") !== -1 || window.navigator.userAgent.indexOf("TouchUI") !== -1),
+		isEpiphanyOrKweb: window.navigator.userAgent.indexOf("AppleWebKit") !== -1 && window.navigator.userAgent.indexOf("ARM Mac OS X") !== -1,
+		isChromiumArm: window.navigator.userAgent.indexOf("X11") !== -1 && window.navigator.userAgent.indexOf("Chromium") !== -1 && window.navigator.userAgent.indexOf("armv7l") !== -1,
 
+		hasBootloader: window.navigator.userAgent.indexOf("TouchUI") !== -1,
 		hasFullscreen: ko.observable(document.webkitCancelFullScreen || document.msCancelFullScreen || document.oCancelFullScreen || document.mozCancelFullScreen || document.cancelFullScreen),
 		hasLocalStorage: ('localStorage' in window),
 		hasTouch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
@@ -62,35 +63,6 @@ TouchUI.prototype = {
 	}
 
 }
-
-!function() {
-
-	// Catch errors
-	if (TouchUI.prototype.settings.isChromiumArm) {
-		if (window.log && window.log.error) {
-			var old = window.log.error;
-			window.log.error = function(plugin, msg) {
-				window.top.postMessage([msg, ''], "*");
-				old.apply(window.log, arguments);
-			}
-		}
-	}
-
-	var Touch = new TouchUI();
-	Touch.domLoading();
-
-	$(function() {
-		Touch.domReady();
-
-		OCTOPRINT_VIEWMODELS.push([
-			Touch.koStartup,
-			Touch.TOUCHUI_REQUIRED_VIEWMODELS,
-			Touch.TOUCHUI_ELEMENTS,
-			Touch.TOUCHUI_REQUIRED_VIEWMODELS
-		]);
-	});
-
-}();
 
 TouchUI.prototype.animate.hide = function(what) {
 	var self = this;
@@ -612,19 +584,19 @@ TouchUI.prototype.components.touchscreen = {
 
 	init: function () {
 		$("html").addClass("isTouchscreenUI");
-		
+
 		if (this.settings.isEpiphanyOrKweb) {
 			this.settings.hasTouch = false;
 			this.scroll.defaults.iScroll.disableTouch = true;
 			this.scroll.defaults.iScroll.disableMouse = false;
 		}
-		
+
 		this.settings.isTouchscreen(true);
 
-		if (this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm) {
+		if (this.settings.hasBootloader) {
 			this.settings.hasFullscreen(false);
 		}
-		
+
 		$('.modal.fade').removeClass('fade');
 		$('#gcode_link').remove();
 
@@ -695,7 +667,11 @@ TouchUI.prototype.core.init = function() {
 
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (!this.settings.hasTouch || this.settings.isChromiumArm) {
+			if (
+				!this.settings.hasTouch ||
+				this.settings.isEpiphanyOrKweb ||
+				this.settings.isChromiumArm
+			) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -710,18 +686,18 @@ TouchUI.prototype.core.init = function() {
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
 		if (
 			(
-				this.settings.isEpiphanyOrKweb || 
-				this.settings.isChromiumArm && 
+				this.settings.isEpiphanyOrKweb ||
+				this.settings.isChromiumArm &&
 				this.DOM.storage.get("touchscreenActive") === undefined
-			) || 
+			) ||
 			this.DOM.storage.get("touchscreenActive")
 		) {
 			this.components.touchscreen.init.call(this);
 		}
 
 		// If TouchUI has been started through bootloader then initialize the process during reloads
-		if (this.settings.isChromiumArm && window.top.postMessage) {
-			window.onbeforeunload = function(event) {
+		if (this.settings.hasBootloader && window.top.postMessage) {
+			window.onbeforeunload = function() {
 				window.top.postMessage("reset", "*");
 			};
 		}
@@ -741,7 +717,7 @@ TouchUI.prototype.core.boot = function() {
 		document.location.hash === "#touch" ||
 		document.location.href.indexOf("?touch") > 0 ||
 		this.DOM.storage.get("active") ||
-		this.settings.isChromiumArm
+		this.settings.hasBootloader
 	) {
 
 		return true;
@@ -1488,6 +1464,44 @@ TouchUI.prototype.plugins.autoBedLevel = function() {
 	});
 }
 
+TouchUI.prototype.plugins.init = function () {
+	var disablePlugins = [
+		{
+			htmlId: '#settings_plugin_themeify'
+		}, {
+			functionName: 'TempsgraphViewModel'
+		}, {
+			constructorName: 'WebcamTabViewModel'
+		}, {
+			constructorName: 'AblExpertViewModel',
+			extra: function() {
+				$('#settings_plugin_ABL_Expert').hide();
+				$('#settings_plugin_ABL_Expert_link').hide();
+				$('#processing_dialog_plugin_ABL_Expert').hide();
+				$('#results_dialog_plugin_ABL_Expert').hide();
+			}
+		}
+	];
+
+	_.remove(OCTOPRINT_VIEWMODELS, function(viewModel) {
+
+		if (_.isArray(viewModel)) {
+			return _.includes(disablePlugins, function(plugin) {
+				if (plugin.htmlId) {
+
+				}
+			});
+		}
+
+		if (_.isPlainObject(viewModel)) {
+
+		}
+
+		return false;
+	});
+
+}
+
 TouchUI.prototype.plugins.navbarTemp = function() {}
 
 TouchUI.prototype.plugins.psuControl = function() {
@@ -1553,9 +1567,11 @@ TouchUI.prototype.plugins.tempsGraph = function() {
 TouchUI.prototype.plugins.themify = function() {
 
 	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
-		if (obj[2] && _.isArray(obj[2]) && obj[2].indexOf("#settings_plugin_themeify") !== -1) {
-			console.info("TouchUI: Themeify is disabled while TouchUI is active.");
-			return true;
+		if (obj.length > 2) {
+			if (obj[2] && _.isArray(obj[2]) && obj[2].indexOf("#settings_plugin_themeify") !== -1) {
+				console.info("TouchUI: Themeify is disabled while TouchUI is active.");
+				return true;
+			}
 		}
 		
 		return false;
