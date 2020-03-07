@@ -1,7 +1,7 @@
 !function() {
 
 	// Catch errors
-	if (TouchUI.prototype.settings.isChromiumArm) {
+	if (TouchUI.prototype.settings.hasBootloader) {
 		if (window.log && window.log.error) {
 			var old = window.log.error;
 			window.log.error = function(plugin, msg) {

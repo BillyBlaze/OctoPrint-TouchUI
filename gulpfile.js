@@ -81,10 +81,10 @@ gulp.task('js:concat:libs', function () {
 
 gulp.task('js:concat:app', function () {
 	return gulp.src([
-			'!source/js/bootstrap.js',
 			'source/js/constructor.js',
 			'source/js/**/*.js',
-			'source/js/**/**/*.js'
+			'source/js/**/**/*.js',
+			'!source/js/bootstrap.js'
 		])
 		.pipe(concat('touchui.bundled.js'))
 		//.pipe(uglify())
@@ -109,12 +109,7 @@ gulp.task('watch', function () {
 			'source/js/*.js'
 		],
 		gulp.series(
-			'lessc',
-			'clean:hash',
-			'less:concat',
-			'js:concat:app',
-			'js:concat:libs',
-			'js:concat:bootstrap'
+			'default'
 		)
 	);
 });

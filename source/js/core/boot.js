@@ -5,7 +5,7 @@ TouchUI.prototype.core.boot = function() {
 		document.location.hash === "#touch" ||
 		document.location.href.indexOf("?touch") > 0 ||
 		this.DOM.storage.get("active") ||
-		this.settings.isChromiumArm
+		this.settings.hasBootloader
 	) {
 
 		return true;
