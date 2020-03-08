@@ -8,6 +8,7 @@ dist
 .DS_Store
 *.zip
 node_modules
+.vscode/
 octoprint_touchui/WHATSNEW.md
 !source/vendors/tinycolorpicker/*
 source/vendors/

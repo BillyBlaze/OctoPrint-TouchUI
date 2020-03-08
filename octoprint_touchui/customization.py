@@ -48,7 +48,7 @@ class touchui_customization(object):
 
 			if os.path.isfile(self._customLessPath):
 				with open(self._customLessPath, 'r') as contentFile:
-					hashedNew = hashlib.md5(contentFile.read()).hexdigest()
+					hashedNew = hashlib.md5(contentFile.read().encode('utf-8')).hexdigest()
 
 			if os.path.isfile(self._customHashPath):
 				with open(self._customHashPath, 'r') as contentFile:
@@ -106,7 +106,7 @@ class touchui_customization(object):
 
 		if os.path.isfile(self._customLessPath):
 			with open(self._customLessPath, 'r') as contentFile:
-				hashed = hashlib.md5(contentFile.read()).hexdigest()
+				hashed = hashlib.md5(contentFile.read().encode('utf-8')).hexdigest()
 
 		with open(self._customHashPath, "w+") as customHash:
 			customHash.write('{hash}'.format(hash=hashed))

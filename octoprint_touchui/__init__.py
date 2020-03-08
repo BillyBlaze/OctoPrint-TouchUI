@@ -27,7 +27,7 @@ class touchui_core(	touchui_api,
 
 	def on_settings_load(self):
 		return self._load_custom_settings()
-		
+
 	def on_settings_save(self, data):
 		self._save_custom_settings(data)
 
@@ -37,10 +37,10 @@ class touchui_core(	touchui_api,
 	def get_template_vars(self):
 		if os.path.isfile(self._customCssPath) and self._settings.get(["useCustomization"]):
 			with open(self._customCssPath, 'r') as contentFile:
-				return dict(cssPath="./plugin/touchui/static/css/touchui.custom.{port}.css".format(port=self._port), timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])
+				return dict(cssPath="./plugin/touchui/static/css/touchui.custom.{port}.css".format(port=self._port), timestamp=hashlib.md5(contentFile.read().encode('utf-8')).hexdigest()[:9])
 		else:
 			with open(self._cssPath, 'r') as contentFile:
-				return dict(cssPath="./plugin/touchui/static/css/touchui.css", timestamp=hashlib.md5(contentFile.read()).hexdigest()[:9])
+				return dict(cssPath="./plugin/touchui/static/css/touchui.css", timestamp=hashlib.md5(contentFile.read().encode('utf-8')).hexdigest()[:9])
 
 	def get_assets(self):
 		return dict(
@@ -101,6 +101,7 @@ class touchui_core(	touchui_api,
 		)
 
 __plugin_name__ = "TouchUI"
+__plugin_pythoncompat__ = ">=2.7,<4"
 def __plugin_load__():
 	touchui = touchui_core()
 
