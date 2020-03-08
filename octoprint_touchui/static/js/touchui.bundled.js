@@ -1415,7 +1415,6 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			window.top.postMessage([true, self.settings.colors.mainColor(), self.settings.colors.bgColor()], "*");
 
 			ko.computed(function() {
-				console.log('mainColor, bgColor');
 				window.top.postMessage([true, self.settings.colors.mainColor(), self.settings.colors.bgColor()], "*");
 			});
 
