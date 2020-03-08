@@ -1393,11 +1393,11 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 				}, 100);
 			}
 		});
-		
+
 		// Evuluate computed subscriber defined above:
 		// In OctoPrint >1.3.5 the settings will be defined upfront
 		requireNewCSS.notifySubscribers(self.settings.requireNewCSS() && viewModels.loginStateViewModel.isAdmin());
-		
+
 		//TODO: move this
 		$("li.dropdown#navbar_login > a.dropdown-toggle").off("click").on("click", function(e) {
 			e.stopImmediatePropagation();
@@ -1405,23 +1405,26 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 			$(this).parent().toggleClass("open");
 		});
-		
+
 		if (window.top.postMessage) {
 			// Tell bootloader we're ready with giving him the expected version for the bootloader
 			// if version is lower on the bootloader, then the bootloader will throw an update msg
 			window.top.postMessage(self.settings.requiredBootloaderVersion, "*");
-			
+
 			// Sync customization with bootloader
 			window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
-			
+
 			// Stop watching for errors
 			$(window).off("error.touchui");
-			
+
 			// Trigger wake-up for iScroll
 			if(window.dispatchEvent) {
 				window.dispatchEvent(new Event('resize'));
 			}
 		}
+
+		// Re-render tabbar
+		$(window).trigger('resize.touchui.tabbar');
 	}
 }
 
@@ -2261,8 +2264,8 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$(window).on('resize.touchui.tabbar', resize);
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 200));
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 600));
-		resize();
-		_.debounce(resize, 200);
+
+		$(window).trigger('resize.touchui.tabbar');
 	}
 }
 

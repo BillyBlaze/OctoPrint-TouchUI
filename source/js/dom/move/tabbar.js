@@ -53,7 +53,7 @@ TouchUI.prototype.DOM.move.tabbar = {
 		$(window).on('resize.touchui.tabbar', resize);
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 200));
 		$(window).on('resize.touchui.tabbar', _.debounce(resize, 600));
-		resize();
-		_.debounce(resize, 200);
+
+		$(window).trigger('resize.touchui.tabbar');
 	}
 }
