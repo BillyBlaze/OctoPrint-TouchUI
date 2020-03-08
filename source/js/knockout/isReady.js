@@ -152,7 +152,11 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 			window.top.postMessage(self.settings.requiredBootloaderVersion, "*");
 
 			// Sync customization with bootloader
-			window.top.postMessage([true, $("#navbar").css("background-color"), $("body").css("background-color")], "*");
+			window.top.postMessage([true, self.settings.colors.mainColor(), self.settings.colors.bgColor()], "*");
+
+			ko.computed(function() {
+				window.top.postMessage([true, self.settings.colors.mainColor(), self.settings.colors.bgColor()], "*");
+			});
 
 			// Stop watching for errors
 			$(window).off("error.touchui");
