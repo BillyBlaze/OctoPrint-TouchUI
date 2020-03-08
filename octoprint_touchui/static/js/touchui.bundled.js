@@ -789,10 +789,7 @@ TouchUI.prototype.core.bridge = function() {
 					// just before this happens.
 					var old = moment.locale;
 					moment.locale = function() {
-						self.plugins.tempsGraph.call(self);
-						self.plugins.webcamTab.call(self);
-						self.plugins.autoBedLevel.call(self);
-						self.plugins.themify.call(self);
+						self.plugins.disable.init.call(self);
 						old.apply(moment, arguments);
 					};
 				}
@@ -1459,34 +1456,20 @@ TouchUI.prototype.plugins.init = function (viewModels) {
 	this.plugins.screenSquish(viewModels.pluginManagerViewModel);
 }
 
-TouchUI.prototype.plugins.autoBedLevel = function() {
-
-	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
-		if (obj && obj.construct && obj.construct.name && obj.construct.name === "AblExpertViewModel") {
-			console.info("TouchUI: AblExpert is disabled while TouchUI is active.");
-
-			$('#settings_plugin_ABL_Expert').hide();
-			$('#settings_plugin_ABL_Expert_link').hide();
-			$('#processing_dialog_plugin_ABL_Expert').hide();
-			$('#results_dialog_plugin_ABL_Expert').hide();
-
-			return true;
-		}
-		
-		return false;
-	});
-}
-
-TouchUI.prototype.plugins.init = function () {
-	var disablePlugins = [
+TouchUI.prototype.plugins.disable = {
+	plugins: [
 		{
-			htmlId: '#settings_plugin_themeify'
+			htmlId: '#settings_plugin_themeify',
+			name: 'Themeify'
 		}, {
-			functionName: 'TempsgraphViewModel'
+			functionName: 'TempsgraphViewModel',
+			name: 'TempsGraph'
 		}, {
-			constructorName: 'WebcamTabViewModel'
+			functionName: 'WebcamTabViewModel',
+			name: 'WebcamTab'
 		}, {
-			constructorName: 'AblExpertViewModel',
+			functionName: 'AblExpertViewModel',
+			name: 'ABLExpert',
 			extra: function() {
 				$('#settings_plugin_ABL_Expert').hide();
 				$('#settings_plugin_ABL_Expert_link').hide();
@@ -1494,28 +1477,47 @@ TouchUI.prototype.plugins.init = function () {
 				$('#results_dialog_plugin_ABL_Expert').hide();
 			}
 		}
-	];
+	],
 
-	_.remove(OCTOPRINT_VIEWMODELS, function(viewModel) {
+	init: function () {
+		var self = this;
 
-		if (_.isArray(viewModel)) {
-			return _.includes(disablePlugins, function(plugin) {
-				if (plugin.htmlId) {
+		_.remove(OCTOPRINT_VIEWMODELS, function(viewModel) {
+			return _.some(
+				self.plugins.disable.plugins,
+				self.plugins.disable.find.bind(
+					_.flattenDeep(
+						_.isPlainObject(viewModel) ? _.values(viewModel) : viewModel
+					)
+				)
+			);
+		});
+	},
 
-				}
+	find: function(plugin) {
+		var result = false;
+
+		if (plugin.htmlId) {
+			result = this.indexOf(plugin.htmlId) !== -1;
+		}
+
+		if (plugin.functionName) {
+			result = _.some(this, function(viewModelProp) {
+				return viewModelProp.name && viewModelProp.name === plugin.functionName;
 			});
 		}
 
-		if (_.isPlainObject(viewModel)) {
+		if (result) {
+			console.info("TouchUI: " + plugin.name + " is disabled while TouchUI is active.");
 
+			if (plugin.extra) {
+				plugin.extra();
+			}
 		}
 
-		return false;
-	});
-
+		return result;
+	}
 }
-
-TouchUI.prototype.plugins.navbarTemp = function() {}
 
 TouchUI.prototype.plugins.psuControl = function() {
 
@@ -1563,48 +1565,6 @@ TouchUI.prototype.plugins.screenSquish = function(pluginManagerViewModel) {
 	});
 
 };
-
-TouchUI.prototype.plugins.tempsGraph = function() {
-
-	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
-		if (obj[0] && obj[0].name === "TempsgraphViewModel") {
-			console.info("TouchUI: TempsGraph is disabled while TouchUI is active.");
-			return true;
-		}
-		
-		return false;
-	});
-
-}
-
-TouchUI.prototype.plugins.themify = function() {
-
-	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
-		if (obj.length > 2) {
-			if (obj[2] && _.isArray(obj[2]) && obj[2].indexOf("#settings_plugin_themeify") !== -1) {
-				console.info("TouchUI: Themeify is disabled while TouchUI is active.");
-				return true;
-			}
-		}
-		
-		return false;
-	});
-
-}
-
-TouchUI.prototype.plugins.webcamTab = function() {
-
-	_.remove(OCTOPRINT_VIEWMODELS, function(obj) {
-		if (obj && obj.construct && obj.construct.name && obj.construct.name === "WebcamTabViewModel") {
-			console.info("TouchUI: WebcamTab is disabled while TouchUI is active.");
-			$('#tab_plugin_webcamtab_link, #tab_plugin_webcamtab').remove();
-			return true;
-		}
-		
-		return false;
-	});
-
-}
 
 TouchUI.prototype.scroll.beforeLoad = function() {
 

@@ -29,7 +29,7 @@ gulp.task("less:concat", function() {
 		.pipe(through.obj(function(file, enc, cb) {
 			var contents = file.contents.toString();
 			var regex = /@import \"(.*)\"\;/gm;
-			
+
 			while ((m = regex.exec(contents)) !== null) {
 				if (m.index === regex.lastIndex) {
 					regex.lastIndex++;
@@ -102,15 +102,12 @@ gulp.task('js:concat:bootstrap', function () {
 
 gulp.task('watch', function () {
 	gulp.watch(
-		[
-			'source/less/touchui.less',
-			'source/less/**/*.less',
-			'source/js/**/*.js',
-			'source/js/*.js'
-		],
-		gulp.series(
-			'default'
-		)
+		['source/js/**/*.js', 'source/js/*.js'],
+		gulp.series('js')
+	);
+	gulp.watch(
+		['source/less/touchui.less', 'source/less/**/*.less'],
+		gulp.series('less')
 	);
 });
 
