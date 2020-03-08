@@ -1,25 +1,23 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from .crossdomain import crossdomain
+from .decorators import crossdomain, touchui_admin_permission
+from octoprint.server.util.flask import restricted_access
 
 import octoprint.plugin
 import octoprint.settings
 import octoprint.util
 import flask
+import functools
 import os
 
-from octoprint.server.util.flask import restricted_access
-from octoprint.server import admin_permission, VERSION
-
 class touchui_api(octoprint.plugin.BlueprintPlugin):
-	
 	def increase_upload_bodysize(self, current_max_body_sizes, *args, **kwargs):
 		return [("POST", r"/css", 1 * 1024 * 1024), ("GET", r"/css", 1 * 1024 * 1024)]
 
 	@octoprint.plugin.BlueprintPlugin.route("/css", methods=["POST"])
 	@restricted_access
-	@admin_permission.require(403)
+	@touchui_admin_permission
 	def saveCSS(self):
 		if not "css" in flask.request.values:
 			return flask.make_response("Expected a CSS value.", 400)
@@ -35,7 +33,7 @@ class touchui_api(octoprint.plugin.BlueprintPlugin):
 
 	@octoprint.plugin.BlueprintPlugin.route("/css", methods=["GET"])
 	@restricted_access
-	@admin_permission.require(403)
+	@touchui_admin_permission
 	def getCSS(self):
 		data = ""
 

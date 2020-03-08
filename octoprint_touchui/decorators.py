@@ -2,8 +2,27 @@
 from __future__ import absolute_import
 
 from datetime import timedelta
-from flask import make_response, request, current_app
-from functools import update_wrapper
+from flask import make_response, request, current_app, abort
+from functools import update_wrapper, wraps
+
+try:
+	from octoprint.access.permissions import Permissions
+except:
+	from octoprint.server import admin_permission
+
+def touchui_admin_permission(f):
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		try:
+			plugin_permission = Permissions.PLUGIN_TOUCHUI_ADMIN.can()
+		except:
+			plugin_permission = admin_permission.can()
+
+		if not plugin_permission:
+			return abort(403)
+
+		return f(*args, **kwargs)
+	return decorated_function
 
 def crossdomain(origin=None, methods=None, headers=None,
 				max_age=21600, attach_to_all=True,

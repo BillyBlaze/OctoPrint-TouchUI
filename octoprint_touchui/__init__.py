@@ -11,6 +11,11 @@ import hashlib
 import time
 import os
 
+try:
+	from octoprint.access.permissions import ADMIN_GROUP
+except:
+	ADMIN_GROUP=None
+
 class touchui_core(	touchui_api,
 					touchui_customization,
 					octoprint.plugin.SettingsPlugin,
@@ -67,6 +72,18 @@ class touchui_core(	touchui_api,
 
 		return files
 
+	def get_additional_permissions(self):
+		return [
+			dict(
+				key="ADMIN",
+				name="Admin access",
+				description="Allows administrating all application keys",
+				roles=["admin"],
+				dangerous=True,
+				default_groups=[ADMIN_GROUP]
+			)
+		]
+
 	def get_settings_defaults(self):
 		return dict(
 			hasVisibleSettings=True,
@@ -111,5 +128,6 @@ def __plugin_load__():
 	global __plugin_hooks__
 	__plugin_hooks__ = {
 		"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-		"octoprint.server.http.bodysize": __plugin_implementation__.increase_upload_bodysize
+		"octoprint.server.http.bodysize": __plugin_implementation__.increase_upload_bodysize,
+		"octoprint.access.permissions": __plugin_implementation__.get_additional_permissions
 	}

@@ -1,7 +1,10 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-from octoprint.server import admin_permission, VERSION
+try:
+	from octoprint.access.permissions import Permissions
+except:
+	from octoprint.server import admin_permission
 
 import octoprint.plugin
 import octoprint.settings
@@ -67,7 +70,12 @@ class touchui_customization(object):
 		data["refreshCSS"] = self._refreshCSS
 		data["whatsNew"] = False
 
-		if admin_permission.can():
+		try:
+			plugin_permission = Permissions.PLUGIN_TOUCHUI_ADMIN.can()
+		except:
+			plugin_permission = admin_permission.can()
+
+		if plugin_permission:
 			if os.path.isfile(self._whatsNewPath):
 				with open(self._whatsNewPath, 'r') as contentFile:
 					data["whatsNew"] = contentFile.read()
