@@ -33,6 +33,15 @@ TouchUI.prototype.components.touchscreen = {
 					return confirm("Do you want to navigate away from TouchUI?");
 				});
 		});
+
+		// disable dashboard layer progress
+		if ($('.dashboardGridItem').length > 0) {
+			$('.dashboardGridItem').each(function(i, elm) {
+				if ($(elm).find('[title="Layer Progress"]').length > 0) {
+					$(elm).remove();
+				}
+			});
+		}
 	},
 
 	isLoading: function (viewModels) {
