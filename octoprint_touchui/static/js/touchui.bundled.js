@@ -1273,7 +1273,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Remove active keyboard when disabled
 		self.components.keyboard.isActive.subscribe(function(isActive) {
-			if( !isActive ) {
+			if (!isActive) {
 				$(".ui-keyboard-input").each(function(ind, elm) {
 					$(elm).data("keyboard").destroy();
 				});
@@ -1283,7 +1283,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		// Remove drag files into website feature
 		$(document).off("drag");
 		$(document).off("dragover");
-		if(viewModels.gcodeFilesViewModel && viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		if (viewModels.gcodeFilesViewModel && viewModels.gcodeFilesViewModel._enableDragNDrop) {
 			viewModels.gcodeFilesViewModel._enableDragNDrop(false);
 			viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
 			viewModels.gcodeFilesViewModel._forceEndDragNDrop = function() {};
@@ -1291,7 +1291,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Hide the dropdown after login
 		viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
-			if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
+			if (isLoggedIn && $(".open > .dropdown-menu").length > 0) {
 				$(document).trigger("click");
 			}
 		});
@@ -1303,7 +1303,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		});
 
 		// Resize height of low-fi terminal to enable scrolling
-		if($("#terminal-output-lowfi").prop("scrollHeight")) {
+		if ($("#terminal-output-lowfi").prop("scrollHeight")) {
 			viewModels.terminalViewModel.plainLogOutput.subscribe(function() {
 				$("#terminal-output-lowfi").height($("#terminal-output-lowfi").prop("scrollHeight"));
 			});
@@ -1316,12 +1316,12 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
 		// (Re-)Apply bindings to the new webcam div
-		if($("#webcam").length) {
+		if ($("#webcam").length) {
 			ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 		}
 
 		// (Re-)Apply bindings to the new navigation div
-		if($("#navbar_login").length) {
+		if ($("#navbar_login").length) {
 			try {
 				ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 			} catch(err) {}
@@ -1337,7 +1337,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		}
 
 		// (Re-)Apply bindings to the new system commands div
-		if($("#navbar_systemmenu").length) {
+		if ($("#navbar_systemmenu").length) {
 			ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
 			ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
 		}
@@ -1482,7 +1482,10 @@ TouchUI.prototype.plugins.disable = {
 			name: 'TempsGraph'
 		}, {
 			functionName: 'WebcamTabViewModel',
-			name: 'WebcamTab'
+			name: 'WebcamTab',
+			extra: function() {
+				$('#tab_plugin_webcamtab_link').remove();
+			}
 		}, {
 			functionName: 'AblExpertViewModel',
 			name: 'ABLExpert',
@@ -2214,18 +2217,19 @@ TouchUI.prototype.DOM.move.sidebar = {
 }
 
 TouchUI.prototype.DOM.move.tabbar = {
-	init: function() {
-		//var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
+	init: function(viewModels) {
 
 		var $items = $("#tabs > li:not(#print_link, #touchui_dropdown_link, .hidden_touch)");
-		$($items).each(function(ind, elm) {
+		$($items.get().reverse()).each(function(ind, elm) {
 			var $elm = $(elm);
 
 			// Clone the items into the dropdown, and make it click the orginal link
 			$elm
 				.clone()
 				.attr("id", $elm.attr("id")+"2")
-				.prependTo("#all_touchui_settings > .dropdown-menu")
+				.removeAttr('style')
+				.removeAttr('data-bind')
+				.prependTo(this.DOM.create.dropdown.container)
 				.find("a")
 				.off("click")
 				.on("click", function(e) {
@@ -2235,22 +2239,32 @@ TouchUI.prototype.DOM.move.tabbar = {
 					return false;
 				});
 
-			$elm.addClass("hidden_touch");
+			// $elm.addClass("hidden_touch");
 		}.bind(this));
 
-		$items = $("#tabs > li > a");
-		$items.each(function(ind, elm) {
+		$("#tabs > li > a").each(function(ind, elm) {
 			$(elm).text("");
-		}.bind(this));
+		});
 
 		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
-			var items = $('#tabs > li:not("#touchui_dropdown_link")');
+			var $items = $('#tabs > li:not("#touchui_dropdown_link")');
 			var itemsFit = Math.floor(winWidth / width) - 2;
 
+			// Loop over items; if they contain display: none; then do
+			// not show them in the dropdown menu and filter them out from items
+			$items = $items.filter(function(i, elm) {
+				if (($(elm).attr('style') || "").indexOf('none') !== -1) {
+					$('#' + $(elm).attr('id') + '2').addClass('hidden_touch');
+					return false;
+				}
+
+				return true;
+			});
+
 			if (winWidth > (width * 2)) {
-				items.each(function(key, elm) {
+				$items.each(function(key, elm) {
 					if (key > itemsFit) {
 						$(elm).addClass('hidden_touch');
 						$('#' + $(elm).attr('id') + '2').removeClass('hidden_touch');

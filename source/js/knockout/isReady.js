@@ -13,7 +13,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Remove active keyboard when disabled
 		self.components.keyboard.isActive.subscribe(function(isActive) {
-			if( !isActive ) {
+			if (!isActive) {
 				$(".ui-keyboard-input").each(function(ind, elm) {
 					$(elm).data("keyboard").destroy();
 				});
@@ -23,7 +23,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		// Remove drag files into website feature
 		$(document).off("drag");
 		$(document).off("dragover");
-		if(viewModels.gcodeFilesViewModel && viewModels.gcodeFilesViewModel._enableDragNDrop) {
+		if (viewModels.gcodeFilesViewModel && viewModels.gcodeFilesViewModel._enableDragNDrop) {
 			viewModels.gcodeFilesViewModel._enableDragNDrop(false);
 			viewModels.gcodeFilesViewModel._enableDragNDrop = function() {};
 			viewModels.gcodeFilesViewModel._forceEndDragNDrop = function() {};
@@ -31,7 +31,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Hide the dropdown after login
 		viewModels.settingsViewModel.loginState.loggedIn.subscribe(function(isLoggedIn) {
-			if(isLoggedIn && $(".open > .dropdown-menu").length > 0) {
+			if (isLoggedIn && $(".open > .dropdown-menu").length > 0) {
 				$(document).trigger("click");
 			}
 		});
@@ -43,7 +43,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		});
 
 		// Resize height of low-fi terminal to enable scrolling
-		if($("#terminal-output-lowfi").prop("scrollHeight")) {
+		if ($("#terminal-output-lowfi").prop("scrollHeight")) {
 			viewModels.terminalViewModel.plainLogOutput.subscribe(function() {
 				$("#terminal-output-lowfi").height($("#terminal-output-lowfi").prop("scrollHeight"));
 			});
@@ -56,12 +56,12 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		this.core.version.init.call(this, viewModels.softwareUpdateViewModel);
 
 		// (Re-)Apply bindings to the new webcam div
-		if($("#webcam").length) {
+		if ($("#webcam").length) {
 			ko.applyBindings(viewModels.controlViewModel, $("#webcam")[0]);
 		}
 
 		// (Re-)Apply bindings to the new navigation div
-		if($("#navbar_login").length) {
+		if ($("#navbar_login").length) {
 			try {
 				ko.applyBindings(viewModels.navigationViewModel, $("#navbar_login")[0]);
 			} catch(err) {}
@@ -77,7 +77,7 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		}
 
 		// (Re-)Apply bindings to the new system commands div
-		if($("#navbar_systemmenu").length) {
+		if ($("#navbar_systemmenu").length) {
 			ko.applyBindings(viewModels.navigationViewModel, $("#navbar_systemmenu")[0]);
 			ko.applyBindings(viewModels.navigationViewModel, $("#divider_systemmenu")[0]);
 		}

@@ -1,16 +1,17 @@
 TouchUI.prototype.DOM.move.tabbar = {
-	init: function() {
-		//var howManyToSplice = ($("#webcam_container").length > 0) ? 3 : 4;
+	init: function(viewModels) {
 
 		var $items = $("#tabs > li:not(#print_link, #touchui_dropdown_link, .hidden_touch)");
-		$($items).each(function(ind, elm) {
+		$($items.get().reverse()).each(function(ind, elm) {
 			var $elm = $(elm);
 
 			// Clone the items into the dropdown, and make it click the orginal link
 			$elm
 				.clone()
 				.attr("id", $elm.attr("id")+"2")
-				.prependTo("#all_touchui_settings > .dropdown-menu")
+				.removeAttr('style')
+				.removeAttr('data-bind')
+				.prependTo(this.DOM.create.dropdown.container)
 				.find("a")
 				.off("click")
 				.on("click", function(e) {
@@ -20,22 +21,32 @@ TouchUI.prototype.DOM.move.tabbar = {
 					return false;
 				});
 
-			$elm.addClass("hidden_touch");
+			// $elm.addClass("hidden_touch");
 		}.bind(this));
 
-		$items = $("#tabs > li > a");
-		$items.each(function(ind, elm) {
+		$("#tabs > li > a").each(function(ind, elm) {
 			$(elm).text("");
-		}.bind(this));
+		});
 
 		var resize = function() {
 			var width = $('#print_link').width();
 			var winWidth = $(window).width();
-			var items = $('#tabs > li:not("#touchui_dropdown_link")');
+			var $items = $('#tabs > li:not("#touchui_dropdown_link")');
 			var itemsFit = Math.floor(winWidth / width) - 2;
 
+			// Loop over items; if they contain display: none; then do
+			// not show them in the dropdown menu and filter them out from items
+			$items = $items.filter(function(i, elm) {
+				if (($(elm).attr('style') || "").indexOf('none') !== -1) {
+					$('#' + $(elm).attr('id') + '2').addClass('hidden_touch');
+					return false;
+				}
+
+				return true;
+			});
+
 			if (winWidth > (width * 2)) {
-				items.each(function(key, elm) {
+				$items.each(function(key, elm) {
 					if (key > itemsFit) {
 						$(elm).addClass('hidden_touch');
 						$('#' + $(elm).attr('id') + '2').removeClass('hidden_touch');

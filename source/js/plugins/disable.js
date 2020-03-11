@@ -8,7 +8,10 @@ TouchUI.prototype.plugins.disable = {
 			name: 'TempsGraph'
 		}, {
 			functionName: 'WebcamTabViewModel',
-			name: 'WebcamTab'
+			name: 'WebcamTab',
+			extra: function() {
+				$('#tab_plugin_webcamtab_link').remove();
+			}
 		}, {
 			functionName: 'AblExpertViewModel',
 			name: 'ABLExpert',

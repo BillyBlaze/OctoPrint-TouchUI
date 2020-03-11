@@ -67,28 +67,33 @@
 
 #tabs {
 	.flex-display();
+}
 
-	.nav,
-	&.nav {
-		li {
-			.flex(0 0 100%);
-			max-width: 7rem;
+#navbar .navbar-inner .container .nav li#all_touchui_settings {
+	width: 200px;
+}
 
-			@media(max-width: 565px) {
-				max-width: 5.5rem;
-			}
+#navbar,
+#tabs {
+	.nav > li,
+	&.nav > li {
+		.flex(0 0 100%);
+		max-width: 7rem;
 
-			@media(max-width: 439px) {
-				max-width: 5rem;
-			}
+		@media(max-width: 565px) {
+			max-width: 5.5rem;
+		}
 
-			@media(max-width: 400px) {
-				max-width: 4.5rem;
-			}
+		@media(max-width: 439px) {
+			max-width: 5rem;
+		}
 
-			&#touchui_dropdown_link {
-				pointer-events: none;
-			}
+		@media(max-width: 400px) {
+			max-width: 4.5rem;
+		}
+
+		&#touchui_dropdown_link {
+			pointer-events: none;
 		}
 	}
 }
