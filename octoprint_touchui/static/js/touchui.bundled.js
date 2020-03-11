@@ -230,6 +230,8 @@ TouchUI.prototype.components.keyboard = {
 	config: {
 
 		default: {
+			usePreview: false,
+			autoAccept: true,
 
 			display: {
 				'accept' :  'Save',
@@ -269,6 +271,9 @@ TouchUI.prototype.components.keyboard = {
 
 		},
 		terminal: {
+			usePreview: false,
+			autoAccept: true,
+
 			display: {
 				'bksp'   :  ' ',
 				'accept' : 'Save',
@@ -301,6 +306,9 @@ TouchUI.prototype.components.keyboard = {
 
 		},
 		number: {
+			usePreview: false,
+			autoAccept: true,
+
 			display: {
 				'bksp'   :  ' ',
 				'a'      :  'Save',
@@ -376,7 +384,7 @@ TouchUI.prototype.components.keyboard = {
 				prev.selectionStart = prev.selectionEnd = prev.value.length;
 			}
 		}, 10);
-		
+
 		keyboard.$keyboard.find("button").on("mousedown", function(e) {
 			$(e.target).addClass("touch-focus");
 
@@ -1436,9 +1444,16 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		}, 0);
 
 		// Disable clicking outside models
-		viewModels.settingsViewModel.appearance_closeModalsWithClick(this.settings.closeDialogsOutside());
-		$('#settings-appearanceCloseModalsWithClick').parent().addClass('touchui_disabled');
-		$('<span>(Disabled and managed by TouchUI)</span>').appendTo($('#settings-appearanceCloseModalsWithClick').parent());
+		if (viewModels.settingsViewModel.appearance_closeModalsWithClick) {
+			$('#settings-appearanceCloseModalsWithClick').parent().addClass('touchui_disabled');
+			$('<span>(Disabled and managed by TouchUI)</span>').appendTo($('#settings-appearanceCloseModalsWithClick').parent());
+
+			this.settings.closeDialogsOutside.subscribe(function(close) {
+				viewModels.settingsViewModel.appearance_closeModalsWithClick(close);
+			});
+
+			this.settings.closeDialogsOutside.valueHasMutated();
+		}
 	}
 }
 

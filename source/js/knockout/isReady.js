@@ -177,9 +177,14 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Disable clicking outside models
 		if (viewModels.settingsViewModel.appearance_closeModalsWithClick) {
-			viewModels.settingsViewModel.appearance_closeModalsWithClick(this.settings.closeDialogsOutside());
 			$('#settings-appearanceCloseModalsWithClick').parent().addClass('touchui_disabled');
 			$('<span>(Disabled and managed by TouchUI)</span>').appendTo($('#settings-appearanceCloseModalsWithClick').parent());
+
+			this.settings.closeDialogsOutside.subscribe(function(close) {
+				viewModels.settingsViewModel.appearance_closeModalsWithClick(close);
+			});
+
+			this.settings.closeDialogsOutside.valueHasMutated();
 		}
 	}
 }
