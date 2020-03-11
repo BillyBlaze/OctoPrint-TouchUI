@@ -71,7 +71,7 @@ class touchui_customization(object):
 		data["whatsNew"] = False
 
 		try:
-			plugin_permission = Permissions.PLUGIN_TOUCHUI_ADMIN.can()
+			plugin_permission = Permissions.PLUGIN_TOUCHUI_SETTINGS.can()
 		except:
 			plugin_permission = admin_permission.can()
 

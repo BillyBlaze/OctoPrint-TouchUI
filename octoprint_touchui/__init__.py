@@ -12,9 +12,10 @@ import time
 import os
 
 try:
-	from octoprint.access.permissions import ADMIN_GROUP
+	from octoprint.access.permissions import ADMIN_GROUP, USER_GROUP
 except:
 	ADMIN_GROUP=None
+	USER_GROUP=None
 
 class touchui_core(	touchui_api,
 					touchui_customization,
@@ -75,10 +76,10 @@ class touchui_core(	touchui_api,
 	def get_additional_permissions(self):
 		return [
 			dict(
-				key="ADMIN",
+				key="SETTINGS",
 				name="Change customization",
 				description="Allows user to change customization and save CSS to a file.",
-				roles=["admin"],
+				roles=["settings"],
 				dangerous=True,
 				default_groups=[ADMIN_GROUP]
 			)
