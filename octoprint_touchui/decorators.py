@@ -14,7 +14,7 @@ def touchui_admin_permission(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		try:
-			plugin_permission = Permissions.PLUGIN_TOUCHUI_SETTINGS.can()
+			plugin_permission = Permissions.SETTINGS.can()
 		except:
 			plugin_permission = admin_permission.can()
 
