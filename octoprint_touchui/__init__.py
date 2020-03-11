@@ -76,8 +76,8 @@ class touchui_core(	touchui_api,
 		return [
 			dict(
 				key="ADMIN",
-				name="Admin access",
-				description="Allows administrating all application keys",
+				name="Change customization",
+				description="Allows user to change customization and save CSS to a file.",
 				roles=["admin"],
 				dangerous=True,
 				default_groups=[ADMIN_GROUP]
