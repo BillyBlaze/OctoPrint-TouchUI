@@ -174,5 +174,12 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 		setTimeout(function() {
 			self.plugins.multiWebCam.call(self);
 		}, 0);
+
+		// Disable clicking outside models
+		if (viewModels.settingsViewModel.appearance_closeModalsWithClick) {
+			viewModels.settingsViewModel.appearance_closeModalsWithClick(this.settings.closeDialogsOutside());
+			$('#settings-appearanceCloseModalsWithClick').parent().addClass('touchui_disabled');
+			$('<span>(Disabled and managed by TouchUI)</span>').appendTo($('#settings-appearanceCloseModalsWithClick').parent());
+		}
 	}
 }

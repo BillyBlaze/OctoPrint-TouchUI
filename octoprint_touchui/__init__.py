@@ -12,7 +12,7 @@ import time
 import os
 
 try:
-	from octoprint.access.permissions import ADMIN_GROUP, USER_GROUP
+	from octoprint.access.permissions import ADMIN_GROUP
 except:
 	ADMIN_GROUP=None
 	USER_GROUP=None
@@ -91,6 +91,7 @@ class touchui_core(	touchui_api,
 			automaticallyLoadResolution=True,
 			automaticallyLoadTouch=True,
 			useCustomization=False,
+			closeDialogsOutside=False,
 			colors=dict(
 				mainColor="#00B0FF",
 				termColor="#0F0",
