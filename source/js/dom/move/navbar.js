@@ -47,7 +47,7 @@ TouchUI.prototype.DOM.move.navbar = {
 
 		// Create and Move login form to main dropdown
 		$('<li><ul id="youcanhazlogin"></ul></li>').insertAfter("#navbar_plugin_touchui");
-		
+
 		$('#navbar_login')
 			.appendTo('#youcanhazlogin')
 			.find('a.dropdown-toggle')
@@ -56,7 +56,7 @@ TouchUI.prototype.DOM.move.navbar = {
 
 		// Create a fake dropdown link that will be overlapped by settings icon
 		$('<li id="touchui_dropdown_link"><a href="#"></a></li>').appendTo("#tabs");
-		
+
 		// Move the navbar temp plugin
 		this.plugins.psuControl.call(this);
 	}

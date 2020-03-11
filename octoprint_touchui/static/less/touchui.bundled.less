@@ -3688,6 +3688,20 @@ display: block;
 #navbar_plugin_octolapse {
 display: none;
 }
+#camControl {
+.flex-display();
+.flex-flow(column);
+padding: 20px 30px 0;
+> div {
+.flex-display();
+.flex-flow(row);
+width: 100%;
+button {
+width: auto;
+margin: 0 10px 0 0;
+}
+}
+}
 .footer {
 .rem(font-size, 14);
 position: absolute;

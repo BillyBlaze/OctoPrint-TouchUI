@@ -169,5 +169,10 @@ TouchUI.prototype.knockout.isReady = function (viewModels) {
 
 		// Re-render tabbar
 		$(window).trigger('resize.touchui.tabbar');
+
+		// We will win the DOM manipulation war!
+		setTimeout(function() {
+			self.plugins.multiWebCam.call(self);
+		}, 0);
 	}
 }
