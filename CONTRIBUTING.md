@@ -88,6 +88,7 @@ Unsure where to begin contributing to TouchUI? You can start by looking through 
 * ~~Follow the [JavaScript](https://github.com/styleguide/javascript),
   and [LESS](https://github.com/styleguide/css) styleguides.~~ [work-in-progress]
 * End files with a newline.
+* Target the branch maintenance 
 
 ## Styleguides
 
