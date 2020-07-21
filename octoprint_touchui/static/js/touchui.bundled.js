@@ -2123,10 +2123,20 @@ TouchUI.prototype.DOM.move.controls = {
 
 		}
 
-		$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
-		$("#control-jog-extrusion button:last-child").prependTo("#control-jog-feedrate");
-		$("#control-jog-extrusion input:last-child").attr('data-bind', $("#control-jog-extrusion input:last-child").attr('data-bind').replace('slider: {', 'slider: {tools: tools(), ')).prependTo("#control-jog-feedrate");
-		$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
+		if($('#control-jog-feedrate .input-append').length === 0) {
+			// <1.4.1
+			$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
+			$("#control-jog-extrusion button:last-child").prependTo("#control-jog-feedrate");
+			$("#control-jog-extrusion input:last-child").attr('data-bind', $("#control-jog-extrusion input:last-child").attr('data-bind').replace('slider: {', 'slider: {tools: tools(), ')).prependTo("#control-jog-feedrate");
+			$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
+		} else {
+			// >=1.4.1
+			$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
+			$("#control-jog-feedrate .input-append button").insertAfter("#control-jog-feedrate .input-append");
+
+			$("#control-jog-flowrate").removeClass("jog-panel");
+			$("#control-jog-flowrate .input-append button").insertAfter("#control-jog-flowrate .input-append");
+		}
 
 		$("#control div.distance").prependTo("#control-jog-feedrate");
 	}
