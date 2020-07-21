@@ -19,7 +19,7 @@
     "gulp-uglify": "^3.0.2",
     "iscroll": "~5.2.0",
     "jquery-fullscreen-kayahr": "~1.1.5",
-    "keyboard": "https://github.com/Mottie/Keyboard/archive/v1.30.2.tar.gz",
+    "keyboard": "https://github.com/Mottie/Keyboard/archive/v1.27.2.tar.gz",
     "through2": "^4.0.2"
   },
   "optionalDependencies": {},

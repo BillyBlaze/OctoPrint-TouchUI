@@ -319,7 +319,7 @@ TouchUI.prototype.components.keyboard = {
 			customLayout: {
 				'default' : [
 					'{bksp} 1 2 3 4 5 6 7 ',
-					'{accept} {c} {left} {right} 8 9 0 - , . '
+					'{accept} {c} 8 9 0 - , . '
 				]
 			},
 		}
@@ -332,7 +332,7 @@ TouchUI.prototype.components.keyboard = {
 
 		// Add virtual keyboard
 		var obj = {
-			visible: self.components.keyboard.onShow,
+			visible: self.components.keyboard.onShow.bind(self),
 			beforeClose: self.components.keyboard.onClose
 		};
 
@@ -347,17 +347,6 @@ TouchUI.prototype.components.keyboard = {
 				}
 
 			} else {
-
-				if(!self.settings.hasTouch) {
-
-					// Force iScroll to stop following the mouse (bug)
-					self.scroll.currentActive._end(e);
-					setTimeout(function() {
-						self.scroll.currentActive.scrollToElement($elm[0], 200, 0, -30);
-					}, 0);
-
-				}
-
 				// $elm already has a keyboard
 				if($elm.data("keyboard")) {
 					$elm.data('keyboard').reveal();
@@ -377,29 +366,39 @@ TouchUI.prototype.components.keyboard = {
 	},
 
 	onShow: function(event, keyboard, el) {
-		// Set the input cursor to the end of the input field
-		setTimeout(function() {
-			var prev = keyboard.$preview.get(0);
-			if (prev) {
-				prev.selectionStart = prev.selectionEnd = prev.value.length;
-			}
-		}, 10);
+		var self = this;
 
-		keyboard.$keyboard.find("button").on("mousedown", function(e) {
-			$(e.target).addClass("touch-focus");
+		keyboard.$keyboard.find("button").on("mousedown, touchstart", function(e) {
+			var $elm = $(e.target);
+			$elm.addClass("touch-focus");
 
-			if(typeof $(e.target).data("timeout") !== "function") {
-				clearTimeout($(e.target).data("timeout"));
+			if($elm.data("timeout")) {
+				clearTimeout($elm.data("timeout"));
 			}
+
 			var timeout = setTimeout(function() {
-				$(e.target).removeClass("touch-focus").data("timeout", "");
-			}, 600);
-			$(e.target).data("timeout", timeout);
+				$elm.removeClass("touch-focus").data("timeout", "");
+			}, 1000);
+
+			$elm.data("timeout", timeout);
 		});
+
+		if(!self.settings.hasTouch) {
+			var height = keyboard.$keyboard.height();
+			$('#page-container-main').css('padding-bottom', height);
+
+			// Force iScroll to stop following the mouse (bug)
+			self.scroll.currentActive._end(new Event('click'));
+			setTimeout(function() {
+				self.scroll.currentActive.scrollToElement(keyboard.$el[0], 200, 0, -30);
+			}, 100);
+
+		}
 	},
 
 	onClose: function(event, keyboard, el) {
-		keyboard.$keyboard.find("button").off("mousedown");
+		keyboard.$keyboard.find("button").off("mousedown, touchstart");
+		$('#page-container-main').css('padding-bottom', 0);
 	}
 
 }
