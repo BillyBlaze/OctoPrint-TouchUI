@@ -694,13 +694,11 @@ TouchUI.prototype.core.init = function() {
 		// Enforce active cookie
 		this.DOM.storage.set("active", true);
 
+		var isTouchDevice = this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm || this.settings.hasBootloader;
+
 		// Create keyboard cookie if not existing
 		if (this.DOM.storage.get("keyboardActive") === undefined) {
-			if (
-				!this.settings.hasTouch ||
-				this.settings.isEpiphanyOrKweb ||
-				this.settings.isChromiumArm
-			) {
+			if (!this.settings.hasTouch || isTouchDevice) {
 				this.DOM.storage.set("keyboardActive", true);
 			} else {
 				this.DOM.storage.set("keyboardActive", false);
@@ -714,12 +712,11 @@ TouchUI.prototype.core.init = function() {
 
 		// Treat KWEB3 as a special Touchscreen mode or enabled by cookie
 		if (
+			this.DOM.storage.get("touchscreenActive") ||
 			(
-				this.settings.isEpiphanyOrKweb ||
-				this.settings.isChromiumArm &&
+				isTouchDevice &&
 				this.DOM.storage.get("touchscreenActive") === undefined
-			) ||
-			this.DOM.storage.get("touchscreenActive")
+			)
 		) {
 			this.components.touchscreen.init.call(this);
 		}
