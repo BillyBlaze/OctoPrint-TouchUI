@@ -552,7 +552,9 @@ position: relative;
 * {
 .text-shadow(none) !important;
 .box-shadow(none) !important;
+&:not([class^="icon-"]):not([class*=" icon-"]):not(.fa):not(.far):not(.fas) {
 font-family: 'Source Code Pro', monospace;
+}
 }
 .no-pointer * {
 pointer-events: none !important;
@@ -1385,6 +1387,7 @@ display: none;
 .print-control {
 .btn {
 .flex-display();
+.align-items(center);
 .rem(height, 50);
 padding: 0;
 overflow: hidden;
