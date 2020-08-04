@@ -2564,7 +2564,7 @@ font-family: FontAwesome;
 padding-left: 10px;
 }
 &.open {
-left: -(@main-gutter + 40px);
+left: -(@main-gutter + 90px);
 background: @swipe-list-background-open-color;
 color: contrast(@swipe-list-background-open-color);
 &.large {
@@ -2623,6 +2623,23 @@ top: 10px !important;
 .additionalInfo {
 padding: 0;
 }
+.btn {
+position: absolute;
+left: 100%;
+top: 21px;
+.border-radius(0);
+background: transparent !important;
+z-index: 5;
+border: 0 none;
+.box-shadow(0 0 0 transparent);
+.text-shadow(0 0 0 transparent);
+color: contrast(@swipe-list-background-color);
+transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
+&.toggleAdditionalData {
+left: 88.3%;
+font-size: 37px;
+}
+}
 div.action-buttons {
 position: static;
 right: auto;
@@ -2636,17 +2653,6 @@ font-size: 32px;
 .opacity(0.2);
 }
 .btn {
-position: absolute;
-left: 100%;
-top: 21px;
-.border-radius(0);
-background: transparent !important;
-z-index: 5;
-border: 0 none;
-.box-shadow(0 0 0 transparent);
-.text-shadow(0 0 0 transparent);
-color: contrast(@swipe-list-background-color);
-transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
 &:first-child {
 right: (@main-gutter + 40px);
 left: auto;
@@ -2655,7 +2661,7 @@ left: auto;
 left: auto;
 right: (@main-gutter - 15px);
 }
-&.toggleAdditionalData + :nth-child(2) {
+&:nth-child(2) {
 margin-left: 55px;
 margin-top: 2px;
 }
@@ -3734,7 +3740,7 @@ color: mix(@main-background, contrast(@main-background), 50%);
 overflow: hidden;
 max-width: 100%;
 li {
-display: block;
+display: inline-block;
 small {
 .box-sizing(border-box);
 white-space: nowrap;
