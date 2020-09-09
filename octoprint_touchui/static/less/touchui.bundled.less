@@ -508,18 +508,19 @@ pointer-events: none;
 }
 }
 }
-&.touch {
+&.touch,
+&.touchevents {
 .show-dropdown,
 #terminal-scroll {
 overflow-y: scroll !important;
 -webkit-overflow-scrolling: auto;
 }
-::-webkit-scrollbar {
+&::-webkit-scrollbar {
 width: 2px;
 height: 2px;
 background: transparent;
 }
-::-webkit-scrollbar-thumb {
+&::-webkit-scrollbar-thumb {
 background: @main-color;
 }
 body {
@@ -2689,6 +2690,7 @@ overflow: hidden;
 &.modal-open {
 position: fixed;
 width: 100%;
+height: 100%;
 overflow: hidden;
 }
 .modal-backdrop {
