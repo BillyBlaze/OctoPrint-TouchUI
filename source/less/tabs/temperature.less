@@ -85,7 +85,7 @@
 						.rem(font-size, 18);
 
 						&:first-child {
-							width: 13% !important;
+							width: 10% !important;
 						}
 						&:nth-child(3) {
 							width: auto !important;
@@ -187,13 +187,9 @@
 						.btn-group,
 						> button {
 							.border-radius(0);
-							
+
 							.fa, .icon {
 								pointer-events: none;
-							}
-
-							.btn.dropdown-toggle {
-								border-left: 1px solid @table-row-background;
 							}
 						}
 						.add-on {
@@ -239,6 +235,42 @@
 			&.open {
 				left: -38vw !important;
 			}
+		}
+	}
+
+	#temperature-table {
+		@media (max-width: 490px) {
+			td,
+			th {
+				.rem(font-size, 14) !important;
+			}
+		}
+
+		td {
+			.btn {
+				border-left: 1px solid @table-row-background;
+			}
+		}
+
+		th.temperature_target {
+			 .btn-group {
+				float: none !important;
+				margin-top: -5px;
+
+				.caret:after {
+					content: "\f0d7";
+					font-family: FontAwesome;
+					font-size: 1.125rem;
+					top: -7px;
+					left: -6px;
+					position: relative;
+				}
+			}
+		}
+
+		th.temperature_target,
+		th.temperature_offset {
+			text-align: left;
 		}
 	}
 }
