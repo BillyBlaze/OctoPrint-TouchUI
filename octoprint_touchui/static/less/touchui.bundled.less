@@ -1418,7 +1418,7 @@ top: 80px;
 }
 }
 #state {
-padding-top: ~"calc(3.125rem + 60px)";
+padding-top: ~"calc(3.125rem + 60px) !important";
 .progress,
 .print-control {
 position: absolute !important;
@@ -1431,6 +1431,9 @@ margin: 0;
 .print-control {
 top: 0;
 }
+.progress {
+top: ~"calc(3.125rem + 15px) !important";
+}
 }
 .slimScrollBar, .slimScrollRail {
 display: none !important;
@@ -1439,6 +1442,9 @@ display: none !important;
 left: auto !important;
 right: -10px !important;
 }
+}
+.progress-text-centered {
+top: auto !important;
 }
 #term {
 position: relative;
@@ -2498,7 +2504,7 @@ display: none;
 .form-search {
 display: none;
 }
-// Depracated 1.3.9
+// Deprecated 1.3.9
 .slimScrollDiv {
 margin: 0 -@main-gutter 10px;
 height: auto !important;
@@ -2569,7 +2575,7 @@ left: -(@main-gutter + 90px);
 background: @swipe-list-background-open-color;
 color: contrast(@swipe-list-background-open-color);
 &.large {
-left: -(@main-gutter + 150px);
+left: -(@main-gutter + 200px);
 }
 &:hover,
 &:after {
@@ -2591,8 +2597,8 @@ content: "";
 display: block;
 top: 0;
 height: 100%;
-width: (@main-gutter + 200px);
-right: -(@main-gutter + 200px);
+width: (@main-gutter + 240px);
+right: -(@main-gutter + 240px);
 position: absolute;
 transition: background 0.7s ease;
 background: @swipe-list-background-color;
@@ -2634,10 +2640,11 @@ z-index: 5;
 border: 0 none;
 .box-shadow(0 0 0 transparent);
 .text-shadow(0 0 0 transparent);
-color: contrast(@swipe-list-background-color);
+color: contrast(@swipe-list-background-color) !important;
 transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
 &.toggleAdditionalData {
-left: 88.3%;
+right: 70px;
+left: auto;
 font-size: 37px;
 }
 }
@@ -2653,22 +2660,52 @@ font-size: 32px;
 .btn.disabled, .btn[disabled] {
 .opacity(0.2);
 }
+}
+&.machinecode {
 .btn {
-&:first-child {
+&[data-bind*="PRINT"] {
+right: (@main-gutter - 15px);
+left: auto;
+}
+&[data-bind*="FILES_DOWNLOAD"] {
+margin-left: 53px !important;
+}
+&[data-bind*="FILES_DELETE"] {
+margin-left: 110px !important;
+}
+&[data-bind*="FILES_UPLOAD"] {
+margin-left: 160px !important;
+}
+&[data-bind*="FILES_SELECT"] {
+margin-left: 0;
+}
+}
+}
+&.model {
+.btn {
+&[data-bind*="SLICE"] {
+right: (@main-gutter - 15px);
+left: auto;
+}
+&[data-bind*="FILES_DOWNLOAD"] {
 right: (@main-gutter + 40px);
 left: auto;
 }
-&:last-child {
-left: auto;
-right: (@main-gutter - 15px);
+&[data-bind*="FILES_UPLOAD"] {
+margin-left: 50px !important;
 }
-&:nth-child(2) {
-margin-left: 55px;
-margin-top: 2px;
+&[data-bind*="FILES_DELETE"] {
+margin-left: 0;
 }
-&:nth-child(4) {
-margin-left: 110px;
-margin-top: 2px;
+}
+}
+&.folder {
+.btn {
+&[data-bind*="FILES_DELETE"] {
+margin-left: 0;
+}
+&[data-bind*="FILES_UPLOAD"] {
+margin-left: 50px !important;
 }
 }
 }

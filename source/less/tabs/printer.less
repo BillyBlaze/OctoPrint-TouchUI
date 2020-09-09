@@ -49,7 +49,7 @@
 	}
 
 	#state {
-		padding-top: ~"calc(3.125rem + 60px)";
+		padding-top: ~"calc(3.125rem + 60px) !important";
 
 		.progress,
 		.print-control {
@@ -63,6 +63,9 @@
 		.print-control {
 			top: 0;
 		}
+		.progress {
+			top: ~"calc(3.125rem + 15px) !important";
+		}
 	}
 
 	.slimScrollBar, .slimScrollRail {
@@ -73,4 +76,8 @@
 		right: -10px !important;
 	}
 
+}
+
+.progress-text-centered {
+	top: auto !important;
 }
