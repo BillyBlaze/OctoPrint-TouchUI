@@ -1,0 +1,39 @@
+name: Mark stale issues and pull requests
+
+on:
+  schedule:
+  - cron: "30 1 * * *"
+
+jobs:
+  stale:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/stale@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        days-before-stale: 14
+        days-before-close: 7
+        stale-issue-message: >
+          This issue has been automatically marked as inactive because it has not had
+          recent activity. It will be closed if no further activity occurs. Thank you
+          for your contributions.
+        stale-pr-message: >
+          This issue has been automatically marked as inactive because it has not had
+          recent activity. It will be closed if no further activity occurs. Thank you
+          for your contributions.
+        stale-issue-label: 'inactive'
+        stale-pr-label: 'inactive'
+        exempt-issue-labels:
+          - help wanted
+          - up for grabs
+          - fixed
+          - confirmed
+          - pending
+        exempt-pr-labels:
+          - help wanted
+          - up for grabs
+          - fixed
+          - confirmed
+          - pending
