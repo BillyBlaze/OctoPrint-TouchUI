@@ -54,7 +54,8 @@
 							> a:before {
 								animation-duration: 0.6s;
 								animation-iteration-count: 5;
-								content: "\f0c9";
+								.font-icon-reset();
+								content: @fa-legacy-var-navicon;
 							}
 
 							&.open {
@@ -64,7 +65,9 @@
 											background: transparent;
 
 											&:after {
-												content: "\f0d8" !important;
+												.font-icon-reset();
+												line-height: 1;
+												content: @fa-legacy-var-caret-up !important;
 											}
 										}
 									}
@@ -87,7 +90,7 @@
 
 								&#conn_link2 {
 									a:before {
-										content: "\f1eb";
+										content: @fa-legacy-var-wifi;
 									}
 								}
 
@@ -105,7 +108,7 @@
 
 								&#navbar_settings {
 									a:before {
-										content: "\f013";
+										content: @fa-legacy-var-gear;
 									}
 								}
 
@@ -115,13 +118,13 @@
 
 								#usersettings_button {
 									&:before {
-										content: "\f007";
+										content: @fa-legacy-var-user;
 									}
 								}
 
 								#logout_button {
 									&:before {
-										content: "\f08b";
+										content: @fa-legacy-var-sign-out;
 									}
 								}
 
@@ -129,21 +132,22 @@
 									a.dropdown-toggle {
 										&:after {
 											.font-icon-reset();
-											content: "\f0d7";
+											content: @fa-legacy-var-caret-down;
 											position: absolute;
 											right: 20px;
 											margin: 0;
 											.rem(line-height, 40);
 										}
+
 										&:before {
-											content: "\f023";
+											content: @fa-legacy-var-lock;
 										}
 									}
 								}
 
 								&#navbar_plugin_touchui {
 									a:before {
-										content: "\f10b";
+										content: @fa-legacy-var-mobile-phone;
 										.rem(font-size, 28);
 										.rem(line-height, 28);
 										position: relative;
@@ -160,12 +164,14 @@
 
 										&.active {
 											&:after {
-												content: "\f0d8" !important;
+												.font-icon-reset();
+												content: @fa-legacy-var-caret-up !important;
 											}
 										}
 
 										&:before {
-											content: "\f085";
+											.font-icon-reset();
+											content: @fa-legacy-var-gears;
 											.rem(font-size, 19);
 										}
 										i {
@@ -173,7 +179,7 @@
 										}
 										&:after {
 											.font-icon-reset();
-											content: "\f0d7";
+											content: @fa-legacy-var-caret-down;
 											right: 18px;
 											position: absolute;
 											top: 12px;
@@ -182,7 +188,8 @@
 									.dropdown-menu {
 										a {
 											&:before {
-												content: "\f101";
+												.font-icon-reset();
+												content: @fa-legacy-var-angle-double-right;
 											}
 										}
 									}
@@ -216,7 +223,7 @@
 
 									&:before {
 										.font-icon-reset();
-										content: '\f128';
+										content: @fa-legacy-var-question;
 										display: inline-block;
 										margin: 0 15px 0 0;
 										.rem(font-size, 20);

@@ -180,7 +180,7 @@
 
 			&:after {
 				.font-icon-reset();
-				content: "\f00c";
+				content: @fa-legacy-var-check;
 				width: 100%;
 				position: absolute;
 				right: 0;
@@ -305,7 +305,7 @@
 			&:before,
 			&:after {
 				color: inherit;
-				font-family: FontAwesome;
+				.font-icon-reset();
 				.text-shadow(0 0 0 transparent);
 				display: block;
 				overflow: hidden;
@@ -329,15 +329,16 @@
 
 				&:first-child {
 					&:before {
-						font-family: FontAwesome;
+						.font-icon-reset();
 						background: transparent;
-						content: "\f011";
+						content: @fa-legacy-var-power-off;
 					}
 				}
 				&:last-child {
 
 					&:after {
-						content: "\f057";
+						.font-icon-reset();
+						content: @fa-legacy-var-times-circle;
 						color: @main-color !important;
 						font-size: 8vw;
 						position: absolute;

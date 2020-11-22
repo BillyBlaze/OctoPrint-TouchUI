@@ -3,16 +3,17 @@
 	> h1 {
 		margin: 30px 0 0;
 	}
-	
-	.icon-unchecked:before, 
+
+	.icon-unchecked:before,
 	.icon-check-empty:before {
-		content: "\f0c5";
+		.font-icon-reset();
+		content: @fa-legacy-var-copy;
 	}
-	
+
 	.caret {
 		display: none;
 	}
-	
+
 	.pull-left, .pull-right {
 		button {
 			font-size: 1.1rem;

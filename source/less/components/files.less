@@ -44,10 +44,10 @@
 				}
 
 				&:after {
-					.font-icon-reset(FontAwesome);
+					.font-icon-reset();
+					content: @fa-legacy-var-filter;
 					.rem(font-size, 25);
 					color: @main-color-text;
-					content: "\f0b0";
 				}
 			}
 		}
@@ -61,7 +61,7 @@
 		.sd-trigger {
 			.dropdown-toggle {
 				&:after {
-					content: "\f0ea";
+					content: @fa-legacy-var-paste;
 					top: 3px;
 					position: relative;
 				}
@@ -71,7 +71,7 @@
 		.refresh-trigger {
 			a {
 				&:after {
-					content: "\f021";
+					content: @fa-legacy-var-refresh;
 				}
 			}
 		}
@@ -79,7 +79,7 @@
 		.upload-trigger {
 			a {
 				&:after {
-					content: "\f093";
+					content: @fa-legacy-var-upload;
 				}
 			}
 		}
@@ -169,8 +169,8 @@
 				transition: left 0.4s ease, background 0.7s ease, color 0.7s ease;
 
 				.title.text-success:after {
-					content: "\f00c";
-					font-family: FontAwesome;
+					.font-icon-reset();
+					content: @fa-legacy-var-check;
 					padding-left: 10px;
 				}
 

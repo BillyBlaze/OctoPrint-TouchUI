@@ -211,8 +211,8 @@
 								width: 11px;
 
 								&:after {
-									content: "\f0d7";
-									font-family: FontAwesome;
+									content: @fa-legacy-var-caret-down;
+									.font-icon-reset();
 									.rem(font-size, 18);
 									top: -7px;
 									position: relative;
@@ -258,8 +258,8 @@
 				margin-top: -5px;
 
 				.caret:after {
-					content: "\f0d7";
-					font-family: FontAwesome;
+					content: @fa-legacy-var-caret-down;
+					.font-icon-reset();
 					font-size: 1.125rem;
 					top: -7px;
 					left: -6px;

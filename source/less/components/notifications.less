@@ -7,8 +7,8 @@
 	.rem(font-size, 28);
 
 	.glyphicon-remove:after {
-		font-family: FontAwesome !important;
-		content: "\f00d";
+		.font-icon-reset() !important;
+		content: @fa-legacy-var-remove;
 	}
 }
 .ui-pnotify-sticker {

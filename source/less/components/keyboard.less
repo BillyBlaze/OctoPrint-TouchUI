@@ -53,7 +53,7 @@
 	}
 	&:after {
 		.font-icon-reset();
-		content: "\f062";
+		content: @fa-legacy-var-arrow-up;
 		.rem(font-size, 25);
 		max-height: 43px;
 	}
@@ -82,7 +82,7 @@
 
 	&:after {
 		.font-icon-reset();
-		content: "\f00c";
+		content: @fa-legacy-var-check;
 		color: @keyboard-background;
 	}
 }
@@ -95,7 +95,8 @@
 	}
 
 	&:after {
-		content: "\f149";
+		.font-icon-reset();
+		content: @fa-legacy-var-level-down;
 	}
 }
 
@@ -162,7 +163,7 @@
 
 		&:after {
 			.font-icon-reset();
-			content: "\f00d";
+			content: @fa-legacy-var-remove;
 
 			background: contrast(@keyboard-background);
 			color: @keyboard-background;
