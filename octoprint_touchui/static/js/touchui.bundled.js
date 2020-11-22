@@ -668,181 +668,6 @@ TouchUI.prototype.components.touchscreen = {
 
 }
 
-TouchUI.prototype.DOM.init = function() {
-
-	// Create new tab with printer status and make it active
-	this.DOM.create.printer.init(this.DOM.create.tabbar);
-	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
-
-	// Create a new persistent dropdown
-	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
-
-	// Add a webcam tab if it's defined
-	if ($("#webcam_container").length > 0) {
-		this.DOM.create.webcam.init(this.DOM.create.tabbar);
-	}
-
-	// Move all other items from tabbar into dropdown
-	this.DOM.move.sidebar.init.call(this);
-	this.DOM.move.navbar.init.call(this);
-	this.DOM.move.tabbar.init.call(this);
-	this.DOM.move.afterTabAndNav.call(this);
-	this.DOM.move.overlays.init.call(this);
-	this.DOM.move.terminal.init.call(this);
-
-	// Move connection sidebar into a new modal
-	this.DOM.move.connection.init(this.DOM.create.tabbar);
-
-	// Manipulate controls div
-	this.DOM.move.controls.init();
-
-	// Disable these bootstrap/jquery plugins
-	this.DOM.overwrite.tabdrop.call(this);
-	this.DOM.overwrite.modal.call(this);
-	this.DOM.overwrite.pnotify.call(this);
-
-	// Add class with how many tab-items
-	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
-
-	// Remove active class when clicking on a tab in the tabbar
-	$('#tabs [data-toggle=tab]').on("click", function() {
-		$("#all_touchui_settings").removeClass("item_active");
-	});
-
-	// If touch emulator is enabled, then disable dragging of a menu item for scrolling
-	if(!this.settings.hasTouch) {
-		$("#navbar ul.nav > li a").on("dragstart drop", function(e) {
-			return false;
-		});
-	}
-}
-
-TouchUI.prototype.DOM.cookies = {
-
-	get: function(key, isPlain) {
-		var name = (isPlain) ? key + "=" : "TouchUI." + key + "=";
-		var ca = document.cookie.split(';');
-		var tmp;
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1);
-			if (c.indexOf(name) == 0) tmp = c.substring(name.length,c.length);
-			return (isPlain) ? tmp : $.parseJSON(tmp);
-			
-		}
-		return undefined;
-	},
-
-	set: function(key, value, isPlain) {
-		key = (isPlain) ? key + "=" : "TouchUI." + key + "=";
-		var d = new Date();
-		d.setTime(d.getTime()+(360*24*60*60*1000));
-		var expires = "expires="+d.toUTCString();
-		document.cookie = key + value + "; " + expires;
-	},
-
-	toggleBoolean: function(key, isPlain) {
-		var value = $.parseJSON(this.get(key, isPlain) || "false");
-
-		if(value === true) {
-			this.set(key, "false", isPlain);
-		} else {
-			this.set(key, "true", isPlain);
-		}
-
-		return !value;
-
-	}
-
-}
-
-TouchUI.prototype.DOM.localstorage = {
-	store: JSON.parse(localStorage["TouchUI"] || "{}"),
-
-	get: function (key) {
-		return this.store[key];
-	},
-
-	set: function (key, value) {
-		this.store[key] = value;
-		localStorage["TouchUI"] = JSON.stringify(this.store);
-		return this.store[key];
-	},
-
-	toggleBoolean: function (key) {
-		var value = this.store[key] || false;
-
-		if(value === true) {
-			this.set(key, false);
-		} else {
-			this.set(key, true);
-		}
-
-		return !value;
-
-	}
-
-}
-
-// Since I messed up by releasing start_kweb3.xinit without disabling private
-// mode, we now need to check if we can store anything at all in localstorage
-// the missing -P will prevent any localstorage
-if (TouchUI.prototype.settings.hasLocalStorage) {
-	try {
-		localStorage["TouchUIcanWeHazStorage"] = "true";
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
-		delete localStorage["TouchUIcanWeHazStorage"];
-	} catch(err) {
-
-		// TODO: remove this is future
-		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
-			$(function() {
-				new PNotify({
-					type: 'error',
-					title: "Private Mode detection:",
-					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
-						"and add the parameter 'P' after the dash. \n\n" +
-						"For more information see the v0.3.3 release notes.",
-					hide: false
-				});
-			});
-		}
-
-		console.info("Localstorage defined but failback to cookies due to errors.");
-		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-	}
-} else {
-	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
-}
-
-TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
-
-	if (this.settings.hasLocalStorage) {
-		if (document.cookie.indexOf("TouchUI.") !== -1) {
-			console.info("TouchUI cookies migration.");
-
-			var name = "TouchUI.";
-			var ca = document.cookie.split(';');
-			for (var i=0; i<ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0)==' ') c = c.substring(1);
-				if (c.indexOf(name) == 0) {
-					var string = c.substring(name.length,c.length);
-					string = string.split("=");
-					var value = $.parseJSON(string[1]);
-
-					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
-					this.DOM.storage.set(string[0], value);
-
-					console.info("Removing cookie", string[0]);
-					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-				}
-			}
-		}
-	}
-
-} : _.noop;
-
 TouchUI.prototype.core.init = function() {
 
 	// Migrate old cookies into localstorage
@@ -1153,6 +978,181 @@ TouchUI.prototype.core.version = {
 	}
 
 }
+
+TouchUI.prototype.DOM.init = function() {
+
+	// Create new tab with printer status and make it active
+	this.DOM.create.printer.init(this.DOM.create.tabbar);
+	this.DOM.create.printer.menu.$elm.find('a').trigger("click");
+
+	// Create a new persistent dropdown
+	this.DOM.create.dropdown.init.call( this.DOM.create.dropdown );
+
+	// Add a webcam tab if it's defined
+	if ($("#webcam_container").length > 0) {
+		this.DOM.create.webcam.init(this.DOM.create.tabbar);
+	}
+
+	// Move all other items from tabbar into dropdown
+	this.DOM.move.sidebar.init.call(this);
+	this.DOM.move.navbar.init.call(this);
+	this.DOM.move.tabbar.init.call(this);
+	this.DOM.move.afterTabAndNav.call(this);
+	this.DOM.move.overlays.init.call(this);
+	this.DOM.move.terminal.init.call(this);
+
+	// Move connection sidebar into a new modal
+	this.DOM.move.connection.init(this.DOM.create.tabbar);
+
+	// Manipulate controls div
+	this.DOM.move.controls.init();
+
+	// Disable these bootstrap/jquery plugins
+	this.DOM.overwrite.tabdrop.call(this);
+	this.DOM.overwrite.modal.call(this);
+	this.DOM.overwrite.pnotify.call(this);
+
+	// Add class with how many tab-items
+	$("#tabs, #navbar").addClass("items-" + $("#tabs li:not(.hidden_touch)").length);
+
+	// Remove active class when clicking on a tab in the tabbar
+	$('#tabs [data-toggle=tab]').on("click", function() {
+		$("#all_touchui_settings").removeClass("item_active");
+	});
+
+	// If touch emulator is enabled, then disable dragging of a menu item for scrolling
+	if(!this.settings.hasTouch) {
+		$("#navbar ul.nav > li a").on("dragstart drop", function(e) {
+			return false;
+		});
+	}
+}
+
+TouchUI.prototype.DOM.cookies = {
+
+	get: function(key, isPlain) {
+		var name = (isPlain) ? key + "=" : "TouchUI." + key + "=";
+		var ca = document.cookie.split(';');
+		var tmp;
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) tmp = c.substring(name.length,c.length);
+			return (isPlain) ? tmp : $.parseJSON(tmp);
+			
+		}
+		return undefined;
+	},
+
+	set: function(key, value, isPlain) {
+		key = (isPlain) ? key + "=" : "TouchUI." + key + "=";
+		var d = new Date();
+		d.setTime(d.getTime()+(360*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		document.cookie = key + value + "; " + expires;
+	},
+
+	toggleBoolean: function(key, isPlain) {
+		var value = $.parseJSON(this.get(key, isPlain) || "false");
+
+		if(value === true) {
+			this.set(key, "false", isPlain);
+		} else {
+			this.set(key, "true", isPlain);
+		}
+
+		return !value;
+
+	}
+
+}
+
+TouchUI.prototype.DOM.localstorage = {
+	store: JSON.parse(localStorage["TouchUI"] || "{}"),
+
+	get: function (key) {
+		return this.store[key];
+	},
+
+	set: function (key, value) {
+		this.store[key] = value;
+		localStorage["TouchUI"] = JSON.stringify(this.store);
+		return this.store[key];
+	},
+
+	toggleBoolean: function (key) {
+		var value = this.store[key] || false;
+
+		if(value === true) {
+			this.set(key, false);
+		} else {
+			this.set(key, true);
+		}
+
+		return !value;
+
+	}
+
+}
+
+// Since I messed up by releasing start_kweb3.xinit without disabling private
+// mode, we now need to check if we can store anything at all in localstorage
+// the missing -P will prevent any localstorage
+if (TouchUI.prototype.settings.hasLocalStorage) {
+	try {
+		localStorage["TouchUIcanWeHazStorage"] = "true";
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.localstorage;
+		delete localStorage["TouchUIcanWeHazStorage"];
+	} catch(err) {
+
+		// TODO: remove this is future
+		if(TouchUI.prototype.settings.isEpiphanyOrKweb) {
+			$(function() {
+				new PNotify({
+					type: 'error',
+					title: "Private Mode detection:",
+					text: "Edit the startup file 'start_kweb3.xinit' in '~/OctoPrint-TouchUI-autostart/' "+
+						"and add the parameter 'P' after the dash. \n\n" +
+						"For more information see the v0.3.3 release notes.",
+					hide: false
+				});
+			});
+		}
+
+		console.info("Localstorage defined but failback to cookies due to errors.");
+		TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+	}
+} else {
+	TouchUI.prototype.DOM.storage = TouchUI.prototype.DOM.cookies;
+}
+
+TouchUI.prototype.DOM.storage.migration = (TouchUI.prototype.DOM.storage === TouchUI.prototype.DOM.localstorage) ? function migration() {
+
+	if (this.settings.hasLocalStorage) {
+		if (document.cookie.indexOf("TouchUI.") !== -1) {
+			console.info("TouchUI cookies migration.");
+
+			var name = "TouchUI.";
+			var ca = document.cookie.split(';');
+			for (var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+				if (c.indexOf(name) == 0) {
+					var string = c.substring(name.length,c.length);
+					string = string.split("=");
+					var value = $.parseJSON(string[1]);
+
+					console.info("Saving cookie", string[0], "with value", value, "to localstorage.");
+					this.DOM.storage.set(string[0], value);
+
+					console.info("Removing cookie", string[0]);
+					document.cookie = "TouchUI." + string[0] + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+				}
+			}
+		}
+	}
+
+} : _.noop;
 
 TouchUI.prototype.knockout.bindings = function() {
 	var self = this;
@@ -1948,6 +1948,110 @@ TouchUI.prototype.scroll.terminal = {
 	}
 }
 
+TouchUI.prototype.DOM.create.dropdown = {
+
+	menuItem: {
+		cloneTo: $('#navbar ul.nav')
+	},
+	container: null,
+
+	init: function() {
+
+		this.menuItem.menu = $('' +
+			'<li id="all_touchui_settings" class="dropdown">' +
+				'<a href="#" class="dropdown-toggle" data-toggle="dropdown">' +
+					$('navbar_show_settings').text() || $('navbar_show_settings').attr("title") +
+				'</a>' +
+			'</li>').prependTo(this.menuItem.cloneTo);
+
+		this.container = $('<ul class="dropdown-menu"></ul>').appendTo(this.menuItem.menu);
+	}
+
+}
+
+TouchUI.prototype.DOM.create.printer = {
+
+	menu: {
+		cloneTo: "#tabs"
+	},
+
+	container: {
+		cloneTo: "#temp"
+	},
+
+	move: {
+		$state: $("#state_wrapper"),
+		$files: $("#files_wrapper")
+	},
+
+	init: function( tabbar ) {
+		this.menu.$elm = tabbar.createItem("print_link", "printer", "tab").prependTo(this.menu.cloneTo);
+		this.container.$elm = $('<div id="printer" class="tab-pane active"><div class="row-fluid"></div></div>').insertBefore(this.container.cloneTo);
+
+		// Move the contents of the hidden accordions to the new print status and files tab
+		this.move.$state.appendTo(this.container.$elm.find(".row-fluid"));
+		this.move.$files.insertAfter(this.container.$elm.find(".row-fluid #state_wrapper"));
+
+		// Create an upload button in the header
+		$('<div class="upload-trigger accordion-heading-button btn-group" data-bind="enable: $root.loginState.isUser(), css: {disabled: !$root.loginState.isUser()}">' +
+			'<a href="#" title="' + $('.upload-buttons .fileinput-button:first-child > span').text()  +'">' +
+				'<i class="fa fa-upload"></i>' +
+			'</a>' +
+		'</div>')
+			.appendTo('#files_wrapper .accordion-heading')
+			.find('a[href="#"]')
+			.on('click', function(e) {
+				e.preventDefault();
+				$('#gcode_upload').click();
+			});
+	}
+
+}
+
+TouchUI.prototype.DOM.create.tabbar = {
+
+	createItem: function(itemId, linkId, toggle, text) {
+		text = (text) ? text : "";
+		return $('<li id="'+itemId+'"><a href="#'+linkId+'" data-toggle="'+toggle+'">'+text+'</a></li>');
+
+	}
+}
+
+TouchUI.prototype.DOM.create.webcam = {
+
+	menu: {
+		webcam: {
+			cloneTo: "#tabs #control_link"
+		}
+	},
+
+	container: {
+		cloneTo: "#tabs + .tab-content",
+
+		webcam: {
+			$container: $("#webcam_container"),
+			cloneTo: "#webcam"
+		}
+	},
+
+	init: function( tabbar ) {
+		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
+		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertAfter(this.menu.webcam.cloneTo).find('a').text('Webcam');
+
+		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
+		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
+
+		$('<!-- ko allowBindings: false -->').insertBefore(this.container.$elm);
+		$('<!-- /ko -->').insertAfter(this.container.$elm);
+
+		$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
+		$("#webcam_image").on("mousedown", function(e) {
+			e.preventDefault();
+		});
+	}
+
+}
+
 TouchUI.prototype.DOM.move.afterTabAndNav = function() {
 
 	this.DOM.create.dropdown.container.children().each(function(ind, elm) {
@@ -1999,38 +2103,22 @@ TouchUI.prototype.DOM.move.controls = {
 
 	init: function() {
 
-		// backward compatibility with <1.3.0
-		if($('#control-jog-feedrate').length === 0) {
-			var jogPanels = $('#control > .jog-panel');
-
-			$(jogPanels[0]).find(".jog-panel:nth-child(1)").attr("id", "control-jog-xy");
-			$(jogPanels[0]).find(".jog-panel:nth-child(2)").attr("id", "control-jog-z");
-			$(jogPanels[1]).attr("id", "control-jog-extrusion");
-			$(jogPanels[2]).attr("id", "control-jog-general");
-
-			$('<div class="jog-panel" id="control-jog-feedrate"></div>').insertAfter($(jogPanels[2]));
-			$(jogPanels[0]).find("> button:last-child").prependTo("#control-jog-feedrate");
-			$(jogPanels[0]).find("> input:last-child").prependTo("#control-jog-feedrate");
-			$(jogPanels[0]).find("> .slider:last-child").prependTo("#control-jog-feedrate");
-
-		}
-
 		if($('#control-jog-feedrate .input-append').length === 0) {
 			// <1.4.1
 			$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
 			$("#control-jog-extrusion button:last-child").prependTo("#control-jog-feedrate");
 			$("#control-jog-extrusion input:last-child").attr('data-bind', $("#control-jog-extrusion input:last-child").attr('data-bind').replace('slider: {', 'slider: {tools: tools(), ')).prependTo("#control-jog-feedrate");
 			$("#control-jog-extrusion .slider:last-child").prependTo("#control-jog-feedrate");
-		} else {
-			// >=1.4.1
-			$("#control-jog-feedrate").insertBefore("#control-jog-extrusion");
-			$("#control-jog-feedrate .input-append button").insertAfter("#control-jog-feedrate .input-append");
-
-			$("#control-jog-flowrate").removeClass("jog-panel");
-			$("#control-jog-flowrate .input-append button").insertAfter("#control-jog-flowrate .input-append");
 		}
 
-		$("#control div.distance").prependTo("#control-jog-feedrate");
+		// Move Z-panel
+		$("#control-jog-general").insertAfter("#control-jog-z");
+
+		// Create panel
+		var $jog = $('<div/>').attr('id', 'control-jog-rate').insertBefore('#control-jog-extrusion');
+		$("#control div.distance").appendTo($jog);
+		$("#control-jog-feedrate").appendTo($jog);
+		$("#control-jog-flowrate").appendTo($jog);
 	}
 
 }
@@ -2239,110 +2327,6 @@ TouchUI.prototype.DOM.move.terminal = {
 	}
 
 };
-
-TouchUI.prototype.DOM.create.dropdown = {
-
-	menuItem: {
-		cloneTo: $('#navbar ul.nav')
-	},
-	container: null,
-
-	init: function() {
-
-		this.menuItem.menu = $('' +
-			'<li id="all_touchui_settings" class="dropdown">' +
-				'<a href="#" class="dropdown-toggle" data-toggle="dropdown">' +
-					$('navbar_show_settings').text() || $('navbar_show_settings').attr("title") +
-				'</a>' +
-			'</li>').prependTo(this.menuItem.cloneTo);
-
-		this.container = $('<ul class="dropdown-menu"></ul>').appendTo(this.menuItem.menu);
-	}
-
-}
-
-TouchUI.prototype.DOM.create.printer = {
-
-	menu: {
-		cloneTo: "#tabs"
-	},
-
-	container: {
-		cloneTo: "#temp"
-	},
-
-	move: {
-		$state: $("#state_wrapper"),
-		$files: $("#files_wrapper")
-	},
-
-	init: function( tabbar ) {
-		this.menu.$elm = tabbar.createItem("print_link", "printer", "tab").prependTo(this.menu.cloneTo);
-		this.container.$elm = $('<div id="printer" class="tab-pane active"><div class="row-fluid"></div></div>').insertBefore(this.container.cloneTo);
-
-		// Move the contents of the hidden accordions to the new print status and files tab
-		this.move.$state.appendTo(this.container.$elm.find(".row-fluid"));
-		this.move.$files.insertAfter(this.container.$elm.find(".row-fluid #state_wrapper"));
-
-		// Create an upload button in the header
-		$('<div class="upload-trigger accordion-heading-button btn-group" data-bind="enable: $root.loginState.isUser(), css: {disabled: !$root.loginState.isUser()}">' +
-			'<a href="#" title="' + $('.upload-buttons .fileinput-button:first-child > span').text()  +'">' +
-				'<i class="fa fa-upload"></i>' +
-			'</a>' +
-		'</div>')
-			.appendTo('#files_wrapper .accordion-heading')
-			.find('a[href="#"]')
-			.on('click', function(e) {
-				e.preventDefault();
-				$('#gcode_upload').click();
-			});
-	}
-
-}
-
-TouchUI.prototype.DOM.create.tabbar = {
-
-	createItem: function(itemId, linkId, toggle, text) {
-		text = (text) ? text : "";
-		return $('<li id="'+itemId+'"><a href="#'+linkId+'" data-toggle="'+toggle+'">'+text+'</a></li>');
-
-	}
-}
-
-TouchUI.prototype.DOM.create.webcam = {
-
-	menu: {
-		webcam: {
-			cloneTo: "#tabs #control_link"
-		}
-	},
-
-	container: {
-		cloneTo: "#tabs + .tab-content",
-
-		webcam: {
-			$container: $("#webcam_container"),
-			cloneTo: "#webcam"
-		}
-	},
-
-	init: function( tabbar ) {
-		this.container.$elm = $('<div id="webcam" class="tab-pane"></div>').appendTo(this.container.cloneTo);
-		this.menu.webcam.$elm = tabbar.createItem("webcam_link", "webcam", "tab").insertAfter(this.menu.webcam.cloneTo).find('a').text('Webcam');
-
-		this.container.webcam.$container.next().appendTo(this.container.webcam.cloneTo);
-		this.container.webcam.$container.prependTo(this.container.webcam.cloneTo);
-
-		$('<!-- ko allowBindings: false -->').insertBefore(this.container.$elm);
-		$('<!-- /ko -->').insertAfter(this.container.$elm);
-
-		$("#webcam_container").attr("data-bind", $("#webcam_container").attr("data-bind").replace("keydown: onKeyDown, ", ""));
-		$("#webcam_image").on("mousedown", function(e) {
-			e.preventDefault();
-		});
-	}
-
-}
 
 TouchUI.prototype.DOM.overwrite.modal = function() {
 
