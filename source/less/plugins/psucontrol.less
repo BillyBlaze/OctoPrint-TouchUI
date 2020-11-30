@@ -2,15 +2,16 @@
 @psucontrol-off-color: #808080;
 
 #navbar .navbar-inner .container .nav li.dropdown#all_touchui_settings li #psucontrol_indicator {
-    &:before {
-        content: '\f0e7';
-    }
+	&:before {
+		.font-icon-reset();
+		content: @fa-legacy-var-bolt;
+	}
 
-    &.on:before {
-        color: @psucontrol-on-color;
-    }
+	&.on:before {
+		color: @psucontrol-on-color;
+	}
 
-    &.off:before {
-        color: @psucontrol-off-color;
-    }
+	&.off:before {
+		color: @psucontrol-off-color;
+	}
 }

@@ -4,11 +4,11 @@
 
 	.icon-caret-down:before,
 	.icon-caret-right:before {
-		.font-icon-reset(FontAwesome);
-		content: "\f078";
+		.font-icon-reset();
+		content: @fa-legacy-var-chevron-down;
 	}
 	.icon-caret-right:before {
-		content: "\f054";
+		content: @fa-legacy-var-chevron-right;
 	}
 
 	span.muted {
@@ -48,7 +48,7 @@
 				span {
 					display: block !important;
 					padding: 10px 0 0 0 !important;
-					
+
 					+ span {
 						display: none !important;;
 					}
@@ -78,7 +78,7 @@
 			.rem(font-size, 35);
 
 			i:before {
-				font-family: FontAwesome;
+				.font-icon-reset();
 			}
 		}
 

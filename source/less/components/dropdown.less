@@ -22,9 +22,9 @@
 
 .dropdown-submenu {
 	> a {
-		&:after {
+		&::after {
 			.font-icon-reset();
-			content: "\f0d7";
+			content: @fa-legacy-var-caret-down;
 			float: none;
 			position: absolute;
 			top: 13px;
@@ -44,7 +44,7 @@
 		}
 		> a {
 			&:after {
-				content: "\f0d8" !important;
+				content: @fa-legacy-var-caret-up !important;
 			}
 		}
 	}

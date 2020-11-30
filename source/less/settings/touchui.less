@@ -32,7 +32,7 @@
 
 			&:after {
 				.font-icon-reset();
-				content: "\f00d";
+				content: @fa-legacy-var-close;
 				color: @main-color-text;
 				text-align: center;
 				display: block;
@@ -78,7 +78,8 @@
 
 	#navbar_touchui_settings {
 		i:before {
-			content: "\f10b";
+			.font-icon-reset();
+			content: @fa-legacy-var-mobile;
 			.rem(font-size, 28);
 			position: relative;
 			top: 5px;

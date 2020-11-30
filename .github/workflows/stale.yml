@@ -25,15 +25,5 @@ jobs:
           for your contributions.
         stale-issue-label: 'inactive'
         stale-pr-label: 'inactive'
-        exempt-issue-labels:
-          - help wanted
-          - up for grabs
-          - fixed
-          - confirmed
-          - pending
-        exempt-pr-labels:
-          - help wanted
-          - up for grabs
-          - fixed
-          - confirmed
-          - pending
+        exempt-issue-labels: 'help wanted,up for grabs,fixed,confirmed,pending'
+        exempt-pr-labels: 'help wanted,up for grabs,fixed,confirmed,pending'
