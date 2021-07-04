@@ -62,7 +62,7 @@
 @light-darker-dark-color: darken(@light-color, 50%);
 @light-darker-darker-color: darken(@light-color, 55%);
 .rem (@property, @value) {
-@remValue: @value / 16;
+@remValue: (@value / 16);
 mixin:~'placeholder;@{property}: @{remValue}rem';
 }
 .gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {

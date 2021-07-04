@@ -5,7 +5,7 @@
 	More info at: http://lesselements.com
   ---------------------------------------------------*/
 .rem (@property, @value) {
-	@remValue: @value / 16;
+	@remValue: (@value / 16);
 	mixin:~'placeholder;@{property}: @{remValue}rem';
 }
 .gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
