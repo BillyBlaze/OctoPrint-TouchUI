@@ -6,7 +6,9 @@
     "type": "git",
     "url": "git://github.com/BillyBlaze/OctoPrint-TouchUI.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "virtual-keyboard": "https://github.com/Mottie/Keyboard/archive/v1.27.2.tar.gz"
+  },
   "devDependencies": {
     "del": "^5.1.0",
     "gulp": "^4.0.2",
