@@ -15,7 +15,7 @@ or manually using this URL:
 Read more about [setting up a touchscreen](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Setup#raspberrypi--touchscreen) on our Wiki.
 
 ## Configuration
-The interface will automatically start when your browser is smaller then 980 pixels in width or if you're browsing with a touch device. You can turn this manually on and off in the ``TouchUI settings`` modal. Alternatively you can force TouchUI to load by adding ``#touch`` on the end of your URL.
+The interface will automatically start when your browser is smaller then 980 pixels in width or if you're browsing with a touch device. You can turn this manually on and off in the ``TouchUI settings`` modal. Alternatively you can force toggle TouchUI by adding ``#touch`` on the end of your URL, or start TouchUI for a single session by adding ``#touch-temp`` instead (useful if your browser supports side panels).
 
 Read more [configuration options](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Configuration) on our Wiki.
 

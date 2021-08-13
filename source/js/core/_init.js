@@ -21,9 +21,13 @@ TouchUI.prototype.core.init = function() {
 
 		this.isActive(true);
 
-		// Enforce active cookie
-		this.DOM.storage.set("active", true);
-
+		// Do not set active cookie if hash "#touch-temp" is used
+		// That way you can boot into TouchUI for a single session
+		if (document.location.hash !== "#touch-temp") {
+			// Enforce active cookie
+			this.DOM.storage.set("active", true);
+		}
+		
 		var isTouchDevice = this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm || this.settings.hasBootloader;
 
 		// Create keyboard cookie if not existing

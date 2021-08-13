@@ -691,8 +691,12 @@ TouchUI.prototype.core.init = function() {
 
 		this.isActive(true);
 
-		// Enforce active cookie
-		this.DOM.storage.set("active", true);
+		// Do not set active cookie if hash "#touch-temp" is used
+		// That way you can boot into TouchUI for a single session
+		if (document.location.hash !== "#touch-temp") {
+			// Enforce active cookie 
+			this.DOM.storage.set("active", true);
+		}
 
 		var isTouchDevice = this.settings.isEpiphanyOrKweb || this.settings.isChromiumArm || this.settings.hasBootloader;
 
@@ -741,6 +745,7 @@ TouchUI.prototype.core.boot = function() {
 	// This should always start TouchUI
 	if(
 		document.location.hash === "#touch" ||
+		document.location.hash === "#touch-temp" ||
 		document.location.href.indexOf("?touch") > 0 ||
 		this.DOM.storage.get("active") ||
 		this.settings.hasBootloader
