@@ -9,7 +9,7 @@ plugin_author = "Paul de Vries"
 plugin_author_email = "pablo+octoprint+touch+ui@aerosol.me"
 plugin_url = "https://github.com/BillyBlaze/OctoPrint-TouchUI"
 plugin_license = "AGPLv3"
-plugin_requires = ["OctoPrint>=1.2.4"]
+plugin_requires = ["OctoPrint>=1.8"]
 plugin_additional_data = []
 plugin_addtional_packages = []
 plugin_ignored_packages = []
