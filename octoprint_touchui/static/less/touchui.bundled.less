@@ -2476,9 +2476,8 @@ top: auto;
 .box-sizing(border-box);
 overflow: hidden;
 width: 100%;
-height: 60vh;
 max-height: none;
-min-height: 200px;
+min-height: 40px;
 padding: 0 @main-gutter;
 margin: 0 0 @main-gutter;
 #temperature-graph {
@@ -2514,6 +2513,9 @@ padding: 0 15px 0 5px;
 }
 }
 }
+}
+> div:nth-child(2) {
+height: 60vh;
 }
 > div:last-child {
 .box-sizing(border-box);
@@ -2685,6 +2687,9 @@ th.temperature_offset {
 text-align: left;
 }
 }
+}
+#temperature-graph > div.legend table {
+bottom: -70px !important;
 }
 @button-width: 16vw;
 @button-width-large: 120px;

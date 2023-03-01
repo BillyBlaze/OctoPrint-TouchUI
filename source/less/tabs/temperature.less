@@ -20,9 +20,8 @@
 		overflow: hidden;
 
 		width: 100%;
-		height: 60vh;
 		max-height: none;
-		min-height: 200px;
+		min-height: 40px;
 
 		padding: 0 @main-gutter;
 		margin: 0 0 @main-gutter;
@@ -71,6 +70,9 @@
 		}
 	}
 
+	> div:nth-child(2) {
+    height: 60vh;
+  }
 
 	> div:last-child {
 		.box-sizing(border-box);
@@ -273,4 +275,8 @@
 			text-align: left;
 		}
 	}
+}
+
+#temperature-graph > div.legend table {
+  bottom: -70px !important;
 }
