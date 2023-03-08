@@ -5,9 +5,9 @@ plugin_package = "octoprint_touchui"
 plugin_name = "TouchUI"
 plugin_version = "0.3.19"
 plugin_description = """A touch friendly interface for a small TFT modules and or phones"""
-plugin_author = "Paul de Vries"
-plugin_author_email = "pablo+octoprint+touch+ui@aerosol.me"
-plugin_url = "https://github.com/BillyBlaze/OctoPrint-TouchUI"
+plugin_author = "Unn4m3DD (current), Paul de Vries"
+plugin_author_email = "andrepatacass@gmail.com, pablo+octoprint+touch+ui@aerosol.me"
+plugin_url = "https://github.com/Unn4m3DD/OctoPrint-TouchUI"
 plugin_license = "AGPLv3"
 plugin_requires = ["OctoPrint>=1.2.4"]
 plugin_additional_data = []
