@@ -1,0 +1,1 @@
+Version 0.3.19+ of this plugin is available from a new maintainer, but your version still looks for updates at the repository of the old maintainer. Please uninstall the old plugin from the plugin manager, then reinstall from the plugin repository to update it.

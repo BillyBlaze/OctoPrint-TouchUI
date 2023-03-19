@@ -9,7 +9,7 @@ All these settings are set client-side, so we won't interfere with other clients
 Install via the bundled [Plugin Manager](https://github.com/foosel/OctoPrint/wiki/Plugin:-Plugin-Manager)
 or manually using this URL:
 
-    https://github.com/BillyBlaze/OctoPrint-TouchUI/archive/master.zip
+    https://github.com/Unn4m3DD/OctoPrint-TouchUI/archive/master.zip
 
 - **Touchscreens**  
 Read more about [setting up a touchscreen](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Setup#raspberrypi--touchscreen) on our Wiki.

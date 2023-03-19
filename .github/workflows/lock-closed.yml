@@ -7,7 +7,7 @@ on:
 jobs:
   lock:
     name: Lock Closed Issues
-    if: github.repository == 'BillyBlaze/OctoPrint-TouchUI'
+    if: github.repository == 'Unn4m3DD/OctoPrint-TouchUI'
 
     runs-on: ubuntu-latest
 

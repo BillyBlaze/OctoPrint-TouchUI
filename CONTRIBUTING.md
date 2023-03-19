@@ -18,7 +18,7 @@ Sometimes bugs can be related to a specific plugin or OctoPrint version. Since T
 #### Before Submitting A Bug Report
 
 * **Check the [Troubleshooting on the Wiki](https://github.com/BillyBlaze/OctoPrint-TouchUI/wiki/Setup:-Troubleshooting)** for a list of common questions and problems.
-* **Perform a [cursory search](https://github.com/BillyBlaze/OctoPrint-TouchUI/issues?utf8=%E2%9C%93&q=)** to see if the problem has already been reported. If it has, add a comment to the existing issue instead of opening a new one.
+* **Perform a [cursory search](https://github.com/Unn4m3DD/OctoPrint-TouchUI/issues?utf8=%E2%9C%93&q=)** to see if the problem has already been reported. If it has, add a comment to the existing issue instead of opening a new one.
 
 #### How Do I Submit A (Good) Bug Report?
 
